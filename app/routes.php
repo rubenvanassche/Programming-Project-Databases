@@ -13,7 +13,7 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('home')->with('name', 'ruben');
 });
 
 Route::get('users', function()
