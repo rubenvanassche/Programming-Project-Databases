@@ -51,7 +51,7 @@ if (isset($_COOKIE["user"]) && isset($_COOKIE["userSession"])) {
   $result = mysqli_query($con,$sql);
   $row = mysqli_fetch_array($result);
   if ($row && Hash::check($row["session_id"], $_COOKIE["userSession"])) {
-    echo "logged in";
+    echo "logged in as $user";
   }
 }
 else {

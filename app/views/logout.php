@@ -37,6 +37,7 @@
 
 <?php
 
+  setcookie("user", "", time() - 3600);
   setcookie("userSession", "", time() - 3600);
   echo "Logged out";
 
