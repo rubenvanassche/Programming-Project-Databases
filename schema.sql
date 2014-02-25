@@ -1,8 +1,3 @@
--- Host: localhost
--- Generation Time: Feb 21, 2014 at 06:27 
--- Server version: 5.6.16
--- PHP Version: 5.5.9
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -95,13 +90,11 @@ CREATE TABLE IF NOT EXISTS `match` (
   `hometeam_id` int(11) NOT NULL,
   `awayteam_id` int(11) NOT NULL,
   `competition_id` int(11) NOT NULL,
-  `lineup_id` int(11) NOT NULL,
   `date` date NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hometeam` (`hometeam_id`),
   UNIQUE KEY `awayteam` (`awayteam_id`),
-  UNIQUE KEY `competition` (`competition_id`),
-  UNIQUE KEY `lineup` (`lineup_id`)
+  UNIQUE KEY `competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -127,7 +120,8 @@ CREATE TABLE IF NOT EXISTS `playerPerMatch` (
   `match_id` int(11) NOT NULL,
   `intime` tinyint(4) NOT NULL,
   `outtime` tinyint(4) NOT NULL,
-  PRIMARY KEY (`player_id`,`match_id`)
+  PRIMARY KEY (`player_id`,`match_id`),
+  KEY `player_per_match` (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -139,7 +133,8 @@ CREATE TABLE IF NOT EXISTS `playerPerMatch` (
 CREATE TABLE IF NOT EXISTS `playerPerTeam` (
   `player_id` int(11) NOT NULL,
   `team_id` int(11) NOT NULL,
-  PRIMARY KEY (`player_id`,`team_id`)
+  PRIMARY KEY (`player_id`,`team_id`),
+  KEY `player_per_team` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -190,17 +185,29 @@ ALTER TABLE `country`
 -- Constraints for table `goal`
 --
 ALTER TABLE `goal`
-  ADD CONSTRAINT `goal_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `goal_match` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `goal_player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `goal_player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `goal_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `match`
 --
 ALTER TABLE `match`
-  ADD CONSTRAINT `match_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`),
   ADD CONSTRAINT `awayteam` FOREIGN KEY (`awayteam_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `hometeam` FOREIGN KEY (`hometeam_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `hometeam` FOREIGN KEY (`hometeam_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `match_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
+
+--
+-- Constraints for table `playerPerMatch`
+--
+ALTER TABLE `playerPerMatch`
+  ADD CONSTRAINT `player_per_match` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `playerPerTeam`
+--
+ALTER TABLE `playerPerTeam`
+  ADD CONSTRAINT `player_per_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `team`
@@ -213,4 +220,3 @@ ALTER TABLE `team`
 --
 ALTER TABLE `teamPerCompetition`
   ADD CONSTRAINT `tpc_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
-
