@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 27, 2014 at 01:03 
+-- Generation Time: Feb 27, 2014 at 01:19 
 -- Server version: 5.6.16
 -- PHP Version: 5.5.9
 
@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `country` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   `continent_id` int(11) NOT NULL,
+  `abbreviation` char(4) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `continent` (`continent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -135,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `firstname` varchar(60) NOT NULL,
   `lastname` varchar(60) NOT NULL,
+  `injured` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
