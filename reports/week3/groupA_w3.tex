@@ -1,0 +1,53 @@
+\documentclass[11pt, a4paper]{article}
+
+\begin{document}
+\title{}
+\author{Groep A\\ Week 3}
+\date{27 februari 2014}
+\maketitle
+
+\section{Aanwezigheden}
+Iedereen was aanwezig.
+\section{Status}
+Het geplande werk is grotendeels gebeurd. We hebben nog niet echt iets om aan een gebruiker te tonen, maar veel van het werk achter de schermen is gebeurd.
+\subsection{Stijn}
+Basisversie van crawler geschreven.
+\subsection{Tom}
+Mogelijke logo's ontworpen. Nog geen pagina's opgesteld, omdat de templates voor pagina's nog maar net af waren.
+\subsection{Ruben}
+\subsection{Jakob}
+Database voor users gemaakt. Registratie en login met validatie van gegevens mogelijk.
+\subsection{Kristof}
+Databaseschema verbeterd, foreign keys toegevoegd
+
+\section{Besproken onderwerpen}
+We hebben overlegd welke aanpassingen we nog zullen doorvoeren aan het design van onze database, aangezien dat best gebeurt voor we de database gaan invullen. We hebben besloten voor elk team de naam van de huidige coach bij te houden. Ook gaan we in de playertabel de naam opsplitsen in voor- en familienaam, zodat ordenen op familienaam mogelijk wordt. Verder overwegen we nog bij te houden of een speler geblesseerd is, moesten we hiervoor de data kunnen vinden.
+\newline
+We hebben nog niets gehoord van onze aanvraag voor een API-key van openfooty en gaan er dus van uit dat we die niet gaan krijgen. We zullen waarschijnlijk enkel de crawler kunnen gebruiken om data te verzamelen.
+\newline
+We brainstormden ook even over enkele visuele aspecten van de site. We willen onder andere een wereldkaart tonen waarbij de kleur van een land aangeeft hoe goed ze presteren/presteerden in WK's.
+\newline
+Verder hebben we ook overlopen welke aanpassingen er nog dienen te gebeuren aan het registratie- en inlogsysteem. Password recovery moet toegevoegd worden (mailserver voor nodig), er moet een captcha komen bij registratie om bots tegen te houden, de security moet verbeterd worden en we gaan Laravel gebruiken voor validatie.
+\newline
+Ten slotte hebben we besloten om config files van Laravel te gebruiken om met de database te verbinden. Deze mag niet in ons Github-project verschijnen, zodat iedereen die zelf kan instellen voor zijn lokale server.
+
+\section{Afspraken}
+\begin{enumerate}
+\item Database design zo snel mogelijk vastleggen
+\item Database access lokaal instellen zodat niet iedereens configs met elkaar in conflict komen.
+\item Blijven uitkijken voor mogelijke bronnen van data
+\end{enumerate}
+
+
+\section{Planning}
+De planning voor de komende week is grotendeels het afwerken van wat afgelopen week gemaakt werd en het samenbrengen ervan.
+\subsection{Stijn}
+Afwerken van crawler: specifieke implementatie voor verschillende websites, en invoeren van gevonden data in de database
+\subsection{Tom en Kristof}
+Pagina's voor website designen aan de hand van onze templates. Nadenken over hoe we de data gaan gebruiken om uitslagen te voorspellen en mogelijks al een versie van dat algoritme opstellen (maar is momenteel moeilijk te testen aangezien database nog geen correcte data bevat)
+\subsection{Ruben}
+Registratie en authenticatie integreren in de templates (misschien gebruik makende van Ajax). Admin interface opstellen en uitwerken.
+\subsection{Jakob}
+Afwerken registratie en login (zie "besproken onderwerpen"), klasse maken die invoeren in database encapsuleert (ruwe insertqueries, checken op uniciteit, ...) zodat de crawler code er wat mooier kan uitzien.
+
+\end{document}
