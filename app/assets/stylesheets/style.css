@@ -1,0 +1,22 @@
+/*!
+ * CoachCenter Style v0.0.1 (http://coachcenter.net)
+ * Copyright 2011-2014 CoachCenter
+ * Licensed under GNU GPL-v3
+*/
+ 
+body{ 
+	padding-top: 50px; 
+}
+
+.widepicture{
+	background-image: url('bg_seats.jpg');
+	background-size: cover;
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+.widepicturetitle{
+	color: white;
+	text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+             0px 8px 13px rgba(0,0,0,0.1),
+             0px 18px 23px rgba(0,0,0,0.1);
+}
