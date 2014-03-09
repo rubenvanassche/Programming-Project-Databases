@@ -21,6 +21,10 @@ body{
              0px 18px 23px rgba(0,0,0,0.1);
 }
 
+	.row-padded .row {
+		margin-top: 50px;
+	}
+
 
 #searchbar{
 	height: 25px;

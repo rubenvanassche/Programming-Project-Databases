@@ -24,6 +24,11 @@ function predictScore($matchID)
 
 	// Check all variables and add points to the teamscores accordingly.
 
+	// win/loss ratio
+
+	// rank
+
+	// home away
 	
 	// Compare teamscores and return result.
 	if ($homeTeamScore > $awayTeamScore) {
@@ -37,8 +42,7 @@ function predictScore($matchID)
 	}
 
 	// How big is the difference? Calculate score on the difference.
-
-
+	
 }
 ?>
 

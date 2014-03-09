@@ -41,7 +41,7 @@ function predictScore($matchID)
 		$winner = $awayTeam;
 	}
 
-	// How big is the difference? Calculate score on the difference.
+	// How big is the difference? Calculate score on the difference. -> call other function that calculates this.
 	
 }
 ?>
