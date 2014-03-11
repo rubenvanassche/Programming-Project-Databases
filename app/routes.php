@@ -60,10 +60,7 @@ Route::get('users', function()
 				</div>';
 });
 
-Route::get('user/{id}', function($id)
-{
-    return 'User    ddd '.$id;
-});
+Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
 
 Route::get('register', function()
 {
