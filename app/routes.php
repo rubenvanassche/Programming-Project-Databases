@@ -61,6 +61,7 @@ Route::get('users', function()
 });
 
 Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
+Route::match(array('GET', 'POST'), 'user/register', 'UserController@register');
 
 Route::get('register', function()
 {
