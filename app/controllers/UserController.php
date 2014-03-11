@@ -181,5 +181,12 @@ class UserController extends BaseController {
 	    	return View::make('user/passwordforgot');
     	}		
 	}
+	
+	function logout(){
+		Session::forget('userID');
+		Session::forget('userEntrance');
+		
+		echo 'You\'re now logged out!';
+	}
 
 }

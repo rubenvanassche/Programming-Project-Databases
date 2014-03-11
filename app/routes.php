@@ -34,73 +34,10 @@ Route::get('player', function()
 	 return View::make('player');
 });
 
-Route::get('users', function()
-{
-    return '				<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Login</h4>
-				</div>
-				<div class="modal-body">
-					<form>
-					  <div class="form-group">
-					    <label>Username</label>
-					    <input type="text" class="form-control">
-					  </div>
-					  <div class="form-group">
-					    <label>Password</label>
-					    <input type="password" class="form-control">
-					  </div>
-					</form>		
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-warning">Register</button>
-					<button type="button" class="btn btn-success">Login</button>
-				</div>
-				</div>';
-});
-
+// AUTH
 Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
 Route::match(array('GET', 'POST'), 'user/register', 'UserController@register');
 Route::get('user/activate/{username}/{registrationcode}', 'UserController@activate');
+Route::get('user/logout', 'UserController@logout');
 Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwordforgot');
 
-Route::get('register', function()
-{
-	return View::make('register');
-});
-
-Route::post('processRegistration', function()
-{
-    return View::make('processRegistration');
-});
-
-Route::get('login', function()
-{
-    return View::make('login');
-});
-
-Route::post('processLogin', function()
-{
-    return View::make('processLogin');
-});
-
-Route::get('checkLogin', function()
-{
-    return View::make('checkLogin');
-});
-
-Route::get('logout', function()
-{
-    return View::make('logout');
-});
-
-Route::post('register', function()
-{
-    return View::make('register');
-});
-
-Route::post('login', function()
-{
-    return View::make('login');
-});
