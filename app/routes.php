@@ -19,6 +19,21 @@ Route::get('/', function()
 	 return View::make('home')->with('title', 'Home');
 });
 
+Route::get('widemap', function()
+{
+	 return View::make('widemap');
+});
+
+Route::get('team', function()
+{
+	 return View::make('team');
+});
+
+Route::get('player', function()
+{
+	 return View::make('player');
+});
+
 Route::get('users', function()
 {
     return '				<div class="modal-content">
@@ -48,4 +63,44 @@ Route::get('users', function()
 Route::get('user/{id}', function($id)
 {
     return 'User    ddd '.$id;
+});
+
+Route::get('register', function()
+{
+	return View::make('register');
+});
+
+Route::post('processRegistration', function()
+{
+    return View::make('processRegistration');
+});
+
+Route::get('login', function()
+{
+    return View::make('login');
+});
+
+Route::post('processLogin', function()
+{
+    return View::make('processLogin');
+});
+
+Route::get('checkLogin', function()
+{
+    return View::make('checkLogin');
+});
+
+Route::get('logout', function()
+{
+    return View::make('logout');
+});
+
+Route::post('register', function()
+{
+    return View::make('register');
+});
+
+Route::post('login', function()
+{
+    return View::make('login');
 });

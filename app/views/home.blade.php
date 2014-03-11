@@ -1,11 +1,10 @@
 @extends('layouts.master')
 
 @section('content')
-	<div class="row">
-		<div class="col-md-12">
-			Hallo, ik ben een Laravel Page. <a href="<?php echo url('users'); ?>">dd</a>
-		</div>
-	</div>
+	@include('layouts.simple', array('title'=>'CC-Ayo', 'content'=>'Hello, welcome to Coach Center:'))
+
+	//<a href="<?php echo url('users'); ?>">Users</a>'));
+
 @stop
 
 @section('css')
@@ -13,5 +12,5 @@
 @stop
 
 @section('javascript')
-	<link>
+
 @stop

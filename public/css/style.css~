@@ -1,0 +1,43 @@
+/*!
+ * CoachCenter Style v0.0.1 (http://coachcenter.net)
+ * Copyright 2011-2014 CoachCenter
+ * Licensed under GNU GPL-v3
+*/
+ 
+body{ 
+	padding-top: 50px; 
+}
+
+.widepicture{
+	background-image: url('bg_seats.jpg');
+	background-size: cover;
+	height: 100px;
+}
+.widepicturetitle{
+	color: white;
+	margin-top: -60px;
+	text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+             0px 8px 13px rgba(0,0,0,0.1),
+             0px 18px 23px rgba(0,0,0,0.1);
+}
+
+	.row-padded .row {
+		margin-top: 50px;
+	}
+
+
+#searchbar{
+	height: 25px;
+	float: right;
+	border: 0px;
+	padding: 10px;
+}
+
+#bottom{
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+	text-align: center;
+	margin-bottom: 10px;
+	font-size: 10px;
+}
