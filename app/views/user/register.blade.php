@@ -14,9 +14,6 @@
 {{ Form::label('country', 'Country') . Form::text('country', Input::old('country')) }}
 {{ $errors->first('country') }}
 
-{{ Form::label('birthdate', 'Birth Date') . Form::text('birthdate', Input::old('birthdate')) }}
-{{ $errors->first('birthdate') }}
-
 {{ Form::label('email', 'Email Adress') . Form::text('email', Input::old('email')) }}
 {{ $errors->first('email') }}
 

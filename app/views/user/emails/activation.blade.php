@@ -7,7 +7,7 @@
 		<h2>Coachcenter Account activationt</h2>
 
 		<div>
-			To activate your account, please click : {{ URL::to('user/activate', array($registrationCode)) }}.
+			To activate your account, please click : {{ URL::to('user/activate', array($username, $registrationCode)) }}.
 		</div>
 	</body>
 </html>

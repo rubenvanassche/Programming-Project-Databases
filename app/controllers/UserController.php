@@ -57,7 +57,6 @@ class UserController extends BaseController {
 			        'firstname' => array('required'),
 			        'lastname' => array('required'),
 			        'country' => array('required'),
-			        'birthdate' => array('required', 'date'),
 			        'email' => array('required', 'email'),
 			        'password' => array('required'),
 			        'passwordagain' => array('required', 'same:password')
@@ -74,7 +73,6 @@ class UserController extends BaseController {
 				$firstname = Input::get('firstname');
 				$lastname = Input::get('lastname');
 				$country = Input::get('country');
-				$birthdate = Input::get('birthdate');
 				$email = Input::get('email');
 				$password = Input::get('password');
 				
@@ -96,13 +94,13 @@ class UserController extends BaseController {
 				$registrationCode = str_random(24);
 				$password = Hash::make($password);
 				
-				$result = DB::Insert("INSERT INTO user (username, firstname, lastname, email, password, country, registrationcode, birthdate) VALUES ('$username', '$firstname','$lastname','$email', '$password', '$country', '$registrationCode', '$birthdate')");
+				$result = DB::Insert("INSERT INTO user (username, firstname, lastname, email, password, country, registrationcode) VALUES ('$username', '$firstname','$lastname','$email', '$password', '$country', '$registrationCode')");
 				
 				if($result == 1){
 					// Insertion was succesfull, send an email with the activation
-					Mail::send('user/emails/welcome', array($registrationCode), function($message){
-						$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
-					});
+					//Mail::send('user/emails/activation', array($username, $registrationCode), function($message){
+					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
+					//});
 					
 					echo 'Welcome to coachcenter! We have sent you an email to activate your account.';
 					return;
@@ -115,6 +113,72 @@ class UserController extends BaseController {
     	}else{
 	    	// Show the form
 	    	return View::make('user/register');
+    	}		
+	}
+	
+	function activate($username, $registrationcode){
+		$results = DB::Select("Select id, registrationcode FROM user WHERE username = ? ", array($username));
+		
+		if(empty($results)){
+			echo 'There went something wrong!';
+			return;
+		}
+		
+		if(strlen($results[0]->registrationcode) == 0){
+			echo 'You\'re account is already activated!';
+			return;
+		}
+		
+		if($results[0]->registrationcode != $registrationcode){
+			echo 'You\'re activation code is wrong!';
+			return;
+		}
+		
+		// Okay we're ready to remove the activation code
+		DB::Update("UPDATE user SET registrationcode = '' WHERE username = ?", array($username));
+		echo 'Account activated!';
+	}
+	
+	function passwordforgot(){
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'email' => array('required', 'email')
+			);
+			
+			$validation = Validator::make(Input::all(), $rules);
+			
+			if($validation->fails()) {
+				// Problem so show the user error messages
+				return Redirect::to('user/passwordforgot')->withInput()->withErrors($validation);
+			}else{
+				// Start working on this data
+				$email = Input::get('email');
+				$results = DB::select('SELECT id, firstname, lastname FROM user WHERE email = ?', array($email));
+				
+				if(empty($results)){
+					// Username not found
+					echo 'There is no account with this email adress!';
+					return;
+				}
+				
+				// generate the enw password
+				$newPassword = str_random(10);
+				$newPasswordHashed = Hash::make($newPassword);
+				
+				DB::Update("UPDATE user SET password = ? WHERE id = ?", array($newPasswordHashed, $results[0]->id));
+				
+				// Send an email to the user
+				//Mail::send('user/emails/passwordforgot', array($newPassword), function($message){
+				//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
+				//});
+				
+				echo 'We have sent you an email with your new password';
+				return;
+			}
+    	}else{
+	    	// Show the form
+	    	return View::make('user/passwordforgot');
     	}		
 	}
 
