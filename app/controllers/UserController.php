@@ -19,27 +19,9 @@ class UserController extends BaseController {
 				// Start working on this data
 				$username = Input::get('username');
 				$password = Input::get('password');
-				$results = DB::select('SELECT password, registrationcode, id FROM user WHERE username = ?', array($username));
 				
-				if(empty($results)){
-					// Username not found
-					echo 'Username doesn\'t exsist!';
-					return;
-				}
-				
-				if(!Hash::check($password, $results[0]->password)){
-					echo 'The Password isn\'t correct!';
-					return;
-				}
-				
-				if(strlen($results[0]->registrationcode) != 0){
-					echo 'Your email adress isn\'t validated!';
-					return;
-				}
-				
-				// Login was succesfull;
-				Session::put('userID', $results[0]->id);
-				Session::put('userEntrance', time());
+				$user = new User;
+				$user->login($username, $password);
 				
 				return View::make('team');
 			}
@@ -69,34 +51,17 @@ class UserController extends BaseController {
 				return Redirect::to('user/register')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
-				$username = Input::get('username');
-				$firstname = Input::get('firstname');
-				$lastname = Input::get('lastname');
-				$country = Input::get('country');
-				$email = Input::get('email');
-				$password = Input::get('password');
+				$data['username'] = Input::get('username');
+				$data['firstname'] = Input::get('firstname');
+				$data['lastname'] = Input::get('lastname');
+				$data['country'] = Input::get('country');
+				$data['email'] = Input::get('email');
+				$data['password'] = Input::get('password');
 				
-				$results = DB::select('SELECT id FROM user WHERE username = ?', array($username));
-				if(!empty($results)){
-					// Username  found
-					echo 'Username already exists exsist!';
-					return;
-				}
+				$user = new User;
+				$success = $user->register($data)
 				
-				$results = DB::select('SELECT id FROM user WHERE email = ?', array($email));
-				if(!empty($results)){
-					// email found
-					echo 'Email Adress already exists exsist!';
-					return;
-				}
-				
-				// Seems like we're ready to add this new user
-				$registrationCode = str_random(24);
-				$password = Hash::make($password);
-				
-				$result = DB::Insert("INSERT INTO user (username, firstname, lastname, email, password, country, registrationcode) VALUES ('$username', '$firstname','$lastname','$email', '$password', '$country', '$registrationCode')");
-				
-				if($result == 1){
+				if($success == true){
 					// Insertion was succesfull, send an email with the activation
 					//Mail::send('user/emails/activation', array($username, $registrationCode), function($message){
 					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
@@ -117,26 +82,10 @@ class UserController extends BaseController {
 	}
 	
 	function activate($username, $registrationcode){
-		$results = DB::Select("Select id, registrationcode FROM user WHERE username = ? ", array($username));
-		
-		if(empty($results)){
-			echo 'There went something wrong!';
-			return;
+		$user = new User;
+		if($user->activate($username, $registrationcode)){
+					echo 'Account activated!';
 		}
-		
-		if(strlen($results[0]->registrationcode) == 0){
-			echo 'You\'re account is already activated!';
-			return;
-		}
-		
-		if($results[0]->registrationcode != $registrationcode){
-			echo 'You\'re activation code is wrong!';
-			return;
-		}
-		
-		// Okay we're ready to remove the activation code
-		DB::Update("UPDATE user SET registrationcode = '' WHERE username = ?", array($username));
-		echo 'Account activated!';
 	}
 	
 	function passwordforgot(){
@@ -154,27 +103,18 @@ class UserController extends BaseController {
 			}else{
 				// Start working on this data
 				$email = Input::get('email');
-				$results = DB::select('SELECT id, firstname, lastname FROM user WHERE email = ?', array($email));
+				$newPassword = str_random(10);
 				
-				if(empty($results)){
-					// Username not found
-					echo 'There is no account with this email adress!';
+				$user = new User;
+				if($user->passwordforgot($email, $newPassword)){		
+					// Send an email to the user
+					//Mail::send('user/emails/passwordforgot', array($newPassword), function($message){
+					//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
+					//});
+					
+					echo 'We have sent you an email with your new password';
 					return;
 				}
-				
-				// generate the enw password
-				$newPassword = str_random(10);
-				$newPasswordHashed = Hash::make($newPassword);
-				
-				DB::Update("UPDATE user SET password = ? WHERE id = ?", array($newPasswordHashed, $results[0]->id));
-				
-				// Send an email to the user
-				//Mail::send('user/emails/passwordforgot', array($newPassword), function($message){
-				//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
-				//});
-				
-				echo 'We have sent you an email with your new password';
-				return;
 			}
     	}else{
 	    	// Show the form
@@ -183,8 +123,8 @@ class UserController extends BaseController {
 	}
 	
 	function logout(){
-		Session::forget('userID');
-		Session::forget('userEntrance');
+		$user = new User;
+		$user->logout();
 		
 		echo 'You\'re now logged out!';
 	}
