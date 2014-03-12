@@ -148,7 +148,9 @@ class UserController extends BaseController {
 		$user = new User;
 		$user->logout();
 		
-		Notification::info('You\'re now logged out!');
+		$data['title'] = 'Logged Out!';
+		$data['content'] = 'Enjoy the rest of the world wide web.';
+		return View::make('layouts.simple', $data);
 	}
 
 }
