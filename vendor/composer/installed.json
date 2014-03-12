@@ -899,59 +899,6 @@
         ]
     },
     {
-        "name": "patchwork/utf8",
-        "version": "v1.1.18",
-        "version_normalized": "1.1.18.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nicolas-grekas/Patchwork-UTF8.git",
-            "reference": "66a936cc633fe13378c91f81030d5193be968480"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nicolas-grekas/Patchwork-UTF8/zipball/66a936cc633fe13378c91f81030d5193be968480",
-            "reference": "66a936cc633fe13378c91f81030d5193be968480",
-            "shasum": ""
-        },
-        "require": {
-            "lib-pcre": ">=7.3",
-            "php": ">=5.3.0"
-        },
-        "suggest": {
-            "ext-iconv": "Use iconv for best performance",
-            "ext-intl": "Use Intl for best performance",
-            "ext-mbstring": "Use Mbstring for best performance"
-        },
-        "time": "2014-02-02 17:09:49",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Patchwork": "class/",
-                "Normalizer": "class/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "(Apache-2.0 or GPL-2.0)"
-        ],
-        "authors": [
-            {
-                "name": "Nicolas Grekas",
-                "email": "p@tchwork.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "Extensive, portable and performant handling of UTF-8 and grapheme clusters for PHP",
-        "homepage": "https://github.com/nicolas-grekas/Patchwork-UTF8",
-        "keywords": [
-            "i18n",
-            "unicode",
-            "utf-8",
-            "utf8"
-        ]
-    },
-    {
         "name": "nesbot/carbon",
         "version": "1.8.0",
         "version_normalized": "1.8.0.0",
@@ -1395,114 +1342,71 @@
         ]
     },
     {
-        "name": "phpseclib/phpseclib",
-        "version": "0.3.6",
-        "version_normalized": "0.3.6.0",
+        "name": "patchwork/utf8",
+        "version": "v1.1.20",
+        "version_normalized": "1.1.20.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/phpseclib/phpseclib.git",
-            "reference": "76c9692908a6c25601df2db373043fcbb335332e"
+            "url": "https://github.com/nicolas-grekas/Patchwork-UTF8.git",
+            "reference": "aea0de833cba7cf2c25239be71f2787edaee36d5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/76c9692908a6c25601df2db373043fcbb335332e",
-            "reference": "76c9692908a6c25601df2db373043fcbb335332e",
+            "url": "https://api.github.com/repos/nicolas-grekas/Patchwork-UTF8/zipball/aea0de833cba7cf2c25239be71f2787edaee36d5",
+            "reference": "aea0de833cba7cf2c25239be71f2787edaee36d5",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.0.0"
-        },
-        "require-dev": {
-            "squizlabs/php_codesniffer": "1.*"
+            "lib-pcre": ">=7.3",
+            "php": ">=5.3.0"
         },
         "suggest": {
-            "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
-            "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
-            "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 4.3.3."
+            "ext-iconv": "Use iconv for best performance",
+            "ext-intl": "Use Intl for best performance",
+            "ext-mbstring": "Use Mbstring for best performance"
         },
-        "time": "2014-02-23 01:03:22",
+        "time": "2014-03-01 20:01:07",
         "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.3-dev"
-            }
-        },
         "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "Crypt": "phpseclib/",
-                "File": "phpseclib/",
-                "Math": "phpseclib/",
-                "Net": "phpseclib/"
-            },
-            "files": [
-                "phpseclib/Crypt/Random.php"
-            ]
+                "Patchwork": "class/",
+                "Normalizer": "class/"
+            }
         },
         "notification-url": "https://packagist.org/downloads/",
-        "include-path": [
-            "phpseclib/"
-        ],
         "license": [
-            "MIT"
+            "(Apache-2.0 or GPL-2.0)"
         ],
         "authors": [
             {
-                "name": "Jim Wigginton",
-                "email": "terrafrost@php.net",
-                "role": "Lead Developer"
-            },
-            {
-                "name": "Patrick Monnerat",
-                "email": "pm@datasphere.ch",
-                "role": "Developer"
-            },
-            {
-                "name": "Andreas Fischer",
-                "email": "bantu@phpbb.com",
-                "role": "Developer"
-            },
-            {
-                "name": "Hans-Jürgen Petrich",
-                "email": "petrich@tronic-media.com",
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com",
                 "role": "Developer"
             }
         ],
-        "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
-        "homepage": "http://phpseclib.sourceforge.net",
+        "description": "Extensive, portable and performant handling of UTF-8 and grapheme clusters for PHP",
+        "homepage": "https://github.com/nicolas-grekas/Patchwork-UTF8",
         "keywords": [
-            "BigInteger",
-            "aes",
-            "asn.1",
-            "asn1",
-            "blowfish",
-            "crypto",
-            "cryptography",
-            "encryption",
-            "rsa",
-            "security",
-            "sftp",
-            "signature",
-            "signing",
-            "ssh",
-            "twofish",
-            "x.509",
-            "x509"
+            "i18n",
+            "unicode",
+            "utf-8",
+            "utf8"
         ]
     },
     {
         "name": "laravel/framework",
-        "version": "v4.1.22",
-        "version_normalized": "4.1.22.0",
+        "version": "v4.1.23",
+        "version_normalized": "4.1.23.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laravel/framework.git",
-            "reference": "a18a892c9d768464249baa1d16117fe52e0a7004"
+            "reference": "054c1a29aaf537c6c6ca7e7804375c671eddcaaf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laravel/framework/zipball/a18a892c9d768464249baa1d16117fe52e0a7004",
-            "reference": "a18a892c9d768464249baa1d16117fe52e0a7004",
+            "url": "https://api.github.com/repos/laravel/framework/zipball/054c1a29aaf537c6c6ca7e7804375c671eddcaaf",
+            "reference": "054c1a29aaf537c6c6ca7e7804375c671eddcaaf",
             "shasum": ""
         },
         "require": {
@@ -1570,7 +1474,7 @@
         "suggest": {
             "doctrine/dbal": "Allow renaming columns and dropping SQLite columns."
         },
-        "time": "2014-02-20 15:13:32",
+        "time": "2014-02-28 22:07:47",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1610,18 +1514,70 @@
         ]
     },
     {
+        "name": "edvinaskrucas/notification",
+        "version": "2.0.1",
+        "version_normalized": "2.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/edvinaskrucas/notification.git",
+            "reference": "490e12ed962c9f247b854bf4245cfde7d1d5eeb0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/edvinaskrucas/notification/zipball/490e12ed962c9f247b854bf4245cfde7d1d5eeb0",
+            "reference": "490e12ed962c9f247b854bf4245cfde7d1d5eeb0",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/config": "4.*",
+            "illuminate/events": "4.*",
+            "illuminate/session": "4.*",
+            "illuminate/support": "4.*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "mockery/mockery": "0.7.*"
+        },
+        "time": "2013-12-30 17:17:43",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Krucas\\Notification": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Edvinas Kručas",
+                "email": "edv.krucas@gmail.com"
+            }
+        ],
+        "description": "Package for Laravel for helping to manage flash / instant notifications / messages.",
+        "keywords": [
+            "flash",
+            "instant",
+            "laravel",
+            "messages",
+            "notifications"
+        ]
+    },
+    {
         "name": "phpseclib/phpseclib",
         "version": "0.3.6",
         "version_normalized": "0.3.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpseclib/phpseclib.git",
-            "reference": "76c9692908a6c25601df2db373043fcbb335332e"
+            "reference": "0ea31d9b65d49a8661e93bec19f44e989bd34c69"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/76c9692908a6c25601df2db373043fcbb335332e",
-            "reference": "76c9692908a6c25601df2db373043fcbb335332e",
+            "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/0ea31d9b65d49a8661e93bec19f44e989bd34c69",
+            "reference": "0ea31d9b65d49a8661e93bec19f44e989bd34c69",
             "shasum": ""
         },
         "require": {
@@ -1635,7 +1591,7 @@
             "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
             "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 4.3.3."
         },
-        "time": "2014-02-23 01:03:22",
+        "time": "2014-02-28 16:05:05",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1648,7 +1604,8 @@
                 "Crypt": "phpseclib/",
                 "File": "phpseclib/",
                 "Math": "phpseclib/",
-                "Net": "phpseclib/"
+                "Net": "phpseclib/",
+                "System": "phpseclib/"
             },
             "files": [
                 "phpseclib/Crypt/Random.php"

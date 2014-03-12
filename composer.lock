@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3b1d8db966cd545f7ecdeac67ef9e109",
+    "hash": "fae77145ce3cc5708eedbd509a185bfa",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -53,34 +53,6 @@
             "time": "2013-06-24 22:58:34"
         },
         {
-            "name": "cuab/phpcrawl",
-            "version": "0.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sminnee/phpcrawl.git",
-                "reference": "71888d878b9a362e3a269c6e1a331207309489a5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sminnee/phpcrawl/zipball/71888d878b9a362e3a269c6e1a331207309489a5",
-                "reference": "71888d878b9a362e3a269c6e1a331207309489a5",
-                "shasum": ""
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-v2"
-            ],
-            "authors": [
-                {
-                    "name": "Uwe Hunfeld",
-                    "email": "phpcrawl@cuab.de"
-                }
-            ],
-            "description": "PHPCrawl is a webcrawler/webspider-library written in PHP. It supports filters, limiters, cookie-handling, robots.txt-handling, multiprocessing and much more.",
-            "time": "2013-05-06 06:11:50"
-        },
-        {
             "name": "d11wtq/boris",
             "version": "v1.0.8",
             "source": {
@@ -113,6 +85,56 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "time": "2014-01-17 12:21:18"
+        },
+        {
+            "name": "edvinaskrucas/notification",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/edvinaskrucas/notification.git",
+                "reference": "490e12ed962c9f247b854bf4245cfde7d1d5eeb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/edvinaskrucas/notification/zipball/490e12ed962c9f247b854bf4245cfde7d1d5eeb0",
+                "reference": "490e12ed962c9f247b854bf4245cfde7d1d5eeb0",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "4.*",
+                "illuminate/events": "4.*",
+                "illuminate/session": "4.*",
+                "illuminate/support": "4.*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Krucas\\Notification": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Edvinas Kručas",
+                    "email": "edv.krucas@gmail.com"
+                }
+            ],
+            "description": "Package for Laravel for helping to manage flash / instant notifications / messages.",
+            "keywords": [
+                "flash",
+                "instant",
+                "laravel",
+                "messages",
+                "notifications"
+            ],
+            "time": "2013-12-30 17:17:43"
         },
         {
             "name": "filp/whoops",
@@ -254,16 +276,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v4.1.22",
+            "version": "v4.1.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "a18a892c9d768464249baa1d16117fe52e0a7004"
+                "reference": "054c1a29aaf537c6c6ca7e7804375c671eddcaaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/a18a892c9d768464249baa1d16117fe52e0a7004",
-                "reference": "a18a892c9d768464249baa1d16117fe52e0a7004",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/054c1a29aaf537c6c6ca7e7804375c671eddcaaf",
+                "reference": "054c1a29aaf537c6c6ca7e7804375c671eddcaaf",
                 "shasum": ""
             },
             "require": {
@@ -367,7 +389,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-02-20 15:13:32"
+            "time": "2014-02-28 22:07:47"
         },
         {
             "name": "monolog/monolog",
@@ -528,16 +550,16 @@
         },
         {
             "name": "patchwork/utf8",
-            "version": "v1.1.18",
+            "version": "v1.1.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nicolas-grekas/Patchwork-UTF8.git",
-                "reference": "66a936cc633fe13378c91f81030d5193be968480"
+                "reference": "aea0de833cba7cf2c25239be71f2787edaee36d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nicolas-grekas/Patchwork-UTF8/zipball/66a936cc633fe13378c91f81030d5193be968480",
-                "reference": "66a936cc633fe13378c91f81030d5193be968480",
+                "url": "https://api.github.com/repos/nicolas-grekas/Patchwork-UTF8/zipball/aea0de833cba7cf2c25239be71f2787edaee36d5",
+                "reference": "aea0de833cba7cf2c25239be71f2787edaee36d5",
                 "shasum": ""
             },
             "require": {
@@ -575,7 +597,7 @@
                 "utf-8",
                 "utf8"
             ],
-            "time": "2014-02-02 17:09:49"
+            "time": "2014-03-01 20:01:07"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -583,12 +605,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "76c9692908a6c25601df2db373043fcbb335332e"
+                "reference": "0ea31d9b65d49a8661e93bec19f44e989bd34c69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/76c9692908a6c25601df2db373043fcbb335332e",
-                "reference": "76c9692908a6c25601df2db373043fcbb335332e",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/0ea31d9b65d49a8661e93bec19f44e989bd34c69",
+                "reference": "0ea31d9b65d49a8661e93bec19f44e989bd34c69",
                 "shasum": ""
             },
             "require": {
@@ -613,7 +635,8 @@
                     "Crypt": "phpseclib/",
                     "File": "phpseclib/",
                     "Math": "phpseclib/",
-                    "Net": "phpseclib/"
+                    "Net": "phpseclib/",
+                    "System": "phpseclib/"
                 },
                 "files": [
                     "phpseclib/Crypt/Random.php"
@@ -669,7 +692,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2014-02-23 01:03:22"
+            "time": "2014-02-28 16:05:05"
         },
         {
             "name": "predis/predis",

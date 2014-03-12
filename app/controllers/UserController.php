@@ -21,14 +21,23 @@ class UserController extends BaseController {
 				$password = Input::get('password');
 				
 				$user = new User;
-				$user->login($username, $password);
-				
-				return View::make('team');
+				if($user->login($username, $password)){
+					// Logged in
+					return View::make('team');
+				}else{
+					return Redirect::to('user/login')->withInput();
+				}
 			}
     	}else{
 	    	// Show the form
-	    	return View::make('user/login');
+	    	$data['title'] = 'Login';
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.login');
     	}
+	}
+	
+	function loginmodal(){
+		$data['title'] = 'Login';
+		return View::make('layouts.modal', $data)->nest('content', 'user.login');
 	}
 	
 	function register(){
@@ -67,24 +76,31 @@ class UserController extends BaseController {
 					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
 					//});
 					
-					echo 'Welcome to coachcenter! We have sent you an email to activate your account.';
-					return;
+					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account.';
+					$data['title'] = 'Welcome!';
+					return View::make('layouts.simple', $data);
 				}else{
 					// Something went wrong
-					echo 'Something went wrong, please try again later';
-					return;
+					return Redirect::to('user/register')->withInput();
 				}
 			}
     	}else{
 	    	// Show the form
-	    	return View::make('user/register');
+	    	$data['title'] = 'Register';
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.register');
     	}		
 	}
 	
 	function activate($username, $registrationcode){
 		$user = new User;
 		if($user->activate($username, $registrationcode)){
-					echo 'Account activated!';
+			$data['title'] = 'Account Activated!';
+			$data['content'] = 'You are now a full member of coachcenter, login to start!';
+			return View::make('layouts.simple', $data);
+		}else{
+			$data['title'] = 'Activation Error';
+			$data['content'] = Notification::showAll();
+			return View::make('layouts.simple', $data);
 		}
 	}
 	
@@ -112,13 +128,19 @@ class UserController extends BaseController {
 					//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
 					//});
 					
-					echo 'We have sent you an email with your new password';
+					Notification::success('We have sent you an email with your new password');
 					return;
+					$data['title'] = 'Password Recovery';
+					$data['content'] = 'Your password was resetted, we have sent an email with your new password.';
+					return View::make('layouts.simple', $data);
+				}else{
+					return Redirect::to('user/passwordforgot')->withInput();
 				}
 			}
     	}else{
 	    	// Show the form
-	    	return View::make('user/passwordforgot');
+	    	$data['title'] = 'Recover Password';
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.passwordforgot');
     	}		
 	}
 	
@@ -126,7 +148,9 @@ class UserController extends BaseController {
 		$user = new User;
 		$user->logout();
 		
-		echo 'You\'re now logged out!';
+		$data['title'] = 'Logged Out!';
+		$data['content'] = 'Enjoy the rest of the world wide web.';
+		return View::make('layouts.simple', $data);
 	}
 
 }
