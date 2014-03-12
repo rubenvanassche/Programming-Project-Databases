@@ -601,7 +601,7 @@ class Builder {
 		}
 		else
 		{
-			$this->query->where($column, $operator, $value, $boolean);
+			call_user_func_array(array($this->query, 'where'), func_get_args());
 		}
 
 		return $this;
