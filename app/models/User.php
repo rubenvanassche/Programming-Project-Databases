@@ -16,6 +16,7 @@ class User {
 			Session::forget('userEntrance');
 			return false;
 		}else{
+			Session::push('userEntrance', time());
 			return true;
 		}
 	}
@@ -77,6 +78,7 @@ class User {
 		if($result == 1){
 			return true;
 		}else{
+			Notification::error('Something went wrong, please try again');
 			return false;
 		}
 	}
@@ -85,17 +87,17 @@ class User {
 		$results = DB::Select("Select id, registrationcode FROM user WHERE username = ? ", array($username));
 		
 		if(empty($results)){
-			Notification::error('Something went wrong!');
+			Notification::errorInstant('Something went wrong!');
 			return false;
 		}
 		
 		if(strlen($results[0]->registrationcode) == 0){
-			Notification::error('Your account is already activated!');
+			Notification::errorInstant('Your account is already activated!');
 			return false;
 		}
 		
 		if($results[0]->registrationcode != $registrationcode){
-			Notification::error('Your activation code is wrong!');
+			Notification::errorInstant('Your activation code is wrong!');
 			return false;
 		}
 		

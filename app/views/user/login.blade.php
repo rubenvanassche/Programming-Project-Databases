@@ -1,4 +1,3 @@
-
 <?php
 if(Notification::showAll() != '' or $errors->first('username') != '' or $errors->first('password') != ''){
 ?>
@@ -25,7 +24,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 	{{ Form::password('password', array('class'=>'form-control')) }}
 </div>
 
-<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">I Forgot my password</a>
+<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
 {{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
 
 {{ Form::token() . Form::close() }}
