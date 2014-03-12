@@ -36,6 +36,8 @@ Route::get('player', function()
 
 // AUTH
 Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
+// For simple box on website
+Route::get('user/loginmodal', 'UserController@loginmodal');
 Route::match(array('GET', 'POST'), 'user/register', 'UserController@register');
 Route::get('user/activate/{username}/{registrationcode}', 'UserController@activate');
 Route::get('user/logout', 'UserController@logout');

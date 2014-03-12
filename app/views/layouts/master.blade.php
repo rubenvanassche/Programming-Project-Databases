@@ -38,7 +38,7 @@
 							<ul class="dropdown-menu">
 								<li><a href="#">My Profile</a></li>
 								<li><a href="#">Bets</a></li>
-								<li><a href="users" data-toggle="modal" data-target="#dasModel">Login</a></li>
+								<li><a href="user/loginmodal" data-toggle="modal" data-target="#dasModel">Login</a></li>
 								<li class="divider"></li>
 								<li><a href="#">Log Out <i class="flag-be"></i></a></li>
 							</ul>

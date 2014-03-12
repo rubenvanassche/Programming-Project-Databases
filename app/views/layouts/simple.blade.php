@@ -9,7 +9,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			{{{ $content  or ''  }}}
+			{{ $content  or ''  }}
 		</div>
 	</div>
 </div>

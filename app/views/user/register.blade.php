@@ -1,5 +1,7 @@
 <h2>Register!</h2>
 
+{{ Notification::showAll() }}
+
 {{ Form::open(array('url' => 'user/register')) }}
 
 {{ Form::label('username', 'Username') . Form::text('username', Input::old('username')) }}
