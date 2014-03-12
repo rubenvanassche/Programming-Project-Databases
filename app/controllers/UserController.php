@@ -59,7 +59,7 @@ class UserController extends BaseController {
 				$data['password'] = Input::get('password');
 				
 				$user = new User;
-				$success = $user->register($data)
+				$success = $user->register($data);
 				
 				if($success == true){
 					// Insertion was succesfull, send an email with the activation
