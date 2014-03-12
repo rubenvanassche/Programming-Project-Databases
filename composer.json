@@ -4,8 +4,7 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*",
-		"cuab/phpcrawl": "0.8.1"
+		"laravel/framework": "4.1.*"
 	},
 	"autoload": {
 		"classmap": [

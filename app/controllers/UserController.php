@@ -71,7 +71,7 @@ class UserController extends BaseController {
 					return;
 				}else{
 					// Something went wrong
-					echo 'There went something wrong, please try again later';
+					echo 'Something went wrong, please try again later';
 					return;
 				}
 			}
