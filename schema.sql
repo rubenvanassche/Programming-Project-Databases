@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.6
+-- version 4.0.6deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 27, 2014 at 01:19 
--- Server version: 5.6.16
--- PHP Version: 5.5.9
+-- Generation Time: Mar 12, 2014 at 07:07 PM
+-- Server version: 5.5.35-0ubuntu0.13.10.2
+-- PHP Version: 5.5.3-1ubuntu2.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `color` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `player_ids` (`player_id`),
-  UNIQUE KEY `match` (`match_id`)
+  KEY `player_ids` (`player_id`),
+  KEY `match` (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -45,8 +45,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
 
 CREATE TABLE IF NOT EXISTS `coach` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(60) NOT NULL,
-  `lastname` varchar(60) NOT NULL,
+  `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -86,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `country` (
   `continent_id` int(11) NOT NULL,
   `abbreviation` char(4) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `continent` (`continent_id`)
+  KEY `continent` (`continent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -103,9 +102,9 @@ CREATE TABLE IF NOT EXISTS `goal` (
   `team_id` int(11) NOT NULL,
   `penaltyphase` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `match` (`match_id`),
-  UNIQUE KEY `player` (`player_id`),
-  UNIQUE KEY `team` (`team_id`)
+  KEY `match` (`match_id`),
+  KEY `player` (`player_id`),
+  KEY `team` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -121,9 +120,9 @@ CREATE TABLE IF NOT EXISTS `match` (
   `competition_id` int(11) NOT NULL,
   `date` date NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `hometeam` (`hometeam_id`),
-  UNIQUE KEY `awayteam` (`awayteam_id`),
-  UNIQUE KEY `competition` (`competition_id`)
+  KEY `hometeam` (`hometeam_id`),
+  KEY `awayteam` (`awayteam_id`),
+  KEY `competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -134,8 +133,7 @@ CREATE TABLE IF NOT EXISTS `match` (
 
 CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(60) NOT NULL,
-  `lastname` varchar(60) NOT NULL,
+  `name` varchar(60) NOT NULL,
   `injured` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -180,8 +178,8 @@ CREATE TABLE IF NOT EXISTS `team` (
   `country_id` int(11) NOT NULL,
   `coach_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `country` (`country_id`),
-  UNIQUE KEY `coach` (`coach_id`)
+  KEY `country` (`country_id`),
+  KEY `coach` (`coach_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -196,6 +194,25 @@ CREATE TABLE IF NOT EXISTS `teamPerCompetition` (
   PRIMARY KEY (`team_id`,`competition_id`),
   KEY `tpc_competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) NOT NULL,
+  `firstname` varchar(60) NOT NULL,
+  `lastname` varchar(60) NOT NULL,
+  `email` varchar(60) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `country` varchar(60) NOT NULL,
+  `session_id` varchar(24) DEFAULT NULL,
+  `registrationcode` varchar(24) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables

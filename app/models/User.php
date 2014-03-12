@@ -35,7 +35,7 @@ class User {
 		}
 		
 		if(strlen($results[0]->registrationcode) != 0){
-			echo 'Your email adress isn\'t validated!';
+			echo 'Your email adress hasn\'t been validated!';
 			return false;
 		}
 		
@@ -65,7 +65,7 @@ class User {
 		$data['registrationcode'] = str_random(24);
 		$data['password'] = Hash::make($data['password']);
 		
-		$result = DB::Insert("INSERT INTO user (username, firstname, lastname, email, password, country, registrationcode) VALUES ('?', '?', '?', '?', '?', '?', '?')", 
+		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country, registrationcode) VALUES (?, ?, ?, ?, ?, ?, ?)", 
 		array($data['username'],
 			$data['firstname'],
 			$data['lastname'],
@@ -85,17 +85,17 @@ class User {
 		$results = DB::Select("Select id, registrationcode FROM user WHERE username = ? ", array($username));
 		
 		if(empty($results)){
-			echo 'There went something wrong!';
+			echo 'Something went wrong!';
 			return false;
 		}
 		
 		if(strlen($results[0]->registrationcode) == 0){
-			echo 'You\'re account is already activated!';
+			echo 'Your account is already activated!';
 			return false;
 		}
 		
 		if($results[0]->registrationcode != $registrationcode){
-			echo 'You\'re activation code is wrong!';
+			echo 'Your activation code is wrong!';
 			return false;
 		}
 		
@@ -114,7 +114,7 @@ class User {
 		
 		if(empty($results)){
 			// Username not found
-			echo 'There is no account with this email adress!';
+			echo 'There is no account with this email address!';
 			return false;
 		}
 		
