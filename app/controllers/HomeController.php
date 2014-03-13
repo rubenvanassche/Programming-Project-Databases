@@ -17,7 +17,18 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-		return View::make('hello');
+		$recentMatches = Match::getRecentMatches();
+		$recentTeamMatches;
+		foreach ($recentMatches as $rm) {
+			$recentTeamMatches.push(Team::getTeam($rm->hometeam_id));
+			$recentTeamMatches.push(Team::getTeam($rm->awayteam_id));
+		}
+		
+			
+	return View::make('home', array('recentMatches' => $recentMatches), array('recentTeamMatches'=>$recentTeamMatches), 'title', 'Home');		
 	}
 
+
 }
+
+?>

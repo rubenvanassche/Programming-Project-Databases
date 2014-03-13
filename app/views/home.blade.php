@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
 @section('content')
+<?php  Create connection $con=mysqli_connect("localhost","root","root","coachcenter");  Check connection if (mysqli_connect_errno()) { echo "Failed to connect to MySQL: " . mysqli_connect_error(); } ?>
+
 	<div class="row">
 		<div class="col-md-9" >
 			<!--  Carousel - consult the Twitter Bootstrap docs at
@@ -43,7 +45,7 @@
 		 </div>
  		<div class="col-md-3" >
  			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Recently Played</h5>
+	 			<h5 class="matchListTitle">{{$args.$kaka}}</h5>
 	 			<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -55,6 +57,21 @@
 						</tr>
 					</thead>
 					<tbody>
+						<?php
+						$counter = -1;
+						@foreach ($recentMatches as $recentMatch)
+							counter++;
+							$homeflag = "flag-".$recent
+							<tr>
+								<td><i class="flag-be"></i></td>
+								<td>$recentTeamMatch[counter][0]->name</td>
+								<td>$recentMatch->score</td>
+								counter++;
+								<td>$recentTeamMatch[counter][0]->name</td>
+								<td><i class="flag-ru"></i></td>
+							</tr>
+						@endforeach
+						?>
 						<tr>
 							<td><i class="flag-be"></i></td>
 							<td>Belgium</td>
@@ -87,7 +104,7 @@
 				</table>
 				</div>
 				<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Upcoming</h5>
+	 			<h5 class="matchListTitle">{{$kaka}}</h5>
 				<table class="table table-condensed">
 				  <thead>
 					<tr>

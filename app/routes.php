@@ -11,13 +11,9 @@
 |
 */
 
-Route::get('/', function()
-{
-	// return with view
-	//return View::make('home')->with('view', 'ruben')->with('title', 'Home');
-	// return with parameter content given in blade file
-	 return View::make('home')->with('title', 'Home');
-});
+
+
+Route::get('/', 'HomeController@showWelcome');
 
 Route::get('widemap', function()
 {
@@ -33,6 +29,8 @@ Route::get('player', function()
 {
 	 return View::make('player');
 });
+
+// Homepage
 
 // AUTH
 Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
