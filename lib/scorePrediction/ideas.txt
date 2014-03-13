@@ -28,7 +28,7 @@ Variables win/loss prediction:
 	(perhaps divided in home and away again)
 - home team: win/loss ratio at home
 - out team: win/loss ratio when away
-- current rank in the league
+- current rank in the league (This might not be neccesary)
 	
 Variables score prediction:
 - same setup scores

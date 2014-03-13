@@ -1,4 +1,31 @@
 <?php
+
+function predictOutcome($matchID) {
+	// Connect to the database.
+	$con=mysqli_connect("localhost","CoachCenter","xSN2asvRPVU3Lrsa","coachcenter");
+
+    $sql="SELECT * FROM match WHERE id = '$matchID'";
+    $result = mysqli_query($con,$sql);
+    $match = mysqli_fetch_array($result);
+
+	// Holds info about hometeam
+	$sql = "SELECT * FROM team WHERE id = '$match["hometeam_id"]'";
+	$result = mysqli_query($con, $sql);
+	$homeTeam = mysqli_fetch_array($result);
+	
+	// Holds info about awayteam
+	$sql = "SELECT * FROM team WHERE id = '$match["awayteam_id"]'";
+	$result = mysqli_query($con, $sql);
+	$awayTeam = mysqli_fetch_array($result);
+	
+	// Make an array with matches with same teams. (This could be divided in home and away);
+	// Loop over the array giving each team a point if he won. (except same setup = 1 point, different home/away = .5 points);
+	// Look at recent resulst, again adding points (This could be divided aswell in home and away);
+	
+	// Compare the points.
+	
+}
+
 function predictScore($matchID)
 {
 	// Connect to the database.
