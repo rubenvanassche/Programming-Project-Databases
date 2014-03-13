@@ -3,13 +3,40 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-9" >
-			<div class="hero-unit" style="background-color:green;">
-				<h1>Marketing stuff!</h1>
-			 
-				<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-			 
-				<a href="#" class="btn btn-large btn-success">Get Started</a>
-		 	</div>
+			<!--  Carousel - consult the Twitter Bootstrap docs at
+      http://twitter.github.com/bootstrap/javascript.html#carousel -->
+			<div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
+			  <div class="carousel-inner">
+				<div class="item active"><!-- class of active since it's the first item -->
+				  <img src="http://www.highdefinitionwallpapers1080p.com/wp-content/uploads/2013/09/fifa-world-cup-2014-brazil.jpg" alt="" />
+				  <div class="carousel-caption">
+					<p>mead hop back, krausen scotch ale hydrometer. brew pilsner infusion dextrin mash. terminal gravity final gravity racking squares brewhouse brew kettle? acid rest all-malt, beer copper goblet! bunghole dry stout secondary fermentation dry stout adjunct keg hop back. terminal gravity; scotch ale, bock saccharification anaerobic racking ipa.</p>
+				  </div>
+				</div>
+				<div class="item">
+				  <img src="http://placehold.it/1200x480" alt="" />
+				  <div class="carousel-caption">
+					<p>Caption text here</p>
+				  </div>
+				</div>
+				<div class="item">
+				  <img src="http://placehold.it/1200x480" alt="" />
+				  <div class="carousel-caption">
+					<p>Caption text here</p>
+				  </div>
+				</div>
+				<div class="item">
+				  <img src="http://placehold.it/1200x480" alt="" />
+				  <div class="carousel-caption">
+					<p>Caption text here</p>
+				  </div>
+				</div>
+			  </div><!-- /.carousel-inner -->
+			  <!--  Next and Previous controls below
+					href values must reference the id for this carousel -->
+				<a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
+				<a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
+			</div><!-- /.carousel -->
 		 	<div style="background-color:yellow;">
 		 		<p>test2</p>
 		 	</div>
@@ -139,7 +166,14 @@
 	color:white;
 	vertical-align:bottom;
 	padding-top:3%;
+}
 
+.marketingArea {
+	background-color:#007fff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow:3px 3px 10px 1px #c1c1c1;
 }
 </style>
 @stop
