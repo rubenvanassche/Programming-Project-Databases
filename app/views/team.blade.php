@@ -10,7 +10,7 @@
 	<div class="col-md-2">
 	</div>
 </div>
-<div class="row row-padded">
+	<div class="row row-padded">
   <div class="col-md-2">
   	<ul class="nav nav-list">
 		<li class="nav-header">Belgium</li>
