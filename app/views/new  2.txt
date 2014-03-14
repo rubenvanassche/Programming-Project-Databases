@@ -1,0 +1,15 @@
+<?php
+						$counter = -1;
+						@foreach ($recentMatches as $recentMatch)
+							counter++;
+							$homeflag = "flag-".$recent
+							<tr>
+								<td><i class="flag-be"></i></td>
+								<td>$recentTeamMatch[counter][0]->name</td>
+								<td>$recentMatch->score</td>
+								counter++;
+								<td>$recentTeamMatch[counter][0]->name</td>
+								<td><i class="flag-ru"></i></td>
+							</tr>
+						@endforeach
+						?>

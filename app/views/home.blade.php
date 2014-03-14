@@ -1,18 +1,16 @@
 @extends('layouts.master')
 
 @section('content')
-<?php  Create connection $con=mysqli_connect("localhost","root","root","coachcenter");  Check connection if (mysqli_connect_errno()) { echo "Failed to connect to MySQL: " . mysqli_connect_error(); } ?>
-
 	<div class="row">
 		<div class="col-md-9" >
 			<!--  Carousel - consult the Twitter Bootstrap docs at
       http://twitter.github.com/bootstrap/javascript.html#carousel -->
-			<div id="this-carousel-id" class="carousel slide"><!-- class of slide for animation -->
+			<div id="this-carousel-id" class="carousel slide hero"><!-- class of slide for animation -->
 			  <div class="carousel-inner">
 				<div class="item active"><!-- class of active since it's the first item -->
 				  <img src="http://www.highdefinitionwallpapers1080p.com/wp-content/uploads/2013/09/fifa-world-cup-2014-brazil.jpg" alt="" />
 				  <div class="carousel-caption">
-					<p>mead hop back, krausen scotch ale hydrometer. brew pilsner infusion dextrin mash. terminal gravity final gravity racking squares brewhouse brew kettle? acid rest all-malt, beer copper goblet! bunghole dry stout secondary fermentation dry stout adjunct keg hop back. terminal gravity; scotch ale, bock saccharification anaerobic racking ipa.</p>
+					<p>World Cup 2014 Brazil</p>
 				  </div>
 				</div>
 				<div class="item">
@@ -39,13 +37,332 @@
 				<a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
 				<a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
 			</div><!-- /.carousel -->
-		 	<div style="background-color:yellow;">
-		 		<p>test2</p>
+		 	<div style="background-color:grey;">
+				<div class="col-md-3">
+					<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				</div>
+				<div class="col-md-3">
+					<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<div class="matchListDiv">
+						<h5 class="matchListTitle">Group A</h5>
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Country</th>
+									<th>Score</th>
+								</tr>
+							</thead>
+							<tbody>				
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-be"></i></td>
+									<td>Belgium</td>
+									<td>3</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td><i class="flag-ru"></i></td>
+									<td>Russia</td>
+									<td>1</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 		 	</div>
-		 </div>
  		<div class="col-md-3" >
  			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">{{$args.$kaka}}</h5>
+	 			<h5 class="matchListTitle">Upcoming Matches</h5>
 	 			<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -56,22 +373,7 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>
-						<?php
-						$counter = -1;
-						@foreach ($recentMatches as $recentMatch)
-							counter++;
-							$homeflag = "flag-".$recent
-							<tr>
-								<td><i class="flag-be"></i></td>
-								<td>$recentTeamMatch[counter][0]->name</td>
-								<td>$recentMatch->score</td>
-								counter++;
-								<td>$recentTeamMatch[counter][0]->name</td>
-								<td><i class="flag-ru"></i></td>
-							</tr>
-						@endforeach
-						?>
+					<tbody>				
 						<tr>
 							<td><i class="flag-be"></i></td>
 							<td>Belgium</td>
@@ -104,7 +406,7 @@
 				</table>
 				</div>
 				<div class="matchListDiv">
-	 			<h5 class="matchListTitle">{{$kaka}}</h5>
+	 			<h5 class="matchListTitle">Played Matches</h5>
 				<table class="table table-condensed">
 				  <thead>
 					<tr>
@@ -191,6 +493,14 @@
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	box-shadow:3px 3px 10px 1px #c1c1c1;
+}
+
+.hero {
+	margin-top:1.5%;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 3px 3px 10px 1px #c1c1c1;
 }
 </style>
 @stop
