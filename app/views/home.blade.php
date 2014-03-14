@@ -8,7 +8,7 @@
 			<div id="this-carousel-id" class="carousel slide hero"><!-- class of slide for animation -->
 			  <div class="carousel-inner">
 				<div class="item active"><!-- class of active since it's the first item -->
-				  <img src="http://www.highdefinitionwallpapers1080p.com/wp-content/uploads/2013/09/fifa-world-cup-2014-brazil.jpg" alt="" />
+				  <img src="http://riouncovered.com/wp-content/uploads/2013/07/fifa-world-cup-feat21.jpg" alt="" />
 				  <div class="carousel-caption">
 					<p>World Cup 2014 Brazil</p>
 				  </div>
@@ -362,7 +362,7 @@
 		 	</div>
  		<div class="col-md-3" >
  			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Upcoming Matches</h5>
+	 			<h5 class="matchListTitle">Played Matches</h5>
 	 			<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -373,40 +373,30 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>				
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>1 - 0</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>1 - 0</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>1 - 0</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>1 - 0</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
+					<tbody>	
+						<?php 
+							$i = -1;
+						?>
+						@foreach ($recentMatches as $recentMatch)
+							<tr>
+								<?php $i++;
+									$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
+									$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
+									$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
+								?>
+								<td><i class={{$hFlag}}></i></td>
+								<td>{{$recentTeamMatches[$i][0]->name}}</td>
+								<td>{{$scoreString}}</td>
+								<?php $i++;?>
+								<td>{{$recentTeamMatches[$i][0]->name}}</td>
+								<td><i class={{$aFlag}}></i></td>
+							</tr>
+						@endforeach					
 					</tbody>
 				</table>
 				</div>
 				<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Played Matches</h5>
+	 			<h5 class="matchListTitle">Upcoming Matches</h5>
 				<table class="table table-condensed">
 				  <thead>
 					<tr>

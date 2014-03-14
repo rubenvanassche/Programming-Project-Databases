@@ -2,7 +2,7 @@
 
 class Stats {
 
-	function addCard($playerName, $matchID, $color, $time){
+	static function addCard($playerName, $matchID, $color, $time){
 		//Look for all players with this name
 		$playerIDs = DB::select('SELECT id FROM player WHERE name = ?', array($playerName));
 		if (empty($playerIDs)) {
@@ -44,7 +44,7 @@ class Stats {
 
 
 
-	function addCoach($name) {
+	static function addCoach($name) {
 		$result = DB::insert('INSERT INTO coach (name) VALUES (?)', array($name));
 		if($result == 1) {
 			echo "Coach added";
@@ -58,7 +58,7 @@ class Stats {
 
 
 
-	function addCoachUnique($name) {
+	static function addCoachUnique($name) {
 		$results = DB::select('SELECT * FROM coach WHERE name = ?', array($name));
 		if(!empty($results)) {
 			echo "Cocah already in database";
@@ -78,7 +78,7 @@ class Stats {
 
 
 
-	function addCompetition($name) {
+	static function addCompetition($name) {
 		$results = DB::select('SELECT * FROM competition WHERE name = ?', array($name));
 		if(!empty($results)) {
 			echo "Competition already in database";
@@ -98,7 +98,7 @@ class Stats {
 
 
 
-	function addContinent($name) {
+	static function addContinent($name) {
 		$results = DB::select('SELECT * FROM continent WHERE name = ?', array($name));
 		if(!empty($results)) {
 			echo "Continent already in database";
@@ -118,7 +118,7 @@ class Stats {
 
 
 
-	function addCountry($countryName, $continentName, $abbreviation) {
+	static function addCountry($countryName, $continentName, $abbreviation) {
 		$results = DB::select('SELECT id FROM continent WHERE name = ?', array($continentName));
 		if(empty($results)) {
 			echo "Continent not in database";
@@ -132,7 +132,7 @@ class Stats {
 			return false;
 		}
 
-		$result = DB::insert('INSERT INTO country (name, continent_id, abbreviation) VALUES (?, ?, ?)', array($countryName, $continentID));
+		$result = DB::insert('INSERT INTO country (name, continent_id, abbreviation) VALUES (?, ?, ?)', array($countryName, $continentID, $abbreviation));
 		if($result == 1) {
 			echo "Country added";
 			return true;
@@ -145,7 +145,7 @@ class Stats {
 
 
 
-	function addGoal($matchID, $time, $playerName, $teamName, $penaltyPhase) {
+	static function addGoal($matchID, $time, $playerName, $teamName, $penaltyPhase) {
 
 		$results = DB::select('SELECT id FROM `team` WHERE name = ?', array($teamName));
 		if(empty($results)) {
@@ -211,7 +211,7 @@ class Stats {
 
 
 
-	function addMatch($homeTeamName, $awayTeamName, $competitionName) {
+	static function addMatch($homeTeamName, $awayTeamName, $competitionName) {
 		$results = DB::select('SELECT id FROM team WHERE name = ?', array($homeTeamName));
 		if(empty($results)) {
 			echo "Home team not in database";
@@ -265,7 +265,7 @@ class Stats {
 	}
 
 
-	function addPlayer($name, $injured) {
+	static function addPlayer($name, $injured) {
 		$result = DB::insert('INSERT INTO player (name, injured) VALUES (?, ?)', array($name, $injured));
 		if($result == 1) {
 			echo "Player added";
@@ -278,7 +278,7 @@ class Stats {
 	}
 
 	//Won't add player if player with same name is already in db
-	function addPlayerUnique($name, $injured) {
+	static function addPlayerUnique($name, $injured) {
 		$results = DB::select('SELECT * FROM player WHERE name = ?', array($name));
 		if(!empty($results)) {
 			echo "Player already in database";
@@ -299,7 +299,7 @@ class Stats {
 
 
 	//Won't check for playerPerTeam entry
-	function addPlayerPerMatch($playerName, $matchID, $intime, $outtime) {
+	static function addPlayerPerMatch($playerName, $matchID, $intime, $outtime) {
 		$results = DB::select('SELECT id FROM player WHERE name = ?', array($playerName));
 		if(empty($results)) {
 			echo "Player not in database";
@@ -333,7 +333,7 @@ class Stats {
 
 
 	//Will only add player per match if there is a playerPerTeam entry with the player and one of the two teams in the match
-	function addPlayerPerMatchStrict($playerName, $matchID, $intime, $outtime) {
+	static function addPlayerPerMatchStrict($playerName, $matchID, $intime, $outtime) {
 		$results = DB::select('SELECT id FROM player WHERE name = ?', array($playerName));
 		if(empty($results)) {
 			echo "Player not in database";
@@ -375,7 +375,7 @@ class Stats {
 
 
 
-	function addPlayerPerTeam($playerName, $teamName) {
+	static function addPlayerPerTeam($playerName, $teamName) {
 		$results = DB::select('SELECT id FROM player WHERE name = ?', array($playerName));
 		if(empty($results)) {
 			echo "Player not in database";
@@ -409,7 +409,7 @@ class Stats {
 
 
 
-	function addTeam($teamName, $countryName, $coachName) {
+	static function addTeam($teamName, $countryName, $coachName) {
 		$results = DB::select('SELECT id FROM country WHERE name = ?', array($countryName));
 		if(empty($results)) {
 			echo "Country not in database";
@@ -443,7 +443,7 @@ class Stats {
 
 
 
-	function addTeamPerCompetition($teamName, $competitionName) {
+	static function addTeamPerCompetition($teamName, $competitionName) {
 		$results = DB::select('SELECT id FROM team WHERE name = ?', array($teamName));
 		if(empty($results)) {
 			echo "Team not in database";

@@ -30,8 +30,6 @@ Route::get('player', function()
 	 return View::make('player');
 });
 
-// Homepage
-
 // AUTH
 Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
 // For simple box on website
