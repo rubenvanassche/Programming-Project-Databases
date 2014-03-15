@@ -4,7 +4,7 @@
 <div class="row row-padded">
 <!-- Row that contains current hierarchy -->
 	<div class="col-md-10">
-		<p><a href="#">Home</a> >> <a href="#">Teams</a> >> <a href="#">International</a> >> <a href="#">Belgium</a></p>
+		<p><a href="#">Home</a> >> <a href="#">Teams</a> >> <a href="#">International</a> >> <a href="#">{{$playerTeam->name}}</a> >> <a href="#">{{$playerObj->name}}</a></p>
 	</div>
 	<div class="col-md-2">
 	</div>
@@ -12,44 +12,36 @@
 <div class="row row-padded">
   <div class="col-md-2">
   	<ul class="nav nav-list">
-		<li class="nav-header">Vincent Kompany</li>
-		<li class="active"><a href="#">Current Team</a></li>
+		<li class="nav-header">{{$playerObj->name}}</li>
+		<li class="active">
+		<a href={{"team?id=" . $playerTeam->id}}>Current Team</a></li>
 		<li class="active"><a href="#">History</a></li>
 		<li><a href="#">Matches</a></li>
 		<li><a href="#">Stats</a></li>
 	</ul>
   </div>
   <div class="col-md-8">
-  	<h3>Vincent Kompany</h3>
- 	<!--/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=Vincent%20Kompany -->
- 	
- 	<?php 
-		$jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=Vincent%20Kompany";
-		$json = file_get_contents($jsonurl);
-		var_dump(json_decode($json, true, JSON_UNESCAPED_UNICODE)); 	
-		//$wikiObj['query']->['pages']->['1500332']->['extract'];
- 	
- 	?>
- 	
-	<div class="row">
+  	<h3>{{$playerObj->name}}</h3>
 
+	<div class="row">
+		{{$playerText}}
 	</div>
   </div>
   
 	<div class="col-md-2">
 	<dl>
- 		<dd><img class="img-responsive flag img-circle" src="http://upload.wikimedia.org/wikipedia/commons/8/8d/Vincent_Kompany_-_Belgium.jpg" alt="" /></dd>
+ 		<dd><img class="img-responsive flag" src="{{$playerImageURL}}" alt="" /></dd>
   		<dt>Country</dt>
-  		<dd>Belgium</dd>
-  		<dt>Age</dt>
-  		<dd>27</dd>
-  		<dt>Goals</dt>
-  		<dd>34</dd>
+  		<dd>{{$playerTeam->name}}</dd>
  		<dt>Injured</dt>
-  		<dd>No</dd>
+  		<dd>
+		<?php 
+		if ($playerObj->injured == 0) {echo "No";} else { echo "Yes";}; ?>
+		</dd>
+		<dt>Current Teams</dt>
+		<dd>{{$playerTeam->name}}</dd>
 	</dl>
 
-  				
 
 	</table>
 
@@ -67,6 +59,7 @@
 		.img-responsive.flag {
 			padding-top:5%;
 			padding-bottom:5%;
+
 		}
 		
 		dt {

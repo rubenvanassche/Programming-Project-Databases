@@ -20,14 +20,12 @@ Route::get('widemap', function()
 	 return View::make('widemap');
 });
 
-Route::get('team', function()
-{
-	 return View::make('team');
-});
+Route::get('team', 'TeamController@showPage');
 
-Route::get('player', function()
-{
-	 return View::make('player');
+Route::get('player', 'PlayerController@showPage');
+
+Route::get('player/history', function() {
+	return View::make('player/history');
 });
 
 // AUTH
