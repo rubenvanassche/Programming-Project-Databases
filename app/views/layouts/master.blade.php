@@ -22,7 +22,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>ubli
 					</button>
-					<a class="navbar-brand" href="/public">Coach Center</a>
+					<a class="navbar-brand" href="home">Coach Center</a>
 				</div>
 				<div class="collapse navbar-collapse">
 					
