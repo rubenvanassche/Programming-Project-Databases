@@ -46,6 +46,9 @@ class HomeController extends BaseController {
 		Stats::addPlayerUnique("Thibaut Courtois", 0);
 		Stats::addPlayerPerTeam("Thibaut Courtois", "Belgium");
 		
+		//$xml = simplexml_load_file("http://www.fifa.com/worldcup/photo/rss.xml");
+		//$xmlIterator = new SimpleXMLIterator($xml);
+		
 		$recentMatches = Match::getRecentMatches();
 		$countryFlags = array();
 		$matchGoals = array();

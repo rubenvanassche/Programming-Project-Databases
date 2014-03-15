@@ -14,6 +14,7 @@
 
 
 Route::get('/', 'HomeController@showWelcome');
+Route::get('home', 'HomeController@showWelcome');
 
 Route::get('widemap', function()
 {
