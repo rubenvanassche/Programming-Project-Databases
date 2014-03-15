@@ -12,6 +12,16 @@ class Team {
 		return $result;
 	}
 	
+	public static function getPlayers($teamID) {
+		$playerIDs = DB::select('SELECT player_id FROM playerperteam WHERE team_id = ?', array($teamID));
+		$players = array();
+		foreach ($playerIDs as $playerID) {
+			$player = DB::select('SELECT * FROM player WHERE id = ?', array($playerID->player_id));
+			array_push($players, $player);
+		}
+		return $players;
+	}
+	
 	public static function getTeamText($teamName){
 		$jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode($teamName);
 		$json = file_get_contents($jsonurl);

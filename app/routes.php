@@ -24,6 +24,8 @@ Route::get('team', 'TeamController@showPage');
 
 Route::get('player', 'PlayerController@showPage');
 
+Route::get('players', 'PlayersController@showPage');
+
 Route::get('player/history', function() {
 	return View::make('player/history');
 });

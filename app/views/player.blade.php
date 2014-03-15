@@ -4,7 +4,7 @@
 <div class="row row-padded">
 <!-- Row that contains current hierarchy -->
 	<div class="col-md-10">
-		<p><a href="#">Home</a> >> <a href="#">Teams</a> >> <a href="#">International</a> >> <a href="#">{{$playerTeam->name}}</a> >> <a href="#">{{$playerObj->name}}</a></p>
+		<p><a href="#">Home</a> >> <a href="#">Teams</a> >> <a href="#">International</a> >> <a href={{"team?id=" . $playerTeam->id}}>{{$playerTeam->name}}</a> >> <a href={{"players?id=". $playerTeam->id}}>Players</a> >> <a href="#">{{$playerObj->name}}</a></p>
 	</div>
 	<div class="col-md-2">
 	</div>
