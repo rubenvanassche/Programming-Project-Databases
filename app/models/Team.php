@@ -7,13 +7,13 @@ class Team {
 	}
 	
 	public static function getTeambyPlayerID($playerID) {
-		$teamID = DB::select('SELECT team_id FROM playerperteam WHERE player_id = ?', array($playerID));
+		$teamID = DB::select('SELECT team_id FROM playerPerTeam WHERE player_id = ?', array($playerID));
 		$result = Team::getTeambyID($teamID[0]->team_id);
 		return $result;
 	}
 	
 	public static function getPlayers($teamID) {
-		$playerIDs = DB::select('SELECT player_id FROM playerperteam WHERE team_id = ?', array($teamID));
+		$playerIDs = DB::select('SELECT player_id FROM playerPerTeam WHERE team_id = ?', array($teamID));
 		$players = array();
 		foreach ($playerIDs as $playerID) {
 			$player = DB::select('SELECT * FROM player WHERE id = ?', array($playerID->player_id));

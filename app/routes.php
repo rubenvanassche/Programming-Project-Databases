@@ -42,3 +42,6 @@ Route::get('user/activate/{username}/{registrationcode}', 'UserController@activa
 Route::get('user/logout', 'UserController@logout');
 Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwordforgot');
 
+Route::get('inserts', function() {
+	return View::make('inserts');
+});

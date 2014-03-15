@@ -1,4 +1,4 @@
-		Stats::addContinent("Europe");
+<?php		Stats::addContinent("Europe");
 		Stats::addCountry("Belgium", "Europe", "be");
 		Stats::addCompetition("World Cup");
 		Stats::addCoach("Marc Wilmots");
@@ -25,4 +25,4 @@
 		Stats::addPlayerPerTeam("Nacer Chadli", "Belgium");
 		
 		Stats::addPlayerUnique("Thibaut Courtois", 0);
-		Stats::addPlayerPerTeam("Thibaut Courtois", "Belgium");
+		Stats::addPlayerPerTeam("Thibaut Courtois", "Belgium"); ?>
