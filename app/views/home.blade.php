@@ -31,331 +31,28 @@
 				<a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
 				<a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
 			</div><!-- /.carousel -->
-		 	<div style="background-color:grey;">
-				<div class="col-md-3">
-					<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-						<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-						<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				</div>
-				<div class="col-md-3">
-					<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-						<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="col-md-3">
-					<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-						<div class="matchListDiv">
-						<h5 class="matchListTitle">Group A</h5>
-						<table class="table table-condensed">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Country</th>
-									<th>Score</th>
-								</tr>
-							</thead>
-							<tbody>				
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-be"></i></td>
-									<td>Belgium</td>
-									<td>3</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-								<tr>
-									<td><i class="flag-ru"></i></td>
-									<td>Russia</td>
-									<td>1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-		 	</div>
+		</div>
  		<div class="col-md-3" >
- 			<div class="matchListDiv">
+ 			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Team</button>
+			<input type="text" class="form-control" placeholder="Team Name">
+
+ 			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Player</button>
+			<input type="text" class="form-control" placeholder="Player Name">
+
+ 			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Competition</button>
+			<input type="text" class="form-control" placeholder="Competition Name">
+			
+			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Match</button>
+			<input type="text" class="form-control" placeholder="Hometeam Name - Awayteam Name">
+
+ 		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9">
+			rss newsfeed in this column.
+		</div>
+		<div class="col-md-3">
+			<div class="matchListDiv">
 	 			<h5 class="matchListTitle">Played Matches</h5>
 	 			<table class="table table-condensed">
 					<thead>
@@ -435,6 +132,7 @@
 			</div>
  		</div>
 	</div>
+
 @stop
 
 @section('css')
@@ -469,6 +167,16 @@
 	color:white;
 	vertical-align:bottom;
 	padding-top:3%;
+}
+
+.buttonMarg {
+	margin-top:5%;
+	-webkit-border-top-left-radius: 5px;
+-webkit-border-top-right-radius: 5px;
+-moz-border-radius-topleft: 5px;
+-moz-border-radius-topright: 5px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
 }
 
 .marketingArea {

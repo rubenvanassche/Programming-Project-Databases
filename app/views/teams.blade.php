@@ -13,7 +13,7 @@
 	<div class="row row-padded">
 		<div class="col-md-2">
 			<ul class="nav nav-list">
-				<li class="nav-header">Countries</li>
+				<li class="nav-header">Country</li>
 				<li class="active">
 				<select class="form-control rounded">
 				  <option>Belgium</option>
@@ -33,14 +33,19 @@
 					<h4>Belgium</h4>
 
 				</div>
-						<div class="col-md-9">
-							<select class="form-control rounded">
-							  <option>National Team</option>
-							  <option>Russia</option>
-							  <option>Italy</option>
-							  <option>Germany</option>
-							  <option>France</option>
-							</select>
+						<div class="col-md-9 hackity">
+							<ul class="nav nav-list">
+								<li class="nav-header">Team</li>
+								<li class="active">
+								<select class="form-control rounded">
+								  <option>National Team</option>
+								  <option>Russia</option>
+								  <option>Italy</option>
+								  <option>Germany</option>
+								  <option>France</option>
+								</select>
+								</li>
+							</ul>
 						</div>	
 			</div>
   
@@ -61,8 +66,6 @@
 			margin-top: 1%;
 		}
 	
-
-		
 		dt {
 			background-color:#006DDB;;
 		}
@@ -76,12 +79,15 @@
 			-webkit-border-radius: 5px;
 			-moz-border-radius: 5px;
 			border-radius: 5px;
-			box-shadow:3px 3px 10px 1px #c1c1c1;
 			margin-top:1.5%;
 		}
 		
 		.rounded {
 			border-radius: 4px;
+		}
+		
+		.hackity {
+			margin-top:-2%;
 		}
 	</style>
 @stop
@@ -95,7 +101,7 @@
       function drawRegionsMap() {
         var data = google.visualization.arrayToDataTable([
           ['Country'],
-          ['']
+          ['Belgium']
           
         ]);
 
