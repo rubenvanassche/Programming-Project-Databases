@@ -58,8 +58,6 @@
  		<dd><img class="img-responsive flag" src="{{$teamImageURL}}" alt="" /></dd>
   		<dt>Country</dt>
   		<dd>{{$team->name}}</dd>
-		<dt>Current Teams</dt>
-		<dd>{{$team->name}}</dd>
 	</dl>
 
 

@@ -8,27 +8,21 @@
 			<div id="this-carousel-id" class="carousel slide hero"><!-- class of slide for animation -->
 			  <div class="carousel-inner">
 				<div class="item active"><!-- class of active since it's the first item -->
-				  <img src="http://riouncovered.com/wp-content/uploads/2013/07/fifa-world-cup-feat21.jpg" alt="" />
+				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/72/40/2297240_big-lnd.jpg" alt="" />
 				  <div class="carousel-caption">
 					<p>World Cup 2014 Brazil</p>
 				  </div>
 				</div>
 				<div class="item">
-				  <img src="http://placehold.it/1200x480" alt="" />
+				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/68/60/2296860_big-lnd.jpg" alt="" />
 				  <div class="carousel-caption">
-					<p>Caption text here</p>
+					<p>Fifa World Cup 2014 RSS feed</p>
 				  </div>
 				</div>
 				<div class="item">
-				  <img src="http://placehold.it/1200x480" alt="" />
+				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/68/59/2296859_big-lnd.jpg" alt="" />
 				  <div class="carousel-caption">
-					<p>Caption text here</p>
-				  </div>
-				</div>
-				<div class="item">
-				  <img src="http://placehold.it/1200x480" alt="" />
-				  <div class="carousel-caption">
-					<p>Caption text here</p>
+					<p>Fifa World Cup 2014 RSS feed</p>
 				  </div>
 				</div>
 			  </div><!-- /.carousel-inner -->

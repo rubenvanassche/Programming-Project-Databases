@@ -21,6 +21,8 @@ Route::get('widemap', function()
 	 return View::make('widemap');
 });
 
+Route::get('teams', 'TeamsController@showPage');
+
 Route::get('team', 'TeamController@showPage');
 
 Route::get('player', 'PlayerController@showPage');
