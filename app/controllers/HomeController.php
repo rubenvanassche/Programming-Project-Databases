@@ -17,7 +17,7 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
-
+		
 		
 		//$xml = simplexml_load_file("http://www.fifa.com/worldcup/photo/rss.xml");
 		//$xmlIterator = new SimpleXMLIterator($xml);
