@@ -23,7 +23,7 @@ class UserController extends BaseController {
 				$user = new User;
 				if($user->login($username, $password)){
 					// Logged in
-					return View::make('team');
+					return Redirect::to('home');
 				}else{
 					return Redirect::to('user/login')->withInput();
 				}
