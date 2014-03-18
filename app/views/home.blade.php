@@ -48,8 +48,13 @@
  		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-9">
-			rss newsfeed in this column.
+		<div class="col-md-9 news">
+		<h2>Latest News</h2>
+		<?php foreach ($articles as $article):?>
+			<h3><a href="{{$article->get_permalink();}}">{{$article->get_title();}}</a></h3>
+			<p><?php echo $article->get_description(); ?></p>
+			<hr>
+		<?php endforeach; ?>
 		</div>
 		<div class="col-md-3">
 			<div class="matchListDiv">
@@ -194,6 +199,20 @@ border-top-right-radius: 5px;
 	border-radius: 5px;
 	box-shadow: 3px 3px 10px 1px #c1c1c1;
 }
+
+.news {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+hr {
+	margin: 2px 0;
+	border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+	border-style: solid none;
+	border-width: 2px 0;
+}
+
 </style>
 @stop
 
