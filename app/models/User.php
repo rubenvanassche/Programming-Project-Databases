@@ -1,7 +1,5 @@
 <?php
-
 class User {
-
 	function loggedIn(){
 		if(!Session::has('userEntrance')){
 			// No user logged in
@@ -16,10 +14,11 @@ class User {
 			Session::forget('userEntrance');
 			return false;
 		}else{
-			Session::push('userEntrance', time());
+			Session::put('userEntrance', time());
 			return true;
 		}
 	}
+	
 	
 	function login($username, $password){
 		$results = DB::select('SELECT password, registrationcode, id FROM user WHERE username = ?', array($username));
@@ -137,5 +136,51 @@ class User {
 		Session::forget('userEntrance');
 		
 		return true;
+	}
+	
+	
+	function get($userID){
+		$results = $DB::Select('SELECT * FROM user WHERE id = ?', array($userID));
+		return $results[0];
+	}
+	
+	function change($userID, $field, $value){
+		if($field == 'password'){
+			$value = Hash::make($value);
+		}
+		$results = DB::Select("UPDATE user SET ? = '?' WHERE id = ?", array($field, $value, $userID) );
+		
+		if($results == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	// Check if a certain value in a certain field is unique in the database when the userID field is set, there can be one record with this user id containing the value in the field
+	function unique($field, $value, $userID = ''){
+		$results = array();
+		if($userID == ''){
+			$results = DB::Select('SELECT id FROM user WHERE ? = ?', array($field, $value));
+			if(empty($results)){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			$results = DB::Select('SELECT id FROM user WHERE ? = ?', array($field, $value));
+			if(sizeof($results) == 1){
+				if($results[0]->id == $userID){
+					return true;
+				}else{
+					return false;
+				}
+			}else if(empty($results)){
+				echo 'x';
+				return true;
+			}else{
+				return false;
+			}
+		}
 	}
 }
