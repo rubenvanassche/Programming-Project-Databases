@@ -19,6 +19,10 @@ class User {
 		}
 	}
 	
+	function ID(){
+		return Session::get('userID');
+	}
+	
 	
 	function login($username, $password){
 		$results = DB::select('SELECT password, registrationcode, id FROM user WHERE username = ?', array($username));
@@ -140,15 +144,17 @@ class User {
 	
 	
 	function get($userID){
-		$results = $DB::Select('SELECT * FROM user WHERE id = ?', array($userID));
-		return $results[0];
+			$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
+			return $results[0];
 	}
 	
 	function change($userID, $field, $value){
 		if($field == 'password'){
 			$value = Hash::make($value);
 		}
-		$results = DB::Select("UPDATE user SET ? = '?' WHERE id = ?", array($field, $value, $userID) );
+		
+		$field = mysql_real_escape_string($field);
+		$results = DB::update("UPDATE user SET $field = ? WHERE id = ?", array($value, $userID) );
 		
 		if($results == 1){
 			return true;
@@ -157,30 +163,18 @@ class User {
 		}
 	}
 	
-	// Check if a certain value in a certain field is unique in the database when the userID field is set, there can be one record with this user id containing the value in the field
-	function unique($field, $value, $userID = ''){
-		$results = array();
-		if($userID == ''){
-			$results = DB::Select('SELECT id FROM user WHERE ? = ?', array($field, $value));
-			if(empty($results)){
+	function onlyOneEmail($email){
+		$results = DB::select("SELECT id, COUNT(id) AS count FROM user WHERE email = ?", array($email));
+		
+		if($results[0]->count > 0){
+			// Return the id of the one with this email adress
+			if($this->ID() == $results[0]->id){
 				return true;
 			}else{
 				return false;
 			}
 		}else{
-			$results = DB::Select('SELECT id FROM user WHERE ? = ?', array($field, $value));
-			if(sizeof($results) == 1){
-				if($results[0]->id == $userID){
-					return true;
-				}else{
-					return false;
-				}
-			}else if(empty($results)){
-				echo 'x';
-				return true;
-			}else{
-				return false;
-			}
+			return true;
 		}
 	}
 }

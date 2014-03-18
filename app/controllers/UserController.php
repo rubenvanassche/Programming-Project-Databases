@@ -28,7 +28,7 @@ class UserController extends BaseController {
 				$user = new User;
 				if($user->login($username, $password)){
 					// Logged in
-					return Redirect::to('home');
+					return Redirect::to('/');
 				}else{
 					return Redirect::to('user/login')->withInput();
 				}
@@ -157,13 +157,9 @@ class UserController extends BaseController {
 			        'lastname' => array('required'),
 			        'country' => array('required'),
 			        'email' => array('required', 'email'),
-			        'password' => array('required'),
-			        'passwordagain' => array('required', 'same:password')
 			);
 			
 			$validation = Validator::make(Input::all(), $rules);
-			
-			$user = new User;
 			
 			if($validation->fails()) {
 				// Problem so show the user error messages
@@ -175,39 +171,68 @@ class UserController extends BaseController {
 				$data['country'] = Input::get('country');
 				$data['email'] = Input::get('email');
 				
-				// Check if email is unique
-				if(!$user->unique($data['email'], 'email', $user->ID())){
-					// Nope
-					return Redirect::to('user/account')->withInput();
-				}
+				$user = new User;
+			
 				
-				foreach($data as $field => $value){
-					if(!$user->change($userID, $field, $value)){
-						Notification::error("Couldn't change ". $field);
+				// Check if email is unique
+				$onlyOneEmail = $user->onlyOneEmail($data['email']);
+				if($onlyOneEmail != true){
+					if($onlyOneEmail != $user->ID()){
+						Notification::error("This email adress is already in our system, choose another one ");
+						return Redirect::to('user/account')->withInput();
 					}
 				}
 				
-				Redirect::to('user/account')->withInput();
+				
+				foreach($data as $field => $value){
+					$user->change($user->ID(), $field, $value);
+				}
+				
+				return Redirect::to('user/account')->withInput();
 			}
     	}else{
 	    	// Show the form
 	    	$data['title'] = 'Account';
-	    	return View::make('layouts.simple', $data)->nest('content', 'user.account');
+	    	$user = new User;
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.account', array('user' => $user->get($user->ID())));
     	}			
 	}
 	
 	function changepassword(){
-		echo 'hallo';
-		/*$user = new User;
-		$userID = Session::get('userID');
-		if($user->unique('id', '48')){
-			echo 'true';
-		}else{
-			echo 'false';
-		}
-		*/
-		$user = new User;
-		$user->change('48','firstname', 'jos');
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'password' => array('required'),
+			        'passwordagain' => array('required', 'same:password')
+			);
+			
+			$validation = Validator::make(Input::all(), $rules);
+			
+			if($validation->fails()){
+				// Problem so show the user error messages
+				return Redirect::to('user/changepassword')->withInput()->withErrors($validation);
+			}else{
+				// Start working on this data
+				$data['password'] = Input::get('password');
+				
+				$user = new User;
+				
+				if($user->change($user->ID(), 'password', $data['password'])){
+					$user->logout();
+					
+					$data['content'] = 'Please login again with your new password.';
+					$data['title'] = 'Password changed!';
+					return View::make('layouts.simple', $data);
+				}else{
+					// Something went wrong
+					return Redirect::to('user/changepassword')->withInput();
+				}
+			}
+    	}else{
+	    	// Show the form
+	    	$data['title'] = 'Change Password';
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.changepassword');
+    	}			
 	}
 	
 	function logout(){
