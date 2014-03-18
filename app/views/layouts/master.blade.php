@@ -20,7 +20,7 @@
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>ubli
+						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="<?php echo url('/'); ?>">Coach Center</a>
 				</div>
@@ -36,11 +36,22 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="#">My Profile</a></li>
+							<?php
+							$user = new User;
+							if($user->loggedIn()){
+							?>
 								<li><a href="#">Bets</a></li>
-								<li><a href="{{ action('UserController@loginmodal') }}" data-toggle="modal" data-target="#dasModel">Login</a></li>
+								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
-								<li><a href="#">Log Out <i class="flag-be"></i></a></li>
+								<li><a href="{{ action('UserController@logout') }}">Logout</a></li>
+							<?php
+							}else{
+							?>
+								<li><a href="{{ action('UserController@loginmodal') }}" data-toggle="modal" data-target="#dasModel">Login</a></li>
+								<li><a href="{{ action('UserController@register') }}">New Account</a></li>
+							<?php
+							}
+							?>
 							</ul>
 						</li>
 					</ul>

@@ -1,63 +1,28 @@
 @extends('layouts.master')
 
 @section('content')
-<div class="row row-padded">
-<!-- Row that contains current hierarchy -->
-
-	<div class="col-md-10">
-		<p><a href="home">Home</a> >> <a href="#">Teams</a></p>
-	</div>
-	<div class="col-md-2">
-	</div>
-</div>
-	<div class="row row-padded">
-		<div class="col-md-2">
-			<ul class="nav nav-list">
-				<li class="nav-header">Country</li>
-				<li class="active">
-				<select class="form-control rounded">
-				  <option>Belgium</option>
-				  <option>Russia</option>
-				  <option>Italy</option>
-				  <option>Germany</option>
-				  <option>France</option>
-				</select>
-				</li>
-			</ul>
+	<div class="row">
+		<div class="col-md-12">
+			<h1>Teams</h1>
+			<h3>International</h3>
 		</div>
-			<div class="col-md-10 shadowbox">				
-				<div class="col-md-1">
-					<img class="img-responsive flag" src="http://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Belgium.svg/125px-Flag_of_Belgium.svg.png" alt="" />
-				</div>
-				<div class="col-md-2" style="text-align:center;">
-					<h4>Belgium</h4>
-
-				</div>
-						<div class="col-md-9 hackity">
-							<ul class="nav nav-list">
-								<li class="nav-header">Team</li>
-								<li class="active">
-								<select class="form-control rounded">
-								  <option>National Team</option>
-								  <option>Russia</option>
-								  <option>Italy</option>
-								  <option>Germany</option>
-								  <option>France</option>
-								</select>
-								</li>
-							</ul>
-						</div>	
-			</div>
-  
-
-</div>
-	<div class="row row-padded">
-		<div class="col-md-12" style="height:50%;">
-			<div id="chart_div" style="size:50%;">
-			</div>
+		<div class="col-md-12">
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody>	
+					@foreach ($teams as $team)
+						<tr>
+							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
+						</tr>
+					@endforeach					
+				</tbody>
+			</table>
 		</div>
 	</div>
-
 @stop
 
 @section('css')

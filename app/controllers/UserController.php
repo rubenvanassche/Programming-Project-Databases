@@ -2,6 +2,11 @@
 
 class UserController extends BaseController {
 
+	function index(){
+		$user = new User;
+		$user->loggedIn();
+	}
+
 	function login(){
 		if(Request::isMethod('post')){
 			// Work On the Form
@@ -142,6 +147,67 @@ class UserController extends BaseController {
 	    	$data['title'] = 'Recover Password';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.passwordforgot');
     	}		
+	}
+	
+	function account(){
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'firstname' => array('required'),
+			        'lastname' => array('required'),
+			        'country' => array('required'),
+			        'email' => array('required', 'email'),
+			        'password' => array('required'),
+			        'passwordagain' => array('required', 'same:password')
+			);
+			
+			$validation = Validator::make(Input::all(), $rules);
+			
+			$user = new User;
+			
+			if($validation->fails()) {
+				// Problem so show the user error messages
+				return Redirect::to('user/account')->withInput()->withErrors($validation);
+			}else{
+				// Start working on this data
+				$data['firstname'] = Input::get('firstname');
+				$data['lastname'] = Input::get('lastname');
+				$data['country'] = Input::get('country');
+				$data['email'] = Input::get('email');
+				
+				// Check if email is unique
+				if(!$user->unique($data['email'], 'email', $user->ID())){
+					// Nope
+					return Redirect::to('user/account')->withInput();
+				}
+				
+				foreach($data as $field => $value){
+					if(!$user->change($userID, $field, $value)){
+						Notification::error("Couldn't change ". $field);
+					}
+				}
+				
+				Redirect::to('user/account')->withInput();
+			}
+    	}else{
+	    	// Show the form
+	    	$data['title'] = 'Account';
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.account');
+    	}			
+	}
+	
+	function changepassword(){
+		echo 'hallo';
+		/*$user = new User;
+		$userID = Session::get('userID');
+		if($user->unique('id', '48')){
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+		*/
+		$user = new User;
+		$user->change('48','firstname', 'jos');
 	}
 	
 	function logout(){

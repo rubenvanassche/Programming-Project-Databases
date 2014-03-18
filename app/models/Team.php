@@ -6,6 +6,11 @@ class Team {
 		return $result;
 	}
 	
+	public static function getAll(){
+		$result = DB::select('SELECT * FROM team');
+		return $result;
+	}
+	
 	public static function getTeambyPlayerID($playerID) {
 		$teamID = DB::select('SELECT team_id FROM playerPerTeam WHERE player_id = ?', array($playerID));
 		$result = Team::getTeambyID($teamID[0]->team_id);
