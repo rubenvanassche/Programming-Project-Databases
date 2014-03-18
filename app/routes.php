@@ -13,25 +13,16 @@
 
 
 
-Route::get('/', 'HomeController@showWelcome');
-Route::get('home', 'HomeController@showWelcome');
+Route::get('/', 'HomeController@index');
 
-Route::get('widemap', function()
-{
-	 return View::make('widemap');
-});
 
-Route::get('teams', 'TeamsController@showPage');
+Route::get('teams', 'TeamController@all');
+Route::get('team/{id}', array('as' => 'team', 'uses' => 'TeamController@index'));
+Route::get('team/{id}/players', array('as' => 'team.players', 'uses' => 'TeamController@players'));
 
-Route::get('team', 'TeamController@showPage');
+Route::get('player/{name}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
-Route::get('player', 'PlayerController@showPage');
 
-Route::get('players', 'PlayersController@showPage');
-
-Route::get('player/history', function() {
-	return View::make('player/history');
-});
 
 // ------------
 // USER

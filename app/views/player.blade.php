@@ -4,7 +4,7 @@
 <div class="row row-padded">
 <!-- Row that contains current hierarchy -->
 	<div class="col-md-10">
-		<p><a href="#">Home</a> >> <a href="#">Teams</a> >> <a href="#">International</a> >> <a href={{"team?id=" . $playerTeam->id}}>{{$playerTeam->name}}</a> >> <a href={{"players?id=". $playerTeam->id}}>Players</a> >> <a href="#">{{$playerObj->name}}</a></p>
+		<p><a href="#">Home</a> >> <a href="#">Teams</a> >> <a href="#">International</a> >> <a href="{{ route('team', array('id'=>$playerTeam->id)) }}">{{$playerTeam->name}}</a> >> <a href="{{ route('team.players', array('id'=>$playerTeam->id)) }}">Players</a> >> <a href="#">{{$playerObj->name}}</a></p>
 	</div>
 	<div class="col-md-2">
 	</div>
@@ -14,7 +14,7 @@
   	<ul class="nav nav-list">
 		<li class="nav-header">{{$playerObj->name}}</li>
 		<li class="active">
-		<a href={{"team?id=" . $playerTeam->id}}>Current Team</a></li>
+		<a href={{ route('team', array('id'=>$playerTeam->id)) }}>Current Team</a></li>
 		<li class="active"><a href="#">History</a></li>
 		<li><a href="#">Matches</a></li>
 		<li><a href="#">Stats</a></li>

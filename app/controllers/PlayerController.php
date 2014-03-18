@@ -2,11 +2,7 @@
 
 class PlayerController extends BaseController {
 
-	public function showPage()
-	{
-		
-	
-		$playerName = htmlspecialchars($_GET["name"]);
+	public function index($playerName){
 		$playerObj = Player::getPlayer($playerName)[0];
 		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
 		$playerText = Player::getPlayerText($playerName);

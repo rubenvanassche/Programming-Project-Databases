@@ -35,7 +35,7 @@
 			</thead>
 			<tbody>	
 				@foreach ($playerBase as $player)
-					<tr class='clickableRow' href={{"player?name=". urlencode($player[0]->name)}}>
+					<tr class='clickableRow' href={{ route('player', array('name'=>urlencode($player[0]->name))) }}>
 						<td>{{$player[0]->name}}</i></td>
 						<td>
 							<?php 
