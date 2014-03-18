@@ -20,7 +20,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 
 <div class="form-group">
 	<label>{{ Form::label('username', 'Username') }}</label>
-	{{ Form::text('username', Input::old('username'), array('class'=>'form-control', 'disabled'=> 'disabled')) }}
+	{{ Form::text('username', trim(Input::old('username')) != '' ? Input::old('username') : $user->username, array('class'=>'form-control', 'disabled'=> 'disabled')) }}
 </div>
 
 <div class="form-group">
@@ -30,22 +30,22 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 
 <div class="form-group">
 	<label>{{ Form::label('firstname', 'First Name') }}</label>
-	{{ Form::text('firstname', Input::old('firstname'), array('class'=>'form-control')) }}
+	{{ Form::text('firstname', trim(Input::old('firstname')) != '' ? Input::old('firstname') : $user->firstname, array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('lastname', 'Last Name') }}</label>
-	{{ Form::text('lastname', Input::old('lastname'), array('class'=>'form-control')) }}
+	{{ Form::text('lastname', trim(Input::old('lastname')) != '' ? Input::old('lastname') : $user->lastname, array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('country', 'Country') }}</label>
-	{{ Form::text('country', Input::old('country'), array('class'=>'form-control')) }}
+	{{ Form::text('country', trim(Input::old('country')) != '' ? Input::old('country') : $user->country, array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('email', 'Email Adress') }}</label>
-	{{ Form::text('email', Input::old('email'), array('class'=>'form-control')) }}
+	{{ Form::text('email', trim(Input::old('email')) != '' ? Input::old('email') : $user->email, array('class'=>'form-control')) }}
 </div>
 
 
