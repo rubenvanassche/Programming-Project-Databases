@@ -19,10 +19,15 @@ class HomeController extends BaseController {
 		//$xml = simplexml_load_file("http://www.fifa.com/worldcup/photo/rss.xml");
 		//$xmlIterator = new SimpleXMLIterator($xml);
 		
+		//require_once('../lib/autoloader.php');
+
+		
 		$recentMatches = Match::getRecentMatches();
+		$articles = RSS::getFIFAtext();
 		$countryFlags = array();
 		$matchGoals = array();
 		$recentTeamMatches = array();
+
 		
 		foreach ($recentMatches as $rm) {
 			$hid = Team::getTeambyID($rm->hometeam_id);
@@ -38,8 +43,13 @@ class HomeController extends BaseController {
 			array_push($countryFlags, $hFlag, $aFlag);
 		}
 		
-		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags'))->with('title', 'Home');
+		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'articles'))->with('title', 'Home');
 
+	}
+	
+	public function news(){
+		$articles = RSS::getFIFAtext();
+		return View::make('news', compact('articles'))->with('title', 'News');
 	}
 
 
