@@ -3,7 +3,8 @@
 class UserController extends BaseController {
 
 	function index(){
-		return;
+		$user = new User;
+		$user->loggedIn();
 	}
 
 	function login(){

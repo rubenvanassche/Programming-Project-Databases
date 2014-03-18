@@ -39,6 +39,7 @@ Route::get('player/history', function() {
 Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
 // For simple box on website
 Route::get('user/loginmodal', 'UserController@loginmodal');
+Route::get('user', 'UserController@index');
 Route::match(array('GET', 'POST'), 'user/register', 'UserController@register');
 Route::get('user/activate/{username}/{registrationcode}', 'UserController@activate');
 Route::get('user/logout', 'UserController@logout');
@@ -46,6 +47,9 @@ Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwor
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 
+
 Route::get('inserts', function() {
 	return View::make('inserts');
 });
+
+

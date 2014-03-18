@@ -14,7 +14,7 @@ class User {
 			Session::forget('userEntrance');
 			return false;
 		}else{
-			Session::push('userEntrance', time());
+			Session::put('userEntrance', time());
 			return true;
 		}
 	}
@@ -138,7 +138,8 @@ class User {
 		return true;
 	}
 	
-	function gets($userID){
+	
+	function get($userID){
 		$results = $DB::Select('SELECT * FROM user WHERE id = ?', array($userID));
 		return $results[0];
 	}
