@@ -4,27 +4,23 @@
 	<div class="row">
 		<div class="col-md-9" >
 			<!--  Carousel - consult the Twitter Bootstrap docs at
-      http://twitter.github.com/bootstrap/javascript.html#carousel -->
+			http://twitter.github.com/bootstrap/javascript.html#carousel -->
 			<div id="this-carousel-id" class="carousel slide hero"><!-- class of slide for animation -->
 			  <div class="carousel-inner">
 				<div class="item active"><!-- class of active since it's the first item -->
-				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/72/40/2297240_big-lnd.jpg" alt="" />
+				  <img src="{{$photos[0]}}" alt="" />
 				  <div class="carousel-caption">
 					<p>World Cup 2014 Brazil</p>
 				  </div>
 				</div>
-				<div class="item">
-				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/68/60/2296860_big-lnd.jpg" alt="" />
-				  <div class="carousel-caption">
-					<p>Fifa World Cup 2014 RSS feed</p>
-				  </div>
-				</div>
-				<div class="item">
-				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/68/59/2296859_big-lnd.jpg" alt="" />
-				  <div class="carousel-caption">
-					<p>Fifa World Cup 2014 RSS feed</p>
-				  </div>
-				</div>
+				<?php 	for ($i = 1; $i < 5; $i++): ?>
+						<div class="item">
+							<img src="{{$photos[$i]}}" alt="" />
+							<div class="carousel-caption">
+								<p>Fifa World Cup 2014 RSS feed</p>
+							</div>
+						</div>
+				<?php endfor;?>
 			  </div><!-- /.carousel-inner -->
 			  <!--  Next and Previous controls below
 					href values must reference the id for this carousel -->
@@ -48,8 +44,13 @@
  		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-9">
-			rss newsfeed in this column.
+		<div class="col-md-9 news">
+		<h2>Latest News</h2>
+		<?php foreach ($articles as $article):?>
+			<h3><a href="{{$article->get_permalink();}}">{{$article->get_title();}}</a></h3>
+			<p><?php echo $article->get_description(); ?></p>
+			<hr>
+		<?php endforeach; ?>
 		</div>
 		<div class="col-md-3">
 			<div class="matchListDiv">
@@ -194,6 +195,20 @@ border-top-right-radius: 5px;
 	border-radius: 5px;
 	box-shadow: 3px 3px 10px 1px #c1c1c1;
 }
+
+.news {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+hr {
+	margin: 2px 0;
+	border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+	border-style: solid none;
+	border-width: 2px 0;
+}
+
 </style>
 @stop
 
