@@ -1664,23 +1664,23 @@
     },
     {
         "name": "simplepie/simplepie",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "1.3.1",
+        "version_normalized": "1.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/simplepie/simplepie.git",
-            "reference": "5f00e77b5feb96605cbcea4dcfb555e87c2fed24"
+            "reference": "ce53709778bc1e2e4deda1651b66e5081398d5cc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/simplepie/simplepie/zipball/5f00e77b5feb96605cbcea4dcfb555e87c2fed24",
-            "reference": "5f00e77b5feb96605cbcea4dcfb555e87c2fed24",
+            "url": "https://api.github.com/repos/simplepie/simplepie/zipball/ce53709778bc1e2e4deda1651b66e5081398d5cc",
+            "reference": "ce53709778bc1e2e4deda1651b66e5081398d5cc",
             "shasum": ""
         },
         "require": {
             "php": ">=5.2.0"
         },
-        "time": "2013-10-24 06:37:55",
+        "time": "2012-10-30 17:54:03",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

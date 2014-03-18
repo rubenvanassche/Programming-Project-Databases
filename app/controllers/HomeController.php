@@ -19,7 +19,7 @@ class HomeController extends BaseController {
 		//$xml = simplexml_load_file("http://www.fifa.com/worldcup/photo/rss.xml");
 		//$xmlIterator = new SimpleXMLIterator($xml);
 		
-		require_once('../lib/autoloader.php');
+		//require_once('../lib/autoloader.php');
 
 		
 		$recentMatches = Match::getRecentMatches();
