@@ -16,3 +16,27 @@ Weights (1 is most important):
 1. recent win/loss ratio (this season + last season?)
 2. current rank
 3. playing home/away
+
+
+Tom's idea
+----------
+
+Divide the win/loss ratio in a home win/loss and an away win/loss.
+
+Variables win/loss prediction:
+- previous settled match outcomes between teams
+	(perhaps divided in home and away again)
+- home team: win/loss ratio at home
+- out team: win/loss ratio when away
+- current rank in the league (This might not be neccesary)
+	
+Variables score prediction:
+- same setup scores
+- switched around setup scores
+- general results
+	(keep in mind recent = better)
+	
+==> To all this we might add a player ranking for more precise results but certainly not neccesary.
+
+PROBLEM: IN THE WC THERE IS NO HOME AND AWAY !
+

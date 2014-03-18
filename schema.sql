@@ -27,11 +27,11 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `cards` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `player_id` int(11) NOT NULL,
-  `match_id` int(11) NOT NULL,
-  `color` int(11) NOT NULL,
-  `time` int(11) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `player_id` int(11) /*NOT NULL*/,
+  `match_id` int(11) /*NOT NULL*/,
+  `color` int(11) /*NOT NULL*/,
+  `time` int(11) /*NOT NULL*/,
   PRIMARY KEY (`id`),
   KEY `player_ids` (`player_id`),
   KEY `match` (`match_id`)
@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS `cards` (
 --
 
 CREATE TABLE IF NOT EXISTS `coach` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(60) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `name` varchar(60) /*NOT NULL*/,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `coach` (
 --
 
 CREATE TABLE IF NOT EXISTS `competition` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(60) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `name` varchar(60) /*NOT NULL*/,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS `competition` (
 --
 
 CREATE TABLE IF NOT EXISTS `continent` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `name` varchar(40) /*NOT NULL*/,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -80,10 +80,10 @@ CREATE TABLE IF NOT EXISTS `continent` (
 --
 
 CREATE TABLE IF NOT EXISTS `country` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(60) NOT NULL,
-  `continent_id` int(11) NOT NULL,
-  `abbreviation` char(4) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `name` varchar(60) /*NOT NULL*/,
+  `continent_id` int(11) /*NOT NULL*/,
+  `abbreviation` char(4) /*NOT NULL*/,
   PRIMARY KEY (`id`),
   KEY `continent` (`continent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -95,12 +95,12 @@ CREATE TABLE IF NOT EXISTS `country` (
 --
 
 CREATE TABLE IF NOT EXISTS `goal` (
-  `id` int(11) NOT NULL,
-  `match_id` int(11) NOT NULL,
-  `time` tinyint(4) NOT NULL,
-  `player_id` int(11) NOT NULL,
-  `team_id` int(11) NOT NULL,
-  `penaltyphase` tinyint(1) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `match_id` int(11) /*NOT NULL*/,
+  `time` tinyint(4) /*NOT NULL*/,
+  `player_id` int(11) /*NOT NULL*/,
+  `team_id` int(11) /*NOT NULL*/,
+  `penaltyphase` tinyint(1) /*NOT NULL*/,
   PRIMARY KEY (`id`),
   KEY `match` (`match_id`),
   KEY `player` (`player_id`),
@@ -114,11 +114,11 @@ CREATE TABLE IF NOT EXISTS `goal` (
 --
 
 CREATE TABLE IF NOT EXISTS `match` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `hometeam_id` int(11) NOT NULL,
-  `awayteam_id` int(11) NOT NULL,
-  `competition_id` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `hometeam_id` int(11) /*NOT NULL*/,
+  `awayteam_id` int(11) /*NOT NULL*/,
+  `competition_id` int(11) /*NOT NULL*/,
+  `date` date /*NOT NULL*/,
   PRIMARY KEY (`id`),
   KEY `hometeam` (`hometeam_id`),
   KEY `awayteam` (`awayteam_id`),
@@ -132,9 +132,9 @@ CREATE TABLE IF NOT EXISTS `match` (
 --
 
 CREATE TABLE IF NOT EXISTS `player` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(60) NOT NULL,
-  `injured` tinyint(1) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `name` varchar(60) /*NOT NULL*/,
+  `injured` tinyint(1) /*NOT NULL*/,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -145,10 +145,10 @@ CREATE TABLE IF NOT EXISTS `player` (
 --
 
 CREATE TABLE IF NOT EXISTS `playerPerMatch` (
-  `player_id` int(11) NOT NULL,
-  `match_id` int(11) NOT NULL,
-  `intime` tinyint(4) NOT NULL,
-  `outtime` tinyint(4) NOT NULL,
+  `player_id` int(11) /*NOT NULL*/,
+  `match_id` int(11) /*NOT NULL*/,
+  `intime` tinyint(4) /*NOT NULL*/,
+  `outtime` tinyint(4) /*NOT NULL*/,
   PRIMARY KEY (`player_id`,`match_id`),
   KEY `player_per_match` (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -160,8 +160,8 @@ CREATE TABLE IF NOT EXISTS `playerPerMatch` (
 --
 
 CREATE TABLE IF NOT EXISTS `playerPerTeam` (
-  `player_id` int(11) NOT NULL,
-  `team_id` int(11) NOT NULL,
+  `player_id` int(11) /*NOT NULL*/,
+  `team_id` int(11) /*NOT NULL*/,
   PRIMARY KEY (`player_id`,`team_id`),
   KEY `player_per_team` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -173,10 +173,10 @@ CREATE TABLE IF NOT EXISTS `playerPerTeam` (
 --
 
 CREATE TABLE IF NOT EXISTS `team` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) NOT NULL,
-  `country_id` int(11) NOT NULL,
-  `coach_id` int(11) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `name` varchar(40) /*NOT NULL*/,
+  `country_id` int(11) /*NOT NULL*/,
+  `coach_id` int(11) /*NOT NULL*/,
   PRIMARY KEY (`id`),
   KEY `country` (`country_id`),
   KEY `coach` (`coach_id`)
@@ -189,8 +189,8 @@ CREATE TABLE IF NOT EXISTS `team` (
 --
 
 CREATE TABLE IF NOT EXISTS `teamPerCompetition` (
-  `team_id` int(11) NOT NULL,
-  `competition_id` int(11) NOT NULL,
+  `team_id` int(11) /*NOT NULL*/,
+  `competition_id` int(11) /*NOT NULL*/,
   PRIMARY KEY (`team_id`,`competition_id`),
   KEY `tpc_competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -202,13 +202,13 @@ CREATE TABLE IF NOT EXISTS `teamPerCompetition` (
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) NOT NULL,
-  `firstname` varchar(60) NOT NULL,
-  `lastname` varchar(60) NOT NULL,
-  `email` varchar(60) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `country` varchar(60) NOT NULL,
+  `id` int(11) /*NOT NULL*/ AUTO_INCREMENT,
+  `username` varchar(100) /*NOT NULL*/,
+  `firstname` varchar(60) /*NOT NULL*/,
+  `lastname` varchar(60) /*NOT NULL*/,
+  `email` varchar(60) /*NOT NULL*/,
+  `password` varchar(255) /*NOT NULL*/,
+  `country` varchar(60) /*NOT NULL*/,
   `session_id` varchar(24) DEFAULT NULL,
   `registrationcode` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 -- Constraints for dumped tables
 --
-
+/*
 --
 -- Constraints for table `cards`
 --
@@ -271,7 +271,7 @@ ALTER TABLE `team`
 --
 ALTER TABLE `teamPerCompetition`
   ADD CONSTRAINT `tpc_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
-
+*/
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

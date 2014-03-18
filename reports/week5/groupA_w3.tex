@@ -1,0 +1,60 @@
+\documentclass[11pt, a4paper]{article}
+
+\begin{document}
+\title{}
+\author{Groep A\\ Week 5}
+\date{13 maart 2014}
+\maketitle
+
+\section{Aanwezigheden}
+Iedereen was aanwezig.
+\section{Status}
+Iedereen is aan zijn persoonlijke taken bezig. Waar nodig helpen we elkaar. Het project begint beter en beter vorm te krijgen.	
+\subsection{Stijn}
+Er is verdergewerkt aan crawler.
+\subsection{Kristof \& Tom}
+Het voorspellingsalgoritme is grotendeels uitgedacht, het moet nu nog ge\"implementeerd worden. Er zijn al een deel van de pagina's aangemaakt.
+\subsection{Jakob}
+Authenticatie is (adhv Laravelfeatures) sterk verbeterd. Interfaceklasse voor database is in de maak.
+\subsection{Ruben}
+Het authenticatiesysteem is naar een mvc-design geport en ge\"integreerd in de templates. Aan de admin interface wordt gewerkt.
+
+\section{Besproken onderwerpen}
+De vergadering van vorige week en deze week werden samengevoegd tot \'e\'en vergadering. Iedereen had nog genoeg werk om zich heel vorige week mee bezig te houden. Iedereen houdt elkaar wel op de hoogte van zijn eigen vooruitgang.
+\\
+\\
+Er is over de taakverdeling gesproken. Voor de meesten kwam dit neer op verderwerken waaraan men al bezig was.
+\\
+\\
+Omdat niet iedereen goed vertrouwd is met het MVC-principe in het Laravel Framework, heeft Ruben heeft dit nog eens uitgelegd met een voorbeeldje. Nu weet iedereen van het groepje goed hoe het concreet in elkaar zit.
+\\
+\\
+Het plan voor het voorspellingsalgoritme werd overlopen: het algoritme zal werken met een bepaalde score per team, berekend aan de hand van de beschikbare data. De scores van de twee strijdende ploegen worden vergeleken  en aan de hand van het verschil tussen de beide zal er een verdict worden gemaakt. Er wordt gekeken of de ploegen in het verleden al tegen elkaar speelden en hoe die eindigden; de gemiddelde win/loss ratio van het hometeam/away team als ze thuis/uit spelen; gemiddelde doelsaldo van de ploegen; statistieken van spelers; huidige blessures; ...
+\\
+\\
+Data crawlen blijkt nog een probleem volgens Stijn: niet alle info is altijd voor handen. Dit zorgt voor problemen met constraints die we opgesteld hebben voor de tables in de database. Concreet leidt incomplete data tot het violaten van de NOT NULL constraints op foreign keys. We hebben daarom besloten deze tijdelijk te verwijderen. Eens we de data compleet kunnen ingeven worden deze waar mogelijk terug toegevoegd aan de database. 
+\\
+\\
+Voor de rest is de Stats klasse, die een interface met de database biedt, eens bekeken geweest. Deze zal gebruikt worden om data in de database te inserten. Er is nog wat werk aan; de klasse moet zowel bij volledige data de validiteit kunnen controleren als bij onvolledige data (wanneer sommige dingen niet gevonden worden door de crawler) geen onterechte errors geven.
+
+
+\section{Afspraken}
+\begin{enumerate}
+\item Iedereen levert deze week een goede inspanning, en dan komt het goed voor de presentatie van volgende week.
+\end{enumerate}
+
+
+\section{Planning}
+Een presenteerbaar product afwerken tegen de eerste presentatie is ons primair doel. Dit niet per se met gecrawlde data, maar desnoods met manueel ingegeven data.
+De concrete planning voor de presentatie en het rapport bespreken we begin volgende week.
+\subsection{Stijn}
+Verderwerken aan de crawler
+\subsection{Kristof \& Tom}
+Meer webpagina's aanmaken (homepage, playerpage, teampage, ...) en voorspellingsalgoritme inplementeren.
+\subsection{Ruben}
+Assisteren en stukken bijschrijven waar nodig. 
+\subsection{Jakob}
+Verder werken aan database interface klasse voor crawler en manuele inputgegevens.
+
+
+\end{document}

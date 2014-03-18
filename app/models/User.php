@@ -25,17 +25,17 @@ class User {
 				
 		if(empty($results)){
 			// Username not found
-			Notification::error('This user doesn\'t exists!');
+			Notification::error('Username is invalid!');
 			return false;
 		}
 		
 		if(!Hash::check($password, $results[0]->password)){
-			Notification::error('The Password isn\'t correct!');
+			Notification::error('Password is incorrect!');
 			return false;
 		}
 		
 		if(strlen($results[0]->registrationcode) != 0){
-			Notification::error('Your email adress hasn\'t been validated!');
+			Notification::error('Email address hasn\'t been validated!');
 			return false;
 		}
 		
@@ -50,14 +50,14 @@ class User {
 		$results = DB::select('SELECT id FROM user WHERE username = ?', array($data['username']));
 		if(!empty($results)){
 			// Username  found
-			Notification::error('Username already exists exsists!');
+			Notification::error('Username already taken!');
 			return false;
 		}
 		
 		$results = DB::select('SELECT id FROM user WHERE email = ?', array($data['email']));
 		if(!empty($results)){
 			// email found
-			Notification::error('Email Adress already exists exsists!');
+			Notification::error('Email address already tied to an account!');
 			return false;
 		}
 		
@@ -77,7 +77,7 @@ class User {
 		if($result == 1){
 			return true;
 		}else{
-			Notification::error('Something went wrong, please try again');
+			Notification::error('Something went wrong, please try again later');
 			return false;
 		}
 	}
@@ -86,17 +86,17 @@ class User {
 		$results = DB::Select("Select id, registrationcode FROM user WHERE username = ? ", array($username));
 		
 		if(empty($results)){
-			Notification::errorInstant('Something went wrong!');
+			Notification::errorInstant('Something went wrong!');  //Does this occur when the username is invalid? if so, change error accordingly
 			return false;
 		}
 		
 		if(strlen($results[0]->registrationcode) == 0){
-			Notification::errorInstant('Your account is already activated!');
+			Notification::errorInstant('This account has already been activated!');
 			return false;
 		}
 		
 		if($results[0]->registrationcode != $registrationcode){
-			Notification::errorInstant('Your activation code is wrong!');
+			Notification::errorInstant('Activation code is invalid!');
 			return false;
 		}
 		
@@ -115,7 +115,7 @@ class User {
 		
 		if(empty($results)){
 			// Username not found
-			Notification::error('There is no account with this email address!');
+			Notification::error('There is no account tied to this email address!');
 			return false;
 		}
 		

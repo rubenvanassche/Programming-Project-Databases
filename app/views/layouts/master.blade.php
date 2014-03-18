@@ -20,9 +20,9 @@
 						<span class="sr-only">Toggle navigation</span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>ubli
 					</button>
-					<a class="navbar-brand" href="#">Coach Center</a>
+					<a class="navbar-brand" href="<?php echo url('/'); ?>">Coach Center</a>
 				</div>
 				<div class="collapse navbar-collapse">
 					
