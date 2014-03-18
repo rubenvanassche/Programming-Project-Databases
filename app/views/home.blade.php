@@ -2,60 +2,10 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-md-9" >
-			<!--  Carousel - consult the Twitter Bootstrap docs at
-			http://twitter.github.com/bootstrap/javascript.html#carousel -->
-			<div id="this-carousel-id" class="carousel slide hero"><!-- class of slide for animation -->
-			  <div class="carousel-inner">
-				<div class="item active"><!-- class of active since it's the first item -->
-				  <img src="{{$photos[0]}}" alt="" />
-				  <div class="carousel-caption">
-					<p>World Cup 2014 Brazil</p>
-				  </div>
-				</div>
-				<?php 	for ($i = 1; $i < 5; $i++): ?>
-						<div class="item">
-							<img src="{{$photos[$i]}}" alt="" />
-							<div class="carousel-caption">
-								<p>Fifa World Cup 2014 RSS feed</p>
-							</div>
-						</div>
-				<?php endfor;?>
-			  </div><!-- /.carousel-inner -->
-			  <!--  Next and Previous controls below
-					href values must reference the id for this carousel -->
-				<a class="carousel-control left" href="#this-carousel-id" data-slide="prev">&lsaquo;</a>
-				<a class="carousel-control right" href="#this-carousel-id" data-slide="next">&rsaquo;</a>
-			</div><!-- /.carousel -->
-		</div>
- 		<div class="col-md-3" >
- 			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Team</button>
-			<input type="text" class="form-control" placeholder="Team Name">
-
- 			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Player</button>
-			<input type="text" class="form-control" placeholder="Player Name">
-
- 			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Competition</button>
-			<input type="text" class="form-control" placeholder="Competition Name">
-			
-			<button type="button" class="btn btn-primary btn-lg btn-block buttonMarg">Find Match</button>
-			<input type="text" class="form-control" placeholder="Hometeam Name - Awayteam Name">
-
- 		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-9 news">
-		<h2>Latest News</h2>
-		<?php foreach ($articles as $article):?>
-			<h3><a href="{{$article->get_permalink();}}">{{$article->get_title();}}</a></h3>
-			<p><?php echo $article->get_description(); ?></p>
-			<hr>
-		<?php endforeach; ?>
-		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Played Matches</h5>
-	 			<table class="table table-condensed">
+				<h5 class="matchListTitle">Played Matches</h5>
+				<table class="table table-condensed">
 					<thead>
 						<tr>
 							<th></th>
@@ -71,7 +21,8 @@
 						?>
 						@foreach ($recentMatches as $recentMatch)
 							<tr>
-								<?php $i++;
+								<?php 
+									$i++;
 									$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
 									$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
 									$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
@@ -86,10 +37,12 @@
 						@endforeach					
 					</tbody>
 				</table>
-				</div>
-				<div class="matchListDiv">
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="matchListDiv">
 	 			<h5 class="matchListTitle">Upcoming Matches</h5>
-				<table class="table table-condensed">
+	 			<table class="table table-condensed">
 				  <thead>
 					<tr>
 						<th></th>
@@ -131,9 +84,100 @@
 					</tbody>
 				</table>
 			</div>
- 		</div>
-	</div>
+		</div>
+		<div class="col-md-4">
+			<div class="matchListDiv">
+	 			<h5 class="matchListTitle">World Championship Ranking</h5>
+	 			<table class="table table-condensed">
+				  <thead>
+					<tr>
+						<th></th>
+						<th>Country</th>
+						<th>Points</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><i class="flag-be"></i></td>
+							<td>Belgium</td>
+							<td>1000</td>
+						</tr>
+						<tr>
+							<td><i class="flag-ru"></i></td>
+							<td>Rusia</td>
+							<td>100</td>
+						</tr>
+						<tr>
+							<td><i class="flag-nl"></i></td>
+							<td>The Netherlands</td>
+							<td>60</td>
+						</tr>
+						<tr>
+							<td><i class="flag-fr"></i></td>
+							<td>France</td>
+							<td>10</td>
+						</tr>
+						<tr>
+							<td><i class="flag-gr"></i></td>
+							<td>Greece</td>
+							<td>5</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<a href=" {{ route('teams') }}">More Teams</a>
+		</div>
 
+		<div class="col-md-12">
+			<div class="page-header">
+				<h1>News</h1>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+				<div class="carousel-inner">
+					<?php 
+					$counter = 0;
+					foreach ($articles as $article):
+						if($counter == 5){
+							break;
+						}
+						$enclosures =  $article->get_enclosures();
+						$picture = $enclosures[0]->link;
+						$picture = substr($picture, 0, -9);
+						$picture = $picture . "big-lnd.jpg";
+					?>
+						<div class="item <?php if($counter==0){echo 'active';} ?>"><!-- class of active since it's the first item -->
+							<img src="<?php echo $picture; ?>" width='100%' />
+							<div class="carousel-caption">
+								<h3><?php echo $article->get_title(); ?></h3>
+								<p><?php echo $article->get_description(); ?></p>
+								<p><a href="<?php echo $article->get_link(); ?>">Read More</a></p>
+							</div>
+						</div>
+				 
+						<?php 
+						$counter++;
+						endforeach; 
+						?>
+				</div>
+				<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+				</a>
+				<a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right"></span>
+				</a>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<a class="pull-right" href="{{ route('news') }}">More news</a>
+		</div>
+		<div class="col-md-12">
+			<div class="page-header">
+				<h1>World Ranking Map</h1>
+			</div>
+		</div>
+	</div>
 @stop
 
 @section('css')
@@ -155,12 +199,13 @@
 }
 
 .matchListDiv {
-	background-color:#007FFF;
+	background-color:#007F0F;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	box-shadow:3px 3px 10px 1px #c1c1c1;
 }
+
 
 .matchListTitle {
 	text-align:center;

@@ -24,7 +24,6 @@ class HomeController extends BaseController {
 		
 		$recentMatches = Match::getRecentMatches();
 		$articles = RSS::getFIFAtext();
-		$photos = RSS::getFIFAphotos();
 		$countryFlags = array();
 		$matchGoals = array();
 		$recentTeamMatches = array();
@@ -44,8 +43,13 @@ class HomeController extends BaseController {
 			array_push($countryFlags, $hFlag, $aFlag);
 		}
 		
-		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'articles', 'photos'))->with('title', 'Home');
+		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'articles'))->with('title', 'Home');
 
+	}
+	
+	public function news(){
+		$articles = RSS::getFIFAtext();
+		return View::make('news', compact('articles'))->with('title', 'News');
 	}
 
 

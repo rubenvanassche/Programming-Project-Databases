@@ -33,6 +33,7 @@ class RSS {
 			array_push($articles, $url);
 		endforeach;
 		
+		
 		return $articles;
 	}
 	
