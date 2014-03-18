@@ -4,27 +4,23 @@
 	<div class="row">
 		<div class="col-md-9" >
 			<!--  Carousel - consult the Twitter Bootstrap docs at
-      http://twitter.github.com/bootstrap/javascript.html#carousel -->
+			http://twitter.github.com/bootstrap/javascript.html#carousel -->
 			<div id="this-carousel-id" class="carousel slide hero"><!-- class of slide for animation -->
 			  <div class="carousel-inner">
 				<div class="item active"><!-- class of active since it's the first item -->
-				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/72/40/2297240_big-lnd.jpg" alt="" />
+				  <img src="{{$photos[0]}}" alt="" />
 				  <div class="carousel-caption">
 					<p>World Cup 2014 Brazil</p>
 				  </div>
 				</div>
-				<div class="item">
-				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/68/60/2296860_big-lnd.jpg" alt="" />
-				  <div class="carousel-caption">
-					<p>Fifa World Cup 2014 RSS feed</p>
-				  </div>
-				</div>
-				<div class="item">
-				  <img src="http://www.fifa.com/mm/photo/tournament/trophytour/02/29/68/59/2296859_big-lnd.jpg" alt="" />
-				  <div class="carousel-caption">
-					<p>Fifa World Cup 2014 RSS feed</p>
-				  </div>
-				</div>
+				<?php 	for ($i = 1; $i < 5; $i++): ?>
+						<div class="item">
+							<img src="{{$photos[$i]}}" alt="" />
+							<div class="carousel-caption">
+								<p>Fifa World Cup 2014 RSS feed</p>
+							</div>
+						</div>
+				<?php endfor;?>
 			  </div><!-- /.carousel-inner -->
 			  <!--  Next and Previous controls below
 					href values must reference the id for this carousel -->
