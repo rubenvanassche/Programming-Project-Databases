@@ -8,7 +8,7 @@ class PlayerController extends BaseController {
 		$playerText = Player::getPlayerText($playerName);
 		$playerImageURL = Player::getPlayerImageURL($playerName);
 		
-		return View::make('player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL'))->with('title', $playerName);
+		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL'))->with('title', $playerName);
 	}
 }
 
