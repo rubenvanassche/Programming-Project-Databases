@@ -21,7 +21,22 @@
 		<h3>Information</h3>
 		<p>{{$playerText}}</p>
 		<h3>Goals</h3>
-		<p>todo</p>
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Match</th>
+					<th>Time</th>
+				</tr>
+			</thead>
+			<tbody>	
+				@foreach ($goals as $goal)
+					<tr>
+						<td><?php echo $goal->id; ?></td>
+					<tr>
+				@endforeach
+			</tbody>
+		</tabel>
     </div>
 </div>
 @stop
