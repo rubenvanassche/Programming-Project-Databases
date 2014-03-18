@@ -6,7 +6,7 @@ class RSS {
 		$feed = new SimplePie;
 		$feed->set_feed_url('http://www.fifa.com/worldcup/news/rss.xml');
 		$feed->enable_order_by_date(true);
-		$feed->set_cache_location($_SERVER['DOCUMENT_ROOT'] . '/Programming-Project-Databases/cache');
+		$feed->set_cache_location(base_path() . '/cache/simplepie');
 		$feed->init();
 		
 		$articles = array();
@@ -23,7 +23,7 @@ class RSS {
 		$feed = new SimplePie;
 		$feed->set_feed_url('http://www.fifa.com/worldcup/photo/rss.xml');
 		$feed->enable_order_by_date(false);
-		$feed->set_cache_location($_SERVER['DOCUMENT_ROOT'] . '/Programming-Project-Databases/cache');
+		$feed->set_cache_location(base_path() . '/cache/simplepie');
 		$feed->init();
 		
 		$articles = array();
