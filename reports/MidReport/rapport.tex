@@ -137,6 +137,79 @@ Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, st
 \\
 Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina weergegeven. Daar is ook een "forgot password"-functionaliteit voorzien. De gebruiker geeft of zijn username of zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Wederom, deze functionaliteit is nog niet actief. Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. Later zal een ingelogde gebruiker ook een knop te zien krijgen die linkt naar zijn persoonlijk controlepaneel, maar dit moet nog ge\"implementeerd worden. Aangezien alle functionaliteit die weggelegd is voor ingelogde gebruikers gebaseerd is op voorspellingen uitbrengen, wat momenteel nog niet ge\"implementeerd is, ziet de website er verder voor
 
+\section{Webpagina's}
+De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en hebben we dus ook proberen respecteren.
+Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
+\\
+\\
+Er wordt een pagina opgevraagd in de url. (Bv. /public/team?id=1). In de route-file wordt gedefinieerd welke controller er opgeroepen moet worden. Deze controller zal informatie opvragen van het 
+relevante model en zal deze info doorspelen naar de view van de pagina. 
+\\
+\\
+Aanvankelijk was het werken met het framework niet eenvoudig maar eens het wat duidelijker werd zagen we de waarde ervan in.
+Het design hebben we grotendeels te danken aan Twitter Bootstrap. Een website ziet er zo relatief gemakkelijk goed uit. 
+\\
+\\
+De webpagina's zijn nog volop in development alsook kan het design hier en daar ook nog wel veranderen. 
+
+\subsection{Work in progress}
+\subsubsection{Player Page}
+Deze pagina bevat informatie over een bepaalde speler.
+\\
+In de PlayerController wordt volgende info opgevraagd van de Player en Team models:
+\begin{lstlisting}
+		$playerName = htmlspecialchars($_GET["name"]);
+		$playerObj = Player::getPlayer($playerName)[0];
+		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
+		$playerText = Player::getPlayerText($playerName);
+		$playerImageURL = Player::getPlayerImageURL($playerName);
+\end{lstlisting}
+\\	
+\\
+Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
+in onze database zitten. Misschien doen we dit beter wel?
+\subsubsection(Team Page)
+Deze pagina bevat informatie over een bepaald team.
+\\
+In de TeamController wordt volgende info opgevraagd van het Team model.
+\begin{lstlisting}
+		$teamID = htmlspecialchars($_GET["id"]);
+		$teamObj = Team::getTeamByID($teamID)[0];
+		$teamText = Team::getTeamText($teamObj->name);
+		$teamImageURL = Team::getTeamImageURL($teamObj->name);
+\end{lstlisting}
+\\
+Deze informatie wordt vervolgens weer gebruikt om weer te geven op de webpagina. 
+
+\subsubsection(Players page)
+Deze pagina toont de spelers die in een bepaald team zitten. Door hierop te klikken kan je dan naar de desbetreffende playerpage navigeren.
+\\
+In de PlayersController wordt volgende info opgevraagd van het Team model:
+\begin{lstlisting}
+		$teamID = htmlspecialchars($_GET["id"]);
+		$team = Team::getTeamByID($teamID)[0];
+		$playerBase = Team::getPlayers($teamID);
+		$teamImageURL = Team::getTeamImageURL($team->name);
+\end{lstlisting}
+\\
+Deze informatie wordt vervolgens weer gebruikt om weer te geven op de webpagina. 
+\\
+\\
+Als voorbeeld van hoe zo'n informatie wordt opgehaald:
+\begin{lstlisting}
+	public static function getPlayers($teamID) {
+		$playerIDs = DB::select('SELECT player_id FROM playerPerTeam WHERE team_id = ?', array($teamID));
+		$players = array();
+		foreach ($playerIDs as $playerID) {
+			$player = DB::select('SELECT * FROM player WHERE id = ?', array($playerID->player_id));
+			array_push($players, $player);
+		}
+		return $players;
+	}
+\end{lstlisting}
+
+\subsubsection(Home page)
+Bestaat uit een foto en news RSS feed van FIFA samen met search bars om te zoeken naar players/teams/etc. Momenteel is het idee om ook de laatst gespeelde WK wedstrijden en opkomende WK-wedstrijden.
 \section{Extra functionaliteit}
 We gaan meteen data van zoveel competities als we kunnen vinden in onze database steken en daar hetzelfde mee doen als met de WK-data. Met verdere extra functionaliteit gaan we ons pas bezighouden als de verplichte functionaliteit er volledig is.
 
