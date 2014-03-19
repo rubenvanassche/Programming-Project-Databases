@@ -23,13 +23,16 @@ class Match {
 	
 	public static function get($matchID){
 		$results = DB::select("SELECT date,
+								hometeam_id,
+								awayteam_id,
 								(SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,  
 								(SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam,
 								(SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id) as hometeam_score,
 								(SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id) as awayteam_score
 								FROM `match` WHERE id = ?", array($matchID));
-		return $results;
+		return $results[0];
 	}
+	
 }
 
 ?>
