@@ -59,8 +59,14 @@ class CrawlerController extends BaseController {
             // skip if one of the required element is empty
             if ( empty( $name ) ) { continue; }
 
+            $player_page = new simple_html_dom();
+            $player_url = "http://int.soccerway.com/".$name->href;
+            $player_page->load_file( $player_url );
+
+            $first_name = $player_page->find("div.block_player_passport div div div div dl dd", 0);
+            $second_name = $player_page->find("div.block_player_passport div div div div dl dd", 1);
             yield array(
-                "name"      => trim( $name->plaintext ),
+                "name"      => trim( $first_name->plaintext ).' '.trim( $second_name->plaintext ),
                 "href"      => trim( $name->href ),
             );
         } // end foreach
