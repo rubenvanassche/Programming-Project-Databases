@@ -20,7 +20,6 @@ class Match {
 								FROM `match` WHERE id = ?', array($matchID));
 		return $results[0]->hometeam_score." - ".$results[0]->awayteam_score;
 	}
-<<<<<<< HEAD
 	
 	public static function get($matchID){
 		$results = DB::select("SELECT date,
@@ -34,7 +33,6 @@ class Match {
 		return $results[0];
 	}
 	
-=======
 
 	public static function getScore2($matchID){
 		$results = DB::select('SELECT 
