@@ -31,7 +31,9 @@ class CrawlerController extends BaseController {
             );
         } // end foreach
 
+        // clear page to avoid memory exhausting
         $page->clear();
+        return;
     }
 
     /**
@@ -58,6 +60,7 @@ class CrawlerController extends BaseController {
 
         // clear page to avoid memory exhausting
         $page->clear();
+        return;
     }
 
     /**
@@ -87,6 +90,7 @@ class CrawlerController extends BaseController {
 
         // clear page to avoid memory exhausting
         $page->clear();
+        return;
     }
 }
 
@@ -103,13 +107,13 @@ class CrawlerController extends BaseController {
 #        echo "\t\t".$player["name"]."\n";
 #    }
 #}
-
+#
 # .. but this one does.. You can parse once, but not 2 at a time, apparently
 # WTF FUCK YOU PHP!
 #foreach ( $crawler->players( "/teams/germany/germany/1037/" ) as $player ) {
 #    echo $player["name"]."\n";
 #}
-
+#
 #foreach( $crawler->matches() as $match ) {
 #    echo $match["date"].' '.$match["team0"].' '.$match["status"].' '.$match["team1"].' '."\n";
 #}
