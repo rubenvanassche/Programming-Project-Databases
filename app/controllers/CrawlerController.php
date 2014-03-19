@@ -19,15 +19,20 @@ class CrawlerController extends BaseController {
         $page->load_file( $url );
 
         foreach ( $page->find("table.fifa_rankings tbody tr") as $entry ) {
-            $rank = $entry->find("td.rank");
-            $country = $entry->find("td.team a");
-            $points = $entry->find("td.points");
+            $rank = $entry->find("td.rank", 0);
+            $country = $entry->find("td.team a", 0);
+            $points = $entry->find("td.points", 0);
+
+            // skip if one of the required element is empty
+            if ( empty( $rank ) ) { continue; }
+            if ( empty( $country ) ) { continue; }
+            if ( empty( $points ) ) { continue; }
 
             yield array(
-                "rank"      => trim( $rank[0]->plaintext ),
-                "country"   => trim( $country[0]->plaintext ),
-                "points"    => trim( $points[0]->plaintext ),
-                "href"      => trim( $country[0]->href ),
+                "rank"      => trim( $rank->plaintext ),
+                "country"   => trim( $country->plaintext ),
+                "points"    => trim( $points->plaintext ),
+                "href"      => trim( $country->href ),
             );
         } // end foreach
 
@@ -50,11 +55,14 @@ class CrawlerController extends BaseController {
         $page->load_file( $url );
 
         foreach ( $page->find("div.squad-container table.squad tbody tr") as $entry ) {
-            $name = $entry->find("td.name a");
+            $name = $entry->find("td.name a", 0);
+
+            // skip if one of the required element is empty
+            if ( empty( $name ) ) { continue; }
 
             yield array(
-                "name"      => trim( $name[0]->plaintext ),
-                "href"      => trim( $name[0]->href ),
+                "name"      => trim( $name->plaintext ),
+                "href"      => trim( $name->href ),
             );
         } // end foreach
 
@@ -75,16 +83,22 @@ class CrawlerController extends BaseController {
         $page->load_file( $url );
 
         foreach ( $page->find("table.matches tbody tr.match") as $entry ) {
-            $date = $entry->find("td.date");
-            $teamA = $entry->find("td.team-a a");
-            $status = $entry->find("td.status a");
-            $teamB = $entry->find("td.team-b a");
+            $date = $entry->find("td.date", 0);
+            $teamA = $entry->find("td.team-a a", 0);
+            $status = $entry->find("td.status a", 0);
+            $teamB = $entry->find("td.team-b a", 0);
+
+            // skip if one of the required element is empty
+            if ( empty( $date ) ) { continue; }
+            if ( empty( $teamA ) ) { continue; }
+            if ( empty( $status ) ) { continue; }
+            if ( empty( $teamB ) ) { continue; }
 
             yield array(
-                "date"      => trim( $date[0]->plaintext ),
-                "team0"     => trim( $teamA[0]->plaintext ),
-                "status"    => trim( $status[0]->plaintext ),
-                "team1"     => trim( $teamB[0]->plaintext ),
+                "date"      => trim( $date->plaintext ),
+                "team0"     => trim( $teamA->plaintext ),
+                "status"    => trim( $status->plaintext ),
+                "team1"     => trim( $teamB->plaintext ),
             );
         } // end foreach
 
@@ -93,27 +107,3 @@ class CrawlerController extends BaseController {
         return;
     }
 }
-
-
-#$crawler = new CrawlerController();
-
-# This one doesn't work...
-#foreach ( $crawler->teams() as $team ) {
-#    echo $team["rank"].' '.$team["country"].' '.$team["points"].' '."\n";
-#
-#    if ( empty($team["href"]) ) { continue; }
-#
-#    foreach ( $crawler->players( $team["href"] ) as $player ) {
-#        echo "\t\t".$player["name"]."\n";
-#    }
-#}
-#
-# .. but this one does.. You can parse once, but not 2 at a time, apparently
-# WTF FUCK YOU PHP!
-#foreach ( $crawler->players( "/teams/germany/germany/1037/" ) as $player ) {
-#    echo $player["name"]."\n";
-#}
-#
-#foreach( $crawler->matches() as $match ) {
-#    echo $match["date"].' '.$match["team0"].' '.$match["status"].' '.$match["team1"].' '."\n";
-#}
