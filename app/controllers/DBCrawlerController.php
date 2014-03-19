@@ -19,18 +19,17 @@ class DBCrawlerController extends BaseController {
                 $team["country"],
                 $team["country"],
                 "banana",
-                $team['points']
+                $team["points"]
             );
             # TODO get coach
 
             if ( empty($team["href"]) ) { continue; }
 
             foreach ( $crawler->players( $team["href"] ) as $player ) {
-            	$db->addPlayer($player['name'], false);
+                $db->addPlayer( $player["name"], false);
                 $db->addPlayerPerTeam(
                     $player["name"],
-                    $team["country"],
-                    $team["points"]
+                    $team["country"]
                );
             } // end foreach
         } // end foreach
