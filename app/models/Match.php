@@ -3,8 +3,7 @@
 class Match {
 	public static function getRecentMatches(){
 		// What condition are we going to use here?
-		$test = 1;
-		$results = DB::select('SELECT * FROM `match` WHERE id = ?', array(1));
+		$results = DB::select('SELECT * FROM `match`');
 		return $results;
 	}
 	

@@ -24,6 +24,7 @@ class Team {
 			$player = DB::select('SELECT * FROM player WHERE id = ?', array($playerID->player_id));
 			array_push($players, $player);
 		}
+		
 		return $players;
 	}
 	
