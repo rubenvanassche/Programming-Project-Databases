@@ -27,7 +27,8 @@ class DBCrawlerController extends BaseController {
             foreach ( $crawler->players( $team["href"] ) as $player ) {
                 $db->addPlayerPerTeam(
                     $player["name"],
-                    $team["country"]
+                    $team["country"],
+                    $team["points"]
                );
             } // end foreach
         } // end foreach
