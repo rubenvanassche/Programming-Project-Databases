@@ -23,6 +23,19 @@ class Search{
 	    $results = $query->get();
 	    return $results;
 	}
+	
+	public static function matches($input){	
+		$input = implode($input, ' ');	
+		$results = DB::select("SELECT id FROM `match` WHERE hometeam_id IN (SELECT id FROM team WHERE name = ?) OR awayteam_id IN (SELECT id FROM team WHERE name = ?)", array($input, $input));
+		
+		$out = array();
+		
+		foreach($results as $result){
+			$x = DB::select("SELECT id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,  (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam FROM `match` WHERE id = ?", array($result->id));
+			array_push($out, $x[0]);
+		}
+	    return $out;
+	}
 }
 
 ?>
