@@ -24,7 +24,11 @@ class HomeController extends BaseController {
 		$countryFlags = array();
 		$matchGoals = array();
 		$recentTeamMatches = array();
+<<<<<<< HEAD
 		$topteams = Team::getTopTeams(5);
+=======
+		$fifaPoints = Team::getFIFAPoints();
+>>>>>>> dev-jakob
 
 		
 		foreach ($recentMatches as $rm) {
@@ -41,7 +45,11 @@ class HomeController extends BaseController {
 			array_push($countryFlags, $hFlag, $aFlag);
 		}
 		
+<<<<<<< HEAD
 		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'topteams', 'articles'))->with('title', 'Home');
+=======
+		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'articles', 'fifaPoints'))->with('title', 'Home');
+>>>>>>> dev-jakob
 
 	}
 	
@@ -53,4 +61,3 @@ class HomeController extends BaseController {
 
 }
 
-?>
