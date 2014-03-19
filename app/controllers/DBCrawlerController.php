@@ -45,11 +45,41 @@ class DBCrawlerController extends BaseController {
         $db = new Stats();
 
         foreach( $crawler->matches() as $match ) {
+            try {
+            $db->addTeam(
+                $match["team0"],
+                $match["team0"],
+                "banana",
+                0
+            );
+            } catch (Exception $d) {
+                // ignore
+            }
+
+            try {
+            $db->addTeam(
+                $match["team1"],
+                $match["team1"],
+                "banana",
+                0
+            );
+            } catch (Exception $d) {
+                // ignore
+            }
+
+            try {
+            $db->addTeamPerCompetition($match["team0"], "World Cup");
+            $db->addTeamPerCompetition($match["team1"], "World Cup");
+
             $db->addMatch(
                 $match["team0"],
                 $match["team1"],
-                "World Cup"
-            );
+                "World Cup",
+                $match["status"]
+           );
+            } catch (Exception $d) {
+                // ignore
+            }
         } // end foreach
 
         return;

@@ -22,6 +22,9 @@ class HomeController extends BaseController {
 		DB::statement("TRUNCATE playerPerTeam");
 		$crawler = new DBCrawlerController();
 		$crawler->updateTeams();
+        DB::statement("TRUNCATE match");
+		$crawler = new DBCrawlerController();
+        $crawler->updateMatches();
 		*/
 		
 		//require_once('../lib/autoloader.php');
