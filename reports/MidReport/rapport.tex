@@ -50,16 +50,21 @@ Maakte een template voor de wepagina's. Converteerde iedereens code naar een moo
 
 \section{Design}
 De meesten van ons groepje hadden totaal geen ervaring met het bouwen van websites. In het begin van het project zijn de meesten dus begonnen met het doornemen van allerlei tutorials. Dit nam redelijk wat tijd in beslag, waardoor het eigenlijke project met wat vertraging begon. In eerste geval werkten we aan de backend van de website: opstellen van databaseschema, bouwen van loginsysteem, ... We waren eerst van plan om onze data te verkrijgen via de OpenFooty API. Ongeveer een week na het versturen van onze API key request begonnen we te vrezen dat we deze niet meer gingen krijgen, wat inderdaad nog steeds niet gebeurd is. We moesten dus op zoek gaan naar andere manieren om onze data te vergaren. De enige andere optie leek het gebruik van een crawler. Niemand van ons had enige ervaring met het schrijven/gebruiken van crawlers, en de crawler bleek een struikelblok. Ondertussen werkt de crawler min of meer, maar hij is nog niet in een ver genoeg stadium om data te verzamelen die compleet genoeg is om nuttig te zijn. We werken momenteel dus nog met manueel ingevoerde testdata. Ons voorspellingsalgoritme is al uitgedacht maar nog niet ge\"implementeerd. Verder zijn al sommige, maar niet alle webpagina's aangemaakt en is er een (tijdelijke?) vormgeving van de pagina's.
-
+\\
+\\
+\\
 Het voorspellingssysteem hebben wij opgesplitst in 2 essenti\"ele delen, namelijk het voorspellen van een winnaar van een wedstrijd, en het bepalen van de te verwachten score. Factoren die wij belangrijk vonden om rekening mee te houden in het voorspellen van dit alles zijn vooral onderlinge resultaten van eerder gespeelde wedstrijden, en gemiddeldes van andere wedstrijden tegen andere ploegen. Ook wordt altijd rekening gehouden met de locatie waar gespeeld wordt (uit of thuis).
-
+\\
+\\
 Het voorspellen van de winnaar is natuurlijk de makkelijkste van de twee. We beginnen simpelweg door te kijken naar eerder gespeelde wedstrijden tussen deze ploegen. We werken met een puntensysteem waarbij een ploeg punten krijgt wanneer het een wedstrijd wint. Het aantal punten die ze krijgen, hangt af van de impact die we willen dat het heeft op het gehele resultaat. Hierbinnen maken we ook nog eens het onderscheid of de set-up uit/thuis dezelfde is of omgekeerd. Het eerste geval is natuurlijk het belangrijkste aangezien dit een identieke case is. Daarom zal een ploeg ook de meeste punten worden toegekend voor het winnen van zulke wedstrijden.
 Daarna gaan we kijken naar algemene resultaten, maar weer rekening houdende met het al dan niet uit/thuis spelen. We kijken naar alle wedstrijden die de thuisploeg thuis speelde, en de uitploeg uit speelde. Voor elke gewonnen match krijgen ze ieder weer een bepaald aantal punten (afhankelijk van de impact die deze factor moet hebben). Vervolgens kijken we naar de wedstrijden waar de thuisploeg uit speelde, en de uitploeg thuis. Wederom krijgen ze voor iedere gewonnen match een bepaald aantal punten maar weer minder dan in het vorige geval. Tot slot gaan we de punten vergelijken en op basis daarvan kunnen we de kans bepalen dat een bepaalde ploeg wint.
-
+\\
+\\
 Het bepalen van een score is iets complexer. Dit volgt een gelijkaardig systeem als hierboven, maar met een belangrijk verschil. Hier werken we niet met het optellen van punten. We gaan altijd werken met gemiddeldes. Zo zullen we wederom eerst kijken naar identieke wedstrijden en van elke ploeg het gemiddelde aantal goals bewaren. Dan gaan we kijken naar wedstrijden met dezelfde ploegen maar op een andere locatie en wederom berekenen we het gemiddeld aantal goals gescoord door de teams.
 Dan gaan we weer kijken naar de algemene resultaten waarbij we wel wederom een onderscheid maken tussen uit- en thuis spelen. We berekenen dus het gemiddelde aantal goals dat de thuisploeg thuis scoort, en het gemiddelde aantal goals dat de thuisploeg uit scoort. Voor de uitploeg natuurlijk net hetzelfde. Nu zitten we met 4 gemiddeldes die we individueel vermenigvuldigen met een factor (mate van impact) en daarna optellen en delen door 4. Door dit af te ronden hebben we nu een aantal goals bepaald voor iedere ploeg. Maar hier liep het soms nog mis. Afhankelijk van de data kon de kans dat ploeg A won 90\% zijn maar de score berekenen in het voordeel van ploeg B.
 Daarom checken we op het einde de kans op winst van een ploeg en passen de score indien nodig aan zodat deze uitkomt met de verwachte uitslag van de wedstrijd.
-
+\\
+\\
 Ter uitbreiding zouden we graag nog meer data bepaald laten worden door het voorspellingsysteem. Dit zou dan eventuele spelers die scoren, kaarten, minuten van de goals, enzovoort zijn. Hiervoor moeten we echter eerst grondig de data die we ter beschikking hebben analyseren, en zo een geschikt algoritme hiervoor uitdenken dat hoogstwaarschijnlijk in dezelfde trend zal liggen als die hierboven.
 
 
@@ -165,7 +170,7 @@ Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, st
 Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina weergegeven. Daar is ook een "forgot password"-functionaliteit voorzien. De gebruiker geeft of zijn username of zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Wederom, deze functionaliteit is nog niet actief. Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. Later zal een ingelogde gebruiker ook een knop te zien krijgen die linkt naar zijn persoonlijk controlepaneel, maar dit moet nog ge\"implementeerd worden. Aangezien alle functionaliteit die weggelegd is voor ingelogde gebruikers gebaseerd is op voorspellingen uitbrengen, wat momenteel nog niet ge\"implementeerd is, ziet de website er verder voor ingelogde en niet-ingelogde gebruikers hetzelfde uit.
 
 \section{Webpagina's}
-De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en dat  proberen we dus ook te respecteren.
+De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en dat proberen we dus ook te respecteren.
 Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
 \\
 \\
@@ -232,7 +237,9 @@ In de PlayersController wordt volgende info opgevraagd van het Team model:
  
  
 \subsubsection{Match page}
-Analoog aan de Players page. Hier wordt ook met Ajax gewerkt.\section{Extra functionaliteit}
+Analoog aan de Players page. Hier wordt ook met Ajax gewerkt.
+
+\section{Extra functionaliteit}
 We gaan meteen data van zoveel competities als we kunnen vinden in onze database steken en daar hetzelfde mee doen als met de WK-data. Met verdere extra functionaliteit gaan we ons pas bezighouden als de verplichte functionaliteit er volledig is.
 
 \section{Planning}
