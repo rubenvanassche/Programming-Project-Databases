@@ -30,11 +30,7 @@
 				</tr>
 			</thead>
 			<tbody>	
-				@foreach ($goals as $goal)
-					<tr>
-						<td><?php echo $goal->id; ?></td>
-					<tr>
-				@endforeach
+
 			</tbody>
 		</tabel>
     </div>
