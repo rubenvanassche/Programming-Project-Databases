@@ -177,6 +177,7 @@ CREATE TABLE IF NOT EXISTS `team` (
   `name` varchar(40) /*NOT NULL*/,
   `country_id` int(11) /*NOT NULL*/,
   `coach_id` int(11) /*NOT NULL*/,
+	`fifapoints` int(11),
   PRIMARY KEY (`id`),
   KEY `country` (`country_id`),
   KEY `coach` (`coach_id`)

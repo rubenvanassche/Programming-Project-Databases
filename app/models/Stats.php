@@ -258,7 +258,7 @@ class Stats {
 
 
 
-	static function addMatch($homeTeamName, $awayTeamName, $competitionName) {
+	static function addMatch($homeTeamName, $awayTeamName, $competitionName, $date) {
 		$homeTeamID = NULL;  //only used if no name provided
 		$awayTeamID = NULL;
 		$competitionID = NULL;
@@ -310,16 +310,17 @@ class Stats {
 		}
 
 		//Check for duplicates if all info provided
-		if ($homeTeamID != NULL && $awayTeamID != NULL && $competitionID != NULL) {
-			$results = DB::select('SELECT * FROM `match` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ?', 
-									array($homeTeamID, $awayTeamID, $competitionID));
+		if ($homeTeamID != NULL && $awayTeamID != NULL && $competitionID != NULL && $date != NULL) {
+			$results = DB::select('SELECT * FROM `match` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?', 
+									array($homeTeamID, $awayTeamID, $competitionID, $date));
 			if(!empty($results)) {
-				throw new Duplicate("Match with home team name " . $homeTeamName . ", away team name " . $awayTeamName . " and competition " . $competitionName . " already in database");
+				throw new Duplicate("Match with home team name " . $homeTeamName . ", away team name " . $awayTeamName . ", competition " . $competitionName . 
+														" and date " . $date . " already in database");
 			}
 		}
 
-		$result = DB::insert('INSERT INTO `match` (hometeam_id, awayteam_id, competition_id) VALUES (?, ?, ?)', 
-								array($homeTeamID, $awayTeamID, $competitionID));
+		$result = DB::insert('INSERT INTO `match` (hometeam_id, awayteam_id, competition_id, date) VALUES (?, ?, ?, ?)', 
+								array($homeTeamID, $awayTeamID, $competitionID, $date));
 		if($result == 1) {
 			echo "Match added";
 			return true;
@@ -482,7 +483,7 @@ class Stats {
 
 
 
-	static function addTeam($teamName, $countryName, $coachName) {
+	static function addTeam($teamName, $countryName, $coachName, $fifaPoints) {
 		$countryID = NULL;
 		$coachID = NULL;
 		//If countryName provided, find its ID
@@ -508,7 +509,7 @@ class Stats {
 			throw new Duplicate("Team with name " . $teamName . ", country name " . $countryName . " and coach name " . $coachName . " already in database");
 		}
 
-		$result = DB::insert('INSERT INTO team (name, country_id, coach_id) VALUES (?, ?, ?)', array($teamName, $countryID, $coachID));
+		$result = DB::insert('INSERT INTO team (name, country_id, coach_id, fifapoints) VALUES (?, ?, ?, ?)', array($teamName, $countryID, $coachID, $fifaPoints));
 		if($result == 1) {
 			echo "Team added";
 			return true;
