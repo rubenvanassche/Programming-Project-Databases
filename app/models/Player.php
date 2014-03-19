@@ -14,8 +14,22 @@ class Player {
 									 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam
 									 FROM `match`, goal WHERE `match`.id = goal.match_id AND goal.player_id = ?", array($playerID));
 		return $result;
-		
-		// SELECT goal.time as time, match.hometeam.id as hometeamID FROM goal, match, team WHERE match.id = goal.match_id AND goal.player_id = ?
+	}
+	
+	public static function countGoals($playerID){
+		$result = DB::select("SELECT COUNT(id) as count FROM goal WHERE player_id = ?", array($playerID));
+		return $result[0]->count;
+	}
+	
+	public static function cards($playerID){
+		$result = DB::select("SELECT cards.time,
+							cards.color,
+							cards.match_id,
+							(SELECT date FROM `match` WHERE  `match`.id = cards.match_id) as date,
+							(SELECT name FROM team,`match`  WHERE  team.id = `match`.hometeam_id AND `match`.id = cards.match_id) as hometeam,
+							(SELECT name FROM team,`match`  WHERE  team.id = `match`.awayteam_id AND `match`.id = cards.match_id) as awayteam
+							FROM cards WHERE player_id = ? ORDER BY date desc, time asc", array($playerID));
+		return $result;
 	}
 	
 	public static function getPlayerText($playerName){
