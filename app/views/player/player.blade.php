@@ -33,6 +33,8 @@
 				@foreach ($goals as $goal)
 					<tr>
 						<td><?php echo $goal->id; ?></td>
+						<td><?php echo $goal->match_id; ?></td>
+						<td><?php echo $goal->time; ?></td>
 					<tr>
 				@endforeach
 			</tbody>
