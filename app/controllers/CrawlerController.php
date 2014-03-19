@@ -3,8 +3,7 @@ include("../../lib/crawlers/simple_html_dom.php");
 
 /**
  * @class CrawlerController
- * @brief Crawl data from site and put dem shit into the databases with more 
- * shits.
+ * @brief Crawl data from site.
  */
 class CrawlerController extends BaseController {
 
