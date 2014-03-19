@@ -2,6 +2,7 @@
 
 \usepackage{listings}
 \usepackage{color}
+\usepackage[normalem]{ulem}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -49,8 +50,9 @@ Maakte een template voor de wepagina's. Converteerde iedereens code naar een moo
 \section{Design}
 De meesten van ons groepje hadden totaal geen ervaring met het bouwen van websites. In het begin van het project zijn de meesten dus begonnen met het doornemen van allerlei tutorials. Dit nam redelijk wat tijd in beslag, waardoor het eigenlijke project met wat vertraging begon. In eerste geval werkten we aan de backend van de website: opstellen van databaseschema, bouwen van loginsysteem, ... We waren eerst van plan om onze data te verkrijgen via de OpenFooty API. Ongeveer een week na het versturen van onze API key request begonnen we te vrezen dat we deze niet meer gingen krijgen, wat inderdaad nog steeds niet gebeurd is. We moesten dus op zoek gaan naar andere manieren om onze data te vergaren. De enige andere optie leek het gebruik van een crawler. Niemand van ons had enige ervaring met het schrijven/gebruiken van crawlers, en de crawler bleek een struikelblok. Ondertussen werkt de crawler min of meer, maar hij is nog niet in een ver genoeg stadium om data te verzamelen die compleet genoeg is om nuttig te zijn. We werken momenteel dus nog met manueel ingevoerde testdata. Ons voorspellingsalgoritme is al uitgedacht maar nog niet geïmplementeerd. Verder zijn al sommige, maar niet alle webpagina's aangemaakt en is er een (tijdelijke?) vormgeving van de pagina's.
 
-\subsection{UML-diagramma}
-?
+Het voorspellingsalgoritme zal werken met scores per team. Voor een bepaalde match krijgt elk team een score, berekend aan de hand van de uitslagen van eventuele vroegere matches tussen dezelfde teams, hun algemene win/loss ratio, enzovoort. Er wordt ook rekening gehouden met een eventuele invloed van thuis- of uitspelen (hoewel dit niet van toepassing is op WK-matches). Indien dit snel zou kunnen gebeuren, kunnen we ook rekening houden met prestaties van de spelers in een team. Gemiddeld aantal goals van de teams wordt ook meegewogen bij het voorspellen van de exacte uitslag.
+
+
 
 \section{Database}
 Onze database bestaat 12 tabellen met voetbalgerelateerde data en 1 tabel voor users.
@@ -59,7 +61,7 @@ Onze database bestaat 12 tabellen met voetbalgerelateerde data en 1 tabel voor u
 \item `country`: Tabel voor landen. Bevat een id, een naam, de id van het werelddeel waarin het land ligt, en een afkorting voor de naam van het land. Die afkorting zal gebruikt worden op de website.
 \item `player`: Tabel voor voetbalspelers. Bevat een id, een naam en een boolean die aangeeft of de speler geblesseerd is.
 \item `coach`: Tabel voor voetbalcoaches. Bevat een id en een naam.
-\item `team`: Tabel voor voetbalteams. Bevat een id, een naam, een id van het land van het team en een id van de huidige coach van het team.
+\item `team`: Tabel voor voetbalteams. Bevat een id, een naam, een id van het land van het team, een id van de huidige coach van het team en de FIFA score.
 \item `competition`: Tabel voor voetbalcompetities. Bevat een id en een naam.
 \item `match`: Tabel voor voetbalmatches. Bevat id's van thuis- en uitteam, id van de competitie en een datum.
 \item `playerPerTeam`: Tabel die spelers en teams met elkaar linkt. Bevat id's van een speler en een team.
@@ -70,6 +72,20 @@ Onze database bestaat 12 tabellen met voetbalgerelateerde data en 1 tabel voor u
 \end{enumerate}
 
 \subsection{ER-diagramma}
+\subsection{Relational model}
+continent(\uline{id}, name) \\
+country(\uline{id}, name, continent\_id, abbreviation) \\
+player(\uline{id}, name, injured) \\
+coach(\uline{id}, name) \\
+team(\uline{id}, name, country\_id, coach\_id, fifascore) \\
+competition(\uline{id}, name) \\
+match(\uline{id}, hometeam\_id, awayteam\_id, competition\_id, date) \\
+playerPerTeam(\uline{player\_id}, \uline{team\_id}) \\
+playerPerMatch(\uline{player\_id}, \uline{match\_id}, intime, outtime) \\
+playerPerCompetition(\uline{team\_id}, \uline{competition\_id}) \\
+goal(match\_id, time, player\_id, team\_id, penaltyphase) \\
+cards(\uline{id}, player\_id, color, time) \\
+
 \subsection{Constraints}
 \begin{lstlisting}
 -- Constraints for table `cards`
@@ -164,8 +180,7 @@ In de PlayerController wordt volgende info opgevraagd van de Player en Team mode
 		$playerText = Player::getPlayerText($playerName);
 		$playerImageURL = Player::getPlayerImageURL($playerName);
 \end{lstlisting}
-\\	
-\\
+
 Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
 in onze database zitten. Misschien doen we dit beter wel?
 \subsubsection(Team Page)
@@ -216,9 +231,14 @@ We gaan meteen data van zoveel competities als we kunnen vinden in onze database
 \section{Planning}
 We proberen zo snel mogelijk alle verplichte functionaliteit af te krijgen. Concreet is dit de database vullen en de data makkelijk beschikbaar maken (in tekst en grafieken), gebruikers voorspellingen laten uitbrengen en het systeem voorspellingen laten maken, data in real time laten updaten en nog wat kleinere dingen.
 \subsection{Stijn}
+Verderwerken aan crawler
 \subsection{Tom}
+Voorspellingen implementeren
 \subsection{Ruben}
+Verder pagina's aanmaken
 \subsection{Jakob}
+Weergave van data voor gebruikers (tekst en grafisch) implementeren.
 \subsection{Kristof}
+Automatisch updaten van database implementeren
 
 \end{document}
