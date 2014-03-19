@@ -28,6 +28,24 @@ class Team {
 		return $players;
 	}
 	
+	public static function getTopTeams($limit = ''){
+		if($limit != '' and is_numeric($limit)){
+			$limit = " LIMIT ". $limit;
+		}
+		
+		$results = DB::select("SELECT team.id, team.name, team.fifapoints, country.abbreviation FROM team, country WHERE country.id = team.country_id ORDER BY team.fifapoints desc".$limit);
+		return $results;
+	}
+	
+	public static function getMatches($teamID){
+		$results = DB::select("SELECT `match`.date,
+							  `match`.id as match_id,
+							  (SELECT name FROM team WHERE team.id = `match`.hometeam_id) as hometeam,
+							  (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam
+							  FROM `match` WHERE hometeam_id = ? OR awayteam_id = ?", array($teamID, $teamID));
+		return $results;
+	}
+	
 	public static function getTeamText($teamName){
 		$jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode($teamName);
 		$json = file_get_contents($jsonurl);

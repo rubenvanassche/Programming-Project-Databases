@@ -22,7 +22,7 @@
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{{  route('team.information', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Information</a></li>
 			<li><a href="{{  route('team.players', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Players</a></li>
-			<li><a href="{{  route('teams') }}"  data-toggle="tabajax">Matches</a></li>
+			<li><a href="{{  route('team.matches', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Matches</a></li>
 			<li><a href="{{  route('home') }}"  data-toggle="tabajax">Statistics</a></li>
 		</ul>
 		<div class="tabcontent" style="margin-top:10px;">

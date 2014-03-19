@@ -87,7 +87,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">World Championship Ranking</h5>
+	 			<h5 class="matchListTitle">World Cup Ranking</h5>
 	 			<table class="table table-condensed">
 				  <thead>
 					<tr>
@@ -97,31 +97,13 @@
 					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>1000</td>
-						</tr>
-						<tr>
-							<td><i class="flag-ru"></i></td>
-							<td>Rusia</td>
-							<td>100</td>
-						</tr>
-						<tr>
-							<td><i class="flag-nl"></i></td>
-							<td>The Netherlands</td>
-							<td>60</td>
-						</tr>
-						<tr>
-							<td><i class="flag-fr"></i></td>
-							<td>France</td>
-							<td>10</td>
-						</tr>
-						<tr>
-							<td><i class="flag-gr"></i></td>
-							<td>Greece</td>
-							<td>5</td>
-						</tr>
+						@foreach ($topteams as $topteam)
+							<tr>
+								<td><i class="flag-<?php echo $topteam->abbreviation; ?>"></i></td>
+								<td><a href="{{ route('team', array('id'=>$topteam->id)) }}"><?php echo $topteam->name; ?></td>
+								<td><?php echo $topteam->fifapoints; ?></td>
+							</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
