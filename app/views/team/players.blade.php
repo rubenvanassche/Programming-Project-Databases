@@ -20,7 +20,7 @@
 						}; 
 					?>
 				</td>
-				<td>--</td>
+				<td><?php echo Player::countGoals($player[0]->id); ?></td>
 			</tr>
 		@endforeach					
 	</tbody>

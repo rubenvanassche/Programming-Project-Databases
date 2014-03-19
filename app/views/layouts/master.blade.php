@@ -26,12 +26,12 @@
 				</div>
 				<div class="collapse navbar-collapse">
 					
-					<form class="navbar-form navbar-right" role="search">
+					{{ Form::open(array('url' => 'search', 'class'=>'navbar-form navbar-right')) }}
 						<div class="form-group">
-							<input type="text" class="form-control" id="searchbar" placeholder="Search">
+							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%;', 'placeholder'=>'Type searchterm here')) }}
 						</div>
 						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i></button>
-					</form>
+					{{ Form::token() . Form::close() }}
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>

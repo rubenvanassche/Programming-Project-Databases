@@ -29,6 +29,12 @@ class TeamController extends BaseController {
 		return View::make('team.information', compact('teamText'));
 	}
 	
+	public function matches($teamID){
+		$team = Team::getTeamByID($teamID);
+		$matches = Team::getMatches($teamID);
+		
+		return View::make('team.matches', compact('matches'));
+	}
 	
 }
 

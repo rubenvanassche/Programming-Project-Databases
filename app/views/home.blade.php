@@ -87,7 +87,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">World Championship Ranking</h5>
+	 			<h5 class="matchListTitle">World Cup Ranking</h5>
 	 			<table class="table table-condensed">
 				  <thead>
 					<tr>
@@ -97,31 +97,13 @@
 					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>1000</td>
-						</tr>
-						<tr>
-							<td><i class="flag-ru"></i></td>
-							<td>Rusia</td>
-							<td>100</td>
-						</tr>
-						<tr>
-							<td><i class="flag-nl"></i></td>
-							<td>The Netherlands</td>
-							<td>60</td>
-						</tr>
-						<tr>
-							<td><i class="flag-fr"></i></td>
-							<td>France</td>
-							<td>10</td>
-						</tr>
-						<tr>
-							<td><i class="flag-gr"></i></td>
-							<td>Greece</td>
-							<td>5</td>
-						</tr>
+						@foreach ($topteams as $topteam)
+							<tr>
+								<td><i class="flag-<?php echo $topteam->abbreviation; ?>"></i></td>
+								<td><a href="{{route('team', array('id'=>$topteam->id))}}"><?php echo $topteam->name; ?></td>
+								<td><?php echo $topteam->fifapoints; ?></td>
+							</tr>
+						@endforeach
 					</tbody>
 				</table>
 			</div>
@@ -175,6 +157,7 @@
 		<div class="col-md-12">
 			<div class="page-header">
 				<h1>World Ranking Map</h1>
+			    <div id="chart_div" style="width: 900px; height: 500px;"></div>
 			</div>
 		</div>
 	</div>
@@ -258,5 +241,32 @@ hr {
 @stop
 
 @section('javascript')
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+     google.load('visualization', '1', {'packages': ['geochart']});
+     google.setOnLoadCallback(drawRegionsMap);
 
+
+      function drawRegionsMap() {
+
+        var data = google.visualization.arrayToDataTable(
+										<?php 
+										echo "[['Country', 'Popularity'], ";
+										foreach($fifaPoints as $points) {
+											echo "['";
+											echo $points["name"];
+											echo "', ";
+											echo $points["points"];
+											echo "], ";
+										}
+										echo "]";
+
+										?>);
+
+        var options = {};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    };
+    </script>
 @stop

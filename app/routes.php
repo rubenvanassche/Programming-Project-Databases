@@ -15,12 +15,15 @@
 
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 Route::get('news', array('as' => 'news', 'uses' => 'HomeController@news'));
+Route::match(array('GET', 'POST'), 'search', array('as' => 'search', 'uses' => 'SearchController@search'));
+Route::match(array('GET', 'POST'), 'search/{input}', array('uses' => 'SearchController@search'));
 
 
 Route::get('teams', array('as' => 'teams', 'uses' =>'TeamController@all'));
 Route::get('team/{id}', array('as' => 'team', 'uses' => 'TeamController@index'));
 Route::get('team/{id}/players', array('as' => 'team.players', 'uses' => 'TeamController@players'));
 Route::get('team/{id}/information', array('as' => 'team.information', 'uses' => 'TeamController@information'));
+Route::get('team/{id}/matches', array('as' => 'team.matches', 'uses' => 'TeamController@matches'));
 
 Route::get('player/{name}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
