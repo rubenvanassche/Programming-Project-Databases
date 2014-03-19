@@ -1,163 +1,109 @@
 <?php
+include("../../lib/crawlers/simple_html_dom.php");
 
+/**
+ * @class CrawlerController
+ * @brief Crawl data from site.
+ */
 class CrawlerController extends BaseController {
 
     /**
-     * @brief Get all the teams
-     *
-     * @param base_url The base_url
-     * @param rel_url The relative url
-     * @param selector The selector to be used for getting the teams.
-     * @param time_limit The maximum amount of time to be elapsed for crawling
-     * @param elapsed The time already elapsed
-     * @param visited The (relative) urls already visited.
+     * @brief Generator for all teams
+     * @details Based upon the teams on
+     * http://int.soccerway.com/teams/rankings/fifa/
      */
-    public function teams( $base_url, $rel_url, $selector, $time_limit, &$elapsed=0, &$visited=array()) {
-        $visited[] = $rel_url;
-
-        $start = time();
-
+    public function teams() {
+        // load the page
         $page = new simple_html_dom();
-        $page->load_file( $base_url . $rel_url );
+        $url = "http://int.soccerway.com/teams/rankings/fifa/";
+        $page->load_file( $url );
 
-        foreach ( $page->find( $selector ) as $team ) {
-            print trim( $team->plaintext ) . "\n";
+        foreach ( $page->find("table.fifa_rankings tbody tr") as $entry ) {
+            $rank = $entry->find("td.rank", 0);
+            $country = $entry->find("td.team a", 0);
+            $points = $entry->find("td.points", 0);
+
+            // skip if one of the required element is empty
+            if ( empty( $rank ) ) { continue; }
+            if ( empty( $country ) ) { continue; }
+            if ( empty( $points ) ) { continue; }
+
+            yield array(
+                "rank"      => trim( $rank->plaintext ),
+                "country"   => trim( $country->plaintext ),
+                "points"    => trim( $points->plaintext ),
+                "href"      => trim( $country->href ),
+            );
         } // end foreach
 
-        // stop if over time
-        $elapsed += time() - $start;
-        if ( $elapsed >= $time_limit ) {
-            $page->clear();
-            return;
-        } else {
-            // visit subpages
-            $links = $page->find( "a" );
-            $page->clear();
-
-            foreach ( $links as $link ) {
-                // only use relative links, so you're sure you will stay on
-                // the original site. Also ensure that you haven't visited
-                // the page already
-                if ( !( substr( $link->href, 0, 1) === '/' ) || in_array( $link->href, $visited ) ) continue;
-
-                $this->teams( $base_url, $link->href, $selector, $time_limit, $elapsed, $visited);
-
-                // stop if over time
-                if ( $elapsed >= $time_limit ) break;
-            } // end foreach
-
-            return;
-        } // end if-else
+        // clear page to avoid memory exhausting
+        $page->clear();
+        return;
     }
 
     /**
-     * @brief Get all the matches
+     * @brief Generator for all players in a given team.
+     * @details An example of a page where this function is based upon can be found 
+     * at http://int.soccerway.com/teams/spain/spain/2137/squad/
      *
-     * @param base_url The base_url
-     * @param rel_url The relative url
-     * @param selectors An array of selectors
-     * @param time_limit The maximum amount of time to be elapsed for crawling
-     * @param elapsed The time already elapsed
-     * @param visited The (relative) urls already visited.
+     * @param team_href The reference to the page of a team (see $team["href"]).
      */
-    public function matches( $base_url, $rel_url, $selectors, $time_limit, &$elapsed=0, &$visited=array()) {
-        $visited[] = $rel_url;
-
-        $start = time();
-
+    public function players( $team ) {
+        // load the page
         $page = new simple_html_dom();
-        $page->load_file( $base_url . $rel_url );
+        $url = "http://int.soccerway.com/".$team."/squad/";
+        $page->load_file( $url );
 
-        foreach ( $page->find( $selectors["match"] ) as $match ) {
-            $team_a = $match->find( $selectors["team1"] );
-            $team_b = $match->find( $selectors["team2"] );
-            $score = $match->find( $selectors["score"] );
-            $time = $match->find( $selectors["time"] );
+        foreach ( $page->find("div.squad-container table.squad tbody tr") as $entry ) {
+            $name = $entry->find("td.name a", 0);
 
-            if ( $time ) {
-                // match has to be played yet
-                print trim($team_a[0]->plaintext) . " " . str_replace(' ', '', $time[0]->plaintext) . " " . trim($team_b[0]->plaintext) . "\n";
-            } else if ( $score ) {
-                // match is played
-                print trim($team_a[0]->plaintext) . " " . str_replace(' ', '', $score[0]->plaintext) . " " . trim($team_b[0]->plaintext) . "\n";
-            } else {
-                // do nothing
-            } // end if-else
+            // skip if one of the required element is empty
+            if ( empty( $name ) ) { continue; }
+
+            yield array(
+                "name"      => trim( $name->plaintext ),
+                "href"      => trim( $name->href ),
+            );
         } // end foreach
 
-        // stop if over time
-        $elapsed += time() - $start;
-        if ( $elapsed >= $time_limit ) {
-            $page->clear();
-            return;
-        } else {
-            // visit subpages
-            $links = $page->find( "a" );
-            $page->clear();
-
-            foreach ( $links as $link ) {
-                // only use relative links, so you're sure you will stay on
-                // the original site. Also ensure that you haven't visited
-                // the page already
-                if ( !( substr( $link->href, 0, 1) === '/' ) || in_array( $link->href, $visited ) ) continue;
-
-                $this->matches( $base_url, $link->href, $selectors, $time_limit, $elapsed, $visited);
-
-                // stop if over time
-                if ( $elapsed >= $time_limit ) break;
-            } // end foreach
-
-            return;
-        } // end if-else
+        // clear page to avoid memory exhausting
+        $page->clear();
+        return;
     }
 
     /**
-     * @brief Get all the players
-     *
-     * @param base_url The base_url
-     * @param rel_url The relative url
-     * @param selector The selector to be used for getting the teams.
-     * @param time_limit The maximum amount of time to be elapsed for crawling
-     * @param elapsed The time already elapsed
-     * @param visited The (relative) urls already visited.
+     * @brief Generator for all matches.
+     * @details Based upon matches on
+     * http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/matches/?ICID=PL_3N_02
      */
-    public function players( $base_url, $rel_url, $selector, $time_limit, &$elapsed=0, &$visited=array()) {
-        $visited[] = $rel_url;
-
-        $start = time();
-
+    public function matches() {
+        // load the page
         $page = new simple_html_dom();
-        $page->load_file( $base_url . $rel_url );
+        $url = "http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/matches/?ICID=PL_3N_02";
+        $page->load_file( $url );
 
-        foreach ( $page->find( $selector ) as $player ) {
-            print trim( $team->plaintext ) . "\n";
+        foreach ( $page->find("table.matches tbody tr.match") as $entry ) {
+            $date = $entry->find("td.date", 0);
+            $teamA = $entry->find("td.team-a a", 0);
+            $status = $entry->find("td.status a", 0);
+            $teamB = $entry->find("td.team-b a", 0);
+
+            // skip if one of the required element is empty
+            if ( empty( $date ) ) { continue; }
+            if ( empty( $teamA ) ) { continue; }
+            if ( empty( $status ) ) { continue; }
+            if ( empty( $teamB ) ) { continue; }
+
+            yield array(
+                "date"      => trim( $date->plaintext ),
+                "team0"     => trim( $teamA->plaintext ),
+                "status"    => trim( $status->plaintext ),
+                "team1"     => trim( $teamB->plaintext ),
+            );
         } // end foreach
 
-        // stop if over time
-        $elapsed += time() - $start;
-        if ( $elapsed >= $time_limit ) {
-            $page->clear();
-            return;
-        } else {
-            // visit subpages
-            $links = $page->find( "a" );
-            $page->clear();
-
-            foreach ( $links as $link ) {
-                // only use relative links, so you're sure you will stay on
-                // the original site. Also ensure that you haven't visited
-                // the page already
-                if ( !( substr( $link->href, 0, 1) === '/' ) || in_array( $link->href, $visited ) ) continue;
-
-                $this->teams( $base_url, $link->href, $selector, $time_limit, $elapsed, $visited);
-
-                // stop if over time
-                if ( $elapsed >= $time_limit ) break;
-            } // end foreach
-
-            return;
-        } // end if-else
+        // clear page to avoid memory exhausting
+        $page->clear();
+        return;
     }
-
 }
-?>

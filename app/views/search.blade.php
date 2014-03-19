@@ -3,10 +3,10 @@
 @section('content')
 	<div class="row" style="margin-top:40px">
 		{{ Form::open(array('url' => 'search', 'class'=>'form-inline')) }}
-		<div class="col-md-10">
-			{{ Form::text('input', Input::old('input'), array('class'=>'form-control', 'style' => 'width:100%;')) }}
+		<div class="col-md-11">
+			{{ Form::text('input', $input, array('class'=>'form-control', 'style' => 'width:100%;')) }}
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-1">
 			{{ Form::submit('Search', array('class'=>'btn btn-info pull-right')) }}
 			
 			{{ Form::token() . Form::close() }}
@@ -29,11 +29,22 @@
 
 		@if (empty($players) == false)
 			<div class="col-md-12">
-				<h3>Teams</h3>
+				<h3>Players</h3>
 			</div>
 			@foreach ($players as $player)
 				<div class="col-md-2">
-					<a href="{{ route('team', array('id'=>$player->id))}}"></i> {{ $player->name }}</a>
+					<div style="width:100%; height:100px;background-position:cover; background-image:url('<?php echo Player::getPlayerImageURL($player->name); ?>')" ></div>
+					<a href="{{ route('player', array('name'=>urlencode($player->name)))}}"></i> {{ $player->name }}</a>
+				</div>
+			@endforeach
+		@endif
+		@if (empty($matches) == false)
+			<div class="col-md-12">
+				<h3>Matches</h3>
+			</div>
+			@foreach ($matches as $match)
+				<div class="col-md-2">
+					<a href="">{{$match->hometeam}} - {{$match->awayteam}}</a>
 				</div>
 			@endforeach
 		@endif

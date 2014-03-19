@@ -157,6 +157,7 @@
 		<div class="col-md-12">
 			<div class="page-header">
 				<h1>World Ranking Map</h1>
+			    <div id="chart_div" style="width: 900px; height: 500px;"></div>
 			</div>
 		</div>
 	</div>
@@ -240,5 +241,32 @@ hr {
 @stop
 
 @section('javascript')
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+     google.load('visualization', '1', {'packages': ['geochart']});
+     google.setOnLoadCallback(drawRegionsMap);
 
+
+      function drawRegionsMap() {
+
+        var data = google.visualization.arrayToDataTable(
+										<?php 
+										echo "[['Country', 'Popularity'], ";
+										foreach($fifaPoints as $points) {
+											echo "['";
+											echo $points["name"];
+											echo "', ";
+											echo $points["points"];
+											echo "], ";
+										}
+										echo "]";
+
+										?>);
+
+        var options = {};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    };
+    </script>
 @stop
