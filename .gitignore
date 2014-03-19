@@ -12,3 +12,5 @@ composer.phar
 Session.vim
 .netrwhist
 *~
+
+cache/simplepie/
