@@ -15,7 +15,14 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function index(){	
+	public function index(){
+		/*
+		DB::statement("TRUNCATE team");
+		DB::statement("TRUNCATE player");
+		DB::statement("TRUNCATE playerPerTeam");
+		$crawler = new DBCrawlerController();
+		$crawler->updateTeams();
+		*/
 		
 		//require_once('../lib/autoloader.php');
 		
