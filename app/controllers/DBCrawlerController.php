@@ -24,7 +24,6 @@ class DBCrawlerController extends BaseController {
 
             if ( empty($team["href"]) ) { continue; }
 
-            # doesn't work from here...
             foreach ( $crawler->players( $team["href"] ) as $player ) {
                 $db->addPlayerPerTeam(
                     $player["name"],
