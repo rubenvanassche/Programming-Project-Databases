@@ -100,7 +100,7 @@
 						@foreach ($topteams as $topteam)
 							<tr>
 								<td><i class="flag-<?php echo $topteam->abbreviation; ?>"></i></td>
-								<td><a href="{{ route('team', array('id'=>$topteam->id)) }}"><?php echo $topteam->name; ?></td>
+								<td><a href="{{route('team', array('id'=>$topteam->id))}}"><?php echo $topteam->name; ?></td>
 								<td><?php echo $topteam->fifapoints; ?></td>
 							</tr>
 						@endforeach
