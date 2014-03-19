@@ -1,5 +1,5 @@
 <?php		
-		/*Stats::addContinent("Europe");
+		Stats::addContinent("Europe");
 		Stats::addCompetition("World Cup");
 
 		Stats::addCountry("Belgium", "Europe", "be");
@@ -304,6 +304,6 @@
 		Stats::addPlayerPerMatch("Nacer Chadli", 3, 0, 90);
 		Stats::addGoal(3, 57, "Nacer Chadli", "Belgium", 0);
 		Stats::addPlayerPerMatch("Vincent Kompany", 3, 0, 81);
-		Stats::addCard("Vincent Kompany", 3, 2, 81);*/
+		Stats::addCard("Vincent Kompany", 3, 2, 81);
 		
 		?>
