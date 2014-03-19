@@ -4,15 +4,15 @@
 
 		Stats::addCountry("Belgium", "Europe", "be");
 		Stats::addCoach("Marc Wilmots");
-		Stats::addTeam("Belgium", "Belgium", "Marc Wilmots");
+		Stats::addTeam("Belgium", "Belgium", "Marc Wilmots", 500);
 		
 		Stats::addCountry("Russia", "Europe", "ru");
 		Stats::addCoach("Fabio Capello");
-		Stats::addTeam("Russia", "Russia", "Fabio Capello");
+		Stats::addTeam("Russia", "Russia", "Fabio Capello", 450);
 		
 		Stats::addTeamPerCompetition("Belgium", "World Cup");
 		Stats::addTeamPerCompetition("Russia", "World Cup");
-		Stats::addMatch("Belgium", "Russia", "World Cup");
+		Stats::addMatch("Belgium", "Russia", "World Cup", "2014-01-22");
 		
 		Stats::addPlayerUnique("Vincent Kompany", 0);
 		Stats::addPlayerPerTeam("Vincent Kompany", "Belgium");
@@ -178,8 +178,132 @@
 		Stats::addPlayerPerMatch("Aleksei Ionov", 1, 0, 90);
 		Stats::addPlayerPerMatch("Igor Denisov", 1, 0, 90);
 		
-		Stats::addGoal(1, 70, "Yuri Zhirkov", "Russia", 0);*/
+		Stats::addGoal(1, 70, "Yuri Zhirkov", "Russia", 0);
 		
+		Stats::addCountry("Germany", "Europe", "ger");
+		Stats::addCoach("Joachim Löw");
+		Stats::addTeam("Germany", "Germany", "Joachim Löw", 1000);
+		Stats::addTeamPerCompetition("Germany", "World Cup");
+		Stats::addMatch("Germany", "Russia", "World Cup", "2014-01-20");
+
 		
+		Stats::addPlayerUnique("René Adler", 0);
+		Stats::addPlayerPerTeam("René Adler", "Germany");
+		
+		Stats::addPlayerUnique("Ron-Robert Zieler", 0);
+		Stats::addPlayerPerTeam("Ron-Robert Zieler", "Germany");
+		
+		Stats::addPlayerUnique("Marc-André ter Stegen", 0);
+		Stats::addPlayerPerTeam("Marc-André ter Stegen", "Germany");
+		
+		Stats::addPlayerUnique("Mats Hummels", 0);
+		Stats::addPlayerPerTeam("Mats Hummels", "Germany");
+		
+		Stats::addPlayerUnique("Heiko Westermann", 0);
+		Stats::addPlayerPerTeam("Heiko Westermann", "Germany");
+		
+		Stats::addPlayerUnique("Benedikt Höwedes", 0);
+		Stats::addPlayerPerTeam("Benedikt Höwedes", "Germany");
+		
+		Stats::addPlayerUnique("Dennis Aogo", 0);
+		Stats::addPlayerPerTeam("Dennis Aogo", "Germany");
+		
+		Stats::addPlayerUnique("Philipp Wollscheid", 0);
+		Stats::addPlayerPerTeam("Philipp Wollscheid", "Germany");
+		
+		Stats::addPlayerUnique("Andreas Beck", 0);
+		Stats::addPlayerPerTeam("Andreas Beck", "Germany");
+		
+		Stats::addPlayerUnique("Lars Bender", 0);
+		Stats::addPlayerPerTeam("Lars Bender", "Germany");
+		
+		Stats::addPlayerUnique("Thomas Müller", 0);
+		Stats::addPlayerPerTeam("Thomas Müller", "Germany");
+		
+		Stats::addPlayerUnique("Sami Khedira", 0);
+		Stats::addPlayerPerTeam("Sami Khedira", "Germany");
+		
+		Stats::addPlayerUnique("Marco Reus", 0);
+		Stats::addPlayerPerTeam("Marco Reus", "Germany");
+		
+		Stats::addPlayerUnique("Julian Draxler", 0);
+		Stats::addPlayerPerTeam("Julian Draxler", "Germany");
+		
+		Stats::addPlayerUnique("Sven Bender", 0);
+		Stats::addPlayerPerTeam("Sven Bender", "Germany");
+		
+		Stats::addPlayerUnique("Ilkay Gundogan", 0);
+		Stats::addPlayerPerTeam("Ilkay Gundogan", "Germany");
+		
+		Stats::addPlayerUnique("Aaron Hunt", 0);
+		Stats::addPlayerPerTeam("Aaron Hunt", "Germany");
+		
+		Stats::addPlayerUnique("Stefan Reinartz", 0);
+		Stats::addPlayerPerTeam("Stefan Reinartz", "Germany");
+		
+		Stats::addPlayerUnique("Nicolai Müller", 0);
+		Stats::addPlayerPerTeam("Nicolai Müller", "Germany");
+		
+		Stats::addPlayerUnique("Roman Neustädter", 0);
+		Stats::addPlayerPerTeam("Roman Neustädter", "Germany");
+		
+		Stats::addPlayerUnique("Patrick Herrmann", 0);
+		Stats::addPlayerPerTeam("Patrick Herrmann", "Germany");
+		
+		Stats::addPlayerUnique("Pierre-Michel Lasogga", 0);
+		Stats::addPlayerPerTeam("Pierre-Michel Lasogga", "Germany");
+		
+		Stats::addPlayerUnique("Max Kruse", 0);
+		Stats::addPlayerPerTeam("Max Kruse", "Germany");
+		
+		Stats::addPlayerUnique("Mario Gómez", 0);
+		Stats::addPlayerPerTeam("Mario Gómez", "Germany");
+		
+		Stats::addPlayerPerMatch("Mario Gómez", 2, 0, 90);
+		Stats::addPlayerPerMatch("Max Kruse", 2, 0, 90);
+		Stats::addPlayerPerMatch("Pierre-Michel Lasogga", 2, 0, 90);
+		Stats::addPlayerPerMatch("Patrick Herrmann", 2, 0, 90);
+		Stats::addPlayerPerMatch("Roman Neustädter", 2, 0, 90);
+		Stats::addPlayerPerMatch("Nicolai Müller", 2, 0, 90);
+		Stats::addPlayerPerMatch("Stefan Reinartz", 2, 0, 90);
+		Stats::addPlayerPerMatch("Aaron Hunt", 2, 0, 90);
+		Stats::addPlayerPerMatch("Ilkay Gundogan", 2, 0, 90);
+		Stats::addGoal(2, 57, "Ilkay Gundogan", "Germany", 0);
+		
+		Stats::addPlayerPerMatch("Yuri Zhirkov", 2, 0, 90);
+		Stats::addPlayerPerMatch("Roman Shirokov", 2, 0, 90);
+		Stats::addPlayerPerMatch("Alan Dzagoev", 2, 0, 90);
+		Stats::addPlayerPerMatch("Denis Glushakov", 2, 0, 90);
+		Stats::addPlayerPerMatch("Viktor Fayzulin", 2, 0, 90);
+		Stats::addPlayerPerMatch("Aleksandr Samedov", 2, 0, 90);
+		Stats::addPlayerPerMatch("Aleksandr Ryazantsev", 2, 0, 90);
+		Stats::addPlayerPerMatch("Oleg Shatov", 2, 0, 90);
+		Stats::addPlayerPerMatch("Aleksei Ionov", 2, 0, 90);
+		Stats::addPlayerPerMatch("Igor Denisov", 2, 0, 90);
+		
+		Stats::addMatch("Germany", "Belgium", "World Cup", "2014-01-24");
+		Stats::addPlayerPerMatch("Mario Gómez", 3, 0, 90);
+		Stats::addPlayerPerMatch("Max Kruse", 3, 0, 90);
+		Stats::addPlayerPerMatch("Pierre-Michel Lasogga", 3, 0, 90);
+		Stats::addPlayerPerMatch("Patrick Herrmann", 3, 0, 90);
+		Stats::addPlayerPerMatch("Roman Neustädter", 3, 0, 90);
+		Stats::addPlayerPerMatch("Nicolai Müller", 3, 0, 90);
+		Stats::addPlayerPerMatch("Stefan Reinartz", 3, 0, 90);
+		Stats::addPlayerPerMatch("Aaron Hunt", 3, 0, 90);
+		Stats::addPlayerPerMatch("Ilkay Gundogan", 3, 0, 90);
+		Stats::addGoal(3, 57, "Ilkay Gundogan", "Germany", 0);
+		
+		Stats::addPlayerPerMatch("Thibaut Courtois", 3, 0, 90);
+		Stats::addPlayerPerMatch("Koen Casteels", 3, 0, 90);
+		Stats::addPlayerPerMatch("Toby Alderweireld", 3, 0, 90);
+		Stats::addPlayerPerMatch("Daniel Van Buyten", 3, 0, 90);
+		Stats::addPlayerPerMatch("Simon Mignolet", 3, 0, 90);
+		Stats::addPlayerPerMatch("Jan Vertonghen", 3, 0, 90);
+		Stats::addPlayerPerMatch("Sébastien Pocognoli", 3, 0, 90);
+		Stats::addPlayerPerMatch("Anthony Vanden Borre", 3, 0, 90);
+		Stats::addPlayerPerMatch("Nacer Chadli", 3, 0, 90);
+		Stats::addGoal(3, 57, "Nacer Chadli", "Belgium", 0);
+		Stats::addPlayerPerMatch("Vincent Kompany", 3, 0, 81);
+		Stats::addCard("Vincent Kompany", 3, 2, 81);*/
 		
 		?>
