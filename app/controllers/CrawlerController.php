@@ -1,5 +1,4 @@
 <?php
-include("../../lib/crawlers/simple_html_dom.php");
 
 /**
  * @class CrawlerController
