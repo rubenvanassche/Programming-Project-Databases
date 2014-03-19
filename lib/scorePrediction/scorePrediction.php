@@ -18,10 +18,13 @@ function predictOutcome($matchID) {
 	$same_lineup_matches = Match::getMatchByTeams($hometeam_id, $awayteam_id);
 	
 	foreach ($same_lineup_matches as $match) {
-		if ($match->score_home > $match->score_away) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
+
+		if ($score_home > $score_away) {
 			$hometeam_points += 1;
 		}
-		elseif ($match->score_home < $match->score_away) {
+		elseif ($score_home < $score_away) {
 			$awayteam_points += 1;
 		}
  	}
@@ -30,10 +33,13 @@ function predictOutcome($matchID) {
 	$reverse_lineup_matches = Match::getMatchByTeams($awayteam_id, $hometeam_id);
 	
 	foreach ($reverse_lineup_matches as $match) {
-		if ($match->score_home > $match->score_away) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
+
+		if ($score_home > $score_away) {
 			$hometeam_points += 0.75;
 		}
-		elseif ($match->score_home < $match->score_away) {
+		elseif ($score_home < $score_away) {
 			$awayteam_points += 0.75;
 		}
 	}
@@ -44,8 +50,11 @@ function predictOutcome($matchID) {
 	$matches_hometeam_at_home = Match::getMatchByHometeam($hometeam_id);
 	
 	foreach ($matches_hometeam_at_home as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
+
 		$matches_played++;
-		if ($match->score_home > $match->score_away) {
+		if ($score_home > $score_away) {
 			$matches_won++;
 		}
 	}
@@ -59,8 +68,11 @@ function predictOutcome($matchID) {
 	$matches_hometeam_at_away = Match::getMatchByAwayteam($hometeam_id);
 	
 	foreach ($matches_hometeam_at_away as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
+
 		$matches_played++;
-		if ($match->score_home < $match->score_away) {
+		if ($score_home < $score_away) {
 			$matches_won++;
 		}
 	}
@@ -74,8 +86,11 @@ function predictOutcome($matchID) {
 	$matches_awayteam_at_away = Match::getMatchByAwayteam($awayteam_id);
 	
 	foreach ($matches_awayteam_at_away as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
+
 		$matches_played++;
-		if ($match->score_home < $match->score_away) {
+		if ($score_home < $score_away) {
 			$matches_won++;
 		}
 	}
@@ -87,8 +102,13 @@ function predictOutcome($matchID) {
 	$matches_played = 0;
 	$matches_won = 0;
 	$matches_awayteam_at_home = Match::getMatchByHometeam($awayteam_id);
+
+	foreach ($matches_awayteam_at_home as $match)
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
+
 		$matches_played++;
-		if ($match->score_home > $match->score_away) {
+		if ($score_home > $score_away) {
 			$matches_won++;
 		}
 	}
@@ -136,9 +156,11 @@ function predictScore($matchID)
 	$matches_played = 0;
 	
 	foreach ($same_lineup_matches as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
 		$matches_played++;
-		$goals_scored_home += $match->score_home;
-		$goals_scored_away += $match->score_away;
+		$goals_scored_home += $score_home;
+		$goals_scored_away += $score_away;
  	}
 
  	$avg_same_setup_home_score = $goals_scored_home / $matches_played;
@@ -152,9 +174,11 @@ function predictScore($matchID)
 	$matches_played = 0;
 	
 	foreach ($reverse_lineup_matches as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
 		$matches_played++;
-		$goals_scored_home += $match->score_away;
-		$goals_scored_away += $match->score_home;
+		$goals_scored_home += $score_away;
+		$goals_scored_away += $score_home;
 	}
 
 	$avg_reversed_setup_home_score = $goals_scored_home / $matches_played;
@@ -167,8 +191,10 @@ function predictScore($matchID)
 	$matches_played = 0;
 	
 	foreach ($matches_hometeam_at_home as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
 		$matches_played++;
-		$goals_scored_home += $match->score_home;
+		$goals_scored_home += $score_home;
 	}
 	
 	// add average to the score.
@@ -181,8 +207,10 @@ function predictScore($matchID)
 	$matches_played = 0;
 	
 	foreach ($matches_hometeam_at_home as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
 		$matches_played++;
-		$goals_scored_home += $match->score_away;
+		$goals_scored_home += $score_away;
 	}
 	
 	// add average to the score.
@@ -194,8 +222,10 @@ function predictScore($matchID)
 	$matches_played = 0;
 	
 	foreach ($matches_awayteam_at_away as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
 		$matches_played++;
-		$goals_scored_away += $match->score_away;
+		$goals_scored_away += $score_away;
 	}
 	
 	// add average to the score.
@@ -208,15 +238,17 @@ function predictScore($matchID)
 	$matches_played = 0;
 	
 	foreach ($matches_awayteam_at_away as $match) {
+		$score_home = Match::getScore2($match->id)[0];
+		$score_away = Match::getScore2($match->id)[1];
 		$matches_played++;
-		$goals_scored_away += $match->score_home;
+		$goals_scored_away += $score_home;
 	}
 	
 	// add average to the score.
 	$avg_away_at_home_score += $goals_scored_away / $matches_played;
 	
-	$home_team_score = floor(($avg_same_setup_home_score + ($avg_reversed_setup_home_score * 0.9) + ($avg_home_at_home_score * 0.7) + ($avg_home_at_away_score * 0.5)) / 4);
-	$away_team_score = floor(($avg_same_setup_away_score + ($avg_reversed_setup_away_score * 0.9) + ($avg_away_at_home_score * 0.7) + ($avg_away_at_away_score * 0.5)) / 4);
+	$home_team_score = round(($avg_same_setup_home_score + ($avg_reversed_setup_home_score * 0.9) + ($avg_home_at_home_score * 0.7) + ($avg_home_at_away_score * 0.5)) / 4);
+	$away_team_score = round(($avg_same_setup_away_score + ($avg_reversed_setup_away_score * 0.9) + ($avg_away_at_home_score * 0.7) + ($avg_away_at_away_score * 0.5)) / 4);
 
 	$match_chance = predictOutcome($matchID);
 
