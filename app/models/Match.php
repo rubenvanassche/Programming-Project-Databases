@@ -33,6 +33,16 @@ class Match {
 		return $results[0];
 	}
 	
+	function goals($matchID, $teamID){
+		$results = DB::select("SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player FROM goal WHERE match_id = ? AND team_id = ?", array($matchID, $teamID));
+		return $results;
+	}
+	
+	function cards($matchID, $teamID){
+		$results = DB::select("SELECT color, time, (SELECT name FROM player WHERE id = cards.player_id AND team_id = ?) as player FROM cards WHERE id match_id = ?", array($teamID, $matchID));
+		return $results;
+	}
+	
 
 	public static function getScore2($matchID){
 		$results = DB::select('SELECT 
@@ -61,7 +71,6 @@ class Match {
 		$results = DB::select('SELECT * FROM `match WHERE awayteam_id = ?', array($awayteam_id));
 		return $results;
 	}
->>>>>>> master
 }
 
 ?>
