@@ -184,7 +184,7 @@ INSERT INTO `country` (`id`, `name`, `continent_id`, `abbreviation`) VALUES
 (175, 'France', 1, 'fr'),
 (176, 'Germany', 1, 'ge'),
 (177, 'Great Britain', 1, 'gb'),
-(178, 'Greek', 1, 'gr'),
+(178, 'Greece', 1, 'gr'),
 (179, 'Greenland', 1, 'gl'),
 (180, 'Gypsy', 1, 'gy'),
 (181, 'Hungary', 1, 'hu'),
