@@ -27,6 +27,19 @@ class Team {
 		
 		return $players;
 	}
+
+	public static function getFIFAPoints() {
+			$results = DB::select('SELECT name FROM country');
+			$points = array();
+			foreach ($results as $country) {
+				$fifaPoints = DB::select('SELECT fifapoints FROM team WHERE name = ?', array($country->name));
+				if (!empty($fifaPoints)) {
+					$thesePoints = array("name" => $country->name, "points" => $fifaPoints[0]->fifapoints);
+					array_push($points, $thesePoints);
+				}
+			}
+			return $points;
+	}
 	
 	public static function getTeamText($teamName){
 		$jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode($teamName);
