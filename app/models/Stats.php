@@ -385,8 +385,10 @@ class Stats {
 
 		$results = DB::select('SELECT * FROM playerPerMatch WHERE player_id = ? AND match_id = ?', array($playerID, $matchID));
 		if(!empty($results)) {
-				throw new Duplicate("PlayerPerMatch with player name " . $playerName . ", matchID " . $matchID . ", intime " . $intime . 
-														" and outtime " . $outtime . " already in database");
+				//Exception disabled because different players with the same name are technically possible
+				/*throw new Duplicate("PlayerPerMatch with player name " . $playerName . ", matchID " . $matchID . ", intime " . $intime . 
+														" and outtime " . $outtime . " already in database");*/
+				return false;
 		}
 		$result = DB::insert('INSERT INTO playerPerMatch (player_id, match_id, intime, outtime) VALUES (?, ?, ?, ?)', 
 									array($playerID, $matchID, $intime, $outtime));
@@ -435,8 +437,10 @@ class Stats {
 
 		$results = DB::select('SELECT * FROM playerPerMatch WHERE player_id = ? AND match_id = ?', array($playerID, $matchID));
 		if(!empty($results)) {
-				throw new Duplicate("PlayerPerMatch with player name " . $playerName . ", matchID " . $matchID . ", intime " . $intime . 
-														" and outtime " . $outtime . " already in database");
+				//Exception disabled because different players with the same name are technically possible
+				/*throw new Duplicate("PlayerPerMatch with player name " . $playerName . ", matchID " . $matchID . ", intime " . $intime . 
+														" and outtime " . $outtime . " already in database");*/
+				return false;
 		}
 		$result = DB::insert('INSERT INTO playerPerMatch (player_id, match_id, intime, outtime) VALUES (?, ?, ?, ?)', 
 									array($playerID, $matchID, $intime, $outtime));
@@ -468,7 +472,9 @@ class Stats {
 
 		$results = DB::select('SELECT * FROM playerPerTeam WHERE player_id = ? AND team_id = ?', array($playerID, $teamID));
 		if(!empty($results)) {
-				throw new Duplicate("PlayerPerTeam with player name " . $playerName . " and team name " . $teamName . " already in database");
+				//Exception disabled because different players with the same name are technically possible
+				/*throw new Duplicate("PlayerPerTeam with player name " . $playerName . " and team name " . $teamName . " already in database");*/
+				return false;
 		}
 
 		$result = DB::insert('INSERT INTO playerPerTeam (player_id, team_id) VALUES (?, ?)', array($playerID, $teamID));
