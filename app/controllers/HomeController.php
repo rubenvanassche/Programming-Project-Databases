@@ -18,13 +18,13 @@ class HomeController extends BaseController {
 	public function index(){	
 		
 		//require_once('../lib/autoloader.php');
-
 		
 		$recentMatches = Match::getRecentMatches();
 		$articles = RSS::getFIFAtext();
 		$countryFlags = array();
 		$matchGoals = array();
 		$recentTeamMatches = array();
+		$topteams = Team::getTopTeams(5);
 
 		
 		foreach ($recentMatches as $rm) {
@@ -41,7 +41,7 @@ class HomeController extends BaseController {
 			array_push($countryFlags, $hFlag, $aFlag);
 		}
 		
-		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'articles'))->with('title', 'Home');
+		return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'topteams', 'articles'))->with('title', 'Home');
 
 	}
 	

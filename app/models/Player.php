@@ -7,7 +7,12 @@ class Player {
 	}
 	
 	public static function goals($playerID){
-		$result = DB::select("SELECT * FROM goal WHERE goal.player_id = ?", array($playerID));
+		$result = DB::select("SELECT goal.time,
+									goal.match_id,
+									 `match`.date,
+									 (SELECT name FROM team WHERE team.id = `match`.hometeam_id) as hometeam,
+									 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam
+									 FROM `match`, goal WHERE `match`.id = goal.match_id AND goal.player_id = ?", array($playerID));
 		return $result;
 		
 		// SELECT goal.time as time, match.hometeam.id as hometeamID FROM goal, match, team WHERE match.id = goal.match_id AND goal.player_id = ?
