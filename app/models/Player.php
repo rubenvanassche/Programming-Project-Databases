@@ -37,11 +37,18 @@ class Player {
 		$json = file_get_contents($jsonurl);
 		$decodedJSON = json_decode($json, true, JSON_UNESCAPED_UNICODE);
 		
+		
+		
 		foreach ($decodedJSON['query']['pages'] as $key => $value) {
 			$pagenr = $key;
 		}		
 		
-		$text = $decodedJSON['query']['pages'][$pagenr]['extract'];
+		try {
+			$text = $decodedJSON['query']['pages'][$pagenr]['extract'];
+		}
+		catch (Exception $e) {
+			return "No summary available.";
+		}
 		return $text;
 	}
 	
@@ -54,8 +61,12 @@ class Player {
 			$pagenr = $key;
 		}
 		
-		$url = $decodedJSON['query']['pages'][$pagenr]['thumbnail']['source'];
-		
+		try {
+			$url = $decodedJSON['query']['pages'][$pagenr]['thumbnail']['source'];
+		}
+		catch (Exception $e) {
+			return "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQDBQGDMwwKrrjyl5frVZhTV1qDP6u3YtPhFW_XM6zjdStHkm0";
+		}
 		return $url;
 	}
 }

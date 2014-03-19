@@ -29,7 +29,8 @@ class DBCrawlerController extends BaseController {
             	$db->addPlayer($player['name'], false);
                 $db->addPlayerPerTeam(
                     $player["name"],
-                    $team["country"]
+                    $team["country"],
+                    $team["points"]
                );
             } // end foreach
         } // end foreach

@@ -169,62 +169,63 @@ Het design hebben we grotendeels te danken aan Twitter Bootstrap. Een website zi
 De webpagina's zijn nog volop in development alsook kan het design hier en daar ook nog wel veranderen. 
 
 \subsection{Work in progress}
+
+\subsubsection{Home page}
+Bestaat uit 3 tabellen, een news foto feed en een wereldkaart die de landen kleurt in functie van hun WK-ranking.
+De 3 tabellen zullen data bevatten over de laatst gespeelde matchen, de opkomende matchen en de WK-ranking.
+\\
+De foto newsfeed is een RSS feed van FIFA die we met SimplePie hebben geparsed.
+
+\\subsubsection{Search bar/search results}
+Rechtsbovenaan alle pagina's staat een searchbar waarin je een speler/match/team kunt invullen en die de beschikbare info presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
+
 \subsubsection{Player Page}
 Deze pagina bevat informatie over een bepaalde speler.
 \\
 In de PlayerController wordt volgende info opgevraagd van de Player en Team models:
 \begin{lstlisting}
-		$playerName = htmlspecialchars($_GET["name"]);
 		$playerObj = Player::getPlayer($playerName)[0];
 		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
 		$playerText = Player::getPlayerText($playerName);
 		$playerImageURL = Player::getPlayerImageURL($playerName);
+		$goals = Player::goals($playerObj->id);
+		$cards = Player::cards($playerObj->id);
 \end{lstlisting}
 
 Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
 in onze database zitten. Misschien doen we dit beter wel?
-\subsubsection(Team Page)
-Deze pagina bevat informatie over een bepaald team.
-\\
-In de TeamController wordt volgende info opgevraagd van het Team model.
+\subsubsection{Team Page}
+Deze pagina bevat informatie over een bepaald team. Zoals de spelers, matchen e.d.
+
+In de TeamController wordt de benodigde informatie uit de models gehaald.
 \begin{lstlisting}
-		$teamID = htmlspecialchars($_GET["id"]);
 		$teamObj = Team::getTeamByID($teamID)[0];
-		$teamText = Team::getTeamText($teamObj->name);
 		$teamImageURL = Team::getTeamImageURL($teamObj->name);
 \end{lstlisting}
-\\
-Deze informatie wordt vervolgens weer gebruikt om weer te geven op de webpagina. 
 
-\subsubsection(Players page)
-Deze pagina toont de spelers die in een bepaald team zitten. Door hierop te klikken kan je dan naar de desbetreffende playerpage navigeren.
+Deze informatie wordt vervolgens gebruikt om weer te geven op de webpagina. De spelers en dergelijke worden opgevraagd in andere methoden van de TeamController. 
+
+\subsubsection{Team Players page}
+Deze pagina is een onderdeel van de bijhorende Team pagina. Door middel van Ajax wordt dit op de pagina geladen zonder de pagina te hoeven herladen.
 \\
 In de PlayersController wordt volgende info opgevraagd van het Team model:
 \begin{lstlisting}
-		$teamID = htmlspecialchars($_GET["id"]);
+	public function players($teamID){
 		$team = Team::getTeamByID($teamID)[0];
 		$playerBase = Team::getPlayers($teamID);
 		$teamImageURL = Team::getTeamImageURL($team->name);
-\end{lstlisting}
-\\
-Deze informatie wordt vervolgens weer gebruikt om weer te geven op de webpagina. 
-\\
-\\
-Als voorbeeld van hoe zo'n informatie wordt opgehaald:
-\begin{lstlisting}
-	public static function getPlayers($teamID) {
-		$playerIDs = DB::select('SELECT player_id FROM playerPerTeam WHERE team_id = ?', array($teamID));
-		$players = array();
-		foreach ($playerIDs as $playerID) {
-			$player = DB::select('SELECT * FROM player WHERE id = ?', array($playerID->player_id));
-			array_push($players, $player);
-		}
-		return $players;
+		
+		return View::make('team.players', compact('team', 'playerBase', 'teamImageURL'));
 	}
 \end{lstlisting}
+\\
 
-\subsubsection(Home page)
-Bestaat uit een foto en news RSS feed van FIFA samen met search bars om te zoeken naar players/teams/etc. Momenteel is het idee om ook de laatst gespeelde WK wedstrijden en opkomende WK-wedstrijden.
+\subsubsection{Match page}
+Analoog aan de Players page. Hier wordt ook met Ajax gewerkt.
+
+\end{lstlisting}
+
+
 \section{Extra functionaliteit}
 We gaan meteen data van zoveel competities als we kunnen vinden in onze database steken en daar hetzelfde mee doen als met de WK-data. Met verdere extra functionaliteit gaan we ons pas bezighouden als de verplichte functionaliteit er volledig is.
 
