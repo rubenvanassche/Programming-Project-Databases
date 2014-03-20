@@ -44,7 +44,7 @@
 			</div>
 			@foreach ($matches as $match)
 				<div class="col-md-2">
-					<a href="">{{$match->hometeam}} - {{$match->awayteam}}</a>
+					<a href="{{ route('match', array('id'=>$match->id)) }}">{{$match->hometeam}} - {{$match->awayteam}}</a>
 				</div>
 			@endforeach
 		@endif

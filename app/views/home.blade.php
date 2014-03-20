@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="matchListDiv">
-				<h5 class="matchListTitle">Played Matches</h5>
+				<h5 class="matchListTitle">Upcoming Matches</h5>
 				<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -29,7 +29,7 @@
 								?>
 								<td><i class={{$hFlag}}></i></td>
 								<td>{{$recentTeamMatches[$i][0]->name}}</td>
-								<td>{{$scoreString}}</td>
+								<td><a href="{{route('match', array('id'=>$recentMatch->id))}}">{{$scoreString}}</a></td>
 								<?php $i++;?>
 								<td>{{$recentTeamMatches[$i][0]->name}}</td>
 								<td><i class={{$aFlag}}></i></td>
@@ -41,7 +41,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Upcoming Matches</h5>
+	 			<h5 class="matchListTitle">Played Matches</h5>
 	 			<table class="table table-condensed">
 				  <thead>
 					<tr>
@@ -53,34 +53,6 @@
 					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -134,7 +106,7 @@
 							<div class="carousel-caption">
 								<h3><?php echo $article->get_title(); ?></h3>
 								<p><?php echo $article->get_description(); ?></p>
-								<p><a href="<?php echo $article->get_link(); ?>">Read More</a></p>
+								<p><a href="<?php echo $article->get_permalink(); ?>">Read More</a></p>
 							</div>
 						</div>
 				 

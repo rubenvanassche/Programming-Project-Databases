@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+
+@section('content')
 <?php
 	function cardColorToImg($color){
 		if($color == 1){
@@ -10,7 +12,6 @@
 	}
 ?>
 
-@section('content')
 <div class="row">
 	<div class="col-md-12">
 		<ol class="breadcrumb">
@@ -45,7 +46,7 @@
 					<tr>
 						<td><?php echo $goal->date; ?></td>
 						<td><?php echo $goal->time; ?></td>
-						<td><a href="{{ $goal->match_id}}">{{ $goal->hometeam }} - {{ $goal->awayteam }} </a></td>
+						<td><a href="<?php echo route('match', array('id'=>$goal->match_id)); ?>">{{ $goal->hometeam }} - {{ $goal->awayteam }} </a></td>
 					<tr>
 				@endforeach
 			</tbody>
@@ -65,8 +66,8 @@
 					<tr>
 						<td><?php echo $card->date; ?></td>
 						<td><?php echo $card->time; ?></td>
-						<td><a href="{{ $card->match_id}}">{{ $card->hometeam }} - {{ $card->awayteam }} </a></td>
-						<td><?php echo cardColorToImg($card->color); ?></td>
+						<td><a href="<?php echo $route('match', array('id'=>$card->match_id)); ?>">{{ $card->hometeam }} - {{ $card->awayteam }} </a></td>
+						<td><?php echo cardColorToImg($card->color);?></td>
 					<tr>
 				@endforeach
 			</tbody>

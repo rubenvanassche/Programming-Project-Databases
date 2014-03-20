@@ -33,13 +33,13 @@ class Match {
 		return $results[0];
 	}
 	
-	function goals($matchID, $teamID){
+	public static function goals($matchID, $teamID){
 		$results = DB::select("SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player FROM goal WHERE match_id = ? AND team_id = ?", array($matchID, $teamID));
 		return $results;
 	}
 	
-	function cards($matchID, $teamID){
-		$results = DB::select("SELECT color, time, (SELECT name FROM player WHERE id = cards.player_id AND team_id = ?) as player FROM cards WHERE id match_id = ?", array($teamID, $matchID));
+	public static function cards($matchID, $teamID){
+		$results = DB::select("SELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id AND player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)) as player FROM cards WHERE cards.match_id = ?", array($teamID, $matchID));
 		return $results;
 	}
 	
