@@ -125,8 +125,8 @@ class Stats {
 
         if ( in_array( $table, $allowed_tables ) ) {
             // query to get the id with the given name
-            $query = 'SELECT id FROM ? WHERE name = ?';
-            $values = array( $table, $name );
+            $query = 'SELECT id FROM `'.$table.'` WHERE name = "?"';
+            $values = array( $name );
             return DB::select( $query, $values );
         } else {
             throw new InvalidTableException( $table );
@@ -142,11 +142,11 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the competition.
      */
-    public static function addCompetition( $name ) {
+    public function addCompetition( $name ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_COMPETITION, $name ) ) ) {
 
-            $query = "INSERT INTO ? (name) VALUES (?)";
-            $values = array( Stats::TABLE_COMPETITION, $name );
+            $query = "INSERT INTO `".Stats::TABLE_COMPETITION."` (name) VALUES (?)";
+            $values = array( $name );
             $result = DB::insert( $query, $values );
 
             // succeed?
@@ -170,16 +170,16 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the continent.
      */
-    public static function addContinent( $name ) {
+    public function addContinent( $name ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_CONTINENT, $name ) ) ) {
 
-            $query = "INSERT INTO ? (name) VALUES (?)";
-            $values = array( Stats::TABLE_CONTINENT, $name );
+            $query = "INSERT INTO `".Stats::TABLE_CONTINENT."` (name) VALUES (?)";
+            $values = array( $name );
             $result = DB::insert( $query, $values );
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_CONTINENT, $name )[0]->id;
+                return $this->getIDsByName( Stats::TABLE_CONTINENT, $name );
             } else {
                 throw new InsertException( $name, Stats::TABLE_CONTINENT );
             } // end if-else
@@ -202,7 +202,7 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public static function addCountry( $country, $continent, $abbreviation ) {
+    public function addCountry( $country, $continent, $abbreviation ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_COUNTRY, $country ) ) ) {
 
             // get the ids of the continent
@@ -211,8 +211,8 @@ class Stats {
             if ( empty( $continentIDs ) )
                 throw new MissingFieldException( $continent, Stats::TABLE_CONTINENT );
 
-            $query = 'INSERT INTO ? (name, continent_id, abbreviation) VALUES (?, ?, ?)';
-            $values = array( Stats::TABLE_COUNTRY, $name, $continentIDs[0]->id, $abbreviation );
+            $query = 'INSERT INTO `'.Stats::TABLE_COUNTRY.'` (name, continent_id, abbreviation) VALUES (?, ?, ?)';
+            $values = array( $name, $continentIDs[0]->id, $abbreviation );
             $result = DB::insert( $query, $values );
 
             // succeed?
@@ -236,11 +236,11 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the coach.
      */
-    public static function addCoach( $name ) {
+    public function addCoach( $name ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_COACH, $name ) ) ) {
 
-            $query = "INSERT INTO ? (name) VALUES (?)";
-            $values = array( Stats::TABLE_COACH, $name );
+            $query = "INSERT INTO `".Stats::TABLE_COACH."` (name) VALUES (?)";
+            $values = array( $name );
             $result = DB::insert( $query, $values );
 
             // succeed?
@@ -268,7 +268,7 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the team.
      */
-    public static function addTeam( $team, $country, $coach, $points ) {
+    public function addTeam( $team, $country, $coach, $points ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_TEAM, $team ) ) ) {
 
             // get the ids of the country and coach
@@ -281,8 +281,8 @@ class Stats {
             if ( empty( $coachIDs ) )
                 throw new MissingFieldException( $coach, Stats::TABLE_COACH );
 
-            $query = 'INSERT INTO ? (name, country_id, coach_id, fifapoints) VALUES (?, ?, ?, ?)';
-            $values = array( Stats::TABLE_TEAM, $team, $countryIDs[0]->id, $coachIDs[0]->id, $points );
+            $query = 'INSERT INTO `'.Stats::TABLE_TEAM.'` (name, country_id, coach_id, fifapoints) VALUES (?, ?, ?, ?)';
+            $values = array( $team, $countryIDs[0]->id, $coachIDs[0]->id, $points );
             $result = DB::insert( $query, $values );
 
             // succeed?
@@ -308,7 +308,7 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public static function addTeamPerCompetition( $team, $competition ) {
+    public function addTeamPerCompetition( $team, $competition ) {
         // get the team and competition ids
         $teamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $team );
         if ( empty( $teamIDs ) )
@@ -319,15 +319,15 @@ class Stats {
             throw new MissingFieldException( $competition, Stats::TABLE_COMPETITION );
 
         // check whether the team is already linked to the competition
-        $query = 'SELECT * FROM ? WHERE team_id = ? AND competition_id = ?';
-        $values = array( Stats::TABLE_TEAM_PER_COMPETITION, $teamIDs[0]->id, $competitionIDs[0]->id );
+        $query = 'SELECT * FROM `'.Stats::TABLE_TEAM_PER_COMPETITION.'` WHERE team_id = ? AND competition_id = ?';
+        $values = array( $teamIDs[0]->id, $competitionIDs[0]->id );
         $results = DB::select( $query, $values );
         if ( !empty( $results ) )
             throw new DuplicateException( "Link team ".$team." to competition ".$competition, Stats::TABLE_TEAM_PER_COMPETITION );
 
         // okay, link the team to the competition
-        $query = 'INSERT INTO ? (team_id, competition_id) VALUES (?, ?)';
-        $values = array( Stats::TABLE_TEAM_PER_COMPETITION, $teamIDs[0]->id, $competitionIDs[0]->id );
+        $query = 'INSERT INTO `'.Stats::TABLE_TEAM_PER_COMPETITION.'` (team_id, competition_id) VALUES (?, ?)';
+        $values = array( $teamIDs[0]->id, $competitionIDs[0]->id );
         $result = DB::insert( $query, $values );
 
         // success?
@@ -351,7 +351,7 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public static function addMatch( $homeTeam, $awayTeam, $competition, $date ) {
+    public function addMatch( $homeTeam, $awayTeam, $competition, $date ) {
         // get the IDs of the hometeam, awayteam and the competition
         $homeTeamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $homeTeam );
         if ( empty( $homeTeamIDs ) )
@@ -367,28 +367,28 @@ class Stats {
 
         // check whether the home and away teams are both linked to the 
         // competition.
-        $query = 'SELECT * FROM ? WHERE team_id = ? AND competition_id = ?';
-        $values = array( Stats::TABLE_TEAM_PER_COMPETITION, $homeTeamIDs[0]->id, $competitionIDs[0]->id );
+        $query = 'SELECT * FROM `'.Stats::TABLE_TEAM_PER_COMPETITION.'` WHERE team_id = ? AND competition_id = ?';
+        $values = array( $homeTeamIDs[0]->id, $competitionIDs[0]->id );
         $results = DB::select( $query, $values );
         if ( empty( $results ) )
             throw new MissingFieldException( $team, Stats::TABLE_TEAM_PER_COMPETITION);
 
-        $query = 'SELECT * FROM ? WHERE team_id = ? AND competition_id = ?';
-        $values = array( Stats::TABLE_TEAM_PER_COMPETITION, $homeTeamIDs[0]->id, $competitionIDs[0]->id );
+        $query = 'SELECT * FROM `'.Stats::TABLE_TEAM_PER_COMPETITION.'` WHERE team_id = ? AND competition_id = ?';
+        $values = array( $homeTeamIDs[0]->id, $competitionIDs[0]->id );
         $results = DB::select( $query, $values );
         if ( empty( $results ) )
             throw new MissingFieldException( $team, Stats::TABLE_TEAM_PER_COMPETITION);
 
         // Check whether the match is already added into the table
-        $query = 'SELECT * FROM ? WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?';
-        $values = array( Stats::TABLE_MATCH, $homeTeamIDs[0]->id, $awayTeamIDs[0]->id, $competitionIDs[0]->id, $date );
+        $query = 'SELECT * FROM `'.Stats::TABLE_MATCH.'` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?';
+        $values = array( $homeTeamIDs[0]->id, $awayTeamIDs[0]->id, $competitionIDs[0]->id, $date );
         $results = DB::select( $query, $values );
         if ( !empty( $results ) )
             throw new DuplicateException( "Match ".$homeTeam." - ".$awayTeam, Stats::TABLE_MATCH );
 
         // Okay, now insert the match into the table
-        $query = 'INSERT INTO ? (hometeam_id, awayteam_id, competition_id, date) VALUES (?, ?, ?, ?)';
-        $values = array( Stats::TABLE_MATCH, $homeTeamIDs[0]->id, $awayTeamIDs[0]->id, $competitionIDs[0]->id, $date );
+        $query = 'INSERT INTO `'.Stats::TABLE_MATCH.'` (hometeam_id, awayteam_id, competition_id, date) VALUES (?, ?, ?, ?)';
+        $values = array( $homeTeamIDs[0]->id, $awayTeamIDs[0]->id, $competitionIDs[0]->id, $date );
         $results = DB::insert( $query, $values );
 
         // success?
@@ -409,11 +409,11 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the player.
      */
-    public static function addPlayer( $name, $injured=false ) {
+    public function addPlayer( $name, $injured=false ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_PLAYER, $name ) ) ) {
 
-            $query = "INSERT INTO ? (name) VALUES (?, ?)";
-            $values = array( Stats::TABLE_PLAYER, $name, $injured );
+            $query = "INSERT INTO `".Stats::TABLE_PLAYER."` (name) VALUES (?, ?)";
+            $values = array( $name, $injured );
             $result = DB::insert( $query, $values );
 
             // succeed?
@@ -439,7 +439,7 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public static function addPlayerPerTeam( $player, $team ) {
+    public function addPlayerPerTeam( $player, $team ) {
         // get the team and player ids
         $teamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $team );
         if ( empty( $teamIDs ) )
@@ -450,15 +450,15 @@ class Stats {
             throw new MissingFieldException( $player, Stats::TABLE_PLAYER );
 
         // check whether the player is already linked to the team
-        $query = 'SELECT * FROM ? WHERE player_id = ? AND team_id = ?';
-        $values = array( Stats::TABLE_PLAYER_PER_TEAM, $playerIDs[0]->id, $teamIDs[0]->id );
+        $query = 'SELECT * FROM `'.Stats::TABLE_PLAYER_PER_TEAM.'` WHERE player_id = ? AND team_id = ?';
+        $values = array( $playerIDs[0]->id, $teamIDs[0]->id );
         $results = DB::select( $query, $values );
         if ( !empty( $results ) )
             throw new DuplicateException( "Link player ".$player." to team ".$team, Stats::TABLE_PLAYER_PER_TEAM );
 
         // okay, link the player to the team
-        $query = 'INSERT INTO ? (player_id, team_id) VALUES (?, ?)';
-        $values = array( Stats::TABLE_PLAYER_PER_TEAM, $playerIDs[0]->id, $teamIDs[0]->id );
+        $query = 'INSERT INTO `'.Stats::TABLE_PLAYER_PER_TEAM.'` (player_id, team_id) VALUES (?, ?)';
+        $values = array( $playerIDs[0]->id, $teamIDs[0]->id );
         $result = DB::insert( $query, $values );
 
         // success?
