@@ -125,7 +125,7 @@ class Stats {
 
         if ( in_array( $table, $allowed_tables ) ) {
             // query to get the id with the given name
-            $query = 'SELECT id FROM `'.$table.'` WHERE name = "?"';
+            $query = 'SELECT id FROM `'.$table.'` WHERE name = ?';
             $values = array( $name );
             return DB::select( $query, $values );
         } else {
@@ -179,7 +179,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_CONTINENT, $name );
+                return $this->getIDsByName( Stats::TABLE_CONTINENT, $name )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_CONTINENT );
             } // end if-else
@@ -212,7 +212,7 @@ class Stats {
                 throw new MissingFieldException( $continent, Stats::TABLE_CONTINENT );
 
             $query = 'INSERT INTO `'.Stats::TABLE_COUNTRY.'` (name, continent_id, abbreviation) VALUES (?, ?, ?)';
-            $values = array( $name, $continentIDs[0]->id, $abbreviation );
+            $values = array( $country, $continentIDs[0]->id, $abbreviation );
             $result = DB::insert( $query, $values );
 
             // succeed?
@@ -287,7 +287,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_TEAM, $country )[0]->id;
+                return $this->getIDsByName( Stats::TABLE_TEAM, $team )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_TEAM );
             } // end if-else
@@ -389,7 +389,7 @@ class Stats {
         // Okay, now insert the match into the table
         $query = 'INSERT INTO `'.Stats::TABLE_MATCH.'` (hometeam_id, awayteam_id, competition_id, date) VALUES (?, ?, ?, ?)';
         $values = array( $homeTeamIDs[0]->id, $awayTeamIDs[0]->id, $competitionIDs[0]->id, $date );
-        $results = DB::insert( $query, $values );
+        $result = DB::insert( $query, $values );
 
         // success?
         if ( 1 == $result ) {
@@ -412,7 +412,7 @@ class Stats {
     public function addPlayer( $name, $injured=false ) {
         if ( empty( $this->getIDsByName( Stats::TABLE_PLAYER, $name ) ) ) {
 
-            $query = "INSERT INTO `".Stats::TABLE_PLAYER."` (name) VALUES (?, ?)";
+            $query = "INSERT INTO `".Stats::TABLE_PLAYER."` (name, injured) VALUES (?, ?)";
             $values = array( $name, $injured );
             $result = DB::insert( $query, $values );
 
