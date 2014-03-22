@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 22, 2014 at 08:33 PM
+-- Generation Time: Mar 22, 2014 at 09:23 PM
 -- Server version: 5.5.36-MariaDB
 -- PHP Version: 5.5.10
 
@@ -218,7 +218,10 @@ INSERT INTO `coach` (`id`, `name`) VALUES
 (191, 'Sui Wing Leung'),
 (192, 'Alfred Imonje'),
 (193, 'Kazunori Ohara'),
-(194, 'Colin Forde');
+(194, 'Colin Forde'),
+(195, 'Gustave Clément Nyoumba'),
+(196, 'Oh-Son Kwon'),
+(197, 'Colin Johnson');
 
 --
 -- Dumping data for table `continent`
@@ -259,7 +262,7 @@ INSERT INTO `country` (`id`, `name`, `continent_id`, `abbreviation`) VALUES
 (25, 'Botswana', 1, 'BOT'),
 (26, 'Brazil', 1, 'BRA'),
 (27, 'British Virgin Islands', 1, 'VGB'),
-(28, 'Brunei', 1, 'BRU'),
+(28, 'Brunei Darussalam', 1, 'BRU'),
 (29, 'Bulgaria', 1, 'BUL'),
 (30, 'Burkina Faso', 1, 'BFA'),
 (31, 'Burundi', 1, 'BDI'),
@@ -389,7 +392,7 @@ INSERT INTO `country` (`id`, `name`, `continent_id`, `abbreviation`) VALUES
 (155, 'St. Lucia', 1, 'LCA'),
 (156, 'St. Vincent and the Grenadines', 1, 'VIN'),
 (157, 'San Marino', 1, 'SMR'),
-(158, 'São Tomé and Príncipe', 1, 'STP'),
+(158, 'São Tomé e Príncipe', 1, 'STP'),
 (159, 'Saudi Arabia', 1, 'KSA'),
 (160, 'Scotland', 1, 'SCO'),
 (161, 'Senegal', 1, 'SEN'),
@@ -494,7 +497,20 @@ INSERT INTO `country` (`id`, `name`, `continent_id`, `abbreviation`) VALUES
 (260, 'Samoa', 1, 'SAM'),
 (261, 'United States', 1, 'USA'),
 (262, 'US Virgin Islands', 1, 'VIR'),
-(263, 'Western Samoa', 1, 'WSM');
+(263, 'Western Samoa', 1, 'WSM'),
+(264, 'Bosnia and Herzegovina', 1, 'BIH'),
+(265, 'Cape Verde', 1, 'CPV'),
+(266, 'North Korea', 1, 'PRK'),
+(267, 'South Korea', 1, 'KOR'),
+(268, 'Macau', 1, 'MAC'),
+(269, 'Macedonia', 1, 'MKD'),
+(270, 'Republic of Ireland', 1, 'IRL'),
+(271, 'Saint Kitts and Nevis', 1, 'SKN'),
+(272, 'Saint Lucia', 1, 'LCA'),
+(273, 'Saint Vincent and the Grenadines', 1, 'VIN'),
+(274, 'U.S. Virgin Islands', 1, 'VIR'),
+(275, 'São Tomé and Príncipe', 1, 'STP'),
+(276, 'Brunei', 1, 'BRU');
 
 --
 -- Dumping data for table `team`
@@ -694,7 +710,10 @@ INSERT INTO `team` (`id`, `name`, `country_id`, `coach_id`, `fifapoints`) VALUES
 (191, 'Macao', 110, 191, 9),
 (192, 'Somalia', 169, 192, 8),
 (193, 'Bhutan', 22, 193, 0),
-(194, 'Barbados', 16, 194, 101);
+(194, 'Barbados', 16, 194, 101),
+(195, 'São Tomé e Príncipe', 158, 195, 86),
+(196, 'Brunei', 28, 196, 26),
+(197, 'Anguilla', 6, 197, 3);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
