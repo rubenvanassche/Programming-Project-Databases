@@ -7,79 +7,78 @@
 class DBCrawlerController extends BaseController {
 
     /**
-     * @brief Update the teams.
-     * @details It will also update it's players.
+     * @brief Update the country.
      */
-    public function updateTeams() {
-        $crawler = new CrawlerController();
-        $db = new Stats();
+    private static function update_country( $item ) {
+        $continent = $item["continent"];
+        $country = $item["country"];
+        $abbreviation = $item["abbreviation"];
 
-        foreach ( $crawler->teams() as $team ) {
-            $db->addTeam(
-                $team["country"],
-                $team["country"],
-                "banana",
-                $team["points"]
-            );
-            # TODO get coach
+        try {
+            Stats::addCountry( $country, $continent, $abbreviation );
+        } catch ( MissingFieldException $mfe ) {
 
-            if ( empty($team["href"]) ) { continue; }
+            if ( $continent == $mfe->missing ) {
+                Stats::addContinent( $continent );
+                return self::update_country( $item );
+            } else {
+                throw $mfe;
+            } // end if-else
 
-            foreach ( $crawler->players( $team["href"] ) as $player ) {
-                $db->addPlayer( $player["name"], false);
-                $db->addPlayerPerTeam(
-                    $player["name"],
-                    $team["country"]
-               );
-            } // end foreach
+        } catch ( DuplicateException $de ) {
+            // oh, already added into the database
+        } // end try-catch
+
+        return;
+    }
+
+    /**
+     * @brief Update the list of countries and continents.
+     */
+    public static function update_countries() {
+        foreach ( CrawlerController::countries() as $item ) {
+            self::update_country( $item );
         } // end foreach
 
         return;
     }
 
     /**
-     * @brief Update all the matches.
+     * @brief update the team.
+     *
+     * @param team The team to be updated.
      */
-    public function updateMatches() {
-        $crawler = new CrawlerController();
-        $db = new Stats();
+    private static function update_team( $team ) {
+        $name = $team["name"];
+        $country = $team["country"];
+        $coach = $team["coach"];
+        $points = $team["points"];
 
-        foreach( $crawler->matches() as $match ) {
-            try {
-            $db->addTeam(
-                $match["team0"],
-                $match["team0"],
-                "banana",
-                0
-            );
-            } catch (Exception $d) {
-                // ignore
-            }
+        try {
+            Stats::addTeam( $name, $country, $coach, $points );
+        } catch ( MissingFieldException $mfe ) {
 
-            try {
-            $db->addTeam(
-                $match["team1"],
-                $match["team1"],
-                "banana",
-                0
-            );
-            } catch (Exception $d) {
-                // ignore
-            }
+            if ( $coach == $mfe->missing ) {
+                Stats::addCoach( $coach );
+                return self::update_team( $team );
+            } else {
+                // cannot add country because you'll need to know the continent
+                throw $mfe;
+            } // end if-else
 
-            try {
-            $db->addTeamPerCompetition($match["team0"], "World Cup");
-            $db->addTeamPerCompetition($match["team1"], "World Cup");
+        } catch ( DuplicateException $de ) {
+            // oh, already in the database
+        } // end try-catch
 
-            $db->addMatch(
-                $match["team0"],
-                $match["team1"],
-                "World Cup",
-                $match["status"]
-           );
-            } catch (Exception $d) {
-                // ignore
-            }
+        return;
+    }
+
+    /**
+     * @brief Update the FIFA rankings.
+     */
+    public static function update_FIFA_rank() {
+        foreach ( CrawlerController::teams_FIFA() as $team ) {
+            self::update_team( $team );
         } // end foreach
 
         return;

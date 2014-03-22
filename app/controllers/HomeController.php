@@ -25,8 +25,8 @@ class HomeController extends BaseController {
          * doing. Or you want to mess up the database or just want to watch the 
          * world burn, then it's fine.
          */
-        #$crawler = new DBCrawlerController();
-        #$crawler->update_WorldCup();
+        #DBCrawlerController::update_countries();
+        #DBCrawlerController::update_FIFA_rank();
 
         $recentMatches = Match::getRecentMatches();
         $articles = RSS::getFIFAtext();
