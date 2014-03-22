@@ -12,10 +12,11 @@ libxml_use_internal_errors( true );
 class CrawlerController extends BaseController {
 
     /**
-     * @brief Generator for all countries accompanied with the ISO (3) 
+     * @brief Generator for all countries participating in the men's national 
+     * association football teams, it's abbreviation and it's continent.
      * abbreviation and it's continent.
      * @details A complete list can be found at
-     * http://www.cloford.com/resources/codes/index.htm
+     * https://en.wikipedia.org/wiki/List_of_FIFA_country_codes
      *
      * @return An associative array with the following values mapped:
      *          "country"       => $country,
@@ -27,7 +28,7 @@ class CrawlerController extends BaseController {
         $doc = new DOMDocument();
 
         try {
-            $doc->loadHTMLFile( "http://www.cloford.com/resources/codes/index.htm" );
+            $doc->loadHTMLFile( "https://en.wikipedia.org/wiki/List_of_FIFA_country_codes" );
         } catch ( ErrorException $ee ) {
             // HTTP request failed
             return;
@@ -36,26 +37,40 @@ class CrawlerController extends BaseController {
         $crawler = new Crawler();
         $crawler->addDocument( $doc );
 
-        foreach ( $crawler->filterXPath( '//table[@class="outlinetable"]/tr/td/..') as $row ) {
-            $data = $row->getElementsByTagName( 'td' );
-
-            $continent = $data->item(0);
-            if ( empty( $continent ) ) { continue; }
-            $continent = trim( $continent->textContent );
-
-            $country = $data->item(2);
+        foreach ( $crawler->filterXPath( '//table[@class="wikitable"]/tr/td/a[contains(@title, "team")]/../..') as $row ) {
+            $country = $row->getElementsByTagName( 'a' );
             if ( empty( $country ) ) { continue; }
-            $country = trim( $country->textContent );
+            # TODO Cannot fix that goddamn continent
+            #$country_href = $country->item(0)->getAttribute( 'href' );
+            $country = trim( $country->item(0)->textContent );
 
-            $abbreviation = $data->item(6);
-            if ( empty( $abbreviation ) ) { continue; }
-            $abbreviation = trim( $abbreviation->textContent );
+            $abbreviation = $row->getElementsByTagName( 'td' );
+            if ( 2 > $abbreviation->length ) { continue; }
+            $abbreviation = trim( $abbreviation->item(1)->textContent );
+
+            #$country_page = new DOMDocument();
+
+            #try {
+            #    $country_page->loadHTMLFile( "https://en.wikipedia.org/".$country_href );
+            #} catch ( ErrorException $ee ) {
+            #    // HTTP request failed
+            #    continue;
+            #} // end try-catch
+
+            #$country_crawler = new Crawler();
+            #$country_crawler->addDocument( $country_page );
+
+            $continent = "";
+            #if ( empty( $continent ) ) { continue; }
+            #$continent = trim( $continent->textContent );
 
             yield array(
                 "country"       => $country,
                 "continent"     => $continent,
                 "abbreviation"  => $abbreviation
             );
+
+            #$country_crawler->clear();
         } // end foreach
 
         // clear crawler (to avoid memory exhausting)
@@ -200,110 +215,4 @@ class CrawlerController extends BaseController {
         $crawler->clear();
         return;
     }
-
-    /**
-     * @brief Generator for all players in a given team in the World Cup 
-     * competition.
-     * @details An example of a page where this function is based upon can be found 
-     * at http://int.soccerway.com/teams/spain/spain/2137/squad/
-     *
-     * @param team_href The reference to the page of a team (see $team["href"]).
-     * @return An associative array with the following values mapped:
-     *      "href"          => [relative link to the players profile]
-     *      "first name"    => [players first name]
-     *      "second name"   => [players second name]
-    public function players_WorldCup( $team_href ) {
-        // load the page
-        $page = new simple_html_dom();
-        $url = "http://int.soccerway.com/".$team_href."/squad/";
-        $page->load_file( $url );
-
-        foreach ( $page->find("div.squad-container table.squad tbody tr") as $entry ) {
-            $profile = $entry->find("td.name a", 0);
-
-            // skip if one of the required element is empty
-            if ( empty( $profile ) ) { continue; }
-
-            $player_page = new simple_html_dom();
-            $player_url = "http://int.soccerway.com/".$profile->href;
-            $player_page->load_file( $player_url );
-
-            $first_name = $player_page->find("div.block_player_passport div div div div dl dd", 0);
-            $second_name = $player_page->find("div.block_player_passport div div div div dl dd", 1);
-
-            // skip if one of the required element is empty
-            if ( empty( $first_name ) ) { continue; }
-            if ( empty( $second_name ) ) { continue; }
-
-            $href = $profile->href;
-            $first_name = trim( $first_name->plaintext );
-            $second_name = trim( $second_name->plaintext );
-
-            yield array(
-                "href"          => $href,
-                "first name"    => $first_name,
-                "second name"   => $second_name
-            );
-        } // end foreach
-
-        // clear page to avoid memory exhausting
-        $page->clear();
-        return;
-    }
-     */
-
-    /**
-     * @brief Generator for all matches in the World Cup.
-     * @details Based upon matches on
-     * http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/matches/?ICID=PL_3N_02
-     *
-     * @return An associative array with the following values mapped:
-     *      "href"          => [relative link to the match]
-     *      "first team"    => [home team]
-     *      "second team"   => [away team]
-     *      "date"          => [date of the match]
-     *      "time"          => [time of the match or empty if going on]
-     *      "score"         => [result or empty if has to be played yet]
-    public function matches_() {
-        // load the page
-        $page = new simple_html_dom();
-        $url = "http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/matches/?ICID=PL_3N_02";
-        $page->load_file( $url );
-
-        foreach ( $page->find("table.matches tbody tr.match") as $entry ) {
-            $href = $entry->find("td.score-time a", 0);
-            $first_team = $entry->find("td.team-a a", 0);
-            $second_team = $entry->find("td.team-b a", 0);
-            $date = $entry->find("td.date", 0);
-            $time = $entry->find("td.status", 0);
-            $score = $entry->find("td.score", 0);
-
-            // skip if one of the required element is empty
-            if ( empty( $href ) ) { continue; }
-            if ( empty( $first_team ) ) { continue; }
-            if ( empty( $second_team ) ) { continue; }
-            if ( empty( $date ) ) { continue; }
-
-            $href = $href->href;
-            $first_team = trim( $first_team->plaintext )
-            $second_team = trim( $second_team->plaintext )
-            $date = $date->plaintext;
-            $time = empty( $time ) ? "" : trim( $time->plaintext );
-            $score = empty( $score ) ? "" : trim( $score->plaintext );
-
-            yield array(
-                "href"          => $href,
-                "first team"    => $first_team,
-                "second team"   => $second_team,
-                "date"          => $date,
-                "time"          => $time,
-                "score"         => $score
-            );
-        } // end foreach
-
-        // clear page to avoid memory exhausting
-        $page->clear();
-        return;
-    }
-     */
 }
