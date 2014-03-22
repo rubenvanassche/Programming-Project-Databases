@@ -230,12 +230,12 @@ CREATE TABLE IF NOT EXISTS `teamPerCompetition` (
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) DEFAULT NULL,
-  `firstname` varchar(60) DEFAULT NULL,
-  `lastname` varchar(60) DEFAULT NULL,
-  `email` varchar(60) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `country` varchar(60) DEFAULT NULL,
+  `username` varchar(100) NOT NULL,
+  `firstname` varchar(60) NOT NULL,
+  `lastname` varchar(60) NOT NULL,
+  `email` varchar(60) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `country` varchar(60) NOT NULL,
   `session_id` varchar(24) DEFAULT NULL,
   `registrationcode` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`id`)
