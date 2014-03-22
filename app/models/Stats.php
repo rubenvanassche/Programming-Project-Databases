@@ -112,7 +112,7 @@ class Stats {
      * @throw InvalidTableException Not a valid table to get the id by name
      * @return Array of the id's with the matching name.
      */
-    public function getIDsByName( $table, $name ) {
+    public static function getIDsByName( $table, $name ) {
         // first, list all allowed table to get the id by name
         $allowed_tables = array(
             Stats::TABLE_COACH,
@@ -142,8 +142,8 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the competition.
      */
-    public function addCompetition( $name ) {
-        if ( empty( $this->getIDsByName( Stats::TABLE_COMPETITION, $name ) ) ) {
+    public static function addCompetition( $name ) {
+        if ( empty( Stats::getIDsByName( Stats::TABLE_COMPETITION, $name ) ) ) {
 
             $query = "INSERT INTO `".Stats::TABLE_COMPETITION."` (name) VALUES (?)";
             $values = array( $name );
@@ -151,7 +151,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_COMPETITION, $name )[0]->id;
+                return Stats::getIDsByName( Stats::TABLE_COMPETITION, $name )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_COMPETITION );
             } // end if-else
@@ -170,8 +170,8 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the continent.
      */
-    public function addContinent( $name ) {
-        if ( empty( $this->getIDsByName( Stats::TABLE_CONTINENT, $name ) ) ) {
+    public static function addContinent( $name ) {
+        if ( empty( Stats::getIDsByName( Stats::TABLE_CONTINENT, $name ) ) ) {
 
             $query = "INSERT INTO `".Stats::TABLE_CONTINENT."` (name) VALUES (?)";
             $values = array( $name );
@@ -179,7 +179,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_CONTINENT, $name )[0]->id;
+                return Stats::getIDsByName( Stats::TABLE_CONTINENT, $name )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_CONTINENT );
             } // end if-else
@@ -202,11 +202,11 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public function addCountry( $country, $continent, $abbreviation ) {
-        if ( empty( $this->getIDsByName( Stats::TABLE_COUNTRY, $country ) ) ) {
+    public static function addCountry( $country, $continent, $abbreviation ) {
+        if ( empty( Stats::getIDsByName( Stats::TABLE_COUNTRY, $country ) ) ) {
 
             // get the ids of the continent
-            $continentIDs = $this->getIDsByName( Stats::TABLE_CONTINENT, $continent );
+            $continentIDs = Stats::getIDsByName( Stats::TABLE_CONTINENT, $continent );
 
             if ( empty( $continentIDs ) )
                 throw new MissingFieldException( $continent, Stats::TABLE_CONTINENT );
@@ -217,7 +217,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_COUNTRY, $country )[0]->id;
+                return Stats::getIDsByName( Stats::TABLE_COUNTRY, $country )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_COUNTRY );
             } // end if-else
@@ -236,8 +236,8 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the coach.
      */
-    public function addCoach( $name ) {
-        if ( empty( $this->getIDsByName( Stats::TABLE_COACH, $name ) ) ) {
+    public static function addCoach( $name ) {
+        if ( empty( Stats::getIDsByName( Stats::TABLE_COACH, $name ) ) ) {
 
             $query = "INSERT INTO `".Stats::TABLE_COACH."` (name) VALUES (?)";
             $values = array( $name );
@@ -245,7 +245,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_COACH, $name )[0]->id;
+                return Stats::getIDsByName( Stats::TABLE_COACH, $name )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_COACH );
             } // end if-else
@@ -268,12 +268,12 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the team.
      */
-    public function addTeam( $team, $country, $coach, $points ) {
-        if ( empty( $this->getIDsByName( Stats::TABLE_TEAM, $team ) ) ) {
+    public static function addTeam( $team, $country, $coach, $points ) {
+        if ( empty( Stats::getIDsByName( Stats::TABLE_TEAM, $team ) ) ) {
 
             // get the ids of the country and coach
-            $countryIDs = $this->getIDsByName( Stats::TABLE_COUNTRY, $country );
-            $coachIDs = $this->getIDsByName( Stats::TABLE_COACH, $coach );
+            $countryIDs = Stats::getIDsByName( Stats::TABLE_COUNTRY, $country );
+            $coachIDs = Stats::getIDsByName( Stats::TABLE_COACH, $coach );
 
             if ( empty( $countryIDs ) )
                 throw new MissingFieldException( $country, Stats::TABLE_COUNTRY );
@@ -287,7 +287,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_TEAM, $team )[0]->id;
+                return Stats::getIDsByName( Stats::TABLE_TEAM, $team )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_TEAM );
             } // end if-else
@@ -308,13 +308,13 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public function addTeamPerCompetition( $team, $competition ) {
+    public static function addTeamPerCompetition( $team, $competition ) {
         // get the team and competition ids
-        $teamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $team );
+        $teamIDs = Stats::getIDsByName( Stats::TABLE_TEAM, $team );
         if ( empty( $teamIDs ) )
             throw new MissingFieldException( $team, Stats::TABLE_TEAM );
 
-        $competitionIDs = $this->getIDsByName( Stats::TABLE_COMPETITION, $competition );
+        $competitionIDs = Stats::getIDsByName( Stats::TABLE_COMPETITION, $competition );
         if ( empty( $competitionIDs ) )
             throw new MissingFieldException( $competition, Stats::TABLE_COMPETITION );
 
@@ -351,17 +351,17 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public function addMatch( $homeTeam, $awayTeam, $competition, $date ) {
+    public static function addMatch( $homeTeam, $awayTeam, $competition, $date ) {
         // get the IDs of the hometeam, awayteam and the competition
-        $homeTeamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $homeTeam );
+        $homeTeamIDs = Stats::getIDsByName( Stats::TABLE_TEAM, $homeTeam );
         if ( empty( $homeTeamIDs ) )
             throw new MissingFieldException( $homeTeam, Stats::TABLE_TEAM );
 
-        $awayTeamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $awayTeam );
+        $awayTeamIDs = Stats::getIDsByName( Stats::TABLE_TEAM, $awayTeam );
         if ( empty( $awayTeamIDs ) )
             throw new MissingFieldException( $awayTeam, Stats::TABLE_TEAM );
 
-        $competitionIDs = $this->getIDsByName( Stats::TABLE_COMPETITION, $competition );
+        $competitionIDs = Stats::getIDsByName( Stats::TABLE_COMPETITION, $competition );
         if ( empty( $competitionIDs ) )
             throw new MissingFieldException( $competition, Stats::TABLE_COMPETITION );
 
@@ -409,8 +409,8 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return The id of the player.
      */
-    public function addPlayer( $name, $injured=false ) {
-        if ( empty( $this->getIDsByName( Stats::TABLE_PLAYER, $name ) ) ) {
+    public static function addPlayer( $name, $injured=false ) {
+        if ( empty( Stats::getIDsByName( Stats::TABLE_PLAYER, $name ) ) ) {
 
             $query = "INSERT INTO `".Stats::TABLE_PLAYER."` (name, injured) VALUES (?, ?)";
             $values = array( $name, $injured );
@@ -418,7 +418,7 @@ class Stats {
 
             // succeed?
             if( 1 == $result ) {
-                return $this->getIDsByName( Stats::TABLE_PLAYER, $name )[0]->id;
+                return Stats::getIDsByName( Stats::TABLE_PLAYER, $name )[0]->id;
             } else {
                 throw new InsertException( $name, Stats::TABLE_PLAYER );
             } // end if-else
@@ -439,13 +439,13 @@ class Stats {
      * @throw InsertException Failed to insert (no specific raisons).
      * @return True
      */
-    public function addPlayerPerTeam( $player, $team ) {
+    public static function addPlayerPerTeam( $player, $team ) {
         // get the team and player ids
-        $teamIDs = $this->getIDsByName( Stats::TABLE_TEAM, $team );
+        $teamIDs = Stats::getIDsByName( Stats::TABLE_TEAM, $team );
         if ( empty( $teamIDs ) )
             throw new MissingFieldException( $team, Stats::TABLE_TEAM );
 
-        $playerIDs = $this->getIDsByName( Stats::TABLE_PLAYER, $player );
+        $playerIDs = Stats::getIDsByName( Stats::TABLE_PLAYER, $player );
         if ( empty( $playerIDs ) )
             throw new MissingFieldException( $player, Stats::TABLE_PLAYER );
 
