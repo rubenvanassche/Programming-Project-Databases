@@ -25,7 +25,13 @@ class CrawlerController extends BaseController {
     public static function countries() {
         // load document
         $doc = new DOMDocument();
-        $doc->loadHTMLFile( "http://www.cloford.com/resources/codes/index.htm" );
+
+        try {
+            $doc->loadHTMLFile( "http://www.cloford.com/resources/codes/index.htm" );
+        } catch ( ErrorException $ee ) {
+            // HTTP request failed
+            return;
+        } // end try-catch
 
         $crawler = new Crawler();
         $crawler->addDocument( $doc );
@@ -52,6 +58,8 @@ class CrawlerController extends BaseController {
             );
         } // end foreach
 
+        // clear crawler (to avoid memory exhausting)
+        $crawler->clear();
         return;
     }
 
@@ -62,91 +70,134 @@ class CrawlerController extends BaseController {
      * http://int.soccerway.com/teams/rankings/fifa/
      *
      * @return An associative array with the following values mapped:
-     *      "href"      => $href,
-     *      "name"      => $name,
-     *      "rank"      => $rank,
-     *      "points"    => $points,
-     *      "coach"     => $coach,
-     *      "logo"      => $logo,
-     *      "founded"   => $founded,
-     *      "address"   => $address
-     *      "country"   => $country,
-     *      "phone"     => $phone,
-     *      "fax"       => $fax,
-     *      "email"     => $email
+     *          "href"      => $href,
+     *          "name"      => $team,
+     *          "rank"      => $rank,
+     *          "points"    => $points,
+     *          "coach"     => $first_name.' '.$last_name,
+     *          "logo"      => $logo,
+     *          "founded"   => $founded,
+     *          "address"   => $address,
+     *          "country"   => $country,
+     *          "phone"     => $phone,
+     *          "fax"       => $fax,
+     *          "email"     => $email
      */
-    public function teams_FIFA() {
-        // load the page
-        $page = new simple_html_dom();
-        $url = "http://int.soccerway.com/teams/rankings/fifa/";
-        $page->load_file( $url );
+    public static function teams_FIFA() {
+        // load document
+        $doc = new DOMDocument();
 
-        foreach ( $page->find("table.fifa_rankings tbody tr") as $entry ) {
-            // first, get all the required data
-            $name = $entry->find("td.team a", 0);
-            if ( empty( $name ) ) { continue; }
-            $href = $name->href;
+        try {
+            $doc->loadHTMLFile( "http://int.soccerway.com/teams/rankings/fifa/" );
+        } catch ( ErrorException $ee ) {
+            // HTTP request failed
+            return;
+        } // end try-catch
 
-            $rank = $entry->find("td.rank", 0);
+        $crawler = new Crawler();
+        $crawler->addDocument( $doc );
+
+        foreach ( $crawler->filterXPath( '//table[contains(@class, fifa_rankings)]/tbody/tr/td/..' ) as $row ) {
+            $data = $row->getElementsByTagName( 'td' );
+
+            $rank = $data->item(0);
             if ( empty( $rank ) ) { continue; }
+            $rank = trim( $rank->textContent );
 
-            $points = $entry->find("td.points", 0);
+            $team = $data->item(1);
+            if ( empty( $team ) ) { continue; }
+            $team = trim( $team->textContent );
+
+            $points = $data->item(2);
             if ( empty( $points ) ) { continue; }
+            $points = trim( $points->textContent );
 
-            // now navigate to the page of the team
-            $team_page = new simple_html_dom();
-            $url = "http://int.soccerway.com/".$href;
-            $team_page->load_file( $url );
+            $href = $data->item(1)->getElementsByTagName( 'a' );
+            $href = $href->item(0)->getAttribute( 'href' );
+            if ( empty( $href ) ) { continue; }
 
-            // also get the required data there
-            #$coach = $team_page->find("table.squad tbody", 4);#->find("tr td div a", 0);#->find("td", 1)->find("div a", 0);
-            #if ( empty( $coach ) ) { continue; }
+            // now navigate to the team page
+            $team_page = new DOMDocument();
 
-            #$content = $team_page->find("div.block_team_info div div dl", 0);
-            #if ( empty( $content ) ) { continue; }
+            try {
+                $team_page->loadHTMLFile( "http://int.soccerway.com/".$href );
+            } catch ( ErrorException $ee ) {
+                // HTTP request failed
+                continue;
+            } // end try-catch
 
-            #$country = $team_page->find("div.block_team_info div div dl dd", 2);
-            #if ( empty( $country ) ) { continue; }
+            $team_crawler = new Crawler();
+            $team_crawler->addDocument( $team_page );
 
-            // okay, get the optional data now
-            #$logo = $team_page->find("div.block_team_info div div.logo img", 0);
-            #$founded = $content->find("dd", 0);
-            #$address = $content->find("dd", 1);
-            #$phone = $content->find("dd", 3);
-            #$fax = $content->find("dd", 4);
-            #$email = $content->find("dd", 5);
+            $logo = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div[@class="logo"]/img' );
+            $logo = empty( $logo->getNode(0) ) ? "" : $logo->getNode(0)->getAttribute( 'src' );
 
-            // use default values or skip team if data not provided
-            $name = trim( $name->plaintext );
-            $rank = trim( $rank->plaintext );
-            $points = trim( $points->plaintext );
-            #$coach = trim( $coach->plaintext );
-            #$founded = empty( $founded ) ? 0 : trim( $founded->plaintext );
-            #$address = empty( $address ) ? "" : trim( $address->plaintext );
-            #$country = trim( $country->plaintext );
-            #$phone = empty( $founded ) ? "" : trim( $phone->plaintext );
-            #$fax = empty( $founded ) ? "" : trim( $fax->plaintext );
-            #$email = empty( $founded ) ? "" : trim( $email->plaintext );
+            $founded = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div/dl/dd[1]' );
+            $founded = empty( $founded->getNode(0) ) ? "" : trim( $founded->getNode(0)->textContent );
+
+            $address = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div/dl/dd[2]' );
+            $address = empty( $address->getNode(0) ) ? "" : trim( $address->getNode(0)->textContent );
+
+            $country = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div/dl/dd[3]' );
+            if ( empty( $country->getNode(0) ) ) { continue; }
+            $country = trim( $country->getNode(0)->textContent );
+
+            $phone = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div/dl/dd[4]' );
+            $phone = empty( $phone->getNode(0) ) ? "" : trim( $phone->getNode(0)->textContent );
+
+            $fax = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div/dl/dd[5]' );
+            $fax = empty( $fax->getNode(0) ) ? "" : trim( $fax->getNode(0)->textContent );
+
+            $email = $team_crawler->filterXPath( '//div[contains(@class, block_team_info)]/div/div/dl/dd[6]' );
+            $email = empty( $email->getNode(0) ) ? "" : trim( $email->getNode(0)->textContent );
+
+            $coach_href = $team_crawler->filterXPath( '//table[contains(@class, squad)]/tbody[5]/tr/td[2]/div/a' );
+            if ( empty( $coach_href->getNode(0) ) ) { continue; }
+            $coach_href = $coach_href->getNode(0)->getAttribute( 'href' );
+
+            // to the coach page to get his full name
+            $coach_page = new DOMDocument();
+
+            try {
+                $coach_page->loadHTMLFile( "http://int.soccerway.com/".$coach_href );
+            } catch ( ErrorException $ee ) {
+                // HTTP request failed
+                $team_crawler->clear();
+                continue;
+            } // end try-catch
+
+            $coach_crawler = new Crawler();
+            $coach_crawler->addDocument( $coach_page );
+
+            $first_name = $coach_crawler->filterXPath( '//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]' );
+            if ( empty( $first_name->getNode(0) ) ) { continue; }
+            $first_name = trim( $first_name->getNode(0)->textContent );
+
+            $last_name = $coach_crawler->filterXPath( '//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]' );
+            if ( empty( $last_name->getNode(0) ) ) { continue; }
+            $last_name = trim( $last_name->getNode(0)->textContent );
 
             yield array(
                 "href"      => $href,
-                "name"      => $name,
+                "name"      => $team,
                 "rank"      => $rank,
                 "points"    => $points,
-                #"coach"     => $coach,
-                #"logo"      => $logo,
-                #"founded"   => $founded,
-                #"address"   => $address
-                #"country"   => $country,
-                #"phone"     => $phone,
-                #"fax"       => $fax,
-                #"email"     => $email
+                "coach"     => $first_name.' '.$last_name,
+                "logo"      => $logo,
+                "founded"   => $founded,
+                "address"   => $address,
+                "country"   => $country,
+                "phone"     => $phone,
+                "fax"       => $fax,
+                "email"     => $email
             );
 
+            $coach_crawler->clear();
+            $team_crawler->clear();
         } // end foreach
 
-        // clear page to avoid memory exhausting
-        $page->clear();
+        // clear crawler to avoid memory exhausting
+        $crawler->clear();
         return;
     }
 
