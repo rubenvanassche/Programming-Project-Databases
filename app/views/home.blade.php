@@ -215,6 +215,7 @@ hr {
 @section('javascript')
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
+			//Code adapted from example provided by google
      google.load('visualization', '1', {'packages': ['geochart']});
      google.setOnLoadCallback(drawRegionsMap);
 
@@ -222,12 +223,13 @@ hr {
       function drawRegionsMap() {
 
         var data = google.visualization.arrayToDataTable(
+										//Create the Country/FIFA points table in PHP, as Javascript has no access to these codes
 										<?php 
-										echo "[['Country', 'Popularity'], ";
+										echo "[['Country', 'FIFA points'], ";
 										foreach($fifaPoints as $points) {
-											echo "['";
+											echo "[\"";
 											echo $points["name"];
-											echo "', ";
+											echo "\", ";
 											echo $points["points"];
 											echo "], ";
 										}
