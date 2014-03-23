@@ -6,6 +6,32 @@ use Symfony\Component\DomCrawler\Crawler;
 libxml_use_internal_errors( true );
 
 /**
+ * @brief Request the page.
+ * @details Sometimes, the site is too busy, but you can then send another 
+ * request again.
+ *
+ * @param limit The limit.
+ *
+ * @throw ErrorException when limit has exceeded.
+ * @return DOMDocument
+ */
+function request( &$domdocument, $url, $limit=5 ) {
+    try {
+        $domdocument->loadHTMLFile( $url );
+    } catch ( ErrorException $ee ) {
+
+        if ( 0 == $limit ) {
+            // beyond limit
+            throw $ee;
+        } else {
+            // try again
+            return request( $domdocument, $url, $limit-1 );
+        } // end if-else
+
+    } // end try-catch
+}
+
+/**
  * @class CrawlerController
  * @brief Crawl data from site.
  */
@@ -28,7 +54,7 @@ class CrawlerController extends BaseController {
         $doc = new DOMDocument();
 
         try {
-            $doc->loadHTMLFile( "https://en.wikipedia.org/wiki/List_of_FIFA_country_codes" );
+            request( $doc, "https://en.wikipedia.org/wiki/List_of_FIFA_country_codes" );
         } catch ( ErrorException $ee ) {
             // HTTP request failed
             return;
@@ -102,7 +128,7 @@ class CrawlerController extends BaseController {
         $doc = new DOMDocument();
 
         try {
-            $doc->loadHTMLFile( "http://int.soccerway.com/teams/rankings/fifa/" );
+            request( $doc, "http://int.soccerway.com/teams/rankings/fifa/" );
         } catch ( ErrorException $ee ) {
             // HTTP request failed
             return;
@@ -134,7 +160,7 @@ class CrawlerController extends BaseController {
             $team_page = new DOMDocument();
 
             try {
-                $team_page->loadHTMLFile( "http://int.soccerway.com/".$href );
+                request( $team_page, "http://int.soccerway.com/".$href );
             } catch ( ErrorException $ee ) {
                 // HTTP request failed
                 continue;
@@ -173,7 +199,7 @@ class CrawlerController extends BaseController {
             $coach_page = new DOMDocument();
 
             try {
-                $coach_page->loadHTMLFile( "http://int.soccerway.com/".$coach_href );
+                request( $coach_page, "http://int.soccerway.com/".$coach_href );
             } catch ( ErrorException $ee ) {
                 // HTTP request failed
                 $team_crawler->clear();
@@ -233,7 +259,7 @@ class CrawlerController extends BaseController {
         $doc = new DOMDocument();
 
         try {
-            $doc->loadHTMLFile( $url );
+            request( $doc, $url );
         } catch ( ErrorException $ee ) {
             // HTTP request failed
             return;
