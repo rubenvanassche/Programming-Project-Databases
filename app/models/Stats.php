@@ -91,6 +91,59 @@ class DuplicateException extends InsertException {
     }
 }
 
+
+/**
+ * @class UpdateException
+ * @brief Thrown whenever you fail to update the data in the database.
+ */
+class UpdateException extends Exception {
+
+    /**
+     * @brief Constructor.
+     *
+     * @param what What you tried to update.
+     * @param where In which table are you trying to update.
+     * @param why Why it failed to update (optional).
+     */
+    public function __construct( $what, $where, $why="update not successfull" ) {
+        $msg = "Failed to update ".$what." in table ".$where.": ".$why;
+        parent::__construct( $msg );
+        return;
+    }
+}
+
+/**
+ * @class ConflictingDataException
+ * @brief Thrown whenever you try to update data with clearly obsolete data
+ */
+class ConflictingDataException extends UpdateException {
+		
+		/**
+		 * @var conflictingField
+		 * @brief The field with obsolete data
+		 */
+		public $conflictingField;
+
+
+    /**
+     * @brief Constructor.
+     *
+     * @param what What you tried to update.
+     * @param where In which table are you trying to update.
+     * @param why Why it failed to update (optional).
+     */
+    public function __construct( $conflictingField, $table ) {
+        $msg = "Trying to update ".$conflictingField." in table ".$table." with obsolete data.";
+				parent::__construct( $conflictingField, $table, $msg );
+				$this->conflictingField = $conflictingField;
+				return;
+		}
+}
+
+	
+
+
+
 /**
  * @class Stats
  * @brief Contains all statistics about all stuffs.
@@ -483,4 +536,101 @@ class Stats {
             throw new InsertException( "Link player ".$player." to team ".$team, self::TABLE_PLAYER_PER_MATCH );
         } // end if-else
     }
+
+		/**
+		 * @brief Update information on a team
+		 *
+		 * @param team The name of the team
+		 * @param coach The coach of the team
+		 * @param points The (FIFA) points of the team
+		 *
+		 * @throw MissingFieldException The entry to be updated does not exist
+		 * @throw UpdateException Failed to update (no specific reasons)
+		 * @return True
+		 */
+		public static function updateTeam ( $team, $coach, $points ) {
+			// get the team and coach id
+			$teamID = self::getIDsByName( self::TABLE_TEAM, $team );
+			if (empty( $teamID ))
+				throw new MissingFieldException ( $team, self::TABLE_TEAM );
+			$coachID = self::getIDsByName( self::TABLE_COACH, $coach );
+			if (empty( $coachID ))
+				throw new MissingFieldException ( $coach, self::TABLE_COACH );
+
+
+			//Update with new data
+			$query = 'UPDATE `'.self::TABLE_TEAM.'` SET coach_id = ?, fifapoints = ? WHERE id = ?';
+			$values = array( $coachID[0]->id, $points, $teamID[0]->id );
+			$result = DB::update($query, $values);
+			
+			//success?
+			if ( 1 == $result ) 
+				return true;
+			else
+				throw new UpdateException( $team, self::TABLE_TEAM );
+		}
+
+
+		/**
+		 * @brief Update information on a player
+		 *
+		 * @param player The name of the player
+		 * @param injured True if the player is injured
+		 *
+		 * @throw MissingFieldException The entry to be updated does not exist
+		 * @throw UpdateException Failed to update (no specific reasons)
+		 * @return True
+		 */
+		public static function updatePlayer ( $player, $injured ) {
+			// get the player id
+			$playerID = self::getIDsByName( self::TABLE_PLAYER, $player );
+			if (empty( $playerID ))
+				throw new MissingFieldException ( $player, self::TABLE_PLAYER );
+
+			//Update with new data
+			$query = 'UPDATE `'.self::TABLE_PLAYER.'` SET injured = ? WHERE id = ?';
+			$values = array( $injured, $playerID[0]->id );
+			$result = DB::update($query, $values);
+			
+			//success?
+			if ( 1 == $result ) 
+				return true;
+			else
+				throw new UpdateException( $team, self::TABLE_PLAYER );
+		}
+
+
+		/** INCOMPLETE FUNCTION
+		 * @brief Update information on a match
+		 *
+		 * @param homeTeam The name of the home team
+		 * @param awayTeam The name of the away team
+		 * @param competition The name of the competition
+		 * @param date The date of the match
+		 * @param score The new score of the match
+		 * @param goals Array of new goals
+		 *
+		 * @throw MissingFieldException The entry to be updated does not exist
+     * @throw ConflictingDataException Trying to update entry with obsolete data
+		 * @throw UpdateException Failed to update (no specific reasons)
+		 * @return True
+		 */
+		public static function updateMatch( $hometeam, $awayteam, $competition, $date, $score, $goals ) {
+        // get the IDs of the hometeam, awayteam and the competition
+        $homeTeamIDs = self::getIDsByName( self::TABLE_TEAM, $homeTeam );
+        if ( empty( $homeTeamIDs ) )
+            throw new MissingFieldException( $homeTeam, self::TABLE_TEAM );
+
+        $awayTeamIDs = self::getIDsByName( self::TABLE_TEAM, $awayTeam );
+        if ( empty( $awayTeamIDs ) )
+            throw new MissingFieldException( $awayTeam, self::TABLE_TEAM );
+
+        $competitionIDs = self::getIDsByName( self::TABLE_COMPETITION, $competition );
+        if ( empty( $competitionIDs ) )
+            throw new MissingFieldException( $competition, self::TABLE_COMPETITION );
+				/* complete... */
+		}
+
+
+
 }
