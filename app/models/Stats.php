@@ -371,13 +371,13 @@ class Stats {
         $values = array( $homeTeamIDs[0]->id, $competitionIDs[0]->id );
         $results = DB::select( $query, $values );
         if ( empty( $results ) )
-            throw new MissingFieldException( $team, self::TABLE_TEAM_PER_COMPETITION);
+            throw new MissingFieldException( $homeTeam, self::TABLE_TEAM_PER_COMPETITION);
 
         $query = 'SELECT * FROM `'.self::TABLE_TEAM_PER_COMPETITION.'` WHERE team_id = ? AND competition_id = ?';
-        $values = array( $homeTeamIDs[0]->id, $competitionIDs[0]->id );
+        $values = array( $awayTeamIDs[0]->id, $competitionIDs[0]->id );
         $results = DB::select( $query, $values );
         if ( empty( $results ) )
-            throw new MissingFieldException( $team, self::TABLE_TEAM_PER_COMPETITION);
+            throw new MissingFieldException( $awayTeam, self::TABLE_TEAM_PER_COMPETITION);
 
         // Check whether the match is already added into the table
         $query = 'SELECT * FROM `'.self::TABLE_MATCH.'` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?';
