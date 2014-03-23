@@ -31,6 +31,12 @@ class MissingFieldException extends Exception {
     public $missing;
 
     /**
+     * @var table
+     * @brief Where the record was missing.
+     */
+    public $table;
+
+    /**
      * @brief Constructor
      *
      * @param missing What record is missing.
@@ -41,6 +47,8 @@ class MissingFieldException extends Exception {
         parent::__construct( $msg );
 
         $this->missing = $missing;
+        $this->table = $table;
+        return;
     }
 }
 
