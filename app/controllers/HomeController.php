@@ -26,7 +26,8 @@ class HomeController extends BaseController {
          * world burn, then it's fine.
          */
         #DBCrawlerController::update_countries();
-        #DBCrawlerController::update_FIFA_rank();
+        #DBCrawlerController::update_teams();
+        #DBCrawlerController::update_matches();
 
         $recentMatches = Match::getRecentMatches();
         $articles = RSS::getFIFAtext();

@@ -79,8 +79,7 @@ class CrawlerController extends BaseController {
     }
 
     /**
-     * @brief Generator for all country teams in the official FIFA participant 
-     * lists.
+     * @brief Generator for all teams.
      * @details For the participant lists, see:
      * http://int.soccerway.com/teams/rankings/fifa/
      *
@@ -98,7 +97,7 @@ class CrawlerController extends BaseController {
      *          "fax"       => $fax,
      *          "email"     => $email
      */
-    public static function teams_FIFA() {
+    public static function teams() {
         // load document
         $doc = new DOMDocument();
 
@@ -212,6 +211,72 @@ class CrawlerController extends BaseController {
         } // end foreach
 
         // clear crawler to avoid memory exhausting
+        $crawler->clear();
+        return;
+    }
+
+    /**
+     * @brief Generator for all matches.
+     * @details Based upon the matches on
+     * http://int.soccerway.com/international/world/world-cup/2014-brazil/s6395/
+     *
+     * @returns Array with info about the match and thus the following values 
+     * mapped:
+     *          'competition'   => $competition,
+     *          'date'          => $date,
+     *          'time'          => $time,
+     *          'score'         => $score,
+     *          'home team'     => $hometeam,
+     *          'away team'     => $awayteam,
+     */
+    public static function matches( $url='http://int.soccerway.com/international/world/world-cup/c72/' ) {
+        $doc = new DOMDocument();
+
+        try {
+            $doc->loadHTMLFile( $url );
+        } catch ( ErrorException $ee ) {
+            // HTTP request failed
+            return;
+        } // end try-catch
+
+        $crawler = new Crawler();
+        $crawler->addDocument( $doc );
+
+        $competition = $crawler->filterXPath( '//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a');
+        if ( empty( $competition->getNode(0) ) ) { continue; }
+        $competition = 'World Cup '.$competition->getNode(0)->textContent;
+
+        foreach ( $crawler->filterXPath( '//div[contains(@class, block_competition_matches)]/div/table/tbody/tr' ) as $row ) {
+            $data = $row->getElementsByTagName( 'td' );
+
+            $date = $data->item(1);
+            if ( empty( $date ) ) { continue; }
+            $date = DateTime::createFromFormat('j/m/y', $date->textContent)->format('Y-m-d');
+
+            $hometeam = $data->item(2);
+            if ( empty( $hometeam ) ) { continue; }
+            $hometeam = trim( $hometeam->textContent );
+
+            $awayteam = $data->item(4);
+            if ( empty( $awayteam ) ) { continue; }
+            $awayteam = trim( $awayteam->textContent );
+
+            $status = $data->item(3);
+            if ( empty( $status ) ) { continue; }
+            $time =  (1 == substr_count( $status->textContent, ':' ) ) ? trim( $status->textContent ) : "";
+            $score = (1 == substr_count( $status->textContent, '-' ) ) ? trim( $status->textContent ) : "0 - 0";
+
+            yield array(
+                'competition'   => $competition,
+                'date'          => $date,
+                'time'          => $time,
+                'score'         => $score,
+                'home team'     => $hometeam,
+                'away team'     => $awayteam,
+            );
+        } // end foreach
+
+        // clear cache to avoid memory exhausting
         $crawler->clear();
         return;
     }
