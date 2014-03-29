@@ -20,7 +20,7 @@ class Country {
      * @return The result after the query.
      */
     public static function getIDsByName( $name ) {
-        $query = "SELECT id FROM country WHERE name = ?";
+        $query = "SELECT id FROM `".self::TABLE_COUNTRY."` WHERE name = ?";
         $values = array( $name );
         return DB::select( $query, $values );
     }
