@@ -161,6 +161,7 @@ class CrawlerController extends BaseController {
             for ( $index = 1; $index < 5; $index++ ) {
                 foreach ( $team_data->filterXPath( "//table[contains(@class, squad)]/tbody[".$index."]/tr/td/a/img/.." ) as $player_href ) {
                     $player_info = self::request( "http://int.soccerway.com/".$player_href->getAttribute( "href" ) );
+                    if ( empty( $player_info ) ) continue;
 
                     $player_data = new Crawler();
                     $player_data->addDocument( $player_info );
