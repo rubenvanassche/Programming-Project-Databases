@@ -1,6 +1,48 @@
 <?php
 
+/**
+ * @class Player
+ * @brief The Player data model.
+ */
 class Player {
+
+    /**
+     * @var TABLE_PLAYER
+     * @brief The table of the players.
+     */
+    const TABLE_PLAYER   = "player";
+
+    /**
+     * @brief Get the player IDs by name.
+     *
+     * @param name The name of the players.
+     *
+     * @return The result after the query.
+     */
+    public static function getIDsByName( $name ) {
+        $query = "SELECT id FROM `".self::TABLE_PLAYER."` WHERE name = ?";
+        $values = array( $name );
+        return DB::select( $query, $values );
+    }
+
+    /**
+     * @brief Add a player to the data model.
+     *
+     * @param name The name of the player.
+     *
+     * @return The ID's named after the players.
+     */
+    public static function add( $name ) {
+        $query = "INSERT INTO `".self::TABLE_PLAYER."` (name) VALUES (?)";
+        $values = array( $name );
+
+        DB::insert( $query, $values );
+
+        return self::getIDsByName( $name );
+    }
+
+
+    // TODO documentize
 	public static function getPlayer($playerName){
 		$result = DB::select('SELECT * FROM player WHERE name = ?', array($playerName));
 		return $result;

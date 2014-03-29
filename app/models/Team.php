@@ -1,6 +1,64 @@
 <?php
 
+/**
+ * @class Team
+ * @brief The core data model of Team entity.
+ */
 class Team {
+
+    /**
+     * @var TABLE_TEAM
+     * @brief the team table.
+     */
+    const TABLE_TEAM            = "team";
+
+    /**
+     * @var TABLE_PLAYER_PER_TEAM
+     * @brief Table where each player is linked to a team.
+     */
+    const TABLE_PLAYER_PER_TEAM = "playerPerTeam";
+
+    /**
+     * @brief Get the IDs of the team by inputting the name only.
+     *
+     * @return Results after the query.
+     */
+    public static function getIDsByName( $name ) {
+        $query = "SELECT id FROM `".self::TABLE_TEAM."` WHERE name = (?)";
+        $values = array( $name );
+        return DB::select( $query, $values );
+    }
+
+    /**
+     * @brief add a team into the data model.
+     *
+     * @return The IDs of the team just added.
+     */
+    public static function add( $name, $country_id, $coach_id, $points) {
+        $query = "INSERT INTO `team` (name, country_id, coach_id, fifapoints) VALUES ( ?, ?, ?, ?)";
+        $values = array( $name, $country_id, $coach_id, $points );
+
+        DB::insert( $query, $values );
+
+        return self::getIDsByName( $name );
+    }
+
+    /**
+     * @brief link a player to a team.
+     *
+     * @return True if new link created, False otherwise.
+     */
+    public static function linkPlayer( $player_id, $team_id ) {
+        $query = "SELECT * FROM `".self::TABLE_PLAYER_PER_TEAM."` WHERE player_id = ? AND team_id = ?";
+        $values = array( $player_id, $team_id );
+        if ( !empty( DB::select( $query, $values ) ) ) return False;
+
+        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_TEAM.'` (player_id, team_id) VALUES (?, ?)';
+        DB::insert( $query, $values );
+        return True;
+    }
+
+    // TODO DOCUMENTIZE
 	public static function getTeambyID($askedID){
 		$result = DB::select('SELECT * FROM team WHERE id = ?', array($askedID));
 		return $result;
@@ -93,4 +151,5 @@ class Team {
 		}
 		return $url;
 	}
+
 }

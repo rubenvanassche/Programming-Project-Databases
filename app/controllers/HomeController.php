@@ -18,17 +18,6 @@ class HomeController extends BaseController {
     public function index(){
         //require_once('../lib/autoloader.php');
         
-        /**
-         * CRAWLER
-         *
-         * Please do not uncomment this, unless you really know what you are 
-         * doing. Or you want to mess up the database or just want to watch the 
-         * world burn, then it's fine.
-         */
-        #DBCrawlerController::update_countries();
-        #DBCrawlerController::update_teams();
-        #DBCrawlerController::update_matches();
-
         $recentMatches = Match::getRecentMatches();
         $articles = RSS::getFIFAtext();
         $countryFlags = array();
