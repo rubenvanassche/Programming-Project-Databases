@@ -6,103 +6,205 @@ use Symfony\Component\DomCrawler\Crawler;
 libxml_use_internal_errors( true );
 
 /**
- * @brief Request the page.
- * @details Sometimes, the site is too busy, but you can then send another 
- * request again.
- *
- * @param limit The limit.
- *
- * @throw ErrorException when limit has exceeded.
- * @return DOMDocument
- */
-function request( &$domdocument, $url, $limit=5 ) {
-    try {
-        $domdocument->loadHTMLFile( $url );
-    } catch ( ErrorException $ee ) {
-
-        if ( 0 == $limit ) {
-            // beyond limit
-            throw $ee;
-        } else {
-            // try again
-            return request( $domdocument, $url, $limit-1 );
-        } // end if-else
-
-    } // end try-catch
-}
-
-/**
  * @class CrawlerController
  * @brief Crawl data from site.
  */
 class CrawlerController extends BaseController {
 
     /**
-     * @brief Generator for all countries participating in the men's national 
-     * association football teams, it's abbreviation and it's continent.
-     * abbreviation and it's continent.
-     * @details A complete list can be found at
-     * https://en.wikipedia.org/wiki/List_of_FIFA_country_codes
+     * @brief Request the page.
+     * @details Sometimes, the site is too busy, but you can then send another 
+     * request again.
      *
-     * @return An associative array with the following values mapped:
-     *          "country"       => $country,
-     *          "continent"     => $continent,
-     *          "abbreviation"  => $abbreviation
+     * @param url The url to be requested.
+     * @param time_limit The maximum time limit (in seconds) that has to be passed,
+     * default is 5 seconds.
+     *
+     * @return DOMDocument or NULL if time_limit has been exceeded.
+     */
+    public static function request( $url, $time_limit=5 ) {
+        $start = time();
+        $stop = time();
+
+        do {
+            try {
+                $doc = new DOMDocument();
+                $doc->loadHTMLFile( $url );
+                return $doc;
+            } catch ( ErrorException $ee ) {
+                $stop = time();
+            } // end try-catch
+        } while ( $stop - $start <= $time_limit );
+
+        return NULL;
+    }
+
+    /**
+     * @brief Scrape all countries accompanied with the ISO3 abbreviation and
+     * it's continent.
+     * @details A complete list can be found at 
+     * http://www.cloford.com/resources/codes/index.htm
+     * 
+     * @return True if succeed, False otherwise.
      */
     public static function countries() {
         // load document
-        $doc = new DOMDocument();
+        $doc = self::request( "http://www.cloford.com/resources/codes/index.htm" );
+        if ( empty( $doc ) ) return False;    // request failed
 
-        try {
-            request( $doc, "https://en.wikipedia.org/wiki/List_of_FIFA_country_codes" );
-        } catch ( ErrorException $ee ) {
-            // HTTP request failed
-            return;
-        } // end try-catch
+        $data = new Crawler();
+        $data->addDocument( $doc );
 
-        $crawler = new Crawler();
-        $crawler->addDocument( $doc );
+        foreach ( $data->filterXPath( "//table[@class=\"outlinetable\"]/tr/td/..") as $row ) {
+            // skip empty rows
+            if ( 0 == $row->childNodes->length ) continue;
 
-        foreach ( $crawler->filterXPath( '//table[@class="wikitable"]/tr/td/a[contains(@title, "team")]/../..') as $row ) {
-            $country = $row->getElementsByTagName( 'a' );
-            if ( empty( $country ) ) { continue; }
-            # TODO Cannot fix that goddamn continent
-            #$country_href = $country->item(0)->getAttribute( 'href' );
-            $country = trim( $country->item(0)->textContent );
+            $country = $row->childNodes->item(4);
+            if ( empty( $country ) ) continue;
+            $country = trim( $country->textContent );
 
-            $abbreviation = $row->getElementsByTagName( 'td' );
-            if ( 2 > $abbreviation->length ) { continue; }
-            $abbreviation = trim( $abbreviation->item(1)->textContent );
+            // skip if country is already added
+            if ( !empty( Country::getIDsByName( $country ) ) ) continue;
 
-            #$country_page = new DOMDocument();
+            $continent = $row->childNodes->item(0);
+            if ( empty( $continent ) ) continue;
+            $continent = trim( $continent->textContent );
 
-            #try {
-            #    $country_page->loadHTMLFile( "https://en.wikipedia.org/".$country_href );
-            #} catch ( ErrorException $ee ) {
-            #    // HTTP request failed
-            #    continue;
-            #} // end try-catch
+            $abbreviation = $row->childNodes->item(12);
+            if ( empty( $abbreviation ) ) continue;
+            $abbreviation = trim( $abbreviation->textContent );
 
-            #$country_crawler = new Crawler();
-            #$country_crawler->addDocument( $country_page );
+            // add continent if necessary
+            $continent_ids = Continent::getIDsByName( $continent );
+            if ( empty( $continent_ids ) ) $continent_ids = Continent::add( $continent );
 
-            $continent = "";
-            #if ( empty( $continent ) ) { continue; }
-            #$continent = trim( $continent->textContent );
-
-            yield array(
-                "country"       => $country,
-                "continent"     => $continent,
-                "abbreviation"  => $abbreviation
-            );
-
-            #$country_crawler->clear();
+            // okay, add the country
+            Country::add( $country, $continent_ids[0]->id, $abbreviation );
         } // end foreach
 
-        // clear crawler (to avoid memory exhausting)
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return True;
+    }
+
+    public static function scrape() {
+        // first, do the countries and continents
+        /*
+        // start from the FIFA ranking
+        $fifa_rank = self::request( "http://int.soccerway.com/teams/rankings/fifa/" );
+        if ( empty( $fifa_rank ) ) continue;
+
+        $teams = new Crawler();
+        $teams->addDocument( $fifa_rank );
+
+        $missing_countries = array();
+
+        foreach ( $teams->filterXPath( "//table[contains(@class, fifa_rankings)]/tbody/tr/td/.." ) as $team ) {
+            // skip empty rows
+            if ( 0 == $team->childNodes->length ) continue;
+
+            $team_name = $team->childNodes->item(2);
+            if ( empty( $team_name ) ) continue;
+            $team_name = trim( $team_name->textContent );
+
+            $team_points = $team->childNodes->item(4);
+            if ( empty( $team_points ) ) continue;
+            $team_points = trim( $team_points->textContent );
+
+            $team_href = $team->getElementsByTagName( 'a' );
+            if ( empty( $team_href ) ) continue;
+            $team_href = $team_href->item(0)->getAttribute( "href" );
+
+            // load team page
+            $team_info = self::request( "http://int.soccerway.com/".$team_href );
+            if ( empty( $team_info ) ) continue;
+
+            $team = new Crawler();
+            $team->addDocument( $team_info );
+
+            $team_country = $team->filterXPath( "//div[contains(@class, block_team_info)]/div/div/dl/dd[3]" )->getNode(0);
+            if ( empty( $team_country ) ) continue;
+            $team_country = trim( $team_country->textContent );
+            $team_country_id = Country::getIDsByName( $team_country );
+            if ( empty( $team_country_id ) ) {
+                $missing_countries[] = $team_country;
+                continue;
+            }
+            $team_country_id = $team_country_id[0]->id;
+
+            $team_coach_href = $team->filterXPath( "//table[contains(@class, squad)]/tbody[5]/tr/td/a/img/.." )->getNode(0);
+            if ( empty( $team_coach_href ) ) continue;
+            $team_coach_href = $team_coach_href->getAttribute( "href" );
+
+            $coach_info = self::request( "http://int.soccerway.com/".$team_coach_href );
+
+            $coach = new Crawler();
+            $coach->addDocument( $coach_info );
+
+            $coach_first_name = $coach->filterXPath( "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]" )->getNode(0);
+            if ( empty( $coach_first_name ) ) continue;
+            $coach_first_name = trim( $coach_first_name->textContent );
+
+            $coach_second_name = $coach->filterXPath( "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]" )->getNode(0);
+            if ( empty( $coach_second_name ) ) continue;
+            $coach_second_name = trim( $coach_second_name->textContent );
+
+            $coach_name = $coach_first_name.' '.$coach_second_name;
+            var_dump( $coach_name );
+
+            // clear caches
+            $coach->clear();
+            $team->clear();
+        } // end foreach
+
+        foreach ($missing_countries as $country ) {
+            echo $country."<br>";
+        } 
+        // clear crawler cache to avoid memory exhausting
+        $teams->clear();
+             */
+        return;
+    }
+
+    /**
+            // okay, get the player
+            for ( $index = 1; $index <= 5; $index++ ) {
+                foreach ( $team_crawler->filterXPath( "//table[contains(@class, squad)]/tbody[".$index."]/tr/td/a/img/.." ) as $player_href ) {
+                    $player = array();
+
+                    // to the player page to get his full name
+                    $player_page = new DOMDocument();
+                    $player_page->loadHTMLFile( "http://int.soccerway.com/".$player_href->getAttribute( "href" ) );
+
+                    $player_crawler = new Crawler();
+                    $player_crawler->addDocument( $player_page );
+
+                    // get his full name
+                    $first_name = $player_crawler->filterXPath( "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]" )->getNode(0);
+                    if ( empty( $first_name ) ) continue;
+
+                    $last_name = $player_crawler->filterXPath( "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]" )->getNode(0);
+                    if ( empty( $last_name ) ) continue;
+                    $player["name"] = trim( $first_name->textContent ).' '.trim( $last_name->textContent );
+
+                    if ( 5 == $index ) {
+                        // it's a coach
+
+                    // insert player and link player to team
+                    $player_crawler->clear();
+                } // end foreach
+            } // end for
+
+            $team_crawler->clear();
+            break;
+        } // end foreach
+        echo "<br>AFTER<br>";
+
+        // clear cache to avoid memory exhausting
         $crawler->clear();
         return;
     }
+     */
 
     /**
      * @brief Generator for all teams.
@@ -122,7 +224,6 @@ class CrawlerController extends BaseController {
      *          "phone"     => $phone,
      *          "fax"       => $fax,
      *          "email"     => $email
-     */
     public static function teams() {
         // load document
         $doc = new DOMDocument();
@@ -240,6 +341,7 @@ class CrawlerController extends BaseController {
         $crawler->clear();
         return;
     }
+     */
 
     /**
      * @brief Generator for all matches.
