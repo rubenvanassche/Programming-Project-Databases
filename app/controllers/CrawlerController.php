@@ -212,9 +212,9 @@ class CrawlerController extends BaseController {
 
         $competition = $data->filterXPath( "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a" )->getNode(0);
         if ( empty( $competition ) ) { $data->clear(); return False; }
-        $competition_name = "World Cup ".$competition->textContent;
-        $competition_ids = Competition::getIDsByName( $competition_name );
-        if ( empty( $competition_ids ) ) $competitions_ids = Competitions::add( 
+        $competition = "World Cup ".$competition->textContent;
+        $competition_ids = Competition::getIDsByName( $competition );
+        if ( empty( $competition_ids ) ) $competition_ids = Competition::add( $competition );
 
         foreach ( $data->filterXPath( "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/ul/li/a" ) as $row ) {
             $group_href = $row->getAttribute( "href" );
@@ -237,12 +237,18 @@ class CrawlerController extends BaseController {
                 $hometeam = $match_data->item(2);
                 if ( empty( $hometeam ) ) continue;
                 $hometeam = trim( $hometeam->textContent );
+                $hometeam_ids = Team::getIDsByName( $hometeam );
+                if ( empty( $hometeam_ids ) ) throw new DomainException( "Team ".$hometeam." missing." );
+                Competition::linkTeam( $hometeam_ids[0]->id, $competition_ids[0]->id );
 
                 $awayteam = $match_data->item(4);
                 if ( empty( $awayteam ) ) { continue; }
                 $awayteam = trim( $awayteam->textContent );
+                $awayteam_ids = Team::getIDsByName( $awayteam );
+                if ( empty( $awayteam_ids ) ) throw new DomainException( "Team ".$awayteam." missing." );
+                Competition::linkTeam( $awayteam_ids[0]->id, $competition_ids[0]->id );
 
-                // TODO add matches
+                Match::add( $hometeam_ids[0]->id, $awayteam_ids[0]->id, $competition_ids[0]->id, $date);
             } // end foreach
 
             $group_data->clear();
