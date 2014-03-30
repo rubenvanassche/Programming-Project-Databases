@@ -13,12 +13,6 @@ class Continent {
     const TABLE_CONTINENT   = "continent";
 
     /**
-     * @var name
-     * @brief The name of the continent.
-     */
-    public $name;
-
-    /**
      * @brief Get the continent ID by name.
      * @param name The name of the continent.
      * @return The result after the query.
@@ -31,12 +25,10 @@ class Continent {
 
     /**
      * @brief Add a continent into the data model.
-     * @param continent The continent object.
+     * @param name The name of the continent.
      * @return The id of the continent.
      */
-    public static function add( $continent ) {
-        $name = $continent->name;
-
+    public static function add( $name ) {
         $query = "INSERT INTO `".self::TABLE_CONTINENT."` (name) VALUES (?)";
         $values = array( $name );
 

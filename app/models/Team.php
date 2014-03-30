@@ -19,30 +19,6 @@ class Team {
     const TABLE_PLAYER_PER_TEAM = "playerPerTeam";
 
     /**
-     * @var name
-     * @brief The name of the team.
-     */
-    public $name;
-
-    /**
-     * @var country_id
-     * @brief The id of the country this team belongs to.
-     */
-    public $country_id;
-
-    /**
-     * @var coach_id
-     * @brief The id of the coach coaching this team.
-     */
-    public $coach_id;
-
-    /**
-     * @var points
-     * @brief The FIFA points of this team.
-     */
-    public $points;
-
-    /**
      * @brief Get the IDs of the team by inputting the name only.
      * @param name The name of the team.
      * @return Results after the query.
@@ -56,15 +32,13 @@ class Team {
 
     /**
      * @brief add a team into the data model.
-     * @param team The team object.
+     * @param name The name of the team.
+     * @param coach_id The coach ID of the team.
+     * @param country_id The ID of the country this team is active.
+     * @param points The FIFA points of the team.
      * @return The IDs of the team just added.
      */
-    public static function add( $team ) {
-        $name = $team->name;
-        $coach_id = $team->coach_id;
-        $country_id = $team->country_id;
-        $points = ( empty( $team->points ) ) ? 0 : $team->points;
-
+    public static function add( $name, $coach_id, $country_id, $points ) {
         $query = ( empty( $coach_id ) ) ? "INSERT INTO `".self::TABLE_TEAM."` (name, country_id, fifapoints) VALUES ( ?, ?, ?)" : "INSERT INTO `".self::TABLE_TEAM."` (name, country_id, coach_id, fifapoints) VALUES ( ?, ?, ?, ?)";
         $values = ( empty( $coach_id ) ) ? array( $name, $country_id, $points ) : array( $name, $country_id, $coach_id, $points );
 

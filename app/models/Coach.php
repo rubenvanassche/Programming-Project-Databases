@@ -13,12 +13,6 @@ class Coach {
     const TABLE_COACH   = "coach";
 
     /**
-     * @var name
-     * @brief The name of the coach.
-     */
-    public $name;
-
-    /**
      * @brief Get the coach IDs by name.
      * @param name The name of the coaches.
      * @return The result after the query.
@@ -31,12 +25,10 @@ class Coach {
 
     /**
      * @brief Add a coach to the data model.
-     * @param coach The coach object.
+     * @param name The name of the coach.
      * @return The ID's named after the coaches.
      */
-    public static function add( $coach ) {
-        $name = $coach->name;
-
+    public static function add( $name ) {
         $query = "INSERT INTO `".self::TABLE_COACH."` (name) VALUES (?)";
         $values = array( $name );
 

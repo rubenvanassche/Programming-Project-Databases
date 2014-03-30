@@ -13,12 +13,6 @@ class Player {
     const TABLE_PLAYER   = "player";
 
     /**
-     * @var name
-     * @brief The name of the player.
-     */
-    public $name;
-
-    /**
      * @brief Get the player IDs by name.
      * @param name The name of the players.
      * @return The result after the query.
@@ -32,12 +26,10 @@ class Player {
 
     /**
      * @brief Add a player to the data model.
-     * @param player The player object.
+     * @param name The name of the player.
      * @return The ID's named after the players.
      */
-    public static function add( $player ) {
-        $name = $player->name;
-
+    public static function add( $name ) {
         $query = "INSERT INTO `".self::TABLE_PLAYER."` (name) VALUES (?)";
         $values = array( $name );
 

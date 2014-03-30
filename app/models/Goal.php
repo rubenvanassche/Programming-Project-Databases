@@ -29,7 +29,7 @@ class Goal {
      * @param match The queried match.
      * @return Result after the query.
      */
-    public static function getAwayGoals($match){
+    public static function getAwayGoals( $match ){
         $query = "SELECT * FROM `".self::TABLE_GOAL."` WHERE match_id = ? AND team_id = ?";
         $values = array( $match->id, $match->awayteam_id );
 
