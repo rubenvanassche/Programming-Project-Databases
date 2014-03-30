@@ -59,24 +59,26 @@ class CrawlerController extends BaseController {
             // skip empty rows
             if ( 0 == $row->childNodes->length ) continue;
 
-            $country = $row->childNodes->item(4);
-            if ( empty( $country ) ) continue;
-            $country = trim( $country->textContent );
+            $country = new Country();
 
-            $continent = $row->childNodes->item(0);
-            if ( empty( $continent ) ) continue;
-            $continent = trim( $continent->textContent );
+            $name = $row->childNodes->item(4);
+            if ( empty( $name ) ) continue;
+            $country->name = trim( $name->textContent );
 
             $abbreviation = $row->childNodes->item(12);
             if ( empty( $abbreviation ) ) continue;
-            $abbreviation = trim( $abbreviation->textContent );
+            $country->abbreviation = trim( $abbreviation->textContent );
 
+            $continent = $row->childNodes->item(0);
+            if ( empty( $continent ) ) continue;
+            $continent_name = trim( $continent->textContent );
             // add continent if necessary
-            $continent_ids = Continent::getIDsByName( $continent );
+            $continent_ids = Continent::getIDsByName( $continent_name );
             if ( empty( $continent_ids ) ) $continent_ids = Continent::add( $continent );
+            $country->continent_id = $continent_ids[0]->id;
 
             // okay, add the country
-            if ( empty( Country::getIDsByName( $country ) ) ) Country::add( $country, $continent_ids[0]->id, $abbreviation );
+            if ( empty( Country::getIDsByName( $country->name ) ) ) Country::add( $country );
         } // end foreach
 
         // clear cache to avoid memory exhausting
@@ -100,17 +102,18 @@ class CrawlerController extends BaseController {
         $data = new Crawler();
         $data->addDocument( $doc );
 
-        $i = 0;
         foreach ( $data->filterXPath( "//table[contains(@class, fifa_rankings)]/tbody/tr/td/.." ) as $row ) {
             // skip empty rows
             if ( 0 == $row->childNodes->length ) continue;
 
-            $team = $row->childNodes->item(2);
-            if ( empty( $team ) ) continue;
-            $team = trim( $team->textContent );
+            $team = new Team();
+
+            $name = $row->childNodes->item(2);
+            if ( empty( $name ) ) continue;
+            $team->name = trim( $name->textContent );
 
             $points = $row->childNodes->item(4);
-            $points = empty( $points ) ? 0.0 : trim( $points->textContent );
+            $team->points = empty( $points ) ? 0.0 : trim( $points->textContent );
 
             $href = $row->childNodes->item(2)->getElementsByTagName( 'a' );
             if ( empty( $href ) ) continue;
@@ -124,13 +127,12 @@ class CrawlerController extends BaseController {
 
             $country = $team_data->filterXPath( "//div[contains(@class, block_team_info)]/div/div/dl/dd[3]" )->getNode(0);
             if ( empty( $country ) ) continue;
-            $country = trim( $country->textContent );
-
-            $country_ids = Country::getIDsByName( $country );
-            if ( empty( $country_ids ) ) throw new DomainException( "Missing country ".$country );
+            $country_name = trim( $country->textContent );
+            $country_ids = Country::getIDsByName( $country_name );
+            if ( empty( $country_ids ) ) throw new DomainException( "Missing country ".$country_name );
+            $team->country_id = $country_ids[0]->id;
 
             $coach_href = $team_data->filterXPath( "//table[contains(@class, squad)]/tbody[5]/tr/td[2]/div/a" )->getNode(0);
-            $coach_ids = NULL;
             if ( !empty( $coach_href ) ) {
                 $coach_href = $coach_href->getAttribute( "href" );
 
@@ -151,14 +153,15 @@ class CrawlerController extends BaseController {
 
                 // add coach if not in database
                 $coach_ids = ( !empty( $coach_name ) ) ? Coach::getIDsByName( $coach_name ) : NULL;
-                if ( empty( $coach_ids ) && NULL != $coach_name ) $coach_ids = Coach::add( $coach_name )[0]->id;
+                if ( empty( $coach_ids ) && NULL != $coach_name ) $coach_ids = Coach::add( $coach_name );
+                $team->coach_id = ( empty( $coach_ids ) ) ? NULL : $coach_ids[0]->id;
 
                 $coach_data->clear();
             } // end if
 
             // allright, add the team into the database
             $team_ids = Team::getIDsByName( $team );
-            if ( empty( $team_ids ) ) $team_ids = Team::add( $team, $country_ids[0]->id, $coach_ids, $points );
+            if ( empty( $team_ids ) ) $team_ids = Team::add( $team );
 
             // okay, now let's do the players
             for ( $index = 1; $index < 5; $index++ ) {
@@ -169,6 +172,8 @@ class CrawlerController extends BaseController {
                     $player_data = new Crawler();
                     $player_data->addDocument( $player_info );
 
+                    $player = new Player();
+
                     $player_first_name = $player_data->filterXPath( "//div[contains(@class, block_player_passpaort)]/div/div/div/div/dl/dd[1]" )->getNode(0);
                     if ( empty( $player_first_name ) ) continue;
                     $player_first_name = trim( $player_first_name->textContent );
@@ -177,11 +182,11 @@ class CrawlerController extends BaseController {
                     if ( empty( $player_last_name ) ) continue;
                     $player_last_name = trim( $player_last_name->textContent );
 
-                    $player_name = $player_first_name.' '.$player_last_name;
+                    $player->name = $player_first_name.' '.$player_last_name;
 
                     // add player if necessary
-                    $player_ids = Player::getIDsByName( $player_name );
-                    if ( empty( $player_ids ) ) $player_ids = Player::add( $player_name );
+                    $player_ids = Player::getIDsByName( $player->name );
+                    if ( empty( $player_ids ) ) $player_ids = Player::add( $player );
 
                     Team::linkPlayer( $player_ids[0]->id, $team_ids[0]->id );
 
@@ -200,32 +205,21 @@ class CrawlerController extends BaseController {
     }
 
     /**
-     * @brief Generator for all matches.
+     * @brief Scrape all the competitions.
      * @details Based upon the matches on
-     * http://int.soccerway.com/international/world/world-cup/2014-brazil/s6395/
-     *
-     * @returns Array with info about the match and thus the following values 
-     * mapped:
-     *          'competition'   => $competition,
-     *          'date'          => $date,
-     *          'time'          => $time,
-     *          'score'         => $score,
-     *          'home team'     => $hometeam,
-     *          'away team'     => $awayteam,
+     * http://int.soccerway.com/international/world/world-cup/c72/archive/?ICID=PL_3N_06
      */
-    public static function matches( $url='http://int.soccerway.com/international/world/world-cup/c72/' ) {
-        $doc = new DOMDocument();
+    public static function matches() {
+        $doc = self::request( "http://int.soccerway.com/international/world/world-cup/c72/archive/?ICID=PL_3N_06" );
+        if ( empty( $doc ) ) return;
 
-        try {
-            request( $doc, $url );
-        } catch ( ErrorException $ee ) {
-            // HTTP request failed
-            return;
-        } // end try-catch
+        $data = new Crawler();
+        $data->addDocument( $doc );
 
-        $crawler = new Crawler();
-        $crawler->addDocument( $doc );
+        $data->clear();
+        return;
 
+            /*
         $competition = $crawler->filterXPath( '//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a');
         if ( empty( $competition->getNode(0) ) ) { continue; }
         $competition = 'World Cup '.$competition->getNode(0)->textContent;
@@ -263,5 +257,6 @@ class CrawlerController extends BaseController {
         // clear cache to avoid memory exhausting
         $crawler->clear();
         return;
+             */
     }
 }
