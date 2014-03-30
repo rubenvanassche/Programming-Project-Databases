@@ -35,8 +35,8 @@ class Team {
      * @return The IDs of the team just added.
      */
     public static function add( $name, $country_id, $coach_id, $points) {
-        $query = "INSERT INTO `team` (name, country_id, coach_id, fifapoints) VALUES ( ?, ?, ?, ?)";
-        $values = array( $name, $country_id, $coach_id, $points );
+        $query = ( empty( $coach_id ) ) ? "INSERT INTO `".self::TABLE_TEAM."` (name, country_id, fifapoints) VALUES ( ?, ?, ?)" : "INSERT INTO `".self::TABLE_TEAM."` (name, country_id, coach_id, fifapoints) VALUES ( ?, ?, ?, ?)";
+        $values = ( empty( $coach_id ) ) ? array( $name, $country_id, $points ) : array( $name, $country_id, $coach_id, $points );
 
         DB::insert( $query, $values );
 
