@@ -2,7 +2,7 @@
 
 /**
  * @class Coach
- * @brief Core data model of Coach.
+ * @brief Core data model of a coach.
  */
 class Coach {
 
@@ -13,10 +13,14 @@ class Coach {
     const TABLE_COACH   = "coach";
 
     /**
+     * @var name
+     * @brief The name of the coach.
+     */
+    public $name;
+
+    /**
      * @brief Get the coach IDs by name.
-     *
      * @param name The name of the coaches.
-     *
      * @return The result after the query.
      */
     public static function getIDsByName( $name ) {
@@ -27,12 +31,12 @@ class Coach {
 
     /**
      * @brief Add a coach to the data model.
-     *
-     * @param name The name of the coach.
-     *
+     * @param coach The coach object.
      * @return The ID's named after the coaches.
      */
-    public static function add( $name ) {
+    public static function add( $coach ) {
+        $name = $coach->name;
+
         $query = "INSERT INTO `".self::TABLE_COACH."` (name) VALUES (?)";
         $values = array( $name );
 

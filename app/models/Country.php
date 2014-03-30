@@ -2,7 +2,7 @@
 
 /**
  * @class Country
- * @brief Core data of country.
+ * @brief Core data model of a country.
  */
 class Country {
 
@@ -13,10 +13,26 @@ class Country {
     const TABLE_COUNTRY = "country";
 
     /**
+     * @var name
+     * @brief The name of the country.
+     */
+    public $name;
+
+    /**
+     * @var continent_id
+     * @brief The ID of the continent the country belongs to.
+     */
+    public $continent_id;
+
+    /**
+     * @var abbreviation
+     * @brief The abbreviation of the country.
+     */
+    public $abbreviation;
+
+    /**
      * @brief Get the country by name.
-     *
      * @param name The name of the country.
-     *
      * @return The result after the query.
      */
     public static function getIDsByName( $name ) {
@@ -27,14 +43,14 @@ class Country {
 
     /**
      * @brief Add a country into the data model.
-     *
-     * @param name The name of the country.
-     * @param continent_id The id of the country.
-     * @param abbreviation The abbreviation of the country.
-     *
+     * @param country The country object.
      * @return The id of the continent.
      */
-    public static function add( $name, $continent_id, $abbreviation ) {
+    public static function add( $country ) {
+        $name = $country->name;
+        $continent_id = $country->continent_id;
+        $abbreviation = $country->abbreviation;
+
         $query = "INSERT INTO `".self::TABLE_COUNTRY."` (name, continent_id, abbreviation) VALUES (?, ?, ?)";
         $values = array( $name, $continent_id, $abbreviation );
 
@@ -43,10 +59,16 @@ class Country {
         return self::getIDsByName( $name );
     }
 
-    // TODO DOCUMENT
-    public static function getCountry($id){
-        $result = DB::select('SELECT * FROM country WHERE id = ?', array($id));
-        return $result;
+    /**
+     * @brief Get the country by id.
+     * @param id The ID of the country.
+     * @return The results after the query.
+     */
+    public static function getCountry( $id ) {
+        $query = "SELECT * FROM `".self::TABLE_COUNTRY."` WHERE id = ?";
+        $values = array( $id );
+
+        return DB::select( $query, $values );
     }
 
 }

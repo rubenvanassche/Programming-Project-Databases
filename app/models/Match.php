@@ -1,6 +1,7 @@
 <?php
 
 class Match {
+    const TABLE_MATCH = "match";
 	public static function getRecentMatches(){
 		// What condition are we going to use here?
 		$results = DB::select('SELECT * FROM `match`');

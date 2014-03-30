@@ -2,7 +2,7 @@
 
 /**
  * @class Continent
- * @brief Core data of Continent.
+ * @brief Core data model of a continent.
  */
 class Continent {
 
@@ -13,10 +13,14 @@ class Continent {
     const TABLE_CONTINENT   = "continent";
 
     /**
+     * @var name
+     * @brief The name of the continent.
+     */
+    public $name;
+
+    /**
      * @brief Get the continent ID by name.
-     *
      * @param name The name of the continent.
-     *
      * @return The result after the query.
      */
     public static function getIDsByName( $name ) {
@@ -27,12 +31,12 @@ class Continent {
 
     /**
      * @brief Add a continent into the data model.
-     *
-     * @param name The name of the continent.
-     *
+     * @param continent The continent object.
      * @return The id of the continent.
      */
-    public static function add( $name ) {
+    public static function add( $continent ) {
+        $name = $continent->name;
+
         $query = "INSERT INTO `".self::TABLE_CONTINENT."` (name) VALUES (?)";
         $values = array( $name );
 
