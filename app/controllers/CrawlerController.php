@@ -33,6 +33,8 @@ class CrawlerController extends BaseController {
                 return $doc;
             } catch ( ErrorException $ee ) {
                 $stop = time();
+            } catch ( FatalErrorException $fee ) {
+                continue;
             } // end try-catch
         } while ( $stop - $start <= $time_limit );
 
@@ -40,222 +42,456 @@ class CrawlerController extends BaseController {
     }
 
     /**
-     * @brief Scrape all countries accompanied with the ISO3 abbreviation and
-     * it's continent.
+     * @brief Generator for parsing all the country data from site.
      * @details A complete list can be found at 
      * http://www.cloford.com/resources/codes/index.htm
      * 
-     * @return True if succeed, False otherwise.
+     * @return An associative array with the following values mapped:
+     *          "name"       => $name,
+     *          "continent"     => $continent,
+     *          "abbreviation"  => $abbreviation,
      */
-    public static function countries() {
+    public static function countries_generator() {
         // load document
         $doc = self::request( "http://www.cloford.com/resources/codes/index.htm" );
-        if ( empty( $doc ) ) return False;    // request failed
+        if ( empty( $doc ) ) return;    // request failed
 
         $data = new Crawler();
         $data->addDocument( $doc );
 
-        foreach ( $data->filterXPath( "//table[@class=\"outlinetable\"]/tr/td/..") as $row ) {
+        foreach ( $data->filterXPath( "//table[@class=\"outlinetable\"]/tr/td/.." ) as $row ) {
             // skip empty rows
             if ( 0 == $row->childNodes->length ) continue;
 
+            // get the country name
             $name = $row->childNodes->item(4);
             if ( empty( $name ) ) continue;
             $name = trim( $name->textContent );
 
+            // get the continent and its id
             $continent = $row->childNodes->item(0);
             if ( empty( $continent ) ) continue;
             $continent = trim( $continent->textContent );
 
-            // add continent if necessary
-            $continent_ids = Continent::getIDsByName( $continent_name );
-            if ( empty( $continent_ids ) ) $continent_ids = Continent::add( $continent );
-
+            // get the abbreviation
             $abbreviation = $row->childNodes->item(12);
             if ( empty( $abbreviation ) ) continue;
             $abbreviation = trim( $abbreviation->textContent );
 
-            // okay, add the country
-            if ( empty( Country::getIDsByName( $name ) ) ) Country::add( $name, $continent_ids[0]->id, $abbreviation );
+            // yield data
+            yield array(
+                "name"          => $name,
+                "continent"     => $continent,
+                "abbreviation"  => $abbreviation,
+            );
+
         } // end foreach
 
         // clear cache to avoid memory exhausting
         $data->clear();
-        return True;
+        return;
     }
 
     /**
-     * @brief Scrape all international teams in the official FIFA participant 
-     * lists.
-     * @details A complete list can be found at 
-     * http://int.soccerway.com/teams/ranking/fifa/
-     *
-     * @return True if succeed, False otherwise.
+     * @brief Update the countries from database.
      */
-    public static function teams() {
+    public static function update_countries() {
+        // use generator (so it'll do it really fast)
+        foreach ( self::countries_generator() as $country_data ) {
+            $name = $country_data["name"];
+            $continent = $country_data["continent"];
+            $abbreviation = $country_data["abbreviation"];
+
+            // need continent id
+            $ids = Continent::getIDsByName( $continent );
+
+            $continent_id = ( empty( $ids ) ) ? Continent::add( $continent )[0]->id : $ids[0]->id;
+
+            // okay, add country if not yet added
+            if ( empty( Country::getIDsByName( $name ) ) ) Country::add( $name, $continent_id, $abbreviation );
+        } // end foreach
+
+        return;
+    }
+
+    /**
+     * @brief Get all the desired data from the player page.
+     * @details An example of the player page can be found at 
+     * http://int.soccerway.com/players/iker-casillas-fernandez/317/
+     *
+     * @param url The url of the player page.
+     *
+     * @return An associative array with the following values mapped:
+     *      "first name"    => $first_name,
+     *      "last name"     => $last_name,
+     */
+    public static function player_data( $url ) {
         // load document
-        $doc = self::request( "http://int.soccerway.com/teams/rankings/fifa/" );
-        if ( empty( $doc ) ) return False;  // request failed
+        $doc = self::request( $url );
+        if ( empty( $doc ) ) return array();    // request failed
 
         $data = new Crawler();
         $data->addDocument( $doc );
 
-        foreach ( $data->filterXPath( "//table[contains(@class, fifa_rankings)]/tbody/tr/td/.." ) as $row ) {
+        // query for first name
+        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]";
+
+        $first_name = $data->filterXPath( $xpath )->getNode(0);
+        $first_name = ( empty( $first_name ) ) ? NULL : trim( $first_name->textContent );
+
+        // query for last name
+        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]";
+
+        $last_name = $data->filterXPath( $xpath )->getNode(0);
+        $last_name = ( empty( $last_name ) ) ? NULL : trim( $last_name->textContent );
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return array(
+            "first name"    => $first_name,
+            "last name"     => $last_name,
+        );
+    }
+
+    /**
+     * @brief Get all the desired data from the coach page.
+     * @details An example of the coach page can be found at 
+     * http://int.soccerway.com/coaches/vicente-del-bosque/130179/
+     *
+     * @param url The url of the coach page.
+     *
+     * @return An associative array with the following values mapped:
+     *      "first name"    => $first_name,
+     *      "last name"     => $last_name,
+     */
+    public static function coach_data( $url ) {
+        // load document
+        $doc = self::request( $url );
+        if ( empty( $doc ) ) return array();    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // query for first name
+        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]";
+
+        $first_name = $data->filterXPath( $xpath )->getNode(0);
+        $first_name = ( empty( $first_name ) ) ? NULL : trim( $first_name->textContent );
+
+        // query for last name
+        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]";
+
+        $last_name = $data->filterXPath( $xpath )->getNode(0);
+        $last_name = ( empty( $last_name ) ) ? NULL : trim( $last_name->textContent );
+
+        // clear data to avoid memory exhausting
+        $data->clear();
+        return array(
+            "first name"    => $first_name,
+            "last name"     => $last_name,
+        );
+    }
+
+    /**
+     * @brief Get all desired team data from the team page.
+     * @details An example of the team data can be found at
+     * http://int.soccerway.com/teams/south-africa/south-africa/2014/
+     *
+     * @param url The url from where you want get data.
+     *
+     * @return An associative array with the following values mapped:
+     *      "country"       => $country,
+     *      "coach data"    => $coach_data,
+     *      "players data"  => $players_data,
+     */
+    public static function team_data( $url ) {
+        // load document
+        $doc = self::request( $url );
+        if ( empty( $doc ) ) return array();    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // query for country
+        $xpath = "//div[contains(@class, block_team_info)]/div/div/dl/dd[3]";
+
+        $country = $data->filterXPath( $xpath )->getNode(0);
+        $country = ( empty( $country ) ) ? NULL : trim( $country->textContent );
+
+        // query for the coach
+        $xpath = "//table[contains(@class, squad)]/tbody[5]/tr/td[2]/div/a";
+
+        $href = $data->filterXPath( $xpath )->getNode(0);
+
+        $coach_data = ( empty( $href ) ) ? NULL : self::coach_data( "http://int.soccerway.com/".$href->getAttribute( "href" ) );
+
+        // now get all the participating players
+        $players_data = array();
+
+        // squad < 5 because of (1) Goalkeeper, (2) Defender, (3) Midfielder, 
+        // (4) Attacker. (We don't want to include the coach, and besides those 
+        // players are always available (e.g. no goalkeeper or midfielder is 
+        // against the rules of football).
+        for ( $index = 1; $index < 5; $index++ ) {
+            // query for player href
+            $xpath = "//table[contains(@class, squad)]/tbody[".$index."]/tr/td/a/img/..";
+
+            foreach ( $data->filterXPath( $xpath ) as $href ) {
+                // skip if no href provided
+                $href = $href->getAttribute( "href" );
+                if ( empty( $href ) ) continue;
+
+                // add new player data
+                $players_data[] = self::player_data( "http://int.soccerway.com/".$href );
+            } // end foreach
+
+        } // end for
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return array(
+            "country"       => $country,
+            "coach data"    => $coach_data,
+            "players data"  => $players_data,
+        );
+    }
+
+    /**
+     * @brief Generator for parsing all the international teams from the 
+     * official FIFA participant list.
+     * @details A complete list can be found at 
+     * http://int.soccerway.com/teams/ranking/fifa/
+     *
+     * @return An associative array with the following values mapped:
+     *      "name"          => $name,
+     *      "points"        => $points,
+     *      "country"       => $country,
+     *      "coach data"    => $coach_data,
+     *      "players data"  => $players_data,
+     */
+    public static function teams_generator() {
+        // load document
+        $doc = self::request( "http://int.soccerway.com/teams/rankings/fifa/" );
+        if ( empty( $doc ) ) return;    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // query for row
+        $xpath = "//table[contains(@class, fifa_rankings)]/tbody/tr/td/..";
+        foreach ( $data->filterXPath( $xpath ) as $row ) {
             // skip empty rows
             if ( 0 == $row->childNodes->length ) continue;
 
             $name = $row->childNodes->item(2);
-            if ( empty( $name ) ) continue;
-            $name = trim( $name->textContent );
+            $name = ( empty( $name ) ) ? NULL : trim( $name->textContent );
 
             $points = $row->childNodes->item(4);
-            $points = empty( $points ) ? 0.0 : trim( $points->textContent );
+            $points = ( empty( $points ) ) ? 0 : trim( $points->textContent );
 
+            // get more data from the team's page
             $href = $row->childNodes->item(2)->getElementsByTagName( 'a' );
-            if ( empty( $href ) ) continue;
-            $href = $href->item(0)->getAttribute( "href" );
+            $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
+            $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
 
-            $team_doc = self::request( "http://int.soccerway.com/".$href );
-            if ( empty( $team_doc ) ) continue;
+            $team_data = ( empty( $url ) ) ? array() : self::team_data( $url );
 
-            $team_data = new Crawler();
-            $team_data->addDocument( $team_doc );
+            // merge team data with what you already have
+            yield array_merge(
+                array( "name" => $name, "points" => $points ),
+                $team_data
+            );
 
-            $country = $team_data->filterXPath( "//div[contains(@class, block_team_info)]/div/div/dl/dd[3]" )->getNode(0);
-            if ( empty( $country ) ) continue;
-            $country_name = trim( $country->textContent );
-            $country_ids = Country::getIDsByName( $country_name );
-            if ( empty( $country_ids ) ) throw new DomainException( "Missing country ".$country_name );
-
-            $coach_href = $team_data->filterXPath( "//table[contains(@class, squad)]/tbody[5]/tr/td[2]/div/a" )->getNode(0);
-            $coach_id = NULL;
-            if ( !empty( $coach_href ) ) {
-                $coach_href = $coach_href->getAttribute( "href" );
-
-                // coach info
-                $coach_info = self::request( "http://int.soccerway.com/".$coach_href );
-                if ( empty( $coach_info ) ) continue;
-
-                $coach_data = new Crawler();
-                $coach_data->addDocument( $coach_info );
-
-                $coach_first_name = $coach_data->filterXPath( "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]" )->getNode(0);
-                $coach_first_name = ( empty( $coach_first_name ) ) ? NULL : trim( $coach_first_name->textContent );
-
-                $coach_last_name = $coach_data->filterXPath( "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]" )->getNode(0);
-                $coach_last_name = ( empty( $coach_last_name ) ) ? NULL : trim( $coach_last_name->textContent );
-
-                $coach_name = ( empty( $coach_first_name ) || empty( $coach_last_name ) ) ? NULL : $coach_first_name.' '.$coach_last_name;
-
-                // add coach if not in database
-                $coach_ids = ( !empty( $coach_name ) ) ? Coach::getIDsByName( $coach_name ) : NULL;
-                if ( empty( $coach_ids ) && NULL != $coach_name ) $coach_ids = Coach::add( $coach_name );
-                $coach_id = ( empty( $coach_ids ) ) ? NULL : $coach_ids[0]->id;
-
-                $coach_data->clear();
-            } // end if
-
-            // allright, add the team into the database
-            $team_ids = Team::getIDsByName( $team );
-            if ( empty( $team_ids ) ) $team_ids = Team::add( $name, $coach_id, $country_ids[0]->id, $points );
-
-            // okay, now let's do the players
-            for ( $index = 1; $index < 5; $index++ ) {
-                foreach ( $team_data->filterXPath( "//table[contains(@class, squad)]/tbody[".$index."]/tr/td/a/img/.." ) as $player_href ) {
-                    $player_info = self::request( "http://int.soccerway.com/".$player_href->getAttribute( "href" ) );
-                    if ( empty( $player_info ) ) continue;
-
-                    $player_data = new Crawler();
-                    $player_data->addDocument( $player_info );
-
-                    $player_first_name = $player_data->filterXPath( "//div[contains(@class, block_player_passpaort)]/div/div/div/div/dl/dd[1]" )->getNode(0);
-                    if ( empty( $player_first_name ) ) continue;
-                    $player_first_name = trim( $player_first_name->textContent );
-
-                    $player_last_name = $player_data->filterXPath( "//div[contains(@class, block_player_passpaort)]/div/div/div/div/dl/dd[2]" )->getNode(0);
-                    if ( empty( $player_last_name ) ) continue;
-                    $player_last_name = trim( $player_last_name->textContent );
-
-                    $player_name = $player_first_name.' '.$player_last_name;
-
-                    // add player if necessary
-                    $player_ids = Player::getIDsByName( $player_name );
-                    if ( empty( $player_ids ) ) $player_ids = Player::add( $player_name );
-
-                    Team::linkPlayer( $player_ids[0]->id, $team_ids[0]->id );
-
-                    // clear cache to avoid memory exhausting
-                    $player_data->clear();
-                } // end foreach
-            } // end for
-
-            // clear crawler caches to avoid memory exhausting
-            $team_data->clear();
         } // end foreach
 
         // clear cache to avoid memory exhausting
         $data->clear();
-        return True;
+        return;
     }
 
     /**
-     * @brief Scrape all the competitions.
-     * @details Based upon the matches on
-     * http://int.soccerway.com/international/world/world-cup/c72/archive/?ICID=PL_3N_06
+     * @brief Update the teams using the generator.
      */
-    public static function matches() {
-        $doc = self::request( "http://int.soccerway.com/international/world/world-cup/c72/archive/?ICID=PL_3N_06" );
-        if ( empty( $doc ) ) return;
+    public static function update_teams() {
+        foreach ( self::teams_generator() as $team_data ) {
+            // skip if team already added
+            $name = $team_data["name"];
+
+            $ids = Team::getIDsByName( $name );
+            if ( !empty( $ids ) ) continue;
+
+            // query for country ID
+            $country = $team_data["country"];
+
+            $country_id = Country::getIDsByName( $country );
+            if ( empty( $country_id ) ) throw new DomainException( "Missing country ".$country );
+            $country_id = $country_id[0]->id;
+
+            // query for coach id
+            $first_name = $team_data["coach data"]["first name"];
+            $last_name = $team_data["coach data"]["last name"];
+            $coach = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+
+            $coach_id = NULL;
+            if ( NULL != $coach ) {
+                $ids = Coach::getIDsByName( $coach );
+                if ( empty( $ids ) && NULL != $coach ) $ids = Coach::add( $coach );
+                $coach_id = $ids[0]->id;
+            } // end if
+
+            // add the team
+            $points = $team_data["points"];
+
+            $team_id = Team::add( $name, $coach_id, $country_id, $points )[0]->id;
+
+            // alright, link players to this team
+            foreach ( $team_data["players data"] as $player_data ) {
+                $first_name = $player_data["first name"];
+                $last_name = $player_data["last name"];
+                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+
+                $ids = Player::getIDsByName( $player );
+                if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
+                $player_id = $ids[0]->id;
+
+                Team::linkPlayer( $player_id, $team_id );
+            } // end foreach
+        } // end foreach
+
+        return;
+    }
+
+    /**
+     * @brief Get all desired match data from the match page.
+     * @details An example of the match data can be found at
+     * http://int.soccerway.com/matches/2014/06/12/world/world-cup/brazil/croatia/1220070/?ICID=PL_MS_01
+     *
+     * @param url The url of the match page.
+     *
+     * @return An associative array with the following values mapped:
+     *      "date"      => $date,
+     *      "kick-off"  => $kick_off,
+     *      "hometeam"  => $hometeam,
+     *      "scoretime" => $scoretime,
+     *      "awayteam"  => $awayteam,
+     */
+    public static function match_data( $url ) {
+        // load document
+        $doc = self::request( $url );
+        if ( empty( $doc ) ) return array();    // request failed
 
         $data = new Crawler();
         $data->addDocument( $doc );
 
-        $competition = $data->filterXPath( "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a" )->getNode(0);
-        if ( empty( $competition ) ) { $data->clear(); return False; }
-        $competition = "World Cup ".$competition->textContent;
-        $competition_ids = Competition::getIDsByName( $competition );
-        if ( empty( $competition_ids ) ) $competition_ids = Competition::add( $competition );
+        // query for date
+        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[2]";
 
-        foreach ( $data->filterXPath( "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/ul/li/a" ) as $row ) {
-            $group_href = $row->getAttribute( "href" );
-            if ( empty( $group_href ) ) continue;
+        $date = $data->filterXPath( $xpath )->getNode(0);
+        $date = ( empty( $date ) ) ? NULL : trim( $date->textContent );
 
-            $group_info = self::request( "http://int.soccerway.com/".$group_href );
-            if ( empty( $group_info ) ) continue;
+        // query for kick-off
+        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[4]";
+
+        $kick_off = $data->filterXPath( $xpath )->getNode(0);
+        $kick_off = ( empty( $kick_off ) ) ? NULL : trim( $kick_off->textContent );
+
+        // query for heading
+        $xpath = "//div[contains(@class, block_match_info)]/div/div/h3";
+        $heading = $data->filterXPath( $xpath );
+
+        // get hometeam
+        $hometeam = $heading->getNode(0);
+        $hometeam = ( empty( $hometeam ) ) ? NULL : trim( $hometeam->textContent );
+
+        // get scoretime
+        $scoretime = $heading->getNode(1);
+        $scoretime = ( empty( $scoretime ) ) ? NULL : trim( $scoretime->textContent );
+
+        // get awayteam
+        $awayteam = $heading->getNode(2);
+        $awayteam = ( empty( $awayteam ) ) ? NULL : trim( $awayteam->textContent );
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return array(
+            "date"      => $date,
+            "kick-off"  => $kick_off,
+            "hometeam"  => $hometeam,
+            "scoretime" => $scoretime,
+            "awayteam"  => $awayteam,
+        );
+    }
+
+    /**
+     * @brief Get all the desired competition data from the competition page.
+     * @details An example of the competition page can be found at
+     * http://int.soccerway.com/international/world/world-cup/c72/
+     *
+     * @param url The url to the competition page.
+     *
+     * @return An associative array with the following values mapped:
+     *      "name"          => $name,
+     *      "matches data"  => $matches_data,
+     */
+    public static function competition_data( $url ) {
+        // load document
+        $doc = self::request( $url );
+        if ( empty( $doc ) ) return array();    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // query for the name of the competition
+        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a/../../../a";
+
+        $competition_name = $data->filterXPath( $xpath )->getNode(0);
+        $competition_name = ( empty( $competition_name ) ) ? NULL : trim( $competition_name->textContent );
+
+        // query for the edition
+        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a";
+
+        $edition = $data->filterXPath( $xpath )->getNode(0);
+        $edition = ( empty( $edition ) ) ? NULL : trim( $edition->textContent );
+
+        // name is the competition name + edition
+        $name = $competition_name.' '.$edition;
+
+        // query for the matches of the group stages
+        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/ul/li/a";
+
+        $matches_data = array();
+        foreach ( $data->filterXPath( $xpath ) as $group ) {
+            $href = $group->getAttribute( "href" );
+            if ( empty( $href ) ) continue;
+            $url = "http://int.soccerway.com/".$href;
+
+            $group_page = self::request( $url );
+            if ( empty( $group_page ) ) continue;
 
             $group_data = new Crawler();
-            $group_data->addDocument( $group_info );
+            $group_data->addDocument( $group_page );
 
-            foreach ( $group_data->filterXPath( "//div[contains(@class, block_competition_matches)]/div/table/tbody/tr[contains(@class, match)]" ) as $match_data ) {
-                $match_data = $match_data->getElementsByTagName( "td" );
-                if ( empty( $match_data ) ) continue;
+            // query for href
+            $xpath_href = "//table[contains(@class, matches)]/tbody/tr[contains(@class, match)]/td[4]/a";
 
-                $date = $match_data->item(1);
-                if ( empty( $date ) ) continue;
-                $date = DateTime::createFromFormat('j/m/y', $date->textContent)->format('Y-m-d');
+            foreach ( $group_data->filterXPath( $xpath_href ) as $href ) {
+                $href = $href->getAttribute( "href" );
+                if ( empty( $href ) ) continue;
+                $url = "http://int.soccerway.com/".$href;
 
-                $hometeam = $match_data->item(2);
-                if ( empty( $hometeam ) ) continue;
-                $hometeam = trim( $hometeam->textContent );
-                $hometeam_ids = Team::getIDsByName( $hometeam );
-                if ( empty( $hometeam_ids ) ) throw new DomainException( "Team ".$hometeam." missing." );
-                Competition::linkTeam( $hometeam_ids[0]->id, $competition_ids[0]->id );
-
-                $awayteam = $match_data->item(4);
-                if ( empty( $awayteam ) ) { continue; }
-                $awayteam = trim( $awayteam->textContent );
-                $awayteam_ids = Team::getIDsByName( $awayteam );
-                if ( empty( $awayteam_ids ) ) throw new DomainException( "Team ".$awayteam." missing." );
-                Competition::linkTeam( $awayteam_ids[0]->id, $competition_ids[0]->id );
-
-                Match::add( $hometeam_ids[0]->id, $awayteam_ids[0]->id, $competition_ids[0]->id, $date);
+                // add match data
+                $matches_data[] = self::match_data( $url );
             } // end foreach
 
             $group_data->clear();
         } // end foreach
 
+        // clear cache to avoid memory exhausting
         $data->clear();
-        return;
+        return array(
+            "name"          => $name,
+            "matches data"  => $matches_data,
+        );
     }
     
      /**
@@ -302,4 +538,49 @@ class CrawlerController extends BaseController {
     	
     }
 
+    /**
+     * @brief Update the competition.
+     *
+     * @param url The url to be used for parsing competition.
+     */
+    public static function update_competition( $url ) {
+        // get the competition data
+        $competition_data = self::competition_data( $url );
+        if ( empty( $competition_data ) ) return;
+
+        // get the competition id
+        $competition = $competition_data["name"];
+
+        $ids = Competition::getIDsByName( $competition );
+        if ( empty( $ids ) ) $ids = Competition::add( $competition );
+        $competition_id = $ids[0]->id;
+
+        // add match to the competition (and also link team to the competition)
+        foreach ( $competition_data["matches data"] as $match_data ) {
+            // get the hometeam ID
+            $hometeam = $match_data["hometeam"];
+
+            $ids = Team::getIDsByName( $hometeam );
+            if ( empty( $ids ) ) throw new DomainException( "Missing team ".$hometeam );
+            $hometeam_id = $ids[0]->id;
+
+            // get the awayteam ID
+            $awayteam = $match_data["awayteam"];
+
+            $ids = Team::getIDsByName( $awayteam );
+            if ( empty( $ids ) ) throw new DomainException( "Missing team ".$awayteam );
+            $awayteam_id = $ids[0]->id;
+
+            // link both teams to the competition
+            Competition::linkTeam( $hometeam_id, $competition_id );
+            Competition::linkTeam( $awayteam_id, $competition_id );
+
+            // alright, add the match (if not already added)
+            $date = new DateTime( $match_data["date"] );
+            $date = $date->format( "Y-m-d" );
+            if ( empty( Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date ) ) ) Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
+        } // end foreach
+
+        return;
+    }
 }

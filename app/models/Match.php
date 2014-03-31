@@ -13,22 +13,32 @@ class Match {
     const TABLE_MATCH = "match";
 
     /**
+     * @brief Get The ids of a given match.
+     * @param hometeam_id The ID of the hometeam.
+     * @param awayteam_id The ID of the awayteam.
+     * @param competition_id The ID of the competition.
+     * @param date The date of the match.
+     * @return The query after the results.
+     */
+    public static function getIDs( $hometeam_id, $awayteam_id, $competition_id, $date ) {
+        $query = "SELECT * FROM `".self::TABLE_MATCH."` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?";
+        $values = array( $hometeam_id, $awayteam_id, $competition_id, $date );
+        return DB::select( $query, $values );
+    }
+
+    /**
      * @brief Add a match into the database.
      * @param hometeam_id The ID of the hometeam.
      * @param awayteam_id The ID of the awayteam.
      * @param competition_id The ID of the competition.
      * @param date The date of the match.
-     * @return True if new match added, False otherwise.
+     * @return The IDs of the given match.
      */
     public static function add( $hometeam_id, $awayteam_id, $competition_id, $date ) {
-        // first check whether the match is already added
-        $query = "SELECT * FROM `".self::TABLE_MATCH."` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?";
-        $values = array( $hometeam_id, $awayteam_id, $competition_id, $date );
-        if ( !empty( DB::select( $query, $values ) ) ) return False;
-
         $query = "INSERT INTO `".self::TABLE_MATCH."` (hometeam_id, awayteam_id, competition_id, date) VALUES (?, ?, ?, ?)";
+        $values = array( $hometeam_id, $awayteam_id, $competition_id, $date );
         DB::insert( $query, $values );
-        return True;
+        return self::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
     }
 
     // TODO DOCUMENTIZE
