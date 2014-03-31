@@ -369,11 +369,11 @@ class CrawlerController extends BaseController {
      * @param url The url of the match page.
      *
      * @return An associative array with the following values mapped:
-     *      "date"          => $date,
-     *      "kick-off"      => $kick_off,
-     *      "hometeam data" => $hometeam_data,
-     *      "scoretime"     => $scoretime,
-     *      "awayteam data" => $awayteam_data,
+     *      "date"      => $date,
+     *      "kick-off"  => $kick_off,
+     *      "hometeam"  => $hometeam,
+     *      "scoretime" => $scoretime,
+     *      "awayteam"  => $awayteam,
      */
     public static function match_data( $url ) {
         // load document
@@ -399,33 +399,26 @@ class CrawlerController extends BaseController {
         $xpath = "//div[contains(@class, block_match_info)]/div/div/h3";
         $heading = $data->filterXPath( $xpath );
 
-        // get hometeam data
-        $href = $heading->getNode(0);
-        $href = ( empty( $href ) ) ? NULL : $href->getElementsByTagName( 'a' );
-        $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
-        $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
+        // get hometeam
+        $hometeam = $heading->getNode(0);
+        $hometeam = ( empty( $hometeam ) ) ? NULL : trim( $hometeam->textContent );
 
-        $hometeam_data = self::team_data( $url );
-
+        // get scoretime
         $scoretime = $heading->getNode(1);
         $scoretime = ( empty( $scoretime ) ) ? NULL : trim( $scoretime->textContent );
 
-        // get awayteam data
-        $href = $heading->getNode(0);
-        $href = ( empty( $href ) ) ? NULL : $href->getElementsByTagName( 'a' );
-        $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
-        $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
-
-        $awayteam_data = self::team_data( $url );
+        // get awayteam
+        $awayteam = $heading->getNode(2);
+        $awayteam = ( empty( $awayteam ) ) ? NULL : trim( $awayteam->textContent );
 
         // clear cache to avoid memory exhausting
         $data->clear();
         return array(
-            "date"          => $date,
-            "kick-off"      => $kick_off,
-            "hometeam data" => $hometeam_data,
-            "scoretime"     => $scoretime,
-            "awayteam data" => $awayteam_data,
+            "date"      => $date,
+            "kick-off"  => $kick_off,
+            "hometeam"  => $hometeam,
+            "scoretime" => $scoretime,
+            "awayteam"  => $awayteam,
         );
     }
 
@@ -449,16 +442,24 @@ class CrawlerController extends BaseController {
         $data->addDocument( $doc );
 
         // query for the name of the competition
+        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a/../../../a";
+
+        $competition_name = $data->filterXPath( $xpath )->getNode(0);
+        $competition_name = ( empty( $competition_name ) ) ? NULL : trim( $competition_name->textContent );
+
+        // query for the edition
         $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a";
 
-        $name = $data->filterXPath( $xpath )->getNode(0);
-        $name = ( empty( $name ) ) ? NULL : trim( $name->textContent );
+        $edition = $data->filterXPath( $xpath )->getNode(0);
+        $edition = ( empty( $edition ) ) ? NULL : trim( $edition->textContent );
+
+        // name is the competition name + edition
+        $name = $competition_name.' '.$edition;
 
         // query for the matches of the group stages
         $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/ul/li/a";
 
         $matches_data = array();
-
         foreach ( $data->filterXPath( $xpath ) as $group ) {
             $href = $group->getAttribute( "href" );
             if ( empty( $href ) ) continue;
@@ -483,7 +484,6 @@ class CrawlerController extends BaseController {
             } // end foreach
 
             $group_data->clear();
-            break;
         } // end foreach
 
         // clear cache to avoid memory exhausting
@@ -494,4 +494,49 @@ class CrawlerController extends BaseController {
         );
     }
 
+    /**
+     * @brief Update the competition.
+     *
+     * @param url The url to be used for parsing competition.
+     */
+    public static function update_competition( $url ) {
+        // get the competition data
+        $competition_data = self::competition_data( $url );
+        if ( empty( $competition_data ) ) return;
+
+        // get the competition id
+        $competition = $competition_data["name"];
+
+        $ids = Competition::getIDsByName( $competition );
+        if ( empty( $ids ) ) $ids = Competition::add( $competition );
+        $competition_id = $ids[0]->id;
+
+        // add match to the competition (and also link team to the competition)
+        foreach ( $competition_data["matches data"] as $match_data ) {
+            // get the hometeam ID
+            $hometeam = $match_data["hometeam"];
+
+            $ids = Team::getIDsByName( $hometeam );
+            if ( empty( $ids ) ) throw new DomainException( "Missing team ".$hometeam );
+            $hometeam_id = $ids[0]->id;
+
+            // get the awayteam ID
+            $awayteam = $match_data["awayteam"];
+
+            $ids = Team::getIDsByName( $awayteam );
+            if ( empty( $ids ) ) throw new DomainException( "Missing team ".$awayteam );
+            $awayteam_id = $ids[0]->id;
+
+            // link both teams to the competition
+            Competition::linkTeam( $hometeam_id, $competition_id );
+            Competition::linkTeam( $awayteam_id, $competition_id );
+
+            // alright, add the match (if not already added)
+            $date = new DateTime( $match_data["date"] );
+            $date = $date->format( "Y-m-d" );
+            if ( empty( Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date ) ) ) Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
+        } // end foreach
+
+        return;
+    }
 }
