@@ -24,7 +24,7 @@ class HomeController extends BaseController {
         $matchGoals = array();
         $recentTeamMatches = array();
         $topteams = Team::getTopTeams(5);
-        $fifaPoints = Team::getFIFAPoints();
+        $fifaPoints = Team::getFIFAPoints(true);
 
         
         foreach ($recentMatches as $rm) {

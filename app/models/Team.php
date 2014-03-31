@@ -130,9 +130,10 @@ class Team {
 
     /**
      * @brief Get all the FIFA points of each international teams.
+		 * @param geoCharts Team names GeoCharts-compatible if true (default false)
      * @return array where each country is mapped to a point.
      */
-    public static function getFIFAPoints() {
+    public static function getFIFAPoints($geoCharts=false) {
         $query = "SELECT name, fifapoints FROM `".self::TABLE_TEAM."`";
 
         $records = DB::select( $query );
@@ -146,6 +147,31 @@ class Team {
 
             array_push( $points, $thesePoints );
         } // end foreach
+
+				//Change/add some countries so that array is complete and correct if it's meant for a GeoCharts map
+				if ($geoCharts) {
+					foreach ($points as &$row) {
+						//Manually change names of unrecognized national teams
+						if ($row["name"] == "China PR")
+							$row["name"] = "China";
+						if ($row["name"] == "Congo DR")
+							$row["name"] = "Democratic Republic of the Congo";
+						if ($row["name"] == "Korea DPR")
+							$row["name"] = "North Korea";
+						if ($row["name"] == "Korea Republic")
+							$row["name"] = "South Korea";
+						if ($row["name"] == "Macedonia FYR")
+							$row["name"] = "Former Yuguslavian Republic of Macedonia";
+						if ($row["name"] == "Chinese Taipei")
+							$row["name"] = "Taiwan";
+					}
+					//Add countries without national team (in database) with 0 FIFA Points
+          array_push( $points, array("name" => "Svalbard and Jan Mayen", "points" => 0) );
+          array_push( $points, array("name" => "French Guiana", "points" => 0) );
+          array_push( $points, array("name" => "Greenland", "points" => 0) );
+          array_push( $points, array("name" => "Western Sahara", "points" => 0) );
+          array_push( $points, array("name" => "Kosovo", "points" => 0) );
+				}
 
         return $points;
     }

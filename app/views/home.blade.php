@@ -219,16 +219,18 @@ hr {
 @stop
 
 @section('javascript')
-    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-			//Code adapted from example provided by google
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>
      google.load('visualization', '1', {'packages': ['geochart']});
+
+     var chart; 
+     var data;
+     var options;   
+
      google.setOnLoadCallback(drawRegionsMap);
 
-
       function drawRegionsMap() {
-
-        var data = google.visualization.arrayToDataTable(
+        data = google.visualization.arrayToDataTable(
 										//Create the Country/FIFA points table in PHP, as Javascript has no access to these codes
 										<?php 
 										echo "[['Country', 'FIFA points'], ";
@@ -243,10 +245,25 @@ hr {
 
 										?>);
 
-        var options = {};
 
-        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+        options =   {};
+
+        chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+   		  google.visualization.events.addListener(chart, 'regionClick', selectHandler);
     };
+
+function selectHandler(e) {  //Allows user to zoom in on Great Britain
+
+		  var selection = e['region'];
+			if (selection == "GB") {
+		  //alert(selection);
+		      options['resolution'] = 'provinces';
+		      options['region'] = selection;
+		          chart.draw(data, options);
+		          document.getElementById('goback').style.display='block';
+			}
+    };
+
     </script>
 @stop
