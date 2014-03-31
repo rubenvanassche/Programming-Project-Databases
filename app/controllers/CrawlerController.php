@@ -257,5 +257,21 @@ class CrawlerController extends BaseController {
         $data->clear();
         return;
     }
+    
+     /**
+     * @brief Fetch live info and update our database.
+     * @details Will use information from pages of this website:
+     * http://www.livescore.com 
+     */
+    public static function liveMatch($competition, $homeTeam, $awayTeam, $date) {
+    	// First we need to find the correct url for the match.
+    	// -> This means we need to crawl a webpage like this: http://www.livescore.com/worldcup/fixtures/ and look for the correct URL.
+    	
+    	// Next extract the info from this webpage.
+    	
+    	// Update the info in our database (this won't be visible on the website unless the user refreshes OR we could use Ajax)
+    	
+    	// Is it possible to notify ajax from here?
+    }
 
 }
