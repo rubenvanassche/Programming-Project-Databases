@@ -33,6 +33,8 @@ class CrawlerController extends BaseController {
                 return $doc;
             } catch ( ErrorException $ee ) {
                 $stop = time();
+            } catch ( FatalErrorException $fee ) {
+                continue;
             } // end try-catch
         } while ( $stop - $start <= $time_limit );
 
@@ -309,11 +311,6 @@ class CrawlerController extends BaseController {
 
     /**
      * @brief Update the teams using the generator.
-     *      "name"          => $name,
-     *      "points"        => $points,
-     *      "country"       => $country,
-     *      "coach data"    => $coach_data,
-     *      "players data"  => $players_data,
      */
     public static function update_teams() {
         foreach ( self::teams_generator() as $team_data ) {
@@ -440,6 +437,8 @@ class CrawlerController extends BaseController {
      * @param url The url to the competition page.
      *
      * @return An associative array with the following values mapped:
+     *      "name"          => $name,
+     *      "matches data"  => $matches_data,
      */
     public static function competition_data( $url ) {
         // load document
