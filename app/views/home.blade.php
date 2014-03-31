@@ -20,20 +20,26 @@
 							$i = -1;
 						?>
 						@foreach ($recentMatches as $recentMatch)
-							<tr>
-								<?php 
-									$i++;
-									$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
-									$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
-									$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
-								?>
-								<td><i class={{$hFlag}}></i></td>
-								<td>{{$recentTeamMatches[$i][0]->name}}</td>
-								<td><a href="{{route('match', array('id'=>$recentMatch->id))}}">{{$scoreString}}</a></td>
-								<?php $i++;?>
-								<td>{{$recentTeamMatches[$i][0]->name}}</td>
-								<td><i class={{$aFlag}}></i></td>
-							</tr>
+							<?php
+							if ($i < 9) {
+							?>		
+								<tr>
+									<?php
+										$i++;
+										$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
+										$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
+										$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
+									?>
+									<td><i class={{$hFlag}}></i></td>
+									<td>{{$recentTeamMatches[$i][0]->name}}</td>
+									<td><a href="{{route('match', array('id'=>$recentMatch->id))}}">{{$scoreString}}</a></td>
+									<?php $i++;?>
+									<td>{{$recentTeamMatches[$i][0]->name}}</td>
+									<td><i class={{$aFlag}}></i></td>
+								</tr>
+							<?php
+							}
+							?>
 						@endforeach					
 					</tbody>
 				</table>
