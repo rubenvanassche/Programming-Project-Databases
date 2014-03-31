@@ -17,7 +17,6 @@ class HomeController extends BaseController {
 
     public function index(){
         //require_once('../lib/autoloader.php');
-        
         $recentMatches = Match::getRecentMatches();
         $articles = RSS::getFIFAtext();
         $countryFlags = array();
