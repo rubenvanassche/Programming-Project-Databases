@@ -494,50 +494,6 @@ class CrawlerController extends BaseController {
         );
     }
     
-     /**
-     * @brief Fetch live info and update our database.
-     * @details Will use information from pages of this website:
-     * http://www.livescore.com 
-     */
-    public static function liveMatch($competition, $homeTeam, $awayTeam, $date) {
-    	// First we need to find the correct url for the match.
-    	// -> This means we need to crawl a webpage like this: http://www.livescore.com/worldcup/fixtures/ and look for the correct URL.
-    	$doc = self::request( "http://www.livescore.com/worldcup/fixtures/");
-        if ( empty( $doc ) ) return;
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-        
-        foreach ( $data->filterXPath( "//table[contains(@class, league-wc)]/tbody/tr/td/.." ) as $row ) {
-            // Skip empty rows.
-            if ( 0 == $row->childNodes->length ) continue;
-
-            $teams = $row->childNodes->item(4);
-            if ( empty( $name ) ) continue;
-            $teams = trim( $teams->textContent );
-            
-            // Check whether or not this is the correct match.
-            if ((strpos($teams, $homeTeam) !== FALSE) && (strpos($teams, $awayTeam) !== FALSE) {
-			  	$href = $row->childNodes->item(4)->getElementsByTagName( 'a' );
-		        if ( empty( $href ) ) continue;
-		        $href = $href->item(0)->getAttribute( "href" );
-		        
-		        // At this point $href we need to concatenate $href with http://www.livescore.com
-		        $href = "http://www.livescore.com" . $href;
-		        break;
-            }
-			else {
-	        	continue;
-			}
-        }
-    	
-    	// Next extract the info from this webpage.
-    	
-    	// Update the info in our database (this won't be visible on the website unless the user refreshes OR we could use Ajax)
-    	// We'll call a method of the match model in here that updates it.
-    	
-    }
-
     /**
      * @brief Update the competition.
      *
@@ -583,4 +539,48 @@ class CrawlerController extends BaseController {
 
         return;
     }
+
+    /**
+     * @brief Fetch live info and update our database.
+     * @details Will use information from pages of this website:
+     * http://www.livescore.com
+     */
+    public static function liveMatch($competition, $homeTeam, $awayTeam, $date) {
+        // First we need to find the correct url for the match.
+        // -> This means we need to crawl a webpage like this: http://www.livescore.com/worldcup/fixtures/ and look for the correct URL.
+        $doc = self::request( "http://www.livescore.com/worldcup/fixtures/");
+        if ( empty( $doc ) ) return;
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        foreach ( $data->filterXPath( "//table[contains(@class, league-wc)]/tbody/tr/td/.." ) as $row ) {
+            // Skip empty rows.
+            if ( 0 == $row->childNodes->length ) continue;
+
+            $teams = $row->childNodes->item(4);
+            if ( empty( $name ) ) continue;
+            $teams = trim( $teams->textContent );
+
+            // Check whether or not this is the correct match.
+            if ((strpos($teams, $homeTeam) !== FALSE) && (strpos($teams, $awayTeam) !== FALSE) {
+                $href = $row->childNodes->item(4)->getElementsByTagName( 'a' );
+                if ( empty( $href ) ) continue;
+                $href = $href->item(0)->getAttribute( "href" );
+
+                // At this point $href we need to concatenate $href with http://www.livescore.com
+                $href = "http://www.livescore.com" . $href;
+                break;
+            } else {
+                continue;
+            }
+        }
+
+        // Next extract the info from this webpage.
+
+        // Update the info in our database (this won't be visible on the website unless the user refreshes OR we could use Ajax)
+        // We'll call a method of the match model in here that updates it.
+
+    }
+
 }
