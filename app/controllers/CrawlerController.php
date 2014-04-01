@@ -473,7 +473,7 @@ class CrawlerController extends BaseController {
                 $time = $time[0];
 
                 $goals[] = array(
-                    "team"          => $hometeam,
+                    "team"          => $awayteam,
                     "player data"   => $player_data,
                     "time"          => $time,
                 );
