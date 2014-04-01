@@ -210,7 +210,9 @@ class Team {
      * @return The team's biography (summary).
      */
     public static function getTeamText( $name ){
-        $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $name );
+    	$editedName = $name . " national football team";
+    	
+        $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $editedName );
 
         $json = file_get_contents($jsonurl);
         $decodedJSON = json_decode($json, true, JSON_UNESCAPED_UNICODE);
