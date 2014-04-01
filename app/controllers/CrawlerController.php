@@ -374,6 +374,12 @@ class CrawlerController extends BaseController {
      *      "hometeam"  => $hometeam,
      *      "scoretime" => $scoretime,
      *      "awayteam"  => $awayteam,
+     *      "goals"     => $goals
+     *
+     *  Where as $goals is an array of associative arrays with the following 
+     *  values mapped:
+     *      "team"          => $hometeam or $awayteam,
+     *      "player data"   => $player_data, 
      */
     public static function match_data( $url ) {
         // load document
@@ -390,7 +396,7 @@ class CrawlerController extends BaseController {
         $date = ( empty( $date ) ) ? NULL : trim( $date->textContent );
 
         // query for kick-off
-        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[4]";
+        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[3]";
 
         $kick_off = $data->filterXPath( $xpath )->getNode(0);
         $kick_off = ( empty( $kick_off ) ) ? NULL : trim( $kick_off->textContent );
@@ -411,6 +417,72 @@ class CrawlerController extends BaseController {
         $awayteam = $heading->getNode(2);
         $awayteam = ( empty( $awayteam ) ) ? NULL : trim( $awayteam->textContent );
 
+        // query for goals, it seems quite strange, but it's the only way this 
+        // works
+        $xpath = "//div[contains(@class, block_match_goals)]/div/table[contains(@class, matches)]";
+
+        $goals = array();
+
+        // skip if no goals
+        if ( "0 - 0" == $scoretime ) return array(
+            "date"      => $date,
+            "kick-off"  => $kick_off,
+            "hometeam"  => $hometeam,
+            "scoretime" => $scoretime,
+            "awayteam"  => $awayteam,
+            "goals"     => $goals,
+        );
+
+        foreach ( $data->filterXPath( $xpath )->getNode(1)->childNodes as $row ) {
+            if ( 0 == $row->childNodes->length ) continue;
+
+            $home = $row->childNodes->item(0);
+            $away = $row->childNodes->item(4);
+
+            // determine which team has scored a goal
+            $homegoal = ( empty( $home ) ) ? NULL : trim( $home->textContent );
+            $awaygoal = ( empty( $away ) ) ? NULL : trim( $away->textContent );
+
+            if ( !empty( $homegoal ) ) {
+                // get the player data
+                $href = $home->getElementsByTagName( 'a' );
+                $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
+                $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
+
+                $player_data = self::player_data( $url );
+
+                // get the time (using regular expressions)
+                preg_match('!\d+!', trim( $homegoal ), $time);
+                $time = $time[0];
+
+                $goals[] = array(
+                    "team"          => $hometeam,
+                    "player data"   => $player_data,
+                    "time"          => $time,
+                );
+            } else if ( !empty( $awaygoal ) ) {
+                // get the player data
+                $href = $away->getElementsByTagName( 'a' );
+                $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
+                $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
+
+                $player_data = self::player_data( $url );
+
+                // get the time (using regular expressions)
+                preg_match('!\d+!', trim( $awaygoal ), $time);
+                $time = $time[0];
+
+                $goals[] = array(
+                    "team"          => $hometeam,
+                    "player data"   => $player_data,
+                    "time"          => $time,
+                );
+            } else {
+                continue;
+            } // end if-else
+
+        } // end foreach
+
         // clear cache to avoid memory exhausting
         $data->clear();
         return array(
@@ -419,6 +491,7 @@ class CrawlerController extends BaseController {
             "hometeam"  => $hometeam,
             "scoretime" => $scoretime,
             "awayteam"  => $awayteam,
+            "goals"     => $goals,
         );
     }
 
@@ -534,53 +607,84 @@ class CrawlerController extends BaseController {
             // alright, add the match (if not already added)
             $date = new DateTime( $match_data["date"] );
             $date = $date->format( "Y-m-d" );
-            if ( empty( Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date ) ) ) Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
+
+            $ids = Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
+            if ( empty( $ids ) ) $ids = Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
+            $match_id = $ids[0]->id;
+
+            // okay, let's update the goals (if any)
+            foreach ( $match_data["goals"] as $goal ) {
+                // get the time
+                $time = $goal["time"];
+
+                // get the player id
+                $player_data = $goal["player data"];
+
+                $first_name = $player_data["first name"];
+                $last_name = $player_data["last name"];
+                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+
+                $ids = Player::getIDsByName( $player );
+                if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
+                $player_id = $ids[0]->id;
+
+                // get the team id
+                $team = $goal["team"];
+
+                $ids = Team::getIDsByName( $team );
+                if ( empty( $ids ) ) throw new DomainException( "Could not find team ".$team );
+                $team_id = $ids[0]->id;
+
+                // now add the goal (if not already added)
+                if ( empty( Goal::getIDs( $match_id, $team_id, $player_id, $time ) ) ) Goal::add( $match_id, $team_id, $player_id, $time );
+            } // end foreach
+
         } // end foreach
 
         return;
     }
 
-    /**
-     * @brief Fetch live info and update our database.
-     * @details Will use information from pages of this website:
-     * http://www.livescore.com
-     */
-    public static function liveMatch($competition, $homeTeam, $awayTeam, $date) {
-        // First we need to find the correct url for the match.
-        // -> This means we need to crawl a webpage like this: http://www.livescore.com/worldcup/fixtures/ and look for the correct URL.
-        $doc = self::request( "http://www.livescore.com/worldcup/fixtures/");
-        if ( empty( $doc ) ) return;
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-
-        foreach ( $data->filterXPath( "//table[contains(@class, league-wc)]/tbody/tr/td/.." ) as $row ) {
-            // Skip empty rows.
-            if ( 0 == $row->childNodes->length ) continue;
-
-            $teams = $row->childNodes->item(4);
-            if ( empty( $name ) ) continue;
-            $teams = trim( $teams->textContent );
-
-            // Check whether or not this is the correct match.
-            if ((strpos($teams, $homeTeam) !== FALSE) && (strpos($teams, $awayTeam) !== FALSE) {
-                $href = $row->childNodes->item(4)->getElementsByTagName( 'a' );
-                if ( empty( $href ) ) continue;
-                $href = $href->item(0)->getAttribute( "href" );
-
-                // At this point $href we need to concatenate $href with http://www.livescore.com
-                $href = "http://www.livescore.com" . $href;
-                break;
-            } else {
-                continue;
-            }
-        }
-
-        // Next extract the info from this webpage.
-
-        // Update the info in our database (this won't be visible on the website unless the user refreshes OR we could use Ajax)
-        // We'll call a method of the match model in here that updates it.
-
-    }
+#    /**
+#     * @brief Fetch live info and update our database.
+#     * @details Will use information from pages of this website:
+#     * http://www.livescore.com
+#     */
+#    public static function liveMatch($competition, $homeTeam, $awayTeam, $date) {
+#        // First we need to find the correct url for the match.
+#        // -> This means we need to crawl a webpage like this: http://www.livescore.com/worldcup/fixtures/ and look for the correct URL.
+#        $doc = self::request( "http://www.livescore.com/worldcup/fixtures/");
+#        if ( empty( $doc ) ) return;
+#
+#        $data = new Crawler();
+#        $data->addDocument( $doc );
+#
+#        foreach ( $data->filterXPath( "//table[contains(@class, league-wc)]/tbody/tr/td/.." ) as $row ) {
+#            // Skip empty rows.
+#            if ( 0 == $row->childNodes->length ) continue;
+#
+#            $teams = $row->childNodes->item(4);
+#            if ( empty( $name ) ) continue;
+#            $teams = trim( $teams->textContent );
+#
+#            // Check whether or not this is the correct match.
+#            if ((strpos($teams, $homeTeam) !== FALSE) && (strpos($teams, $awayTeam) !== FALSE) {
+#                $href = $row->childNodes->item(4)->getElementsByTagName( 'a' );
+#                if ( empty( $href ) ) continue;
+#                $href = $href->item(0)->getAttribute( "href" );
+#
+#                // At this point $href we need to concatenate $href with http://www.livescore.com
+#                $href = "http://www.livescore.com" . $href;
+#                break;
+#            } else {
+#                continue;
+#            }
+#        }
+#
+#        // Next extract the info from this webpage.
+#
+#        // Update the info in our database (this won't be visible on the website unless the user refreshes OR we could use Ajax)
+#        // We'll call a method of the match model in here that updates it.
+#
+#    }
 
 }
