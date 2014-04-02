@@ -12,7 +12,6 @@
 */
 
 
-
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 Route::get('news', array('as' => 'news', 'uses' => 'HomeController@news'));
 Route::match(array('GET', 'POST'), 'search', array('as' => 'search', 'uses' => 'SearchController@search'));
@@ -50,4 +49,6 @@ Route::get('inserts', function() {
 	return View::make('inserts');
 });
 
-
+Route::get('schema', function() {
+        return View::make('schema');
+});

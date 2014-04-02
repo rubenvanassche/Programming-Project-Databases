@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="matchListDiv">
-				<h5 class="matchListTitle">Played Matches</h5>
+				<h5 class="matchListTitle">Upcoming Matches</h5>
 				<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -20,20 +20,26 @@
 							$i = -1;
 						?>
 						@foreach ($recentMatches as $recentMatch)
-							<tr>
-								<?php 
-									$i++;
-									$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
-									$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
-									$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
-								?>
-								<td><i class={{$hFlag}}></i></td>
-								<td>{{$recentTeamMatches[$i][0]->name}}</td>
-								<td>{{$scoreString}}</td>
-								<?php $i++;?>
-								<td>{{$recentTeamMatches[$i][0]->name}}</td>
-								<td><i class={{$aFlag}}></i></td>
-							</tr>
+							<?php
+							if ($i < 9) {
+							?>		
+								<tr>
+									<?php
+										$i++;
+										$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
+										$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
+										$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
+									?>
+									<td><i class={{$hFlag}}></i></td>
+									<td>{{$recentTeamMatches[$i][0]->name}}</td>
+									<td><a href="{{route('match', array('id'=>$recentMatch->id))}}">{{$scoreString}}</a></td>
+									<?php $i++;?>
+									<td>{{$recentTeamMatches[$i][0]->name}}</td>
+									<td><i class={{$aFlag}}></i></td>
+								</tr>
+							<?php
+							}
+							?>
 						@endforeach					
 					</tbody>
 				</table>
@@ -41,7 +47,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Upcoming Matches</h5>
+	 			<h5 class="matchListTitle">Played Matches</h5>
 	 			<table class="table table-condensed">
 				  <thead>
 					<tr>
@@ -53,34 +59,6 @@
 					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
-						<tr>
-							<td><i class="flag-be"></i></td>
-							<td>Belgium</td>
-							<td>08/06</td>
-							<td>Russia</td>
-							<td><i class="flag-ru"></i></td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -134,7 +112,7 @@
 							<div class="carousel-caption">
 								<h3><?php echo $article->get_title(); ?></h3>
 								<p><?php echo $article->get_description(); ?></p>
-								<p><a href="<?php echo $article->get_link(); ?>">Read More</a></p>
+								<p><a href="<?php echo $article->get_permalink(); ?>">Read More</a></p>
 							</div>
 						</div>
 				 
@@ -241,21 +219,25 @@ hr {
 @stop
 
 @section('javascript')
-    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>
      google.load('visualization', '1', {'packages': ['geochart']});
+
+     var chart; 
+     var data;
+     var options;   
+
      google.setOnLoadCallback(drawRegionsMap);
 
-
       function drawRegionsMap() {
-
-        var data = google.visualization.arrayToDataTable(
+        data = google.visualization.arrayToDataTable(
+										//Create the Country/FIFA points table in PHP, as Javascript has no access to these codes
 										<?php 
-										echo "[['Country', 'Popularity'], ";
+										echo "[['Country', 'FIFA points'], ";
 										foreach($fifaPoints as $points) {
-											echo "['";
+											echo "[\"";
 											echo $points["name"];
-											echo "', ";
+											echo "\", ";
 											echo $points["points"];
 											echo "], ";
 										}
@@ -263,10 +245,25 @@ hr {
 
 										?>);
 
-        var options = {};
 
-        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+        options =   {};
+
+        chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
         chart.draw(data, options);
+   		  google.visualization.events.addListener(chart, 'regionClick', selectHandler);
     };
+
+function selectHandler(e) {  //Allows user to zoom in on Great Britain
+
+		  var selection = e['region'];
+			if (selection == "GB") {
+		  //alert(selection);
+		      options['resolution'] = 'provinces';
+		      options['region'] = selection;
+		          chart.draw(data, options);
+		          document.getElementById('goback').style.display='block';
+			}
+    };
+
     </script>
 @stop
