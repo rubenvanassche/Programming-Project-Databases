@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="matchListDiv">
-				<h5 class="matchListTitle">Upcoming Matches</h5>
+				<h5 class="matchListTitle">Played Matches</h5>
 				<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -17,27 +17,26 @@
 					</thead>
 					<tbody>	
 						<?php 
-							$i = -1;
+							$i = 0;
 						?>
 						@foreach ($recentMatches as $recentMatch)
 							<?php
-							if ($i < 9) {
+							if ($i < 5) {
 							?>		
 								<tr>
 									<?php
-										$i++;
-										$scoreString = $matchGoals[$i] . " - " . $matchGoals[$i + 1];
-										$hFlag = "flag-" . $countryFlags[$i][0]->abbreviation;
-										$aFlag = "flag-" . $countryFlags[$i+1][0]->abbreviation;
+										$scoreString = "0 - 0"; //$playedMatchInfo[$i][0][0] . " - " . $playedMatchInfo[$i][0][1];
+										$hFlag = "flag-" . $playedMatchInfo[$i][1][0][0]->abbreviation;
+										$aFlag = "flag-" . $playedMatchInfo[$i][1][1][0]->abbreviation;
 									?>
 									<td><i class={{$hFlag}}></i></td>
-									<td>{{$recentTeamMatches[$i][0]->name}}</td>
-									<td><a href="{{route('match', array('id'=>$recentMatch->id))}}">{{$scoreString}}</a></td>
-									<?php $i++;?>
-									<td>{{$recentTeamMatches[$i][0]->name}}</td>
+									<td>{{$playedMatchInfo[$i][1][0][0]->name}}</td>
+									<td><a href="{{route('match', array('id'=>$recentMatch->id))}}"></a></td>
+									<td>{{$playedMatchInfo[$i][1][1][0]->name}}</td>
 									<td><i class={{$aFlag}}></i></td>
 								</tr>
 							<?php
+								$i++;
 							}
 							?>
 						@endforeach					
@@ -47,7 +46,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Played Matches</h5>
+	 			<h5 class="matchListTitle">Upcoming matches</h5>
 	 			<table class="table table-condensed">
 				  <thead>
 					<tr>

@@ -112,4 +112,36 @@ class Match {
         $results = DB::select('SELECT * FROM `match WHERE awayteam_id = ?', array($awayteam_id));
         return $results;
     }
+    
+    public static function getInfo($rm) {
+    		$recentTeamMatches = array();
+    		$matchGoals = array();
+    		$countryFlags = array();
+    
+            $hid = Team::getTeambyID($rm->hometeam_id);
+            $aid = Team::getTeambyID($rm->awayteam_id);
+            array_push($recentTeamMatches, $hid, $aid);
+            
+            $hGoals = Match::goals($rm->id, $rm->hometeam_id);
+            $aGoals = Match::goals($rm->id, $rm->awayteam_id);
+
+			//echo count($hGoals);
+			//echo count($aGoals);
+			//echo "----";
+
+            array_push($matchGoals, $hGoals, $aGoals);
+            
+            $hFlag = Country::getCountry($hid[0]->country_id);
+            $aFlag = Country::getCountry($aid[0]->country_id);
+//            var_dump($hFlag);
+//            var_dump($aFlag);
+//            echo "+++++";
+
+            array_push($countryFlags, $hFlag, $aFlag);
+            
+            $info = array();
+            array_push($info, $matchGoals, $countryFlags, $recentTeamMatches);
+            
+            return $info;
+    }
 }

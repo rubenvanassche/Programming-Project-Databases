@@ -19,27 +19,17 @@ class HomeController extends BaseController {
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches();
         $articles = RSS::getFIFAtext();
-        $countryFlags = array();
-        $matchGoals = array();
-        $recentTeamMatches = array();
+        $playedMatchInfo = array();
         $topteams = Team::getTopTeams(5);
         $fifaPoints = Team::getFIFAPoints(true);
 
         
         foreach ($recentMatches as $rm) {
-            $hid = Team::getTeambyID($rm->hometeam_id);
-            $aid = Team::getTeambyID($rm->awayteam_id);
-            array_push($recentTeamMatches, $hid, $aid);
+			$info = Match::getInfo($rm);
+            array_push($playedMatchInfo, $info);
             
-            $hGoals = Goal::getHomeGoals($rm);
-            $aGoals = Goal::getAwayGoals($rm);
-            array_push($matchGoals, count($hGoals), count($aGoals));
-            
-            $hFlag = Country::getCountry($hid[0]->country_id);
-            $aFlag = Country::getCountry($aid[0]->country_id);
-            array_push($countryFlags, $hFlag, $aFlag);
         }
-        return View::make('home', compact('recentMatches', 'recentTeamMatches', 'matchGoals', 'countryFlags', 'topteams', 'articles', 'fifaPoints'))->with('title', 'Home');
+        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints'))->with('title', 'Home');
     }
     
     public function news(){
