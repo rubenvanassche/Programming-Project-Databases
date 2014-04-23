@@ -36,7 +36,7 @@
 
 
 \section{Enkele opmerkingen over dit rapport}
-We hebben ervoor gekozen om verder te bouwen op het rapport van de vorige keer. Grote delen van de tekst is dus dezelfde als een maand geleden. Op die manier behandelt ook dit rapport alle functionaliteit van de website, en is het niet nodig om het vroegere rapport erbij te leggen. Volledig veranderde en nieuwe (sub)secties zijn 'Status', 'Taakverdeling', 'Voorspellingen van gebruikers',  'Extra functionaliteit' en 'Planning'. Licht aangepaste (sub)secties zijn 'Design' (zonder subsecties) en 'Database'.
+We hebben ervoor gekozen om verder te bouwen op het rapport van de vorige keer. Grote delen van de tekst zijn dus dezelfde als een maand geleden. Op die manier behandelt ook dit rapport alle functionaliteit van de website, en is het niet nodig om het vroegere rapport erbij te leggen. Volledig veranderde en nieuwe (sub)secties zijn 'Status', 'Taakverdeling', 'Voorspellingen van gebruikers',  'Extra functionaliteit' en 'Planning'. Licht aangepaste (sub)secties zijn 'Design' (zonder subsecties) en 'Database'.
 \section{Status}
 Er is heel wat data toegevoegd aan de database; die bevat momenteel honderden teams en duizenden spelers. De database moet uiteraard nog steeds verder groeien. Daarnaast is ook de mogelijkheid om als ingelogde gebruiker voorspellingen uit te brengen toegevoegd. Heel wat bugs zijn gefixt. De site staat ondertussen ook online (www.coachcenter.net), maar na een wissel in servers zijn de meeste pagina's onbereikbaar geworden. Het is dus nog steeds aangewezen de lokale versie te gebruiken. Verder zijn er geen grote features toegevoegd; het project lag na de vorige presentatie een tijdje stil door een combinatie van een aantal plotse andere taken en drukke vakanties van de groepsleden.
 
@@ -210,6 +210,8 @@ Bestaat uit 3 tabellen, een news foto feed en een wereldkaart die de landen kleu
 De 3 tabellen zullen data bevatten over de laatst gespeelde matchen, de opkomende matchen en de WK-ranking.
 \\
 De foto newsfeed is een RSS feed van FIFA die we met SimplePie hebben geparsed.
+\\
+Op de wereldkaart krijgt elk land een tint groen toegekend; hoe hoger hun WK-ranking, hoe donkerder het groen. Later zul je op elk apart land kunnen klikken om op de pagina van het nationale team terecht te komen. Merk op dat het Verenigd Koninkrijk wegens beperkingen van de gebruikte Google GeoCharts-API niet ingekleurd is; zij hebben vier "nationale" teams (Engeland, Wales, Noord-Ierland, Schotland). Om dit op te lossen, wordt bij klikken op het VK ingezoomd, waarna de vier delen apart in de juiste kleur verschijnen.
  
 \subsubsection{Search bar / search results}
 Rechtsbovenaan alle pagina's staat een searchbar waarin je een speler/match/team kunt invullen en die de beschikbare info presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
@@ -265,10 +267,10 @@ In de PlayersController wordt volgende info opgevraagd van het Team model:
 De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er dus info getoond over de match: de eindstand, wie er gescoord heeft, wie er een kaart heeft gekregen en dergelijke. Uiteraard kan er weer op meerdere manieren doorgeklikt worden door op de speler/teams te klikken en dergelijke.
 
 \subsubsection{Betting pages}
-Uiteraard missen we nog heel wat pagina's omtrent het hele gok gebeuren. Deze zijn momenteel in de maak, zo moeten er onder andere een pagina komen waar je een werkelijke bet kunt plaatsen, alsook een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
+Het is momenteel enkel mogelijk om individueel pronostieken in te vullen; ondersteuning om in groep te spelen volgt nog. Er is een formulier om je pronostiek in te vullen en door te sturen en een pagina met een overzicht van alle gemaakte gokken. Later komt er onder andere nog een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
 
 \subsection{Optimalisatie van reeds bestaande pages}
-Een deel van de reeds geschreven code is niet altijd even proper. Daarom zal een deel ook een beetje herschreven worden; een voorbeeld hiervan zijn de controllers. In plaats van allemaal verschillende argumenten mee te geven aan een view is het properder om alles eerst in een array te steken en die dan gewoon mee te geven. 
+Een deel van de reeds geschreven code is niet altijd even proper. Daarom zal een deel ook een beetje herschreven worden; een voorbeeld hiervan zijn de controllers. In plaats van allemaal verschillende argumenten mee te geven aan een view is het properder om alles eerst in een array te steken en die dan gewoon mee te geven. Dit maakt het makkelijker om later argumenten toe te voegen.
 
 In concreto:
 Eerder dit:
