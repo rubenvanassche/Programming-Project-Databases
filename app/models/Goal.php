@@ -50,7 +50,7 @@ class Goal {
      * @return Result after the query.
      */
     public static function getHomeGoals( $match ){
-        $query = "SELECT * FROM `".self::TABLE_GOAL."` WHERE match_id = ? AND team_id = ?";
+        $query = "SELECT id FROM `".self::TABLE_GOAL."` WHERE match_id = ? AND team_id = ?";
         $values = array( $match->id, $match->hometeam_id );
 
         return DB::select( $query, $values );
