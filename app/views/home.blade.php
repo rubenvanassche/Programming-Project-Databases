@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<div class="matchListDiv">
-				<h5 class="matchListTitle">Upcoming Matches</h5>
+				<h5 class="matchListTitle">Played Matches</h5>
 				<table class="table table-condensed">
 					<thead>
 						<tr>
@@ -47,7 +47,7 @@
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
-	 			<h5 class="matchListTitle">Played Matches</h5>
+	 			<h5 class="matchListTitle">Upcoming Matches</h5>
 	 			<table class="table table-condensed">
 				  <thead>
 					<tr>
