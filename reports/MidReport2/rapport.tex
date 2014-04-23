@@ -225,10 +225,14 @@ in onze database zitten. Misschien doen we dit beter wel?
 \subsubsection{Team Page}
 Deze pagina bevat informatie over een bepaald team, zoals de spelers, matchen e.d.
  
-In de TeamController wordt de benodigde informatie uit de models gehaald.
+In de TeamController wordt de benodigde informatie uit de models gehaald. Dit gebeurt in meerdere verschillende functies. Hieronder een voorbeeld.
 \begin{lstlisting}
-                $teamObj = Team::getTeamByID($teamID)[0];
-                $teamImageURL = Team::getTeamImageURL($teamObj->name);
+	public function index($teamID){
+		$teamObj = Team::getTeamByID($teamID)[0];
+		$teamImageURL = Team::getTeamImageURL($teamObj->name);
+		
+		return View::make('team.team', compact('teamObj', 'teamImageURL'))->with('title', $teamObj->name);
+	}
 \end{lstlisting}
  
 Deze informatie wordt vervolgens gebruikt om weer te geven op de webpagina. De spelers en dergelijke worden opgevraagd in andere methoden van de TeamController.
@@ -238,18 +242,54 @@ Deze pagina is een onderdeel van de bijhorende Team pagina. Door middel van Ajax
 \\
 In de PlayersController wordt volgende info opgevraagd van het Team model:
 \begin{lstlisting}
-        public function players($teamID){
-                $team = Team::getTeamByID($teamID)[0];
-                $playerBase = Team::getPlayers($teamID);
-                $teamImageURL = Team::getTeamImageURL($team->name);
-               
-                return View::make('team.players', compact('team', 'playerBase', 'teamImageURL'));
-        }
+	public function index($playerName){
+		$playerObj = Player::getPlayer($playerName)[0];
+		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
+		$playerText = Player::getPlayerText($playerName);
+		$playerImageURL = Player::getPlayerImageURL($playerName);
+		$goals = Player::goals($playerObj->id);
+		$cards = Player::cards($playerObj->id);
+			
+		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards'))->with('title', $playerName);
+	}
 \end{lstlisting}
  
- 
 \subsubsection{Match page}
-Analoog aan de Players page. Hier wordt ook met Ajax gewerkt.
+De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er dus info getoond over de match: de eindstand, wie er gescoord heeft, wie er een kaart heeft gekregen en dergelijke. Uiteraard kan er weer op meerdere manieren doorgeklikt worden door op de speler/teams te klikken en dergelijke.
+
+\subsubsection{Betting pages}
+Uiteraard missen we nog heel wat pagina's omtrent het hele gok gebeuren. Deze zijn momenteel in de maak, zo moeten er onder andere een pagina komen waar je een werkelijke bet kunt plaatsen, alsook een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
+
+\subsection{Optimalisatie van reeds bestaande pages}
+Een deel van de reeds geschreven code is niet altijd even proper. Daarom zal een deel ook een beetje herschreven worden; een voorbeeld hiervan zijn de controllers. In plaats van allemaal verschillende argumenten mee te geven aan een view is het properder om alles eerst in een array te steken en die dan gewoon mee te geven. 
+
+In concreto:
+Eerder dit:
+\begin{lstlisting}
+	function index($matchID){
+		$data['match'] = Match::get($matchID);
+		$data['goalshometeam'] = Match::goals($matchID, $data['match']->hometeam_id);
+		$data['cardshometeam'] = Match::cards($matchID, $data['match']->hometeam_id);
+		$data['goalsawayteam'] = Match::goals($matchID, $data['match']->awayteam_id);
+		$data['cardsawayteam'] = Match::cards($matchID, $data['match']->awayteam_id);
+		
+		return View::make('match.match',$data)->with('title', 'Match');
+	}
+\end{lstlisting} 
+
+in plaats van:
+\begin{lstlisting}
+	public function index($playerName){
+		$playerObj = Player::getPlayer($playerName)[0];
+		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
+		$playerText = Player::getPlayerText($playerName);
+		$playerImageURL = Player::getPlayerImageURL($playerName);
+		$goals = Player::goals($playerObj->id);
+		$cards = Player::cards($playerObj->id);
+			
+		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards'))->with('title', $playerName);
+	}
+\end{lstlisting} 
 
 \section{Extra functionaliteit}
 De meeste extra functionaliteit die gesuggereerd wordt in de opgave is aanwezig of is ondersteuning voor ingebouwd. Er is heel wat data aanwezig over spelers, er is relevant nieuws te lezen, er is (ondersteuning voor) data uit andere competities, ... \\ Over verdere extra functionaliteiten hebben we nog niet echt nagedacht, het is nu in de eerste plaats belangrijk dat de verplichte functionaliteit er is. Daarna zou nog tijd over moeten zijn voor extra functionaliteit.
