@@ -56,7 +56,7 @@ class Match {
     
     public static function getScore($matchID){
         $results = DB::select('SELECT 
-                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+                                (SELECT COUNT(id) FROM goal WHEREge team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
                                 (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
                                 FROM `match` WHERE id = ?', array($matchID));
         return $results[0]->hometeam_score." - ".$results[0]->awayteam_score;
@@ -99,18 +99,26 @@ class Match {
     }
 
     public static function getMatchByTeams($hometeam_id, $awayteam_id) {
-        $results = DB::select('SELECT * FROM `match WHERE hometeam_id = ? AND awayteam_id = ?', array($hometeam_id, $awayteam_id));
+        $results = DB::select('SELECT * FROM `match` WHERE hometeam_id = ? AND awayteam_id = ?', array($hometeam_id, $awayteam_id));
         return $results;
     }
 
     public static function getMatchByHometeam($hometeam_id) {
-        $results = DB::select('SELECT * FROM `match WHERE hometeam_id = ?', array($hometeam_id));
+        $results = DB::select('SELECT * FROM `match` WHERE hometeam_id = ?', array($hometeam_id));
         return $results;
     }
 
     public static function getMatchByAwayteam($awayteam_id) {
-        $results = DB::select('SELECT * FROM `match WHERE awayteam_id = ?', array($awayteam_id));
+        $results = DB::select('SELECT * FROM `match` WHERE awayteam_id = ?', array($awayteam_id));
         return $results;
+    }
+
+    public static function getMatchByTeamsAndDate($hometeam_id, $awayteam_id, $date) {
+        $results = DB::select('SELECT * FROM `match` WHERE hometeam_id = ? AND awayteam_id = ? AND date = ?', array($hometeam_id, $awayteam_id, $date));
+		if (empty($results))
+			return NULL;
+		else
+	        return $results[0];
     }
     
     public static function getInfo($rm) {

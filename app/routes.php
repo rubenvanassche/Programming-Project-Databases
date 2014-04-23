@@ -44,6 +44,8 @@ Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwor
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 
+Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
+
 
 Route::get('inserts', function() {
 	return View::make('inserts');

@@ -85,7 +85,7 @@ class UserController extends BaseController {
 					$data['title'] = 'Welcome!';
 					return View::make('layouts.simple', $data);
 				}else{
-					// Something went wrong
+						// Something went wrong
 					return Redirect::to('user/register')->withInput();
 				}
 			}
@@ -95,6 +95,74 @@ class UserController extends BaseController {
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.register');
     	}		
 	}
+
+	function bet(){
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'hometeam' => array('required'),
+			        'awayteam' => array('required'),
+			        'date' => array('required'),
+			        'hometeamScore' => array('required'),
+			        'awayteamScore' => array('required'),
+			        'firstGoal' => array('firstgoal:hometeam,awayteam'),
+			        'hometeamYellows' => array('required'),
+			        'hometeamReds' => array('required'),
+			        'awayteamYellows' => array('required'),
+			        'awayteamReds' => array('required')
+			);
+			
+			$validation = Validator::make(Input::all(), $rules);
+			
+			if($validation->fails()) {
+				// Problem so show the user error messages
+				return Redirect::to('user/bet')->withInput()->withErrors($validation);
+			}else{
+				// Start working on this data
+				$hometeam = Input::get('hometeam');
+				$awayteam = Input::get('awayteam');
+				$date = Input::get('date');
+				$hometeam_score = Input::get('hometeamScore');
+				$awayteam_score = Input::get('awayteamScore');
+				$firstGoal = Input::get('firstGoal');
+				$hometeam_yellows = Input::get('hometeamYellows');
+				$hometeam_reds = Input::get('hometeamReds');
+				$awayteam_yellows = Input::get('awayteamYellows');
+				$awayteam_reds = Input::get('awayteamReds');
+				$hometeamIDs = Team::getIDsByName($hometeam);
+				$awayteamIDs = Team::getIDsByName($awayteam);
+				$hometeamID = $hometeamIDs[0]->id;
+				$awayteamID = $awayteamIDs[0]->id;
+				if ($firstGoal == $hometeam)
+					$firstGoal_id = $hometeamID;
+				else
+					$firstGoal_id = $awayteamID;
+
+				$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
+				$user = new User;
+				$success = ($match != NULL) && $user->loggedIn();
+				if($success == true){
+					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
+					$data['content'] = 'Thank you for filling in your bet.';
+					$data['title'] = 'Bet registered!';
+					return View::make('layouts.simple', $data);
+				}else{
+					// Something went wrong
+					return Redirect::to('user/bet')->withInput();
+
+				}
+			}
+    	}else{
+	    	// Show the form
+	    	$data['title'] = 'Bet';
+			$user = new User;
+			if ($user->loggedIn())
+		    	return View::make('layouts.simple', $data)->nest('content', 'user.bet');
+			else 
+				return View::make('layouts.simple', $data)->nest('content', 'user.nologin');
+    	}	
+	}
+
 	
 	function activate($username, $registrationcode){
 		$user = new User;

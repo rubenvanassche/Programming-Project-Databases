@@ -241,6 +241,24 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
+--
+-- Table structure for table `bet`
+--
+
+CREATE TABLE IF NOT EXISTS `bet` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `match_id` int(11) NOT NULL,
+  `hometeam_score` int(5) NOT NULL,
+  `awayteam_score` int(5) NOT NULL,
+  `first_goal` int(11) DEFAULT NULL,
+  `hometeam_yellows` int(5) DEFAULT NULL,
+  `hometeam_reds` int(5) DEFAULT NULL,
+  `awayteam_yellows` int(5) DEFAULT NULL,
+  `awayteam_reds` int(5) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
