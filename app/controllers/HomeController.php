@@ -17,19 +17,29 @@ class HomeController extends BaseController {
 
     public function index(){
         //require_once('../lib/autoloader.php');
-        $recentMatches = Match::getRecentMatches();
+        $recentMatches = Match::getRecentMatches(5);
+	$futureMatches = Match::getFutureMatches(5);
         $articles = RSS::getFIFAtext();
         $playedMatchInfo = array();
+	$futureMatchInfo = array();
         $topteams = Team::getTopTeams(5);
         $fifaPoints = Team::getFIFAPoints(true);
 
         
         foreach ($recentMatches as $rm) {
-			$info = Match::getInfo($rm);
-            array_push($playedMatchInfo, $info);
+		$info = Match::getInfo($rm);
+        	array_push($playedMatchInfo, $info);
             
         }
-        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints'))->with('title', 'Home');
+
+	foreach($futureMatches as $fm) {
+		$info = Match::getInfo($fm);
+		array_push($futureMatchInfo, $info);
+	}
+
+
+	
+        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints', 'futureMatchInfo'))->with('title', 'Home');
     }
     
     public function news(){

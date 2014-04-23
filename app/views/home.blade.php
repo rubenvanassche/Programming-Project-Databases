@@ -1,5 +1,4 @@
 @extends('layouts.master')
-
 @section('content')
 	<div class="row">
 		<div class="col-md-4">
@@ -19,26 +18,19 @@
 						<?php 
 							$i = 0;
 						?>
-						@foreach ($recentMatches as $recentMatch)
-							<?php
-							if ($i < 5) {
-							?>		
+						@foreach ($playedMatchInfo as $pmi)
 								<tr>
 									<?php
-										$scoreString = "0 - 0"; //$playedMatchInfo[$i][0][0] . " - " . $playedMatchInfo[$i][0][1];
-										$hFlag = "flag-" . $playedMatchInfo[$i][1][0][0]->abbreviation;
-										$aFlag = "flag-" . $playedMatchInfo[$i][1][1][0]->abbreviation;
+										$scoreString = $pmi[3]->hometeam_score . " - " . $pmi[3]->awayteam_score; //count($pmi[0][0]) . " - " . count($pmi[0][1]);
+										$hFlag = "flag-" . $pmi[1][0][0]->abbreviation;
+										$aFlag = "flag-" . $pmi[1][1][0]->abbreviation;
 									?>
 									<td><i class={{$hFlag}}></i></td>
-									<td>{{$playedMatchInfo[$i][1][0][0]->name}}</td>
-									<td><a href="{{route('match', array('id'=>$recentMatch->id))}}"></a></td>
-									<td>{{$playedMatchInfo[$i][1][1][0]->name}}</td>
+									<td>{{$pmi[2][0][0]->name}}</td>
+									<td><a href="{{route('match', array('id'=>$pmi[4]))}}">{{$scoreString}}</a></td>
+									<td>{{$pmi[2][1][0]->name}}</td>
 									<td><i class={{$aFlag}}></i></td>
 								</tr>
-							<?php
-								$i++;
-							}
-							?>
 						@endforeach					
 					</tbody>
 				</table>
@@ -58,6 +50,19 @@
 					</tr>
 					</thead>
 					<tbody>
+						@foreach ($futureMatchInfo as $fmi)
+                                                                <tr>
+                                                                        <?php
+                                                                                $hFlag = "flag-" . $fmi[1][0][0]->abbreviation;
+                                                                                $aFlag = "flag-" . $fmi[1][1][0]->abbreviation;
+                                                                        ?>
+                                                                        <td><i class={{$hFlag}}></i></td>
+                                                                        <td>{{$fmi[2][0][0]->name}}</td>
+                                                                        <td><a href="{{route('match', array('id'=>$fmi[4]))}}">...</a></td>
+									<td>{{$fmi[2][1][0]->name}}</td>
+                                                                        <td><i class={{$aFlag}}></i></td>
+                                                                </tr>
+                                                @endforeach
 					</tbody>
 				</table>
 			</div>

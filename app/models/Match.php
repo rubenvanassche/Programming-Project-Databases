@@ -42,22 +42,22 @@ class Match {
     }
 
     // TODO DOCUMENTIZE
-    public static function getRecentMatches(){
-        // What condition are we going to use here?
-        $results = DB::select('SELECT * FROM `match`');
+    public static function getRecentMatches($amount){
+        // Will return a certain amount of last played matches.
+        $results = DB::select("SELECT * FROM `match` WHERE date < CURDATE() ORDER BY date DESC LIMIT ?", array($amount));
         return $results;
     }
     
-    public static function getFutureMatches(){
-        // What condition are we going to use here?
-        $results = DB::select('SELECT * FROM `match` WHERE id = ?', array(0));
+    public static function getFutureMatches($amount){
+        // Will return a certain amount of closest future matches.
+        $results = DB::select("SELECT * FROM `match` WHERE date > CURDATE() ORDER BY date LIMIT ?", array($amount));
         return $results;
     }
     
     public static function getScore($matchID){
         $results = DB::select('SELECT 
-                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id) as hometeam_score,
-                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id) as awayteam_score
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
                                 FROM `match` WHERE id = ?', array($matchID));
         return $results[0]->hometeam_score." - ".$results[0]->awayteam_score;
     }
@@ -68,8 +68,8 @@ class Match {
                                 awayteam_id,
                                 (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,  
                                 (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam,
-                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id) as hometeam_score,
-                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id) as awayteam_score
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
                                 FROM `match` WHERE id = ?", array($matchID));
         return $results[0];
     }
@@ -139,9 +139,12 @@ class Match {
 
             array_push($countryFlags, $hFlag, $aFlag);
             
+            $match = Match::get($rm->id);
+            
             $info = array();
-            array_push($info, $matchGoals, $countryFlags, $recentTeamMatches);
+            array_push($info, $matchGoals, $countryFlags, $recentTeamMatches, $match, $rm->id);
             
             return $info;
     }
 }
+
