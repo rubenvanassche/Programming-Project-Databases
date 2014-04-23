@@ -168,6 +168,13 @@ ALTER TABLE `team`
 --
 ALTER TABLE `teamPerCompetition`
   ADD CONSTRAINT `tpc_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
+  
+  --
+-- Constraints for table `bet`
+--
+ALTER TABLE `bet`
+  ADD CONSTRAINT `matchID` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userID` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 \end{lstlisting}
 
