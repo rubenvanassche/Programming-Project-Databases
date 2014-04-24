@@ -96,7 +96,17 @@ class UserController extends BaseController {
     	}		
 	}
 
+	//Note that $presetValues if supplied should contain keys presetHome, presetAway and presetDate
 	function bet(){
+		//TODO: Laravel probably provides a better way to fetch variables from a Match page after a bet page was pressed there than through $_GET
+		//They are passed through the URL now, maybe that can be circumvented too.
+		//If anyone knows how, please tell me (Jakob) or feel free to change it yourselves.
+		//Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be.
+		if (isset($_GET["presetHome"]))
+			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
+		else
+			$presetValues = array();
+
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -167,7 +177,7 @@ class UserController extends BaseController {
 	    	$data['title'] = 'Bet';
 			$user = new User;
 			if ($user->loggedIn())
-		    	return View::make('layouts.simple', $data)->nest('content', 'user.bet');
+		    	return View::make('layouts.simple', $data)->nest('content', 'user.bet', $presetValues);
 			else 
 				return View::make('layouts.simple', $data)->nest('content', 'user.nologin');
     	}	

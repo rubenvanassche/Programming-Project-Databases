@@ -23,9 +23,28 @@ if(Notification::showAll() != '' or $errors->first('hometeam') != '' or $errors-
 
 {{ Form::open(array('url' => 'user/bet')) }}
 
+<!--If someone can figure out how to do this with the if-else clause to avoid some code duplication, feel free to change.
+	Maybe splitting up into two separate forms is better? -->
+
+@if(isset($presetHome))
 <div class="form-group">
 	<label>{{ Form::label('hometeam', 'Home team') }}</label>
-	{{ Form::text('hometeam', Input::old('hometeam'), array('class'=>'form-control')) }}
+	{{ Form::text('hometeam', $presetHome , array('class'=>'form-control')) }}
+</div>
+
+<div class="form-group">
+	<label>{{ Form::label('awayteam', 'Away team') }}</label>
+	{{ Form::text('awayteam', $presetAway , array('class'=>'form-control')) }}
+</div>
+
+<div class="form-group">
+	<label>{{ Form::label('date', 'Date') }}</label>
+	{{ Form::text('date', $presetDate, array('class'=>'form-control')) }}
+</div>
+@else
+<div class="form-group">
+	<label>{{ Form::label('hometeam', 'Home team') }}</label>
+	{{ Form::text('hometeam', Input::old('hometeam') , array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
@@ -37,6 +56,8 @@ if(Notification::showAll() != '' or $errors->first('hometeam') != '' or $errors-
 	<label>{{ Form::label('date', 'Date') }}</label>
 	{{ Form::text('date', Input::old('date'), array('class'=>'form-control')) }}
 </div>
+
+@endif
 
 <div class="form-group">
 	<label>{{ Form::label('hometeamScore', 'Home team score') }}</label>

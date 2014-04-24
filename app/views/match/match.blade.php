@@ -10,6 +10,18 @@
 	}
 ?>
 @section('content')
+	<!--These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions. 
+	It should probably be changed to something more elegant, if the button even stays there. -->
+	<div class="row">
+	<div class="col-md-5" style="margin-top:20px;">
+	</div>
+	<div class="col-md-3" style="text-align:center;">
+	<ul class="nav nav-pills">
+	  <li class="active"><a href={{ action('UserController@bet', array("presetHome" => $match->hometeam, "presetAway" => $match->awayteam, "presetDate" => $match->date)) }}>   Bet   </a></li>
+	</ul>
+	</div>
+	</div>
+
 
 	<div class="row">
 		<div class="col-md-1" style="margin-top:20px;">
