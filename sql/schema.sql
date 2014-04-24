@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `player_id` int(11) DEFAULT NULL,
   `match_id` int(11) DEFAULT NULL,
-  `color` int(11) DEFAULT NULL,
+  `color` tinyint(1) DEFAULT NULL,
   `time` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `player_ids` (`player_id`),

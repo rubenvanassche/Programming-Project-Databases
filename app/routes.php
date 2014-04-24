@@ -28,6 +28,8 @@ Route::get('player/{name}', array('as' => 'player', 'uses' =>'PlayerController@i
 
 Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'));
 
+Route::get('user/bets', array('as' => 'bets', 'uses' => 'BetController@index'));
+
 
 
 // ------------
@@ -54,3 +56,4 @@ Route::get('inserts', function() {
 Route::get('schema', function() {
         return View::make('schema');
 });
+

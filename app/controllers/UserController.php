@@ -103,13 +103,13 @@ class UserController extends BaseController {
 			        'hometeam' => array('required'),
 			        'awayteam' => array('required'),
 			        'date' => array('required'),
-			        'hometeamScore' => array('required'),
-			        'awayteamScore' => array('required'),
+			        'hometeamScore' => array('integer', 'between:0,100', 'required'),
+			        'awayteamScore' => array('integer', 'between:0,100', 'required'),
 			        'firstGoal' => array('firstgoal:hometeam,awayteam'),
-			        'hometeamYellows' => array('required'),
-			        'hometeamReds' => array('required'),
-			        'awayteamYellows' => array('required'),
-			        'awayteamReds' => array('required')
+			        'hometeamYellows' => array('integer', 'between:0,100'),
+			        'hometeamReds' => array('integer', 'between:0,100'),
+			        'awayteamYellows' => array('integer', 'between:0,100'),
+			        'awayteamReds' => array('integer', 'between:0,100')
 			);
 			
 			$validation = Validator::make(Input::all(), $rules);
@@ -138,11 +138,21 @@ class UserController extends BaseController {
 				else
 					$firstGoal_id = $awayteamID;
 
+				//save blank guesses as -1 internally
+				if ($hometeam_yellows == "")
+					$hometeam_yellows = -1;
+				if ($hometeam_reds == "")
+					$hometeam_reds = -1;
+				if ($awayteam_yellows == "")
+					$awayteam_yellows = -1;
+				if ($awayteam_reds == "")
+					$awayteam_reds = -1;
+
 				$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
 				$user = new User;
 				$success = ($match != NULL) && $user->loggedIn();
 				if($success == true){
-					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
+					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
 					$data['content'] = 'Thank you for filling in your bet.';
 					$data['title'] = 'Bet registered!';
 					return View::make('layouts.simple', $data);
@@ -163,6 +173,10 @@ class UserController extends BaseController {
     	}	
 	}
 
+
+	function showBets() {
+		return View::make('layouts.simple', $data)->nest('content', 'user.bets');
+	}
 	
 	function activate($username, $registrationcode){
 		$user = new User;

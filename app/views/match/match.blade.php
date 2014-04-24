@@ -120,7 +120,7 @@
 						?>
 						<tr>
 							<td><?php echo $cardawayteam->time; ?></td>
-							<td><a href="{{route('player', array('name'=>urlencode($cardhometeam->player)))}}">{{$cardhometeam->player}}</a></td>
+							<td><a href="{{route('player', array('name'=>urlencode($cardawayteam->player)))}}">{{$cardawayteam->player}}</a></td>
 							<td><?php echo cardColorToImg($cardawayteam->color); ?></td>
 						<tr>
 					@endforeach

@@ -33,6 +33,40 @@ class Bet {
 		return true;
     }
 
+
+	/**
+	 *@brief get all bets made by a specific user for played matches
+	 *@param user_id The id of the user
+	 *@return the bets by the user
+	 */
+	public static function getPastBetsByUserID( $user_id ) {
+		//Check if uid exists?
+		$results = DB::select("SELECT * FROM bet WHERE user_id = ? 
+												 AND EXISTS (
+														SELECT * FROM `match`
+														WHERE id = match_id
+														AND date < CURDATE())", array($user_id));
+		return $results;
+	}
+
+	/**
+	 *@brief get all bets made by a specific user for future matches
+	 *@param user_id The id of the user
+	 *@return the bets by the user
+	 */
+	public static function getFutureBetsByUserID( $user_id ) {
+		//Check if uid exists?
+		$results = DB::select("SELECT * FROM bet WHERE user_id = ? 
+												 AND EXISTS (
+														SELECT * FROM `match`
+														WHERE id = match_id
+														AND date > CURDATE())", array($user_id));
+		return $results;
+	}
+
+
+
+
 }
 
 ?>
