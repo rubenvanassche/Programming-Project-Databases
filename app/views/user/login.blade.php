@@ -25,6 +25,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 </div>
 
 <a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
+<a href="{{ url('user/facebooklogin') }}" class="btn btn-primary pull-right">Facebook Login</a>
 {{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
 
 {{ Form::token() . Form::close() }}

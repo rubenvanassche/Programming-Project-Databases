@@ -46,6 +46,8 @@ Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwor
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 
+Route::get('user/facebooklogin', 'UserController@facebookLogin');
+
 Route::get('usergroups', 'UserController@usergroups');
 Route::get('usergroup/{id}', 'UserController@usergroup');
 Route::get('usergroup/{id}/addMe', 'UserController@addMe');
