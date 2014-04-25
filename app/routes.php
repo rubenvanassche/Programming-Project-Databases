@@ -46,12 +46,9 @@ Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwor
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 
-<<<<<<< HEAD
 Route::get('usergroups', 'UserController@usergroups');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
-=======
 Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
->>>>>>> master
 
 
 Route::get('inserts', function() {
