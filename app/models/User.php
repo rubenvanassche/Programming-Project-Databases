@@ -50,6 +50,24 @@ class User {
 		return true;
 	}
 	
+	function loginFacebookUser($id, $firstname, $lastname, $email, $username){
+		// Does this user exists
+		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE facebookid = ?", array($id));
+		if($result[0]->count == 0){
+			// User doesn't exists
+			
+			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username) VALUES (?,?,?,?,?)', array($firstname, $lastname, $id, $email, $username));
+			
+			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
+			Session::put('userID', $result[0]->id);
+			Session::put('userEntrance', time());
+		}else{
+			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
+			Session::put('userID', $result[0]->id);
+			Session::put('userEntrance', time());
+		}
+	}
+	
 	function register($data){
 		$results = DB::select('SELECT id FROM user WHERE username = ?', array($data['username']));
 		if(!empty($results)){

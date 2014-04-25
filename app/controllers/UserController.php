@@ -45,6 +45,30 @@ class UserController extends BaseController {
 		return View::make('layouts.modal', $data)->nest('content', 'user.login');
 	}
 	
+	function facebookLogin(){
+		$application = array(
+		    'appId' => '611155238979722',
+		    'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
+		    );
+		$permissions = 'publish_stream,email';
+		$url_app = 'http://localhost:8000/user/facebooklogin';
+		
+		// getInstance
+		FacebookConnect::getFacebook($application);
+		
+		$getUser = FacebookConnect::getUser($permissions, $url_app); // Return facebook User data
+		$id = $getUser['user_profile']['id'];
+		$firstname = $getUser['user_profile']['first_name'];
+		$lastname = $getUser['user_profile']['last_name'];
+		$email = $getUser['user_profile']['email'];
+		$username = $getUser['user_profile']['username'];
+		
+		
+		$user = new User;
+		$user->loginFacebookUser($id, $firstname, $lastname, $email, $username);
+		return Redirect::to('/');
+	}
+	
 	function register(){
 		if(Request::isMethod('post')){
 			// Work On the Form
