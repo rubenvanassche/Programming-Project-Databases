@@ -56,7 +56,7 @@ class Match {
     
     public static function getScore($matchID){
         $results = DB::select('SELECT 
-                                (SELECT COUNT(id) FROM goal WHEREge team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
                                 (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
                                 FROM `match` WHERE id = ?', array($matchID));
         return $results[0]->hometeam_score." - ".$results[0]->awayteam_score;
