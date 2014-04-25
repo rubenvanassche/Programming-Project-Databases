@@ -40,8 +40,13 @@
 							$user = new User;
 							if($user->loggedIn()){
 							?>
+<<<<<<< HEAD
 								<li><a href="#">Bets</a></li>
 								<li><a href="{{ url('usergroups') }}">User Groups</a></li>
+=======
+								<li><a href="{{ action('UserController@bet') }}">Place bet</a></li>
+								<li><a href="{{ action('BetController@index') }}">View bets</a></li>
+>>>>>>> master
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
 								<li><a href="{{ action('UserController@logout') }}">Logout</a></li>

@@ -85,7 +85,7 @@ class UserController extends BaseController {
 					$data['title'] = 'Welcome!';
 					return View::make('layouts.simple', $data);
 				}else{
-					// Something went wrong
+						// Something went wrong
 					return Redirect::to('user/register')->withInput();
 				}
 			}
@@ -94,6 +94,98 @@ class UserController extends BaseController {
 	    	$data['title'] = 'Register';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.register');
     	}		
+	}
+
+	//Note that $presetValues if supplied should contain keys presetHome, presetAway and presetDate
+	function bet(){
+		//TODO: Laravel probably provides a better way to fetch variables from a Match page after a bet page was pressed there than through $_GET
+		//They are passed through the URL now, maybe that can be circumvented too.
+		//If anyone knows how, please tell me (Jakob) or feel free to change it yourselves.
+		//Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be.
+		if (isset($_GET["presetHome"]))
+			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
+		else
+			$presetValues = array();
+
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'hometeam' => array('required'),
+			        'awayteam' => array('required'),
+			        'date' => array('required'),
+			        'hometeamScore' => array('integer', 'between:0,100', 'required'),
+			        'awayteamScore' => array('integer', 'between:0,100', 'required'),
+			        'firstGoal' => array('firstgoal:hometeam,awayteam'),
+			        'hometeamYellows' => array('integer', 'between:0,100'),
+			        'hometeamReds' => array('integer', 'between:0,100'),
+			        'awayteamYellows' => array('integer', 'between:0,100'),
+			        'awayteamReds' => array('integer', 'between:0,100')
+			);
+			
+			$validation = Validator::make(Input::all(), $rules);
+			
+			if($validation->fails()) {
+				// Problem so show the user error messages
+				return Redirect::to('user/bet')->withInput()->withErrors($validation);
+			}else{
+				// Start working on this data
+				$hometeam = Input::get('hometeam');
+				$awayteam = Input::get('awayteam');
+				$date = Input::get('date');
+				$hometeam_score = Input::get('hometeamScore');
+				$awayteam_score = Input::get('awayteamScore');
+				$firstGoal = Input::get('firstGoal');
+				$hometeam_yellows = Input::get('hometeamYellows');
+				$hometeam_reds = Input::get('hometeamReds');
+				$awayteam_yellows = Input::get('awayteamYellows');
+				$awayteam_reds = Input::get('awayteamReds');
+				$hometeamIDs = Team::getIDsByName($hometeam);
+				$awayteamIDs = Team::getIDsByName($awayteam);
+				$hometeamID = $hometeamIDs[0]->id;
+				$awayteamID = $awayteamIDs[0]->id;
+				if ($firstGoal == $hometeam)
+					$firstGoal_id = $hometeamID;
+				else
+					$firstGoal_id = $awayteamID;
+
+				//save blank guesses as -1 internally
+				if ($hometeam_yellows == "")
+					$hometeam_yellows = -1;
+				if ($hometeam_reds == "")
+					$hometeam_reds = -1;
+				if ($awayteam_yellows == "")
+					$awayteam_yellows = -1;
+				if ($awayteam_reds == "")
+					$awayteam_reds = -1;
+
+				$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
+				$user = new User;
+				$success = ($match != NULL) && $user->loggedIn();
+				if($success == true){
+					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
+					$data['content'] = 'Thank you for filling in your bet.';
+					$data['title'] = 'Bet registered!';
+					return View::make('layouts.simple', $data);
+				}else{
+					// Something went wrong
+					return Redirect::to('user/bet')->withInput();
+
+				}
+			}
+    	}else{
+	    	// Show the form
+	    	$data['title'] = 'Bet';
+			$user = new User;
+			if ($user->loggedIn())
+		    	return View::make('layouts.simple', $data)->nest('content', 'user.bet', $presetValues);
+			else 
+				return View::make('layouts.simple', $data)->nest('content', 'user.nologin');
+    	}	
+	}
+
+
+	function showBets() {
+		return View::make('layouts.simple', $data)->nest('content', 'user.bets');
 	}
 	
 	function activate($username, $registrationcode){

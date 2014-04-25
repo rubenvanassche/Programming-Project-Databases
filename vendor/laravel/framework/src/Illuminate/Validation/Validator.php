@@ -621,6 +621,27 @@ class Validator implements MessageProviderInterface {
 	}
 
 	/**
+	 * Custom for betting class
+	 * Validate that attribute matches one of two others
+	 *
+	 * @param  string  $attribute
+	 * @param  mixed   $value
+	 * @param  array   $parameters
+	 * @return bool
+	 */
+
+	protected function validateFirstgoal($attribute, $value, $parameters)
+	{
+		$this->requireParameterCount(1, $parameters, 'firstgoal');
+
+		$home = array_get($this->data, $parameters[0]);
+		$away = array_get($this->data, $parameters[1]);
+
+		return ($value == $home || $value == $away);
+	}
+
+
+	/**
 	 * Validate that an attribute is different from another attribute.
 	 *
 	 * @param  string  $attribute

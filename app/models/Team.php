@@ -57,10 +57,15 @@ class Team {
         // first check whether the link was already created
         $query = "SELECT * FROM `".self::TABLE_PLAYER_PER_TEAM."` WHERE player_id = ? AND team_id = ?";
         $values = array( $player_id, $team_id );
+<<<<<<< HEAD
         $select = DB::select( $query, $values );
         if (!empty($select)){
 	         return False;
         }
+=======
+        $sql = DB::select( $query, $values );
+        if ( !empty( $sql ) ) return False;
+>>>>>>> master
 
         $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_TEAM.'` (player_id, team_id) VALUES (?, ?)';
         DB::insert( $query, $values );

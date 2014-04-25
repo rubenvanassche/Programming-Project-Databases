@@ -10,7 +10,7 @@
 		@foreach ($matches as $match)
 			<tr>
 				<td>{{ $match->date }}</td>
-				<td><a href="{{ $match->match_id}}">{{ $match->hometeam}} - {{ $match->awayteam }} </a></td>
+				<td><a href="{{route('match', array('id'=>$match->match_id))}}">{{ $match->hometeam}} - {{ $match->awayteam }} </a></td>
 				<td><?php echo Match::getScore($match->match_id); ?></td>
 			</tr>
 		@endforeach					
