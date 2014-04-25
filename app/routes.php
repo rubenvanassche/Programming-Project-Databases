@@ -44,6 +44,9 @@ Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwor
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 
+Route::get('usergroups', 'UserController@usergroups');
+Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
+
 
 Route::get('inserts', function() {
 	return View::make('inserts');

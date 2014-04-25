@@ -41,6 +41,7 @@
 							if($user->loggedIn()){
 							?>
 								<li><a href="#">Bets</a></li>
+								<li><a href="{{ url('usergroups') }}">User Groups</a></li>
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
 								<li><a href="{{ action('UserController@logout') }}">Logout</a></li>

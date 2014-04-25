@@ -243,5 +243,47 @@ class UserController extends BaseController {
 		$data['content'] = 'Enjoy the rest of the world wide web.';
 		return View::make('layouts.simple', $data);
 	}
+	
+	function usergroups(){
+		$user = new User;
+		$data['groups'] = $user->getUserGroups();
+		$data['title'] = 'User Groups';
+		
+		return View::make('user.usergroups', $data);
+	}
+	
+	function newusergroup(){
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'name' => array('required'),
+			);
+			
+			$validation = Validator::make(Input::all(), $rules);
+			
+			if($validation->fails()) {
+				// Problem so show the user error messages
+				return Redirect::to('usergroups/new')->withInput()->withErrors($validation);
+			}else{
+				// Start working on this data
+				$name = Input::get('name');
+				
+				$user = new User;
+				$success = $user->newUserGroup($name);
+				
+				if($success){
+					// Do something
+				}else{
+					$data['title'] = 'There is already A User Group with this name';
+					$data['content'] = 'Please choose another one.';
+					return View::make('layouts.simple', $data);
+				}
+			}
+    	}else{
+	    	// Show the form
+	    	$data['title'] = 'New User Group';
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.newusergroup');
+    	}			
+	}
 
 }

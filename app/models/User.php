@@ -142,6 +142,30 @@ class User {
 		return true;
 	}
 	
+	function newUserGroup($name){
+		$result = DB::select("SELECT COUNT(id) AS count FROM userGroup WHERE name = ?", array($name));
+		if($result[0]->count == 0){
+			DB::insert("INSERT INTO userGroup (name) VALUES (?)", array($name));
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function addUserToUserGroup($userGroupID, $userID){
+		DB::insert("INSERT INTO userPerUserGroup (user_id, userGroup_id) VALUES (?, ?)", array($userID, $userGroupID));
+	}
+	
+	function getUsersByGroup($userGroupID){
+		$result = DB::select("SELECT (SELECT firstname FROM user WHERE id = userPerUserGroup.user_id) as firstname FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
+		return $result;
+	}
+	
+	function getUserGroups(){
+		$result = DB::select('SELECT * FROM userGroup');
+		return $result;
+	}
+	
 	
 	function get($userID){
 			$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
