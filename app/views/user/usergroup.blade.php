@@ -4,21 +4,19 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{$title}}</h1>
-			<a class="btn btn-success pull-right" style="margin-top:-45px;" href="{{url('usergroups/new')}}">New Group</a>
+			<a class="btn btn-success pull-right" style="margin-top:-45px;" href="{{url('usergroup/'.$id.'/addMe')}}">Add Me</a>
 		</div>
 		<div class="col-md-12">
 			<table class="table table-condensed">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Score</th>
+						<th>Username</th>
 					</tr>
 				</thead>
 				<tbody>	
-					@foreach ($groups as $group)
+					@foreach ($users as $user)
 						<tr>
-							<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
-							<td>0</td>
+							<td>{{$user->username}}</a></td>
 						</tr>
 					@endforeach					
 				</tbody>

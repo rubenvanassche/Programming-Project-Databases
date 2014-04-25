@@ -157,8 +157,13 @@ class User {
 	}
 	
 	function getUsersByGroup($userGroupID){
-		$result = DB::select("SELECT (SELECT firstname FROM user WHERE id = userPerUserGroup.user_id) as firstname FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
+		$result = DB::select("SELECT (SELECT username FROM user WHERE id = userPerUserGroup.user_id) as username FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
 		return $result;
+	}
+	
+	function getUserGroupName($userGroupID){
+		$result = DB::select("SELECT name FROM userGroup WHERE id = ?", array($userGroupID));
+		return $result[0]->name;
 	}
 	
 	function getUserGroups(){
