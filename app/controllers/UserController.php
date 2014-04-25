@@ -364,7 +364,7 @@ class UserController extends BaseController {
 				$success = $user->newUserGroup($name);
 				
 				if($success){
-					// Do something
+					return Redirect::to('usergroups');
 				}else{
 					$data['title'] = 'There is already A User Group with this name';
 					$data['content'] = 'Please choose another one.';
@@ -376,6 +376,23 @@ class UserController extends BaseController {
 	    	$data['title'] = 'New User Group';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.newusergroup');
     	}			
+	}
+	
+	function usergroup($id){
+		$user = new User;
+		$data['users'] = $user->getUsersByGroup($id);
+		$data['title'] = $user->getUserGroupName($id);
+		$data['id'] = $id;
+		
+		
+		return View::make('user.usergroup', $data);		
+	}
+	
+	function addMe($usergroup){
+		$user = new User;	
+		$user->addUserToUserGroup($usergroup, $user->ID());
+		
+		return Redirect::to('usergroup/'.$usergroup);
 	}
 
 }
