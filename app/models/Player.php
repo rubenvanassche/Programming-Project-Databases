@@ -43,9 +43,9 @@ class Player {
      * @param name The name of the player.
      * @return The results after the query.
      */
-    public static function getPlayer( $name ) {
-        $query = "SELECT * FROM `".self::TABLE_PLAYER."` WHERE name = ?";
-        $values = array( $name );
+    public static function getPlayer( $id ) {
+        $query = "SELECT * FROM `".self::TABLE_PLAYER."` WHERE id = ?";
+        $values = array( $id );
 
         return DB::select( $query, $values );
     }
@@ -107,7 +107,7 @@ class Player {
      */
     public static function getPlayerText( $name ) {
         $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $name );
-
+		//print($jsonurl);
         $json = file_get_contents( $jsonurl );
         $decodedJSON = json_decode( $json, true, JSON_UNESCAPED_UNICODE );
         

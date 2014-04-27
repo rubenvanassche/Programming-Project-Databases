@@ -9,7 +9,7 @@
 	<tbody>	
 		@foreach ($playerBase as $player)
 			<tr>
-				<td><a href="{{ route('player', array('name'=>urlencode($player[0]->name))) }}">{{$player[0]->name}}</a></td>
+				<td><a href="{{ route('player', array('name'=>urlencode($player[0]->id))) }}">{{$player[0]->name}}</a></td>
 				<td>
 					<?php 
 						if ($player[0]->injured == 0) {

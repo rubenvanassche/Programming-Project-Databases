@@ -24,7 +24,7 @@ Route::get('team/{id}/players', array('as' => 'team.players', 'uses' => 'TeamCon
 Route::get('team/{id}/information', array('as' => 'team.information', 'uses' => 'TeamController@information'));
 Route::get('team/{id}/matches', array('as' => 'team.matches', 'uses' => 'TeamController@matches'));
 
-Route::get('player/{name}', array('as' => 'player', 'uses' =>'PlayerController@index'));
+Route::get('player/{id}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
 Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'));
 
