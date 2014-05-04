@@ -1,4 +1,18 @@
-<table class="table table-condensed">
+<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
+<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
+<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+<script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+<script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+<script type="text/javascript">
+jQuery(document).ready(function() {
+$("#myTable")
+.tablesorter({debug: false, widgets: ['zebra'], sortList: [[0,0]]})
+.tablesorterFilter({filterContainer: "#filter-box",
+                    filterClearContainer: "#filter-clear-button",
+                    filterColumns: [0]}); });
+</script>
+<table id="myTable" class="table table-condensed">
 	<thead>
 		<tr>
 			<th>Name</th>

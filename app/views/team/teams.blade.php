@@ -7,15 +7,20 @@
 			<h3>International</h3>
 		</div>
 		<div class="col-md-12">
-			<table id="tablesorter" class="tablesorter">
+			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
+						<th>Country</th>
 						<th>Name</th>
 					</tr>
 				</thead>
 				<tbody>	
 					@foreach ($teams as $team)
+						<?php
+							$flag = "flag-" . $team->abbreviation;
+						?>
 						<tr>
+							<td><i class={{$flag}}></td>
 							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
 						</tr>
 					@endforeach					

@@ -82,7 +82,7 @@ class Team {
      * @return Results after the query.
      */
     public static function getAll(){
-        $query = "SELECT * FROM `".self::TABLE_TEAM."`";
+        $query = "SELECT team.id, team.name, country.abbreviation FROM team, country WHERE team.country_id = country.id";
 
         return DB::select( $query );
     }
