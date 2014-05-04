@@ -124,6 +124,7 @@ class CrawlerController extends BaseController {
      * @return An associative array with the following values mapped:
      *      "first name"    => $first_name,
      *      "last name"     => $last_name,
+     *      "position"      => $position,
      */
     public static function player_data( $url ) {
         // load document
@@ -145,11 +146,18 @@ class CrawlerController extends BaseController {
         $last_name = $data->filterXPath( $xpath )->getNode(0);
         $last_name = ( empty( $last_name ) ) ? NULL : trim( $last_name->textContent );
 
+        // query for players position
+        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[8]";
+
+        $position = $data->filterXPath( $xpath )->getNode(0);
+        $position = ( empty( $position ) ) ? NULL : trim( $position->textContent );
+
         // clear cache to avoid memory exhausting
         $data->clear();
         return array(
             "first name"    => $first_name,
             "last name"     => $last_name,
+            "position"      => $position,
         );
     }
 
