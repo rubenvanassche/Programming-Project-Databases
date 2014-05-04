@@ -260,7 +260,7 @@ class CrawlerController extends BaseController {
      * @brief Generator for parsing all the international teams from the 
      * official FIFA participant list.
      * @details A complete list can be found at 
-     * http://int.soccerway.com/teams/ranking/fifa/
+     * http://int.soccerway.com/teams/rankings/fifa/
      *
      * @return An associative array with the following values mapped:
      *      "name"          => $name,
@@ -354,6 +354,7 @@ class CrawlerController extends BaseController {
                 if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
                 $player_id = $ids[0]->id;
 
+                // link player to team
                 Team::linkPlayer( $player_id, $team_id );
             } // end foreach
         } // end foreach
@@ -617,6 +618,13 @@ class CrawlerController extends BaseController {
                 // get the time
                 $time = $goal["time"];
 
+                // get the team id
+                $team = $goal["team"];
+
+                $ids = Team::getIDsByName( $team );
+                if ( empty( $ids ) ) throw new DomainException( "Could not find team ".$team );
+                $team_id = $ids[0]->id;
+
                 // get the player id
                 $player_data = $goal["player data"];
 
@@ -625,15 +633,14 @@ class CrawlerController extends BaseController {
                 $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
 
                 $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
+                if ( empty( $ids ) && NULL != $player ) {
+                    $ids = Player::add( $player );
+                    $player_id = $ids[0]->id;
+
+                    // also link player to team
+                    Team::linkPlayer( $player_id, $team_id );
+                } // end if
                 $player_id = $ids[0]->id;
-
-                // get the team id
-                $team = $goal["team"];
-
-                $ids = Team::getIDsByName( $team );
-                if ( empty( $ids ) ) throw new DomainException( "Could not find team ".$team );
-                $team_id = $ids[0]->id;
 
                 // now add the goal (if not already added)
                 if ( empty( Goal::getIDs( $match_id, $team_id, $player_id, $time ) ) ) Goal::add( $match_id, $team_id, $player_id, $time );
