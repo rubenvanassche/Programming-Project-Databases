@@ -113,7 +113,7 @@
 					?>
 						<div class="item <?php if($counter==0){echo 'active';} ?>"><!-- class of active since it's the first item -->
 							<img src="<?php echo $picture; ?>" width='100%' />
-							<div class="carousel-caption">
+							<div class="carousel-caption" style="background: rgba(0,0,0,0.5);">
 								<h3><?php echo $article->get_title(); ?></h3>
 								<p><?php echo $article->get_description(); ?></p>
 								<p><a href="<?php echo $article->get_permalink(); ?>">Read More</a></p>
