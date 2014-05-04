@@ -16,6 +16,9 @@ class HomeController extends BaseController {
     */
 
     public function index(){
+	
+		Notifications::test();
+	
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches(5);
 	$futureMatches = Match::getFutureMatches(5);
