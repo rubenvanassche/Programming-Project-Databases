@@ -7,7 +7,7 @@
 			<h3>International</h3>
 		</div>
 		<div class="col-md-12">
-			<table class="table table-condensed">
+			<table id="tablesorter" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -58,6 +58,12 @@
 @stop
 
 @section('javascript')
+	<script type='text/javascript'>
+	$(document).ready(function() { 
+        $("tablesorter").tablesorter({ sortList: [0,0] });
+    } ); 
+    </script>
+  
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
      google.load('visualization', '1', {'packages': ['geochart']});

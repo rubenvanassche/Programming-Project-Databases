@@ -105,6 +105,7 @@
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
 		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
+		<script src="<?php echo asset('js/__jquery.tablesorter/jquery.tablesorter.min.js'); ?>" ></script>
 		@yield('javascript')
 	</body>
 </html>
