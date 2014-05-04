@@ -32,7 +32,7 @@ CREATE TABLE `bet` (
   `awayteam_yellows` int(5) DEFAULT NULL,
   `awayteam_reds` int(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -49,7 +49,7 @@ CREATE TABLE `cards` (
   PRIMARY KEY (`id`),
   KEY `player_ids` (`player_id`),
   KEY `match` (`match_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -61,7 +61,7 @@ CREATE TABLE `coach` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=200 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -73,7 +73,7 @@ CREATE TABLE `competition` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ CREATE TABLE `continent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE `country` (
   `abbreviation` char(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `continent` (`continent_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=256 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -119,7 +119,7 @@ CREATE TABLE `goal` (
   KEY `match` (`match_id`),
   KEY `player` (`player_id`),
   KEY `team` (`team_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=102 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -137,7 +137,7 @@ CREATE TABLE `match` (
   KEY `hometeam` (`hometeam_id`),
   KEY `awayteam` (`awayteam_id`),
   KEY `competition` (`competition_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -150,7 +150,7 @@ CREATE TABLE `player` (
   `name` varchar(60) DEFAULT NULL,
   `injured` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5138 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -196,7 +196,7 @@ CREATE TABLE `team` (
   PRIMARY KEY (`id`),
   KEY `country` (`country_id`),
   KEY `coach` (`coach_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=210 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -229,7 +229,7 @@ CREATE TABLE `user` (
   `session_id` varchar(24) DEFAULT NULL,
   `registrationcode` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -241,7 +241,7 @@ CREATE TABLE `userGroup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -256,7 +256,7 @@ CREATE TABLE `userGroupInvites` (
   `invetedById` int(11) NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -269,4 +269,4 @@ CREATE TABLE `userPerUserGroup` (
   `userGroup_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`userGroup_id`),
   KEY `userGroup_id` (`userGroup_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
