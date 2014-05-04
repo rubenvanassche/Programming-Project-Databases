@@ -106,8 +106,11 @@ class Player {
      * @return The biography (summary) of the player.
      */
     public static function getPlayerText( $name ) {
-        $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $name );
-		//print($jsonurl);
+	
+		$arr = str_word_count($name, 1);
+		$name = $arr[0] . " " . $arr[1];
+		
+	    $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $name );
         $json = file_get_contents( $jsonurl );
         $decodedJSON = json_decode( $json, true, JSON_UNESCAPED_UNICODE );
         
@@ -128,6 +131,10 @@ class Player {
      * @return The URL of the player image.
      */
     public static function getPlayerImageURL( $name ) {
+	
+		$arr = str_word_count($name, 1);
+		$name = $arr[0] . " " . $arr[1];
+		
         $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&titles=" . urlencode( $name ) . "&prop=pageimages&format=json&pithumbsize=300";
 
         $json = file_get_contents($jsonurl);
