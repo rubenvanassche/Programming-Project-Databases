@@ -79,11 +79,11 @@ class Team {
     }
 
     /**
-     * @brief Get all the teams.
+     * @brief Get all the teams.    
      * @return Results after the query.
      */
     public static function getAll(){
-        $query = "SELECT * FROM `".self::TABLE_TEAM."`";
+        $query = "SELECT team.id, team.name, country.abbreviation, continent.name AS continent FROM team, country, continent WHERE team.country_id = country.id AND country.continent_id = continent.id";
 
         return DB::select( $query );
     }
