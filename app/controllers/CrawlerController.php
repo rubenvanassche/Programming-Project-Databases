@@ -34,7 +34,7 @@ class CrawlerController extends BaseController {
             } catch ( ErrorException $ee ) {
                 $stop = time();
             } catch ( FatalErrorException $fee ) {
-                continue;
+                $stop = time();
             } // end try-catch
         } while ( $stop - $start <= $time_limit );
 
@@ -150,7 +150,14 @@ class CrawlerController extends BaseController {
         $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[8]";
 
         $position = $data->filterXPath( $xpath )->getNode(0);
-        $position = ( empty( $position ) ) ? NULL : trim( $position->textContent );
+        $position = ( empty( $position ) ) ? NULL : strtolower( trim( $position->textContent ) );
+
+        if (! in_array( $position, array("goalkeeper", "defender", "midfielder", "attacker") ) ) {
+            $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[7]";
+
+            $position = $data->filterXPath( $xpath )->getNode(0);
+            $position = ( empty( $position ) ) ? NULL : strtolower( trim( $position->textContent ) );
+        } // end if
 
         // clear cache to avoid memory exhausting
         $data->clear();
@@ -363,7 +370,7 @@ class CrawlerController extends BaseController {
                 $player_id = $ids[0]->id;
 
                 // link player to team
-                Team::linkPlayer( $player_id, $team_id );
+                Team::linkPlayer( $player_id, $team_id, $player_data["position"] );
             } // end foreach
         } // end foreach
 

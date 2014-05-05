@@ -53,14 +53,15 @@ class Team {
      * @param team_id The team ID.
      * @return True if new link created, False otherwise.
      */
-    public static function linkPlayer( $player_id, $team_id ) {
+    public static function linkPlayer( $player_id, $team_id, $position ) {
         // first check whether the link was already created
         $query = "SELECT * FROM `".self::TABLE_PLAYER_PER_TEAM."` WHERE player_id = ? AND team_id = ?";
         $values = array( $player_id, $team_id );
         $sql = DB::select( $query, $values );
         if ( !empty( $sql ) ) return False;
 
-        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_TEAM.'` (player_id, team_id) VALUES (?, ?)';
+        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_TEAM.'` (player_id, team_id, position) VALUES (?, ?, ?)';
+        $values = array( $player_id, $team_id, $position );
         DB::insert( $query, $values );
         return True;
     }
