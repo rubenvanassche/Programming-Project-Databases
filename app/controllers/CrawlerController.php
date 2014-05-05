@@ -412,7 +412,7 @@ class CrawlerController extends BaseController {
         $date = ( empty( $date ) ) ? NULL : trim( $date->textContent );
 
         // query for kick-off
-        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[3]";
+        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[4]";
 
         $kick_off = $data->filterXPath( $xpath )->getNode(0);
         $kick_off = ( empty( $kick_off ) ) ? NULL : trim( $kick_off->textContent );
@@ -462,6 +462,8 @@ class CrawlerController extends BaseController {
             if ( !empty( $homegoal ) ) {
                 // get the player data
                 $href = $home->getElementsByTagName( 'a' );
+                if ( empty( $href->item(0) ) ) continue;
+
                 $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
                 $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
 
@@ -621,8 +623,8 @@ class CrawlerController extends BaseController {
             Competition::linkTeam( $awayteam_id, $competition_id );
 
             // alright, add the match (if not already added)
-            $date = new DateTime( $match_data["date"] );
-            $date = $date->format( "Y-m-d" );
+            $date = new DateTime( $match_data["date"] . ' ' . $match_data["kick-off"] );
+            $date = $date->format( "Y-m-d H:i:s" );
 
             $ids = Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
             if ( empty( $ids ) ) $ids = Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
@@ -653,7 +655,7 @@ class CrawlerController extends BaseController {
                     $player_id = $ids[0]->id;
 
                     // also link player to team
-                    Team::linkPlayer( $player_id, $team_id );
+                    Team::linkPlayer( $player_id, $team_id, $player_data["position"] );
                 } // end if
                 $player_id = $ids[0]->id;
 
