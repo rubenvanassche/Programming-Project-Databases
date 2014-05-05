@@ -105,18 +105,6 @@
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
 		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
-		<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
-		<script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
-		<script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
-
-		<script type="text/javascript">
-    	jQuery(document).ready(function() {
-        $("#myTable")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0,0]]})
-        .tablesorterFilter({filterContainer: "#filter-box",
-                            filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0]}); });
-		</script>
 		@yield('javascript')
 	</body>
 </html>

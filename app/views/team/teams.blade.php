@@ -12,6 +12,7 @@
 					<tr>
 						<th>Country</th>
 						<th>Name</th>
+						<th>Continent</th>
 					</tr>
 				</thead>
 				<tbody>	
@@ -22,6 +23,7 @@
 						<tr>
 							<td><i class={{$flag}}></td>
 							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
+							<td>{{$team->continent}}</td>
 						</tr>
 					@endforeach					
 				</tbody>
@@ -63,11 +65,18 @@
 @stop
 
 @section('javascript')
-	<script type='text/javascript'>
-	$(document).ready(function() { 
-        $("tablesorter").tablesorter({ sortList: [0,0] });
-    } ); 
-    </script>
+	<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+	<script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+	<script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0,0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0]}); });
+	</script>
   
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>

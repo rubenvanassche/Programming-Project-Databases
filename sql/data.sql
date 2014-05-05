@@ -394,7 +394,7 @@ INSERT INTO `country` (`id`, `name`, `continent_id`, `abbreviation`) VALUES
 (140, 'Montserrat', 5, 'ms'),
 (141, 'Morocco', 3, 'ma'),
 (142, 'Mozambique', 3, 'mz'),
-(143, 'Myanmar', 1, 'mz'),
+(143, 'Myanmar', 1, 'mm'),
 (144, 'Namibia', 3, 'na'),
 (145, 'Nauru', 4, 'nr'),
 (146, 'Nepal', 1, 'np'),
