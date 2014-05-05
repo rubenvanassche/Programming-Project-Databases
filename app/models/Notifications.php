@@ -23,7 +23,6 @@ class Notifications {
 				
 		$result = DB::select($query);
 		
-		var_dump($result);
 				
         $rows = array();
 		
@@ -31,16 +30,23 @@ class Notifications {
             $row['object'] = $this->getObjectRow($row['type_id'], $row['object_id']);
             $rows[] = $row;
         }*/
-		
+				
 		foreach($result as $rs) {
-			$row['object'] = Notifications::getObjectRow($rs['type_id'], $rs['object_id']);
+			$row['object_id'] = $rs->object_id;
+			$row['actor_id'] = $rs->actor_id;
+			$row['subject_id'] = $rs->subject_id;
+			$row['type_id'] = $rs->type_id;
+			$row['object'] = Notifications::getObjectRow($rs->type_id, $rs->object_id);
+			$rows[] = $row;
 		}
 		
-		/*$notifications = array();
+		//var_dump($rows[0]['object']);
+		
+		$notifications = array();
 		
 		foreach($rows as $row){
             $notification = array(
-                'message' => $this->getNotificationMessage($row),
+                'message' => Notifications::getNotificationMessage($row),
                 'actor_id' => $row['actor_id'],
                 'subject_id' => $row['subject_id'],
                 'object' => $row['object_id'],
@@ -48,21 +54,24 @@ class Notifications {
             $notifications[] = $notification;
         }
          
-        return $notifications;*/
+        return $notifications;
 	}
 	
-	protected function getObjectRow($typeId, $objectId)
+	protected static function getObjectRow($typeId, $objectId)
     {
         switch($typeId){
             case self::INVITE_USER_GROUP:
-                return $this->mysqli->query("SELECT * FROM userGroupInvites WHERE id = $objectId")->fetch_assoc();
+                $query = "SELECT * FROM `userGroupInvites` WHERE `competitionId` = ?";
+				$values = array($objectId);
+				$result = DB::select($query, $values)[0];
+				return $result;
         }
     }
 	
-	    protected function getNotificationMessage($row){
+	    protected static function getNotificationMessage($row){
         switch($row['type_id']){
             case self::INVITE_USER_GROUP:
-                return "{$row['actor_name']} invited you to join GROUP A";
+                return "{$row['object']->invitedById} invited you to join GROUP A"; // Need to fix this to display the correct stuff.
         }
     }
 
@@ -75,6 +84,8 @@ class Notifications {
 		Notifications::saveNotification(3, 6, 5, self::INVITE_USER_GROUP);
 		
 		$result = Notifications::getNotifications(6);
+		
+		var_dump($result);
 	}
 	
 }
