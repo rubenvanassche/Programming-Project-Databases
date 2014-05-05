@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 05, 2014 at 04:00 PM
+-- Generation Time: May 05, 2014 at 06:46 PM
 -- Server version: 5.5.36-MariaDB
 -- PHP Version: 5.5.11
 
@@ -298,7 +298,8 @@ INSERT INTO `country` (`id`, `name`, `continent_id`, `abbreviation`) VALUES
 (257, 'Yugoslavia', 2, 'yu'),
 (258, 'Czechoslovakia ', 2, 'cs'),
 (259, 'USSR', 2, 'su'),
-(260, 'West Germany', 2, 'de');
+(260, 'West Germany', 2, 'de'),
+(261, 'German DR', 2, 'dd');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
