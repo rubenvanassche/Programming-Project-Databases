@@ -13,6 +13,12 @@ class Match {
     const TABLE_MATCH = "match";
 
     /**
+     * @var TABLE_PLAYER_PER_MATCH
+     * @brief The table where each player is linked to a match.
+     */
+    const TABLE_PLAYER_PER_MATCH = "playerPerMatch";
+
+    /**
      * @brief Get The ids of a given match.
      * @param hometeam_id The ID of the hometeam.
      * @param awayteam_id The ID of the awayteam.
@@ -39,6 +45,25 @@ class Match {
         $values = array( $hometeam_id, $awayteam_id, $competition_id, $date );
         DB::insert( $query, $values );
         return self::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
+    }
+
+    /**
+     * @brief Link player to the match.
+     * @param player_id The ID of the player.
+     * @param match_id The ID of the match.
+     * @return True if new link created, False otherwise.
+     */
+    public static function linkPlayer( $player_id, $match_id ) {
+        // first check whether the link was already created
+        $query = "SELECT * FROM `".self::TABLE_PLAYER_PER_MATCH."` WHERE player_id = ? AND match_id = ?";
+        $values = array( $player_id, $team_id );
+        $sql = DB::select( $query, $values );
+        if ( !empty( $sql ) ) return False;
+
+        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_MATCH.'` (player_id, team_id) VALUES (?, ?)';
+        $values = array( $player_id, $team_id );
+        DB::insert( $query, $values );
+        return True;
     }
 
     // TODO DOCUMENTIZE
