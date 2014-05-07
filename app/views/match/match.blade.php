@@ -10,6 +10,7 @@
 	}
 ?>
 @section('content')
+	@if($future)
 	<!--These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions. 
 	It should probably be changed to something more elegant, if the button even stays there. -->
 	<div class="row">
@@ -21,6 +22,7 @@
 	</ul>
 	</div>
 	</div>
+	@endif
 
 
 	<div class="row">

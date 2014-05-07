@@ -184,7 +184,10 @@ class UserController extends BaseController {
 
 				$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
 				$user = new User;
-				$success = ($match != NULL) && $user->loggedIn();
+				$now = $date = date('y-m-d h:i:s', time());;
+				$matchDateTime = new DateTime( $match->date);
+				$matchDateTime = $matchDateTime->format("y-m-d h:i:s");
+				$success = ($match != NULL) && $user->loggedIn() && $now < $matchDateTime;
 				if($success == true){
 					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
 					$data['content'] = 'Thank you for filling in your bet.';

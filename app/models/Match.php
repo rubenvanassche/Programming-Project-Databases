@@ -226,5 +226,14 @@ class Match {
             
             return $info;
     }
+
+	public static function isInFuture($matchID) {
+		$now = $date = date('y-m-d h:i:s', time());;
+		//Convert sql datetime to php datetime
+		$match = Match::getMatchByID($matchID)[0];
+		$matchDateTime = new DateTime($match->date);
+		$matchDateTime = $matchDateTime->format("y-m-d h:i:s");
+		return $matchDateTime > $now;
+	}
 }
 
