@@ -1,14 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.6
+-- version 4.1.6
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Apr 30, 2014 at 01:26 PM
--- Server version: 5.5.33
--- PHP Version: 5.5.3
+-- Host: 127.0.0.1
+-- Generation Time: May 07, 2014 at 12:19 PM
+-- Server version: 5.6.16
+-- PHP Version: 5.5.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `coachcenter`
@@ -20,7 +26,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `bet`
 --
 
-CREATE TABLE `bet` (
+CREATE TABLE IF NOT EXISTS `bet` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `match_id` int(11) NOT NULL,
@@ -32,7 +38,7 @@ CREATE TABLE `bet` (
   `awayteam_yellows` int(5) DEFAULT NULL,
   `awayteam_reds` int(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -40,7 +46,7 @@ CREATE TABLE `bet` (
 -- Table structure for table `cards`
 --
 
-CREATE TABLE `cards` (
+CREATE TABLE IF NOT EXISTS `cards` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `player_id` int(11) DEFAULT NULL,
   `match_id` int(11) DEFAULT NULL,
@@ -49,7 +55,7 @@ CREATE TABLE `cards` (
   PRIMARY KEY (`id`),
   KEY `player_ids` (`player_id`),
   KEY `match` (`match_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -57,43 +63,39 @@ CREATE TABLE `cards` (
 -- Table structure for table `coach`
 --
 
-CREATE TABLE `coach` (
+CREATE TABLE IF NOT EXISTS `coach` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=200 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `competition`
 --
 
-CREATE TABLE `competition` (
+CREATE TABLE IF NOT EXISTS `competition` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `continent`
 --
 
-CREATE TABLE `continent` (
+CREATE TABLE IF NOT EXISTS `continent` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table `country`
 --
 
-CREATE TABLE `country` (
+CREATE TABLE IF NOT EXISTS `country` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   `continent_id` int(11) DEFAULT NULL,
@@ -102,13 +104,12 @@ CREATE TABLE `country` (
   KEY `continent` (`continent_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=256 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `goal`
 --
 
-CREATE TABLE `goal` (
+CREATE TABLE IF NOT EXISTS `goal` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `match_id` int(11) DEFAULT NULL,
   `time` tinyint(4) DEFAULT NULL,
@@ -121,13 +122,11 @@ CREATE TABLE `goal` (
   KEY `team` (`team_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=102 ;
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table `match`
 --
 
-CREATE TABLE `match` (
+CREATE TABLE IF NOT EXISTS `match` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `hometeam_id` int(11) DEFAULT NULL,
   `awayteam_id` int(11) DEFAULT NULL,
@@ -139,26 +138,40 @@ CREATE TABLE `match` (
   KEY `competition` (`competition_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
 
--- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `actor_id` int(11) DEFAULT NULL,
+  `subject_id` int(11) DEFAULT NULL,
+  `object_id` int(11) DEFAULT NULL,
+  `type_id` int(11) DEFAULT NULL,
+  `status` varchar(100) DEFAULT NULL COMMENT ' To store status of notification i.e seen or not unseen ',
+  `created_date` datetime DEFAULT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=76 ;
 
 --
 -- Table structure for table `player`
 --
 
-CREATE TABLE `player` (
+CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   `injured` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5138 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `playerPerMatch`
 --
 
-CREATE TABLE `playerPerMatch` (
+CREATE TABLE IF NOT EXISTS `playerPerMatch` (
   `player_id` int(11) NOT NULL DEFAULT '0',
   `match_id` int(11) NOT NULL DEFAULT '0',
   `intime` tinyint(4) DEFAULT NULL,
@@ -167,13 +180,12 @@ CREATE TABLE `playerPerMatch` (
   KEY `player_per_match` (`match_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `playerPerTeam`
 --
 
-CREATE TABLE `playerPerTeam` (
+CREATE TABLE IF NOT EXISTS `playerPerTeam` (
   `player_id` int(11) NOT NULL DEFAULT '0',
   `team_id` int(11) NOT NULL DEFAULT '0',
   `position` enum('goalkeeper','defender','midfielder','attacker') NOT NULL,
@@ -181,13 +193,12 @@ CREATE TABLE `playerPerTeam` (
   KEY `player_per_team` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `team`
 --
 
-CREATE TABLE `team` (
+CREATE TABLE IF NOT EXISTS `team` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) DEFAULT NULL,
   `country_id` int(11) DEFAULT NULL,
@@ -198,26 +209,24 @@ CREATE TABLE `team` (
   KEY `coach` (`coach_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=210 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `teamPerCompetition`
 --
 
-CREATE TABLE `teamPerCompetition` (
+CREATE TABLE IF NOT EXISTS `teamPerCompetition` (
   `team_id` int(11) NOT NULL DEFAULT '0',
   `competition_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`team_id`,`competition_id`),
   KEY `tpc_competition` (`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `facebookid` varchar(30) NOT NULL,
   `username` varchar(100) NOT NULL,
@@ -229,44 +238,45 @@ CREATE TABLE `user` (
   `session_id` varchar(24) DEFAULT NULL,
   `registrationcode` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `userGroup`
 --
 
-CREATE TABLE `userGroup` (
+CREATE TABLE IF NOT EXISTS `userGroup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `userGroupInvites`
 --
 
-CREATE TABLE `userGroupInvites` (
+CREATE TABLE IF NOT EXISTS `userGroupInvites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `competitionId` int(11) NOT NULL,
-  `invetedById` int(11) NOT NULL,
-  `message` text NOT NULL,
+  `invitedById` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=88 ;
 
--- --------------------------------------------------------
 
 --
 -- Table structure for table `userPerUserGroup`
 --
 
-CREATE TABLE `userPerUserGroup` (
+CREATE TABLE IF NOT EXISTS `userPerUserGroup` (
   `user_id` int(11) NOT NULL,
   `userGroup_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`,`userGroup_id`),
   KEY `userGroup_id` (`userGroup_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
