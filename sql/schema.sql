@@ -37,8 +37,9 @@ CREATE TABLE IF NOT EXISTS `bet` (
   `hometeam_reds` int(5) DEFAULT NULL,
   `awayteam_yellows` int(5) DEFAULT NULL,
   `awayteam_reds` int(5) DEFAULT NULL,
+  `evaluated` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -234,8 +235,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `country` varchar(60) NOT NULL,
   `session_id` varchar(24) DEFAULT NULL,
   `registrationcode` varchar(24) DEFAULT NULL,
+  `betscore` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
