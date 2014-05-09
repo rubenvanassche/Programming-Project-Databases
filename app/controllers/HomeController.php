@@ -17,7 +17,10 @@ class HomeController extends BaseController {
 
     public function index(){
 	
-		Notifications::test();
+	//Notifications::test();
+ 
+	$user = new User;
+	$notifications = $user->getNotifications();
 	
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches(5);
@@ -40,9 +43,7 @@ class HomeController extends BaseController {
 		array_push($futureMatchInfo, $info);
 	}
 
-
-	
-        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints', 'futureMatchInfo'))->with('title', 'Home');
+        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints', 'futureMatchInfo', 'notifications'))->with('title', 'Home');
     }
     
     public function news(){

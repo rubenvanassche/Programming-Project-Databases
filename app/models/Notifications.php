@@ -16,7 +16,7 @@ class Notifications {
 		$query = "SELECT nf.*, actor.username AS actor_name, subject.username AS subject_name
                 FROM notifications nf
                 INNER JOIN user actor ON nf.actor_id = actor.id
-                INNER JOIN user SUBJECT ON nf.subject_id = SUBJECT.id
+                INNER JOIN user subject ON nf.subject_id = subject.id
                 WHERE subject_id = $subjectID
                 AND status = 'unseen'
                 LIMIT 0, 5";
@@ -71,21 +71,34 @@ class Notifications {
 	    protected static function getNotificationMessage($row){
         switch($row['type_id']){
             case self::INVITE_USER_GROUP:
-                return "{$row['object']->invitedById} invited you to join GROUP A"; // Need to fix this to display the correct stuff.
+		$group = DB::select("
+		SELECT name
+                FROM userGroup
+                WHERE id = {$row['object']->competitionId}
+		");
+
+		$actor = DB::select("
+		SELECT username
+		FROM user
+		WHERE id = {$row['object']->invitedById}
+		");
+	
+                return " {$actor[0]->username} invited you to join the group: {$group[0]->name}";
         }
     }
 
 	public static function test() {
 			
 		$query = "INSERT INTO `userGroupInvites` (userId, competitionId, invitedById) VALUES (?, ?, ?)";
-        $values = array( 6, 3, 5);
+        $values = array(8, 4, 7);
         DB::insert( $query, $values );
 		
-		Notifications::saveNotification(3, 6, 5, self::INVITE_USER_GROUP);
+		Notifications::saveNotification(4, 8, 7, self::INVITE_USER_GROUP);
 		
-		$result = Notifications::getNotifications(6);
+		$result = Notifications::getNotifications(8);
 		
-		var_dump($result);
+		//var_dump($result);
+		print($result[0]['message']);
 	}
 	
 }
