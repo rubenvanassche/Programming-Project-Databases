@@ -20,41 +20,34 @@ if(Notification::showAll() != '' or $errors->first('hometeam') != '' or $errors-
 }
 ?>
 
-
 {{ Form::open(array('url' => 'user/bet')) }}
 
-<!--If someone can figure out how to do this with the if-else clause to avoid some code duplication, feel free to change.
-	Maybe splitting up into two separate forms is better? -->
+<!-- TODO: These hidden form fields are used to store the match information. This should probably be done another way though.
+	       Perhaps through the Session? It was done this way because it was adapted from the form where users could change/fill in those fields s-->
 
 @if(isset($presetHome))
 <div class="form-group">
-	<label>{{ Form::label('hometeam', 'Home team') }}</label>
-	{{ Form::text('hometeam', $presetHome , array('class'=>'form-control')) }}
+	{{ Form::hidden('hometeam', $presetHome , array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
-	<label>{{ Form::label('awayteam', 'Away team') }}</label>
-	{{ Form::text('awayteam', $presetAway , array('class'=>'form-control')) }}
+	{{ Form::hidden('awayteam', $presetAway , array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
-	<label>{{ Form::label('date', 'Date') }}</label>
-	{{ Form::text('date', $presetDate, array('class'=>'form-control')) }}
+	{{ Form::hidden('date', $presetDate, array('class'=>'form-control')) }}
 </div>
 @else
 <div class="form-group">
-	<label>{{ Form::label('hometeam', 'Home team') }}</label>
-	{{ Form::text('hometeam', Input::old('hometeam') , array('class'=>'form-control')) }}
+	{{ Form::hidden('hometeam', Input::old('hometeam') , array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
-	<label>{{ Form::label('awayteam', 'Away team') }}</label>
-	{{ Form::text('awayteam', Input::old('awayteam'), array('class'=>'form-control')) }}
+	{{ Form::hidden('awayteam', Input::old('awayteam'), array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
-	<label>{{ Form::label('date', 'Date') }}</label>
-	{{ Form::text('date', Input::old('date'), array('class'=>'form-control')) }}
+	{{ Form::hidden('date', Input::old('date'), array('class'=>'form-control')) }}
 </div>
 
 @endif
@@ -69,9 +62,14 @@ if(Notification::showAll() != '' or $errors->first('hometeam') != '' or $errors-
 	{{ Form::text('awayteamScore', Input::old('awayteamScore'), array('class'=>'form-control')) }}
 </div>
 
+
 <div class="form-group">
 	<label>{{ Form::label('firstGoal', 'First goal') }}</label>
-	{{ Form::text('firstGoal', Input::old('firstGoal'), array('class'=>'form-control')) }}
+	@if(isset($presetHome))
+	{{ Form::select('firstGoal',  array('none' => '', 'home' => $presetHome, 'away' => $presetAway)) }}
+    @else
+	{{ Form::select('firstGoal',  array('none' => '', 'home' => Input::old('hometeam'), 'away' => Input::old('awayteam'))) }}
+	@endif
 </div>
 
 <div class="form-group">

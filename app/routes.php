@@ -53,6 +53,7 @@ Route::get('usergroup/{id}', 'UserController@usergroup');
 Route::get('usergroup/{id}/addMe', 'UserController@addMe');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
 Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
+Route::get('user/betmodal', 'UserController@betmodal');
 
 
 Route::get('inserts', function() {

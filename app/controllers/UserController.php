@@ -122,10 +122,10 @@ class UserController extends BaseController {
 
 	//Note that $presetValues if supplied should contain keys presetHome, presetAway and presetDate
 	function bet(){
-		//TODO: Laravel probably provides a better way to fetch variables from a Match page after a bet page was pressed there than through $_GET
-		//They are passed through the URL now, maybe that can be circumvented too.
-		//If anyone knows how, please tell me (Jakob) or feel free to change it yourselves.
-		//Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be.
+		/*TODO: Laravel probably provides a better way to fetch variables from a Match page after a bet page was pressed there than through $_GET
+		They are passed through the URL now, maybe that can be circumvented too.
+		If anyone knows how, please tell me (Jakob) or feel free to change it yourselves.
+		Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be. */
 		if (isset($_GET["presetHome"]))
 			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
 		else
@@ -139,7 +139,7 @@ class UserController extends BaseController {
 			        'date' => array('required'),
 			        'hometeamScore' => array('integer', 'between:0,100', 'required'),
 			        'awayteamScore' => array('integer', 'between:0,100', 'required'),
-			        'firstGoal' => array('firstgoal:hometeam,awayteam'),
+			        'firstGoal' => array(),
 			        'hometeamYellows' => array('integer', 'between:0,100'),
 			        'hometeamReds' => array('integer', 'between:0,100'),
 			        'awayteamYellows' => array('integer', 'between:0,100'),
@@ -150,6 +150,7 @@ class UserController extends BaseController {
 			
 			if($validation->fails()) {
 				// Problem so show the user error messages
+				//TODO: Figure out a way to redirect only the modal instead of entire page, if possible
 				return Redirect::to('user/bet')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
@@ -167,11 +168,12 @@ class UserController extends BaseController {
 				$awayteamIDs = Team::getIDsByName($awayteam);
 				$hometeamID = $hometeamIDs[0]->id;
 				$awayteamID = $awayteamIDs[0]->id;
-				if ($firstGoal == $hometeam)
+				if ($firstGoal == "none")
+					$firstGoal_id = NULL;
+				if ($firstGoal == "home")
 					$firstGoal_id = $hometeamID;
-				else
+				if ($firstGoal == "away")
 					$firstGoal_id = $awayteamID;
-
 				//save blank guesses as -1 internally
 				if ($hometeam_yellows == "")
 					$hometeam_yellows = -1;
@@ -184,15 +186,17 @@ class UserController extends BaseController {
 
 				$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
 				$user = new User;
-				$now = $date = date('y-m-d h:i:s', time());;
+				$now = date('y-m-d h:i:s', time());;
 				$matchDateTime = new DateTime( $match->date);
 				$matchDateTime = $matchDateTime->format("y-m-d h:i:s");
+				//Only add if match exists, user is logged in and match is in the future
 				$success = ($match != NULL) && $user->loggedIn() && $now < $matchDateTime;
 				if($success == true){
 					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
 					$data['content'] = 'Thank you for filling in your bet.';
 					$data['title'] = 'Bet registered!';
-					return View::make('layouts.simple', $data);
+					Session::put('bet', $match->id); //Can be used by match page to see if bet was just made.
+					return Redirect::route('match', array('id' => $match->id));  //Go back to match page
 				}else{
 					// Something went wrong
 					return Redirect::to('user/bet')->withInput();
@@ -208,6 +212,16 @@ class UserController extends BaseController {
 			else 
 				return View::make('layouts.simple', $data)->nest('content', 'user.nologin');
     	}	
+	}
+
+	function betmodal(){
+		$data['title'] = 'Bet';
+		//Propagate the presets if given
+		if (isset($_GET["presetHome"]))
+			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
+		else
+			$presetValues = array();
+		return View::make('layouts.modal', $data)->nest('content', 'user.bet', $presetValues);
 	}
 
 

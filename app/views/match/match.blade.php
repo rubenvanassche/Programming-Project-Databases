@@ -11,19 +11,25 @@
 ?>
 @section('content')
 	@if($future)
-	<!--These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions. 
+	<!--TODO: These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions. 
 	It should probably be changed to something more elegant, if the button even stays there. -->
 	<div class="row">
 	<div class="col-md-5" style="margin-top:20px;">
 	</div>
 	<div class="col-md-3" style="text-align:center;">
 	<ul class="nav nav-pills">
-	  <li class="active"><a href={{ action('UserController@bet', array("presetHome" => $match->hometeam, "presetAway" => $match->awayteam, "presetDate" => $match->date)) }}>   Bet   </a></li>
+		<li><a href={{ action('UserController@betmodal', array('presetHome' => $match->hometeam, 'presetAway' => $match->awayteam, 'presetDate' => $match->date)) }} data-toggle="modal" data-target="#dasModel">Bet</a></li>
 	</ul>
 	</div>
 	</div>
 	@endif
 
+
+<?php if (Session::has('bet')) {
+	//TODO: Indicate that bet was successful (modal?). Also maybe check if 'bet' is set to match_id of current page?
+	Session::forget('bet');
+	}
+?>
 
 	<div class="row">
 		<div class="col-md-1" style="margin-top:20px;">
