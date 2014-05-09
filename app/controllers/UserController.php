@@ -130,6 +130,7 @@ class UserController extends BaseController {
 			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
 		else
 			$presetValues = array();
+		//if (isset($validation) && $validation->fails()) { echo "patn"; return; }
 
 		if(Request::isMethod('post')){
 			// Work On the Form
@@ -151,7 +152,13 @@ class UserController extends BaseController {
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				//TODO: Figure out a way to redirect only the modal instead of entire page, if possible
-				return Redirect::to('user/bet')->withInput()->withErrors($validation);
+				$input = Input::all();//Get all the old input.
+				$input['autoOpenModal'] = 'true';//Add the auto open indicator flag as an input.
+				$input2 = array('autoOpenModal' =>true);
+				return Redirect::back()
+					->withErrors($validation)
+					->withInput($input);//Passing the old input and the flag.
+				//return Redirect::to('user/bet')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
 				$hometeam = Input::get('hometeam');
@@ -196,7 +203,8 @@ class UserController extends BaseController {
 					$data['content'] = 'Thank you for filling in your bet.';
 					$data['title'] = 'Bet registered!';
 					Session::put('bet', $match->id); //Can be used by match page to see if bet was just made.
-					return Redirect::route('match', array('id' => $match->id));  //Go back to match page
+					$acceptedInput = array("accepted" => true);
+					return Redirect::back()->withInput($acceptedInput);//Go back to match page
 				}else{
 					// Something went wrong
 					return Redirect::to('user/bet')->withInput();
