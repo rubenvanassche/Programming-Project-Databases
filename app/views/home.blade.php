@@ -1,7 +1,6 @@
 @extends('layouts.master')
 @section('content')
 	<div class="row">
-		{{count($notifications)}}
 		<div class="col-md-4">
 			<div class="matchListDiv">
 				<h5 class="matchListTitle">Played Matches</h5>
