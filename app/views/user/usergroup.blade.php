@@ -4,7 +4,8 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{$title}}</h1>
-			<a class="btn btn-success pull-right" style="margin-top:-45px;" href="{{url('usergroup/'.$id.'/addMe')}}">Add Me</a>
+			<a class="btn btn-success pull-right" style="margin-top:-45px;" href="{{url('usergroup/'.$id.'/addMe')}}">Join Group</a>
+			<a class="btn btn-success pull-right" style="margin-top:0px;" href="{{url('usergroup/'.$id.'/addMe')}}">Invite</a>
 		</div>
 		<div class="col-md-12">
 			<table class="table table-condensed">
