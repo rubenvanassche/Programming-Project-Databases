@@ -41,12 +41,12 @@
 					<th>Match</th>
 				</tr>
 			</thead>
-			<tbody>	
+			<tbody>
 				@foreach ($goals as $goal)
 					<tr>
 						<td><?php echo $goal->date; ?></td>
 						<td><?php echo $goal->time; ?></td>
-						<td><a href="<?php echo route('match', array('id'=>$goal->match_id)); ?>">{{ $goal->hometeam }} - {{ $goal->awayteam }} </a></td>
+						<td><a href="<?php echo route('match', array('id'=>$goal->match_id)); ?>">{{$goal->hometeam}} - {{$goal->awayteam}} </a></td>
 					<tr>
 				@endforeach
 			</tbody>
