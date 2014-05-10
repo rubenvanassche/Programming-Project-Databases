@@ -79,7 +79,7 @@
 					@foreach ($goalshometeam as $goalhometeam)
 						<tr>
 							<td><?php echo $goalhometeam->time; ?></td>
-							<td><a href="{{route('player', array('name'=>urlencode($goalhometeam->player)))}}">{{$goalhometeam->player}}</a></td>
+							<td><a href="{{route('player', array('id'=>$goalhometeam->player_id))}}">{{$goalhometeam->player}}</a></td>
 						<tr>
 					@endforeach
 				</tbody>
@@ -98,7 +98,7 @@
 					@foreach ($goalsawayteam as $goalawayteam)
 						<tr>
 							<td><?php echo $goalawayteam->time; ?></td>
-							<td><a href="{{route('player', array('name'=>urlencode($goalawayteam->player)))}}">{{$goalawayteam->player}}</a></td>
+							<td><a href="{{route('player', array('id'=>$goalawayteam->player_id))}}">{{$goalawayteam->player}}</a></td>
 						<tr>
 					@endforeach
 				</tbody>
@@ -120,7 +120,7 @@
 					@foreach ($cardshometeam as $cardhometeam)
 						<tr>
 							<td><?php echo $cardhometeam->time; ?></td>
-							<td><a href="{{route('player', array('name'=>urlencode($cardhometeam->player)))}}">{{$cardhometeam->player}}</a></td>
+							<td><a href="{{route('player', array('id'=>$cardhometeam->player_id))}}">{{$cardhometeam->player}}</a></td>
 							<td><?php echo cardColorToImg($cardhometeam->color); ?></td>
 						<tr>
 					@endforeach
@@ -146,7 +146,7 @@
 						?>
 						<tr>
 							<td><?php echo $cardawayteam->time; ?></td>
-							<td><a href="{{route('player', array('name'=>urlencode($cardawayteam->player)))}}">{{$cardawayteam->player}}</a></td>
+							<td><a href="{{route('player', array('id'=>$cardawayteam->player_id))}}">{{$cardawayteam->player}}</a></td>
 							<td><?php echo cardColorToImg($cardawayteam->color); ?></td>
 						<tr>
 					@endforeach

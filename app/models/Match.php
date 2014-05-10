@@ -100,17 +100,20 @@ class Match {
     }
     
     public static function goals($matchID, $teamID){
-        $results = DB::select("SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player FROM goal WHERE match_id = ? AND team_id = ?", array($matchID, $teamID));
+        $results = DB::select("SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player, 
+											(SELECT id FROM player WHERE id = goal.player_id) as player_id FROM goal 
+																										WHERE match_id = ? AND team_id = ?", array($matchID, $teamID));
         return $results;
     }
     
     public static function cards($matchID, $teamID){
-        $results = DB::select("SELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id) AS player FROM cards 
-									WHERE match_id = ? 
-									AND cards.player_id IN (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
+        $results = DB::select("SELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id) AS player,
+												   (SELECT id FROM player WHERE player.id = cards.player_id) AS player_id FROM cards 
+									WHERE match_id = ? "
+									/* TODO: AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
 																					  WHERE playerPerMatch.match_id = ?
 																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = ?)", array($matchID, $matchID, $teamID));
+																					  AND playerPerTeam.team_id = ?)"*/, array($matchID/*, $matchID, $teamID*/));
         return $results;
     }
     

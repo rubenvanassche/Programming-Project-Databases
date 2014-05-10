@@ -66,7 +66,7 @@
 					<tr>
 						<td><?php echo $card->date; ?></td>
 						<td><?php echo $card->time; ?></td>
-						<td><a href="<?php echo $route('match', array('id'=>$card->match_id)); ?>">{{ $card->hometeam }} - {{ $card->awayteam }} </a></td>
+						<td><a href="<?php echo route('match', array('id'=>$card->match_id)); ?>">{{$card->hometeam}} - {{$card->awayteam}} </a></td>
 						<td><?php echo cardColorToImg($card->color);?></td>
 					<tr>
 				@endforeach
