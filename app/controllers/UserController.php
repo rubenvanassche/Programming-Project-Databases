@@ -391,6 +391,9 @@ class UserController extends BaseController {
 				$success = $user->newUserGroup($name);
 				
 				if($success){
+					// Add founder of the group to the group instantly.
+					$this->addMe(UserGroup::ID($name));
+					
 					return Redirect::to('usergroups');
 				}else{
 					$data['title'] = 'There is already A User Group with this name';
