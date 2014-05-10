@@ -16,6 +16,7 @@ class HomeController extends BaseController {
     */
 
     public function index(){
+	
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches(5);
 	$futureMatches = Match::getFutureMatches(5);
@@ -37,8 +38,6 @@ class HomeController extends BaseController {
 		array_push($futureMatchInfo, $info);
 	}
 
-
-	
         return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints', 'futureMatchInfo'))->with('title', 'Home');
     }
     

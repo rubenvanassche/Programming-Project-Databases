@@ -39,7 +39,7 @@
 							<?php
 							$user = new User;
 							if($user->loggedIn()){
-							?>
+							?>							
 								<li><a href="{{ url('usergroups') }}">User Groups</a></li>
 								<li><a href="{{ action('UserController@bet') }}">Place bet</a></li>
 								<li><a href="{{ action('BetController@index') }}">View bets</a></li>
@@ -57,6 +57,24 @@
 							</ul>
 						</li>
 					</ul>
+					<?php
+					$user = new User;
+					if($user->loggedIn()){
+					?>
+					<ul class="nav navbar-nav navbar-left">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i></a>
+							<ul class="dropdown-menu">
+								@foreach ($notifications as $notification)
+									<li><a href="#">{{$notification['message']}}</a></li>
+								@endforeach					
+							</ul>
+						</li>
+					</ul>
+					<?php
+					}else{}
+					?>
+
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
