@@ -51,6 +51,7 @@ Route::get('user/facebooklogin', 'UserController@facebookLogin');
 Route::get('usergroups', 'UserController@usergroups');
 Route::get('usergroup/{id}', 'UserController@usergroup');
 Route::get('usergroup/{id}/addMe', 'UserController@addMe');
+Route::get('usergroup/{id}/{otherUser_id}/inviteUser', 'UserController@inviteUser');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
 Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
 

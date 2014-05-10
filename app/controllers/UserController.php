@@ -424,5 +424,12 @@ class UserController extends BaseController {
 		
 		return Redirect::to('usergroup/'.$usergroup);
 	}
+	
+	function inviteUser($usergroup, $invitee_id) {
+		$user = new User;	
+		$user->inviteUserToGroup($usergroup, $invitee_id);
+		
+		return Redirect::to('usergroup/'.$usergroup);
+	}
 
 }

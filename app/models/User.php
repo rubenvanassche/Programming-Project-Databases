@@ -236,17 +236,22 @@ class User {
 		}
 	}
 	
-	function inviteUserToGroup($my_id, $invitee_id, $group_id) {
+	function inviteUserToGroup($group_id, $invitee_id) {
 		// Check if 'I' am actually allowed to invite another user. Let's just say that you need to be a member of the group right now.
-		if (UserGroup::isMember($my_id, $group_id)) {
+		if (UserGroup::isMember($this->ID(), $group_id)) {
 			// All is good, we can proceed to invite our new potential member!
 			// ...
-			Notifications::saveNotification($group_id, $invitee_id, $my_id, Notifications::INVITE_USER_GROUP);
+			Notifications::saveNotification($group_id, $invitee_id, $this->ID(), Notifications::INVITE_USER_GROUP);
 			return true; // Everything went as expected
 		}
 		else {
 			return false; // Something went wrong
 			
 		}
+	}
+	
+	public static function getID($username) {
+		$results = DB::select("SELECT id FROM user WHERE username = ?", array($username));
+		return $results[0]->id;
 	}
 }
