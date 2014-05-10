@@ -205,17 +205,11 @@ class Match {
             $hGoals = Match::goals($rm->id, $rm->hometeam_id);
             $aGoals = Match::goals($rm->id, $rm->awayteam_id);
 
-			//echo count($hGoals);
-			//echo count($aGoals);
-			//echo "----";
-
             array_push($matchGoals, $hGoals, $aGoals);
             
             $hFlag = Country::getCountry($hid[0]->country_id);
             $aFlag = Country::getCountry($aid[0]->country_id);
-//            var_dump($hFlag);
-//            var_dump($aFlag);
-//            echo "+++++";
+
 
             array_push($countryFlags, $hFlag, $aFlag);
             

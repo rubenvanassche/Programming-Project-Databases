@@ -224,4 +224,15 @@ class User {
 			return true;
 		}
 	}
+
+	function getNotifications() {
+		if ($this->loggedIn()) {
+			$id = $this->ID();
+			$result = Notifications::getNotifications($id);
+			return $result;
+		}
+		else {
+			return array();
+		}
+	}
 }
