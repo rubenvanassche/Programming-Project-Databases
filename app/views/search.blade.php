@@ -34,7 +34,7 @@
 			@foreach ($players as $player)
 				<div class="col-md-2">
 					<div style="width:100%; height:100px;background-position:cover; background-image:url('<?php echo Player::getPlayerImageURL($player->name); ?>')" ></div>
-					<a href="{{ route('player', array('name'=>urlencode($player->name)))}}"></i> {{ $player->name }}</a>
+					<a href="{{ route('player', array('id'=>$player->id))}}"></i> {{ $player->name }}</a>
 				</div>
 			@endforeach
 		@endif
