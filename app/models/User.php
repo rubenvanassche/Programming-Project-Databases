@@ -267,11 +267,30 @@ class User {
 	}
 	
 	function getMyInvites() {
-		$results = DB::select('
-		SELECT * 
-		FROM userGroup ug
-		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
-		WHERE upug.user_id = ? ', array($this->ID()));
+		$results = DB::select("
+		SELECT ug.name, inviter.username, notif.created_date, notif.id AS notif_id, ug.id AS ug_id
+		FROM notifications notif
+		INNER JOIN userGroup ug ON notif.object_id = ug.id
+		INNER JOIN user inviter ON notif.actor_id = inviter.id
+		WHERE notif.subject_id = ?
+		AND notif.status = 'unseen'", array($this->ID()));
+		
+		return $results;
 	}
 	
+	public static function acceptInvite($notif_id, $ug_id) {
+		// Mark notification as seen.
+		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
+		
+		// Add the user to the group.
+		$user = new User;
+		$user->addUserToUserGroup($ug_id, $user->ID());
+		
+	}
+	
+	public static function declineInvite($notif_id) {
+		// Mark notification as seen.
+		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
+		
+	}
 }

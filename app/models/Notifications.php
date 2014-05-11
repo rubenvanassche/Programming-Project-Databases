@@ -38,7 +38,7 @@ class Notifications {
 		}
 		
 		$result = DB::select($query);
-				
+
         $rows = array();
 				
 		foreach($result as $rs) {
@@ -49,7 +49,7 @@ class Notifications {
 			$row['object'] = Notifications::getObjectRow($rs->type_id, $rs->object_id);
 			$rows[] = $row;
 		}
-				
+			
 		$notifications = array();
 		
 		foreach($rows as $row){

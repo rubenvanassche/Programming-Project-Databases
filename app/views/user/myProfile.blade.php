@@ -25,8 +25,8 @@
 		<table class="table table-condensed">
 			<tbody>
 				@foreach ($groups as $group)
-					<tr>
-						<td><?php echo $group->username; ?></td>
+					<tr class="notification">
+						<td>{{$group->name}}</td> <!-- Need to add link to the page. -->
 					<tr>
 				@endforeach
 			</tbody>
@@ -40,15 +40,17 @@
 				<tr>
 					<th>Group</th>
 					<th>From</th>
+					<th>Time</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>	
 				@foreach ($invites as $invite)
-					<tr>
-						<td><?php echo 'groupName'; ?></td>
-						<td><?php echo 'invitedBy'; ?></td>
-						<td>yes/no</td>
+					<tr class="notification">
+						<td>{{$invite->name}}</td>
+						<td>{{$invite->username}}</td>
+						<td>{{$invite->created_date}}</td>
+						<td><a href="{{url('myProfile/'.$invite->notif_id.'/'.$invite->ug_id.'/acceptInvite')}}">accept</a>/<a href="{{url('myProfile/'.$invite->notif_id.'/declineInvite')}}">decline</a></td>
 					<tr>
 				@endforeach
 			</tbody>
@@ -57,7 +59,7 @@
 		<table class="table table-condensed">
 			<tbody>	
 				@foreach ($notifications as $notification)
-					<tr>
+					<tr class="notification">
 						<td>{{$notification['message']}}</td>
 					<tr>
 				@endforeach
@@ -65,5 +67,17 @@
 		</table>
     </div>
 </div>
+@stop
+
+@section('css')
+<style>
+	.notification:hover {
+		background-color:#006ddb;
+	}
+	
+	th {
+		text-align:left;
+	}
+</style>
 @stop
 

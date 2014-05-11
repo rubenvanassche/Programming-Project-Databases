@@ -15,5 +15,6 @@ class UserGroup {
 		$query = "INSERT INTO `userGroupInvites` (userId, competitionId, invitedById) VALUES (?, ?, ?)";
         $values = array($user_id, $competition_id, $invitedBy_id);
         DB::insert( $query, $values );
-   } 
+   }
+  
 }
