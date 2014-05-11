@@ -428,8 +428,20 @@ class UserController extends BaseController {
 	function inviteUser($usergroup, $invitee_id) {
 		$user = new User;	
 		$user->inviteUserToGroup($usergroup, $invitee_id);
-		
+		//if ($result) {sleep(3);} 
 		return Redirect::to('usergroup/'.$usergroup);
 	}
 
+	function myProfile() {
+		$user = new User;
+		$data['groups'] = $user->getMyGroups();
+		$data['user'] = $user->get($user->ID());
+		$data['notifications'] = $user->getNotifications();
+		$data['invites'] = $user->getNotifications(Notifications::INVITE_USER_GROUP);
+		$data['avatar'] = NULL;
+		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
+		var_dump($data['invites']);
+		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
+
+	}
 }

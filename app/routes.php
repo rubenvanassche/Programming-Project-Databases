@@ -55,6 +55,7 @@ Route::get('usergroup/{id}/{otherUser_id}/inviteUser', 'UserController@inviteUse
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
 Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
 
+Route::get('myProfile', 'UserController@myProfile');
 
 Route::get('inserts', function() {
 	return View::make('inserts');

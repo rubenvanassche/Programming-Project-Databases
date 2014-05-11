@@ -240,7 +240,8 @@ class User {
 		// Check if 'I' am actually allowed to invite another user. Let's just say that you need to be a member of the group right now.
 		if (UserGroup::isMember($this->ID(), $group_id)) {
 			// All is good, we can proceed to invite our new potential member!
-			// ...
+			$result = UserGroup::addUserGroupInvite($this->ID(), $group_id, $invitee_id);
+			var_dump($result);
 			Notifications::saveNotification($group_id, $invitee_id, $this->ID(), Notifications::INVITE_USER_GROUP);
 			return true; // Everything went as expected
 		}
@@ -254,4 +255,23 @@ class User {
 		$results = DB::select("SELECT id FROM user WHERE username = ?", array($username));
 		return $results[0]->id;
 	}
+	
+	function getMyGroups() {
+		$results = DB::select('
+		SELECT * 
+		FROM userGroup ug
+		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
+		WHERE upug.user_id = ? ', array($this->ID()));
+		
+		return $results;
+	}
+	
+	function getMyInvites() {
+		$results = DB::select('
+		SELECT * 
+		FROM userGroup ug
+		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
+		WHERE upug.user_id = ? ', array($this->ID()));
+	}
+	
 }
