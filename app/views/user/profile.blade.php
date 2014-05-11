@@ -32,40 +32,6 @@
 						
 				@endforeach
 			</tbody>
-
-		</table>
-
-		
-		<h3>Invites</h3>
-		<table class="table table-condensed">
-			<thead>
-				<tr>
-					<th>Group</th>
-					<th>From</th>
-					<th>Time</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>	
-				@foreach ($invites as $invite)
-					<tr class="notification">
-						<td>{{$invite->name}}</td>
-						<td>{{$invite->username}}</td>
-						<td>{{$invite->created_date}}</td>
-						<td><a href="{{url('myProfile/'.$invite->notif_id.'/'.$invite->ug_id.'/acceptInvite')}}">accept</a>/<a href="{{url('myProfile/'.$invite->notif_id.'/declineInvite')}}">decline</a></td>
-					<tr>
-				@endforeach
-			</tbody>
-		</table>
-		<h3>Notifications</h3>
-		<table class="table table-condensed">
-			<tbody>	
-				@foreach ($notifications as $notification)
-					<tr class="notification">
-						<td>{{$notification['message']}}</td>
-					<tr>
-				@endforeach
-			</tbody>
 		</table>
     </div>
 </div>
