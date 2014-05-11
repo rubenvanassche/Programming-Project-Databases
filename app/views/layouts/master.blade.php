@@ -61,7 +61,8 @@
 					</ul>
 					<?php
 					$user = new User;
-					if($user->loggedIn() && (count($notifications) > 0)) {
+					if($user->loggedIn()) {
+						if (count($notifications) > 0) {
 					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
@@ -74,7 +75,7 @@
 						</li>
 					</ul>
 					<?php
-					}else{?>
+						}else{?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
@@ -84,7 +85,9 @@
 						</li>
 					</ul>
 						
-					<?php } ?>
+					<?php
+						}
+					}?>
 
 				</div><!--/.nav-collapse -->
 			</div>

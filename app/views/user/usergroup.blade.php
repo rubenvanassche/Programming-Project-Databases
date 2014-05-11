@@ -6,7 +6,6 @@
 			<h1>{{$title}}</h1>
 			<?php
 			$user = new User;
-			$invitee_id = User::getID("Kion");
 			if(UserGroup::isMember($user->ID(), $id)) {
 			?>	
 						{{ Form::open(array('url' => 'usergroup/'.$id.'')) }}
