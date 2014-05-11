@@ -191,8 +191,13 @@ class User {
 	
 	
 	function get($userID){
-			$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
-			return $results[0];
+		$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
+		return $results[0];
+	}
+	
+	function getAllUsers() {
+		$results = DB::select('SELECT * FROM user');
+		return $results;
 	}
 	
 	function change($userID, $field, $value){
@@ -234,5 +239,62 @@ class User {
 		else {
 			return array();
 		}
+	}
+	
+	function inviteUserToGroup($group_id, $invitee_id) {
+		// Check if 'I' am actually allowed to invite another user. Let's just say that you need to be a member of the group right now.
+		if (UserGroup::isMember($this->ID(), $group_id)) {
+			// All is good, we can proceed to invite our new potential member!
+			$result = UserGroup::addUserGroupInvite($invitee_id, $group_id, $this->ID());
+			Notifications::saveNotification($group_id, $invitee_id, $this->ID(), Notifications::INVITE_USER_GROUP);
+			return true; // Everything went as expected
+		}
+		else {
+			return false; // Something went wrong
+			
+		}
+	}
+	
+	public static function getID($username) {
+		$results = DB::select("SELECT id FROM user WHERE username = ?", array($username));
+		return $results[0]->id;
+	}
+	
+	function getGroupsByID($id) {
+		$results = DB::select('
+		SELECT * 
+		FROM userGroup ug
+		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
+		WHERE upug.user_id = ? ', array($id));
+		
+		return $results;
+	}
+	
+	function getMyInvites() {
+		$results = DB::select("
+		SELECT ug.name, inviter.username, notif.created_date, notif.id AS notif_id, ug.id AS ug_id
+		FROM notifications notif
+		INNER JOIN userGroup ug ON notif.object_id = ug.id
+		INNER JOIN user inviter ON notif.actor_id = inviter.id
+		WHERE notif.subject_id = ?
+		AND notif.status = 'unseen'", array($this->ID()));
+		
+		return $results;
+	}
+	
+	public static function acceptInvite($notif_id, $ug_id) {
+		// Mark notification as seen.
+		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
+		
+		// Add the user to the group.
+		$user = new User;
+		$user->addUserToUserGroup($ug_id, $user->ID());
+		
+	}
+	
+	public static function declineInvite($notif_id) {
+		// Mark notification as seen.
+		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
+		
 	}
 }

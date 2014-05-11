@@ -413,6 +413,9 @@ class UserController extends BaseController {
 				$success = $user->newUserGroup($name);
 				
 				if($success){
+					// Add founder of the group to the group instantly.
+					$this->addMe(UserGroup::ID($name));
+					
 					return Redirect::to('usergroups');
 				}else{
 					$data['title'] = 'There is already A User Group with this name';
@@ -443,5 +446,49 @@ class UserController extends BaseController {
 		
 		return Redirect::to('usergroup/'.$usergroup);
 	}
+	
+	function inviteUser($usergroup_id) {
+		$user = new User;	
+		$invitee_name = Input::get('invitee_name');
+		$invitee_id = $user->getID($invitee_name);
+		$user->inviteUserToGroup($usergroup_id, $invitee_id);
 
+		return Redirect::to('usergroup/'.$usergroup_id);
+	}
+	
+	function acceptInvite($notif_id, $ug_id) {
+		User::acceptInvite($notif_id, $ug_id);
+		return Redirect::to('myProfile');
+	}
+	
+	function declineInvite($notif_id) {
+		User::declineInvite($notif_id);
+		return Redirect::to('myProfile');
+	}
+
+	function myProfile() {
+		$user = new User;
+		$data['groups'] = $user->getGroupsByID($user->ID());
+		$data['user'] = $user->get($user->ID());
+		$data['notifications'] = $user->getNotifications($user->ID());
+		$data['invites'] = $user->getMyInvites();
+		$data['avatar'] = NULL;
+		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
+		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
+	}
+	
+	function profile($id) {
+		$user = new User;
+		$data['groups'] = $user->getGroupsByID($id);
+		$data['user'] = $user->get($id);
+		$data['avatar'] = NULL;
+		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";
+		return View::make('user.profile', $data)->with('title', $data['user']->username);
+	}
+	
+	function userOverview() {
+		$user = new User;
+		$data['users'] = $user->getAllUsers();
+		return View::make('user.userOverview', $data)->with('title', 'users');
+	}
 }

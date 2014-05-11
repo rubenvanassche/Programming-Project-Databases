@@ -39,11 +39,14 @@
 							<?php
 							$user = new User;
 							if($user->loggedIn()){
-							?>							
+							?>					
+								<li><a href="{{url('myProfile')}}">My Profile</a></li>
 								<li><a href="{{ url('usergroups') }}">User Groups</a></li>
 								<li><a href="{{ action('BetController@index') }}">View bets</a></li>
+								<li><a href="{{ action('UserController@bet') }}">Place bet</a></li>
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
+								<li><a href="{{url('users')}}">Users</a></li>
 								<li><a href="{{ action('UserController@logout') }}">Logout</a></li>
 							<?php
 							}else{
@@ -58,21 +61,30 @@
 					</ul>
 					<?php
 					$user = new User;
-					if($user->loggedIn()){
+					if($user->loggedIn() && (count($notifications) > 0)) {
 					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i></a>
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
-									<li><a href="#">{{$notification['message']}}</a></li>
+									<li><a href="{{url('myProfile')}}">{{$notification['message']}}</a></li>
 								@endforeach					
 							</ul>
 						</li>
 					</ul>
 					<?php
-					}else{}
-					?>
+					}else{?>
+					<ul class="nav navbar-nav navbar-left">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
+							<ul class="dropdown-menu">
+									<li><a href="{{url('myProfile')}}">No new notifications</a></li>				
+							</ul>
+						</li>
+					</ul>
+						
+					<?php } ?>
 
 				</div><!--/.nav-collapse -->
 			</div>
