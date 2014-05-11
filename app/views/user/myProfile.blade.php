@@ -25,9 +25,11 @@
 		<table class="table table-condensed">
 			<tbody>
 				@foreach ($groups as $group)
-					<tr class="notification">
-						<td>{{$group->name}}</td> <!-- Need to add link to the page. -->
-					<tr>
+						
+						<tr class="notification">
+							<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td> <!-- Need to add link to the page. -->
+						</tr>
+						
 				@endforeach
 			</tbody>
 

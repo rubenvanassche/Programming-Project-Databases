@@ -88,9 +88,9 @@ class Notifications {
 			$actor = DB::select("
 			SELECT username
 			FROM user
-			WHERE id = {$row['object']->invitedById}
+			WHERE id = {$row['actor_id']}
 			");
-		
+			
 			return " {$actor[0]->username} invited you to join the group: {$group[0]->name}";
         }
     }
@@ -105,7 +105,6 @@ class Notifications {
 		
 		$result = Notifications::getNotifications(8);
 		
-		//var_dump($result);
 		print($result[0]['message']);
 	}
 	

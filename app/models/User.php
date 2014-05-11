@@ -240,8 +240,7 @@ class User {
 		// Check if 'I' am actually allowed to invite another user. Let's just say that you need to be a member of the group right now.
 		if (UserGroup::isMember($this->ID(), $group_id)) {
 			// All is good, we can proceed to invite our new potential member!
-			$result = UserGroup::addUserGroupInvite($this->ID(), $group_id, $invitee_id);
-			var_dump($result);
+			$result = UserGroup::addUserGroupInvite($invitee_id, $group_id, $this->ID());
 			Notifications::saveNotification($group_id, $invitee_id, $this->ID(), Notifications::INVITE_USER_GROUP);
 			return true; // Everything went as expected
 		}

@@ -425,11 +425,13 @@ class UserController extends BaseController {
 		return Redirect::to('usergroup/'.$usergroup);
 	}
 	
-	function inviteUser($usergroup, $invitee_id) {
+	function inviteUser($usergroup_id) {
 		$user = new User;	
-		$user->inviteUserToGroup($usergroup, $invitee_id);
+		$invitee_name = Input::get('invitee_name');
+		$invitee_id = $user->getID($invitee_name);
+		$user->inviteUserToGroup($usergroup_id, $invitee_id);
 
-		return Redirect::to('usergroup/'.$usergroup);
+		return Redirect::to('usergroup/'.$usergroup_id);
 	}
 	
 	function acceptInvite($notif_id, $ug_id) {

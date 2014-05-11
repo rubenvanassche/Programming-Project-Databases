@@ -9,13 +9,10 @@
 			$invitee_id = User::getID("Kion");
 			if(UserGroup::isMember($user->ID(), $id)) {
 			?>	
-						<!--{{ Form::open(array('url' => 'search', 'class'=>'navbar-form navbar-right')) }}
-						<div class="form-group">
-							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%;', 'placeholder'=>'Type searchterm here')) }}
-						</div>
-						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i></button>-->
-						<a class="btn btn-success pull-right" type="submit" style="margin-top:-45px;" href="{{url('usergroup/'.$id.'/'.$invitee_id.'/inviteUser')}}">Invite</a>
-						<!--{{ Form::token() . Form::close() }}-->
+						{{ Form::open(array('url' => 'usergroup/'.$id.'')) }}
+						{{ Form::text('invitee_name', Input::old('invitee_name'), array('class'=>'form-control')) }}
+						{{Form::submit('Invite User', array('class'=>'btn btn-success '))}}
+						{{ Form::token() . Form::close() }}
 
 			<?php
 			}else{

@@ -58,6 +58,7 @@ Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
 Route::get('myProfile', 'UserController@myProfile');
 Route::get('myProfile/{notif_id}/{ug_id}/acceptInvite', 'UserController@acceptInvite');
 Route::get('myProfile/{notif_id}/declineInvite', 'UserController@declineInvite');
+Route::match(array('GET', 'POST'), 'usergroup/{usergroup_id}', 'UserController@inviteUser');
 
 Route::get('inserts', function() {
 	return View::make('inserts');
