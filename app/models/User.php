@@ -191,8 +191,13 @@ class User {
 	
 	
 	function get($userID){
-			$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
-			return $results[0];
+		$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
+		return $results[0];
+	}
+	
+	function getAllUsers() {
+		$results = DB::select('SELECT * FROM user');
+		return $results;
 	}
 	
 	function change($userID, $field, $value){
@@ -255,12 +260,12 @@ class User {
 		return $results[0]->id;
 	}
 	
-	function getMyGroups() {
+	function getGroupsByID($id) {
 		$results = DB::select('
 		SELECT * 
 		FROM userGroup ug
 		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
-		WHERE upug.user_id = ? ', array($this->ID()));
+		WHERE upug.user_id = ? ', array($id));
 		
 		return $results;
 	}

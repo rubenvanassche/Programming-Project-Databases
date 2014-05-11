@@ -46,6 +46,7 @@
 								<li><a href="{{ action('UserController@bet') }}">Place bet</a></li>
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
+								<li><a href="{{url('users')}}">Users</a></li>
 								<li><a href="{{ action('UserController@logout') }}">Logout</a></li>
 							<?php
 							}else{

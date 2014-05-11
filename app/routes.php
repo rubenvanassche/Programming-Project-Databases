@@ -60,6 +60,10 @@ Route::get('myProfile/{notif_id}/{ug_id}/acceptInvite', 'UserController@acceptIn
 Route::get('myProfile/{notif_id}/declineInvite', 'UserController@declineInvite');
 Route::match(array('GET', 'POST'), 'usergroup/{usergroup_id}', 'UserController@inviteUser');
 
+Route::get('profile/{id}', 'UserController@profile');
+
+Route::get('users', 'UserController@userOverview');
+
 Route::get('inserts', function() {
 	return View::make('inserts');
 });
