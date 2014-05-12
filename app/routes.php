@@ -64,6 +64,7 @@ Route::match(array('GET', 'POST'), 'usergroup/{usergroup_id}', 'UserController@i
 Route::get('profile/{id}', 'UserController@profile');
 
 Route::get('users', 'UserController@userOverview');
+Route::get('myProfile/editProfile', 'UserController@editProfileModal');
 
 Route::get('inserts', function() {
 	return View::make('inserts');
@@ -72,4 +73,3 @@ Route::get('inserts', function() {
 Route::get('schema', function() {
         return View::make('schema');
 });
-

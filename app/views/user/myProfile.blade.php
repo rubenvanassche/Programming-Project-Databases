@@ -7,7 +7,7 @@
 	<div class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="{{ route('home') }}">Home</a></li>
-			<li><a href="{{ url('users') }}">People</a></li> <!--// Need to change route -->
+			<li><a href="{{ url('users') }}">People</a></li>
 			<li class="active">{{$user->username}}</li>
 		</ol>
 	</div>
@@ -16,10 +16,22 @@
 	<div class="col-md-2">
 		<img class="img-responsive flag" src="{{$avatar}}" alt="" /> <!-- Optional -->
 		<h2>{{$user->username}}</h2>
+		<p>Country: {{$user->country}}</p>
+		<p>Bet score: {{$user->betscore}}</p>
 	</div>
 	<div class="col-md-10">
 		<h3>About Me</h3>
-		<p>{{$text}}</p>
+		<a class="edit" href="#">edit</a>
+
+
+		<!--<ul class="nav nav-pills">
+		<li><a href="#" class="btn btn-lg btn-success"
+		data-toggle="modal"
+		data-target="#basicModal">Bet</a></li>
+	</ul>-->
+
+
+		<p>{{$user->about}}</p>
 
 		<h3>My Groups</h3>
 		<table class="table table-condensed">
@@ -82,7 +94,7 @@
 @section('css')
 <style>
 	.notification:hover {
-		background-color:#006ddb;
+		background-color:#00BFFF;
 	}
 
 	th {
@@ -96,5 +108,32 @@
 	tr.private.notification:hover {
 		background-color:#DDDDDD;
 	}
+
+	a.edit {
+		font-size:12px;
+	}
+
+		<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	            <h4 class="modal-title" id="myModalLabel">Edit profile</h4>
+	            </div>
+	            <div class="modal-body">
+								{{ Form::open(array('url' => 'user/editProfile')) }}
+
+									<div class="form-group">
+										<label>{{ Form::label('aboutme', 'About Me') }}</label>
+										{{ Form::text('aboutme', Input::old('aboutme'), array('class'=>'form-control')) }}
+									</div>
+
+								{{ Form::submit('edit', array('class'=>'btn btn-success pull-right')) }}
+								{{ Form::token() . Form::close() }}
+	            </div>
+				<div><p/>&nbsp;</div>  <!--makes sure bet button is inside modal-->
+	    </div>
+	  </div>
+	</div>
+
 </style>
 @stop

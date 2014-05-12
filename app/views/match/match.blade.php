@@ -11,7 +11,7 @@
 ?>
 @section('content')
 	@if($future)
-	<!--TODO: These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions. 
+	<!--TODO: These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions.
 	It should probably be changed to something more elegant, if the button even stays there. -->
 	<div class="row">
 	<div class="col-md-5" style="margin-top:20px;">
@@ -75,7 +75,7 @@
 						<th>Name</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 					@foreach ($goalshometeam as $goalhometeam)
 						<tr>
 							<td><?php echo $goalhometeam->time; ?></td>
@@ -94,7 +94,7 @@
 						<th>Name</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 					@foreach ($goalsawayteam as $goalawayteam)
 						<tr>
 							<td><?php echo $goalawayteam->time; ?></td>
@@ -116,7 +116,7 @@
 						<th>Color</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 					@foreach ($cardshometeam as $cardhometeam)
 						<tr>
 							<td><?php echo $cardhometeam->time; ?></td>
@@ -125,7 +125,7 @@
 						<tr>
 					@endforeach
 				</tbody>
-			</table>		
+			</table>
 		</div>
 		<div class="col-md-6">
 			<h3>Cards</h3>
@@ -137,7 +137,7 @@
 						<th>Color</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 					@foreach ($cardsawayteam as $cardawayteam)
 						<?php
 							if($cardawayteam->player == ''){
@@ -151,8 +151,8 @@
 						<tr>
 					@endforeach
 				</tbody>
-			</table>		
-		</div>	
+			</table>
+		</div>
 	</div>
 @stop
 
@@ -264,44 +264,44 @@
 <div class="form-group">
 	<label>{{ Form::label('hometeamScore', 'Home team score') }}</label>
 	{{ Form::text('hometeamScore', Input::old('hometeamScore'), array('class'=>'form-control')) }}
-    {{ $errors->first('hometeamScore', '<label class="error">:message</label>') }}  
+    {{ $errors->first('hometeamScore', '<label class="error">:message</label>') }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('awayteamScore', 'Away team score') }}</label>
 	{{ Form::text('awayteamScore', Input::old('awayteamScore'), array('class'=>'form-control')) }}
-    {{ $errors->first('awayteamScore', '<label class="error">:message</label>') }}  
+    {{ $errors->first('awayteamScore', '<label class="error">:message</label>') }}
 </div>
 
 
 <div class="form-group">
 	<label>{{ Form::label('firstGoal', 'First goal') }}</label>
 	{{ Form::select('firstGoal',  array('none' => '', 'home' => $match->hometeam, 'away' => $match->awayteam)) }}
-    {{ $errors->first('firstGoal', '<label class="error">:message</label>') }}  
+    {{ $errors->first('firstGoal', '<label class="error">:message</label>') }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team') }}</label>
 	{{ Form::text('hometeamYellows', Input::old('hometeamYellows'), array('class'=>'form-control')) }}
-    {{ $errors->first('hometeamYellows', '<label class="error">:message</label>') }}  
+    {{ $errors->first('hometeamYellows', '<label class="error">:message</label>') }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('hometeamReds', 'Red cards for home team') }}</label>
 	{{ Form::text('hometeamReds', Input::old('hometeamReds'), array('class'=>'form-control')) }}
-    {{ $errors->first('hometeamReds', '<label class="error">:message</label>') }}  
+    {{ $errors->first('hometeamReds', '<label class="error">:message</label>') }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team') }}</label>
 	{{ Form::text('awayteamYellows', Input::old('awayteamYellows'), array('class'=>'form-control')) }}
-    {{ $errors->first('awayteamYellows', '<label class="error">:message</label>') }}  
+    {{ $errors->first('awayteamYellows', '<label class="error">:message</label>') }}
 </div>
 
 <div class="form-group">
 	<label>{{ Form::label('awayteamReds', 'Red cards for away team') }}</label>
 	{{ Form::text('awayteamReds', Input::old('awayteamReds'), array('class'=>'form-control')) }}
-    {{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}  
+    {{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}
 </div>
 
 {{ Form::submit('Bet', array('class'=>'btn btn-success pull-right')) }}

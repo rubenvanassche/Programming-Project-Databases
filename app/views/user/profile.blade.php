@@ -16,10 +16,12 @@
 	<div class="col-md-2">
 		<img class="img-responsive flag" src="{{$avatar}}" alt="" /> <!-- Optional -->
 		<h2>{{$user->username}}</h2>
+		<p>Country: {{$user->country}}</p>
+		<p>Bet score: {{$user->betscore}}</p>
 	</div>
 	<div class="col-md-10">
 		<h3>About Me</h3>
-		<p>{{$text}}</p>
+		<p>{{$user->about}}</p>
 
 		<h3>My Groups</h3>
 		<table class="table table-condensed">

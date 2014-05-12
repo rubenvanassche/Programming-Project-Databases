@@ -480,7 +480,6 @@ class UserController extends BaseController {
 		$data['notifications'] = $user->getNotifications($user->ID());
 		$data['invites'] = $user->getMyInvites();
 		$data['avatar'] = NULL;
-		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
 		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
 	}
 
@@ -489,7 +488,6 @@ class UserController extends BaseController {
 		$data['groups'] = $user->getGroupsByID($id);
 		$data['user'] = $user->get($id);
 		$data['avatar'] = NULL;
-		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
 
@@ -497,5 +495,14 @@ class UserController extends BaseController {
 		$user = new User;
 		$data['users'] = $user->getAllUsers();
 		return View::make('user.userOverview', $data)->with('title', 'users');
+	}
+
+	function editProfile(){
+			$aboutme = Input::get('aboutme');
+
+			$data['content'] = 'Thank you for personalizing your profile.';
+			$data['title'] = 'Update profile!';
+			$acceptedInput = array("accepted" => true);
+			return Redirect::back();//Go back to match page
 	}
 }
