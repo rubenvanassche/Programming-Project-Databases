@@ -14,9 +14,9 @@ class UserController extends BaseController {
 			        'username' => array('required'),
 			        'password' => array('required')
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				return Redirect::to('user/login')->withInput()->withErrors($validation);
@@ -24,7 +24,7 @@ class UserController extends BaseController {
 				// Start working on this data
 				$username = Input::get('username');
 				$password = Input::get('password');
-				
+
 				$user = new User;
 				if($user->login($username, $password)){
 					// Logged in
@@ -39,12 +39,12 @@ class UserController extends BaseController {
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.login');
     	}
 	}
-	
+
 	function loginmodal(){
 		$data['title'] = 'Login';
 		return View::make('layouts.modal', $data)->nest('content', 'user.login');
 	}
-	
+
 	function facebookLogin(){
 		$application = array(
 		    'appId' => '611155238979722',
@@ -52,23 +52,23 @@ class UserController extends BaseController {
 		    );
 		$permissions = 'publish_stream,email';
 		$url_app = 'http://localhost:8000/user/facebooklogin';
-		
+
 		// getInstance
 		FacebookConnect::getFacebook($application);
-		
+
 		$getUser = FacebookConnect::getUser($permissions, $url_app); // Return facebook User data
 		$id = $getUser['user_profile']['id'];
 		$firstname = $getUser['user_profile']['first_name'];
 		$lastname = $getUser['user_profile']['last_name'];
 		$email = $getUser['user_profile']['email'];
 		$username = $getUser['user_profile']['username'];
-		
-		
+
+
 		$user = new User;
 		$user->loginFacebookUser($id, $firstname, $lastname, $email, $username);
 		return Redirect::to('/');
 	}
-	
+
 	function register(){
 		if(Request::isMethod('post')){
 			// Work On the Form
@@ -81,9 +81,9 @@ class UserController extends BaseController {
 			        'password' => array('required'),
 			        'passwordagain' => array('required', 'same:password')
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				return Redirect::to('user/register')->withInput()->withErrors($validation);
@@ -95,16 +95,16 @@ class UserController extends BaseController {
 				$data['country'] = Input::get('country');
 				$data['email'] = Input::get('email');
 				$data['password'] = Input::get('password');
-				
+
 				$user = new User;
 				$success = $user->register($data);
-				
+
 				if($success == true){
 					// Insertion was succesfull, send an email with the activation
 					//Mail::send('user/emails/activation', array($username, $registrationCode), function($message){
 					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
 					//});
-					
+
 					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account.';
 					$data['title'] = 'Welcome!';
 					return View::make('layouts.simple', $data);
@@ -117,7 +117,7 @@ class UserController extends BaseController {
 	    	// Show the form
 	    	$data['title'] = 'Register';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.register');
-    	}		
+    	}
 	}
 
 	//Note that $presetValues if supplied should contain keys presetHome, presetAway and presetDate
@@ -146,9 +146,9 @@ class UserController extends BaseController {
 			        'awayteamYellows' => array('integer', 'between:0,100'),
 			        'awayteamReds' => array('integer', 'between:0,100')
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				//TODO: Figure out a way to redirect only the modal instead of entire page, if possible
@@ -217,9 +217,9 @@ class UserController extends BaseController {
 			$user = new User;
 			if ($user->loggedIn())
 		    	return View::make('layouts.simple', $data)->nest('content', 'user.bet', $presetValues);
-			else 
+			else
 				return View::make('layouts.simple', $data)->nest('content', 'user.nologin');
-    	}	
+    	}
 	}
 
 	function betmodal(){
@@ -236,7 +236,7 @@ class UserController extends BaseController {
 	function showBets() {
 		return View::make('layouts.simple', $data)->nest('content', 'user.bets');
 	}
-	
+
 	function activate($username, $registrationcode){
 		$user = new User;
 		if($user->activate($username, $registrationcode)){
@@ -249,16 +249,16 @@ class UserController extends BaseController {
 			return View::make('layouts.simple', $data);
 		}
 	}
-	
+
 	function passwordforgot(){
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
 			        'email' => array('required', 'email')
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				return Redirect::to('user/passwordforgot')->withInput()->withErrors($validation);
@@ -266,14 +266,14 @@ class UserController extends BaseController {
 				// Start working on this data
 				$email = Input::get('email');
 				$newPassword = str_random(10);
-				
+
 				$user = new User;
-				if($user->passwordforgot($email, $newPassword)){		
+				if($user->passwordforgot($email, $newPassword)){
 					// Send an email to the user
 					//Mail::send('user/emails/passwordforgot', array($newPassword), function($message){
 					//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
 					//});
-					
+
 					Notification::success('We have sent you an email with your new password');
 					return;
 					$data['title'] = 'Password Recovery';
@@ -287,9 +287,9 @@ class UserController extends BaseController {
 	    	// Show the form
 	    	$data['title'] = 'Recover Password';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.passwordforgot');
-    	}		
+    	}
 	}
-	
+
 	function account(){
 		if(Request::isMethod('post')){
 			// Work On the Form
@@ -299,9 +299,9 @@ class UserController extends BaseController {
 			        'country' => array('required'),
 			        'email' => array('required', 'email'),
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				return Redirect::to('user/account')->withInput()->withErrors($validation);
@@ -311,10 +311,10 @@ class UserController extends BaseController {
 				$data['lastname'] = Input::get('lastname');
 				$data['country'] = Input::get('country');
 				$data['email'] = Input::get('email');
-				
+
 				$user = new User;
-			
-				
+
+
 				// Check if email is unique
 				$onlyOneEmail = $user->onlyOneEmail($data['email']);
 				if($onlyOneEmail != true){
@@ -323,12 +323,12 @@ class UserController extends BaseController {
 						return Redirect::to('user/account')->withInput();
 					}
 				}
-				
-				
+
+
 				foreach($data as $field => $value){
 					$user->change($user->ID(), $field, $value);
 				}
-				
+
 				return Redirect::to('user/account')->withInput();
 			}
     	}else{
@@ -336,9 +336,9 @@ class UserController extends BaseController {
 	    	$data['title'] = 'Account';
 	    	$user = new User;
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.account', array('user' => $user->get($user->ID())));
-    	}			
+    	}
 	}
-	
+
 	function changepassword(){
 		if(Request::isMethod('post')){
 			// Work On the Form
@@ -346,21 +346,20 @@ class UserController extends BaseController {
 			        'password' => array('required'),
 			        'passwordagain' => array('required', 'same:password')
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()){
 				// Problem so show the user error messages
 				return Redirect::to('user/changepassword')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
 				$data['password'] = Input::get('password');
-				
 				$user = new User;
-				
+
 				if($user->change($user->ID(), 'password', $data['password'])){
 					$user->logout();
-					
+
 					$data['content'] = 'Please login again with your new password.';
 					$data['title'] = 'Password changed!';
 					return View::make('layouts.simple', $data);
@@ -373,49 +372,57 @@ class UserController extends BaseController {
 	    	// Show the form
 	    	$data['title'] = 'Change Password';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.changepassword');
-    	}			
+    	}
 	}
-	
+
 	function logout(){
 		$user = new User;
 		$user->logout();
-		
+
 		$data['title'] = 'Logged Out!';
 		$data['content'] = 'Enjoy the rest of the world wide web.';
 		return View::make('layouts.simple', $data);
 	}
-	
+
 	function usergroups(){
 		$user = new User;
 		$data['groups'] = $user->getUserGroups();
 		$data['title'] = 'User Groups';
-		
+
 		return View::make('user.usergroups', $data);
 	}
-	
-	function newusergroup(){
+
+	function newusergroup() {
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
 			        'name' => array('required'),
 			);
-			
+
 			$validation = Validator::make(Input::all(), $rules);
-			
+
 			if($validation->fails()) {
 				// Problem so show the user error messages
 				return Redirect::to('usergroups/new')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
 				$name = Input::get('name');
-				
+				$private = Input::get('private');
+				var_dump($private);
+
+				if ($private == "true") {
+					$private = true;
+				}
+				else {
+					$private = false;
+				}
+
 				$user = new User;
-				$success = $user->newUserGroup($name);
-				
+				$success = $user->newUserGroup($name, $private);
 				if($success){
 					// Add founder of the group to the group instantly.
 					$this->addMe(UserGroup::ID($name));
-					
+
 					return Redirect::to('usergroups');
 				}else{
 					$data['title'] = 'There is already A User Group with this name';
@@ -427,40 +434,40 @@ class UserController extends BaseController {
 	    	// Show the form
 	    	$data['title'] = 'New User Group';
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.newusergroup');
-    	}			
+    	}
 	}
-	
+
 	function usergroup($id){
 		$user = new User;
 		$data['users'] = $user->getUsersByGroup($id);
 		$data['title'] = $user->getUserGroupName($id);
 		$data['id'] = $id;
-		
-		
-		return View::make('user.usergroup', $data);		
+
+
+		return View::make('user.usergroup', $data);
 	}
-	
+
 	function addMe($usergroup){
-		$user = new User;	
+		$user = new User;
 		$user->addUserToUserGroup($usergroup, $user->ID());
-		
+
 		return Redirect::to('usergroup/'.$usergroup);
 	}
-	
+
 	function inviteUser($usergroup_id) {
-		$user = new User;	
+		$user = new User;
 		$invitee_name = Input::get('invitee_name');
 		$invitee_id = $user->getID($invitee_name);
 		$user->inviteUserToGroup($usergroup_id, $invitee_id);
 
 		return Redirect::to('usergroup/'.$usergroup_id);
 	}
-	
+
 	function acceptInvite($notif_id, $ug_id) {
 		User::acceptInvite($notif_id, $ug_id);
 		return Redirect::to('myProfile');
 	}
-	
+
 	function declineInvite($notif_id) {
 		User::declineInvite($notif_id);
 		return Redirect::to('myProfile');
@@ -476,7 +483,7 @@ class UserController extends BaseController {
 		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
 		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
 	}
-	
+
 	function profile($id) {
 		$user = new User;
 		$data['groups'] = $user->getGroupsByID($id);
@@ -485,7 +492,7 @@ class UserController extends BaseController {
 		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
-	
+
 	function userOverview() {
 		$user = new User;
 		$data['users'] = $user->getAllUsers();
