@@ -64,7 +64,7 @@ Route::match(array('GET', 'POST'), 'usergroup/{usergroup_id}', 'UserController@i
 Route::get('profile/{id}', 'UserController@profile');
 
 Route::get('users', 'UserController@userOverview');
-Route::get('myProfile/editProfile', 'UserController@editProfileModal');
+Route::match(array('GET', 'POST'), 'user/editProfile', 'UserController@editProfile');
 
 Route::get('inserts', function() {
 	return View::make('inserts');

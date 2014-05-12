@@ -20,10 +20,10 @@
 		<p>Bet score: {{$user->betscore}}</p>
 	</div>
 	<div class="col-md-10">
-		<h3>About Me</h3>
+		<h3>About {{$user->username}}</h3>
 		<p>{{$user->about}}</p>
 
-		<h3>My Groups</h3>
+		<h3>{{$user->username}}'s Groups</h3>
 		<table class="table table-condensed">
 			<tbody>
 				@foreach ($groups as $group)

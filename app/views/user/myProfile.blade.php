@@ -21,15 +21,7 @@
 	</div>
 	<div class="col-md-10">
 		<h3>About Me</h3>
-		<a class="edit" href="#">edit</a>
-
-
-		<!--<ul class="nav nav-pills">
-		<li><a href="#" class="btn btn-lg btn-success"
-		data-toggle="modal"
-		data-target="#basicModal">Bet</a></li>
-	</ul>-->
-
+		<a href="#" class="edit" data-toggle="modal" data-target="#aboutMeModal">edit</a>
 
 		<p>{{$user->about}}</p>
 
@@ -112,28 +104,60 @@
 	a.edit {
 		font-size:12px;
 	}
+</style>
 
-		<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	            <h4 class="modal-title" id="myModalLabel">Edit profile</h4>
-	            </div>
-	            <div class="modal-body">
+
+		<div class="modal fade" id="aboutMeModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+			<div class="modal-dialog">
+					<div class="modal-content">
+							<div class="modal-header">
+							<h4 class="modal-title" id="myModalLabel">Edit profile</h4>
+							</div>
+							<div class="modal-body">
 								{{ Form::open(array('url' => 'user/editProfile')) }}
 
 									<div class="form-group">
 										<label>{{ Form::label('aboutme', 'About Me') }}</label>
-										{{ Form::text('aboutme', Input::old('aboutme'), array('class'=>'form-control')) }}
+										{{ Form::text('aboutme', Input::old('aboutme'), array('class'=>'form-control', 'placeholder'=>'Tell me something about yourself!')) }}
 									</div>
 
 								{{ Form::submit('edit', array('class'=>'btn btn-success pull-right')) }}
 								{{ Form::token() . Form::close() }}
-	            </div>
+							</div>
 				<div><p/>&nbsp;</div>  <!--makes sure bet button is inside modal-->
-	    </div>
-	  </div>
+			</div>
+		</div>
 	</div>
 
-</style>
+	<!-- This is the modal used when a bet was accepted -->
+	<div class="modal fade" id="acceptModal" tabindex="-1" role="dialog" aria-labelledby="acceptModal" aria-hidden="true">
+			<div class="modal-dialog">
+					<div class="modal-content">
+							<div class="modal-header">
+							<h4 class="modal-title" id="myModalLabel">Profile updated!</h4>
+							</div>
+							<div class="modal-body">
+									<h3>Thank you for updating your profile. We appreciate it!</h3>
+							</div>
+							<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+			</div>
+		</div>
+	</div>
+
+@stop
+
+@section('javascript')
+<!-- Open bet modal if input contains 'autoOpenModal', open accept modal if input contains 'accepted' -->
+<script>
+$(document).ready(function () {
+		if ({{ Input::old('autoOpenModal', 'false') }}) {
+				$('#betModal').modal('show');
+		}
+		if ({{ Input::old('accepted', 'false') }}) {
+				$('#acceptModal').modal('show');
+		}
+});
+</script>
 @stop

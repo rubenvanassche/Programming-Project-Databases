@@ -125,87 +125,100 @@ class UserController extends BaseController {
 		/*TODO: Laravel probably provides a better way to fetch variables from a Match page after a bet page was pressed there than through $_GET
 		They are passed through the URL now, maybe that can be circumvented too.
 		If anyone knows how, please tell me (Jakob) or feel free to change it yourselves.
-		Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be.
-		UPDATE: as this goes through modal now, URL is invisible for user */
+		Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be. */
 		if (isset($_GET["presetHome"]))
 			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
 		else
 			$presetValues = array();
+		//if (isset($validation) && $validation->fails()) { echo "patn"; return; }
 
-		// Work On the Form
-		$rules = array(
-		        'hometeam' => array('required'),
-		        'awayteam' => array('required'),
-		        'date' => array('required'),
-		        'hometeamScore' => array('integer', 'between:0,100', 'required'),
-		        'awayteamScore' => array('integer', 'between:0,100', 'required'),
-		        'firstGoal' => array(),
-		        'hometeamYellows' => array('integer', 'between:0,100'),
-		        'hometeamReds' => array('integer', 'between:0,100'),
-		        'awayteamYellows' => array('integer', 'between:0,100'),
-		        'awayteamReds' => array('integer', 'between:0,100')
-		);
+		if(Request::isMethod('post')){
+			// Work On the Form
+			$rules = array(
+			        'hometeam' => array('required'),
+			        'awayteam' => array('required'),
+			        'date' => array('required'),
+			        'hometeamScore' => array('integer', 'between:0,100', 'required'),
+			        'awayteamScore' => array('integer', 'between:0,100', 'required'),
+			        'firstGoal' => array(),
+			        'hometeamYellows' => array('integer', 'between:0,100'),
+			        'hometeamReds' => array('integer', 'between:0,100'),
+			        'awayteamYellows' => array('integer', 'between:0,100'),
+			        'awayteamReds' => array('integer', 'between:0,100')
+			);
 
-		$validation = Validator::make(Input::all(), $rules);
+			$validation = Validator::make(Input::all(), $rules);
 
-		if($validation->fails()) {
-			// Problem so show the user error messages
-			$input = Input::all();//Get all the old input.
-			$input['autoOpenModal'] = 'true';//Add the auto open indicator flag as an input.
-			return Redirect::back()
-				->withErrors($validation)
-				->withInput($input);//Passing the old input and the flag.
-			//return Redirect::to('user/bet')->withInput()->withErrors($validation);
-		}else{
-			// Start working on this data
-			$hometeam = Input::get('hometeam');
-			$awayteam = Input::get('awayteam');
-			$date = Input::get('date');
-			$hometeam_score = Input::get('hometeamScore');
-			$awayteam_score = Input::get('awayteamScore');
-			$firstGoal = Input::get('firstGoal');
-			$hometeam_yellows = Input::get('hometeamYellows');
-			$hometeam_reds = Input::get('hometeamReds');
-			$awayteam_yellows = Input::get('awayteamYellows');
-			$awayteam_reds = Input::get('awayteamReds');
-			$hometeamIDs = Team::getIDsByName($hometeam);
-			$awayteamIDs = Team::getIDsByName($awayteam);
-			$hometeamID = $hometeamIDs[0]->id;
-			$awayteamID = $awayteamIDs[0]->id;
-			if ($firstGoal == "none")
-				$firstGoal_id = NULL;
-			if ($firstGoal == "home")
-				$firstGoal_id = $hometeamID;
-			if ($firstGoal == "away")
-				$firstGoal_id = $awayteamID;
-			//save blank guesses as -1 internally
-			if ($hometeam_yellows == "")
-				$hometeam_yellows = -1;
-			if ($hometeam_reds == "")
-				$hometeam_reds = -1;
-			if ($awayteam_yellows == "")
-				$awayteam_yellows = -1;
-			if ($awayteam_reds == "")
-				$awayteam_reds = -1;
-
-			$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
-			$user = new User;
-			$now = date('y-m-d h:i:s', time());;
-			$matchDateTime = new DateTime( $match->date);
-			$matchDateTime = $matchDateTime->format("y-m-d h:i:s");
-			//Only add if match exists, user is logged in and match is in the future
-			//Note that this function should not be called otherwise, this check might be unneeded
-			$success = ($match != NULL) && $user->loggedIn() && $now < $matchDateTime;
-			if($success == true){
-				Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
-				$data['content'] = 'Thank you for filling in your bet.';
-				$data['title'] = 'Bet registered!';
-				$acceptedInput = array("accepted" => true); //Add the bet accepted indicator flag as an input.
-				return Redirect::back()->withInput($acceptedInput);//Go back to match page
+			if($validation->fails()) {
+				// Problem so show the user error messages
+				//TODO: Figure out a way to redirect only the modal instead of entire page, if possible
+				$input = Input::all();//Get all the old input.
+				$input['autoOpenModal'] = 'true';//Add the auto open indicator flag as an input.
+				$input2 = array('autoOpenModal' =>true);
+				return Redirect::back()
+					->withErrors($validation)
+					->withInput($input);//Passing the old input and the flag.
+				//return Redirect::to('user/bet')->withInput()->withErrors($validation);
 			}else{
-				// Something went wrong (shouldn't happen)
-				return Redirect::to('user/bet')->withInput();
+				// Start working on this data
+				$hometeam = Input::get('hometeam');
+				$awayteam = Input::get('awayteam');
+				$date = Input::get('date');
+				$hometeam_score = Input::get('hometeamScore');
+				$awayteam_score = Input::get('awayteamScore');
+				$firstGoal = Input::get('firstGoal');
+				$hometeam_yellows = Input::get('hometeamYellows');
+				$hometeam_reds = Input::get('hometeamReds');
+				$awayteam_yellows = Input::get('awayteamYellows');
+				$awayteam_reds = Input::get('awayteamReds');
+				$hometeamIDs = Team::getIDsByName($hometeam);
+				$awayteamIDs = Team::getIDsByName($awayteam);
+				$hometeamID = $hometeamIDs[0]->id;
+				$awayteamID = $awayteamIDs[0]->id;
+				if ($firstGoal == "none")
+					$firstGoal_id = NULL;
+				if ($firstGoal == "home")
+					$firstGoal_id = $hometeamID;
+				if ($firstGoal == "away")
+					$firstGoal_id = $awayteamID;
+				//save blank guesses as -1 internally
+				if ($hometeam_yellows == "")
+					$hometeam_yellows = -1;
+				if ($hometeam_reds == "")
+					$hometeam_reds = -1;
+				if ($awayteam_yellows == "")
+					$awayteam_yellows = -1;
+				if ($awayteam_reds == "")
+					$awayteam_reds = -1;
+
+				$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
+				$user = new User;
+				$now = date('y-m-d h:i:s', time());;
+				$matchDateTime = new DateTime( $match->date);
+				$matchDateTime = $matchDateTime->format("y-m-d h:i:s");
+				//Only add if match exists, user is logged in and match is in the future
+				$success = ($match != NULL) && $user->loggedIn() && $now < $matchDateTime;
+				if($success == true){
+					Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
+					$data['content'] = 'Thank you for filling in your bet.';
+					$data['title'] = 'Bet registered!';
+					Session::put('bet', $match->id); //Can be used by match page to see if bet was just made.
+					$acceptedInput = array("accepted" => true);
+					return Redirect::back()->withInput($acceptedInput);//Go back to match page
+				}else{
+					// Something went wrong
+					return Redirect::to('user/bet')->withInput();
+
+				}
 			}
+    	}else{
+	    	// Show the form
+	    	$data['title'] = 'Bet';
+			$user = new User;
+			if ($user->loggedIn())
+		    	return View::make('layouts.simple', $data)->nest('content', 'user.bet', $presetValues);
+			else
+				return View::make('layouts.simple', $data)->nest('content', 'user.nologin');
     	}
 	}
 
@@ -342,7 +355,6 @@ class UserController extends BaseController {
 			}else{
 				// Start working on this data
 				$data['password'] = Input::get('password');
-
 				$user = new User;
 
 				if($user->change($user->ID(), 'password', $data['password'])){
@@ -380,7 +392,7 @@ class UserController extends BaseController {
 		return View::make('user.usergroups', $data);
 	}
 
-	function newusergroup(){
+	function newusergroup() {
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -395,10 +407,18 @@ class UserController extends BaseController {
 			}else{
 				// Start working on this data
 				$name = Input::get('name');
+				$private = Input::get('private');
+				var_dump($private);
+
+				if ($private == "true") {
+					$private = true;
+				}
+				else {
+					$private = false;
+				}
 
 				$user = new User;
-				$success = $user->newUserGroup($name);
-
+				$success = $user->newUserGroup($name, $private);
 				if($success){
 					// Add founder of the group to the group instantly.
 					$this->addMe(UserGroup::ID($name));
@@ -460,7 +480,6 @@ class UserController extends BaseController {
 		$data['notifications'] = $user->getNotifications($user->ID());
 		$data['invites'] = $user->getMyInvites();
 		$data['avatar'] = NULL;
-		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
 		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
 	}
 
@@ -469,7 +488,6 @@ class UserController extends BaseController {
 		$data['groups'] = $user->getGroupsByID($id);
 		$data['user'] = $user->get($id);
 		$data['avatar'] = NULL;
-		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
 
@@ -482,12 +500,9 @@ class UserController extends BaseController {
 	function editProfile(){
 			$aboutme = Input::get('aboutme');
 
-			$user = new User;
-			DB::update('UPDATE user SET about = ? WHERE id = ?', array($aboutme, $user->ID()));
-
 			$data['content'] = 'Thank you for personalizing your profile.';
 			$data['title'] = 'Update profile!';
 			$acceptedInput = array("accepted" => true);
-			return Redirect::back()->withInput($acceptedInput);//Go back to match page
+			return Redirect::back();//Go back to match page
 	}
 }
