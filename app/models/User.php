@@ -278,6 +278,16 @@ class User {
 		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
 		WHERE upug.user_id = ? ', array($id));
 
+		foreach ($results as $r) {
+			$v = UserGroup::isMember($this->ID(), $r->id);
+			if (count($v) > 0) {
+				$r->ismember = true;
+			}
+			else {
+				$r->ismember = false;
+			}
+		}
+
 		return $results;
 	}
 

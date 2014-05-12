@@ -20,22 +20,30 @@
 	<div class="col-md-10">
 		<h3>About Me</h3>
 		<p>{{$text}}</p>
-	
+
 		<h3>My Groups</h3>
 		<table class="table table-condensed">
 			<tbody>
 				@foreach ($groups as $group)
-						
+					<?php if ($group->private == false) { ?>
 						<tr class="notification">
 							<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
+							<td>0</td>
 						</tr>
-						
+					<?php } else { ?>
+
+						<tr class="private notification">
+							<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
+							<td>0</td>
+						</tr>
+								<?php
+							} ?>
 				@endforeach
 			</tbody>
 
 		</table>
 
-		
+
 		<h3>Invites</h3>
 		<table class="table table-condensed">
 			<thead>
@@ -46,7 +54,7 @@
 					<th></th>
 				</tr>
 			</thead>
-			<tbody>	
+			<tbody>
 				@foreach ($invites as $invite)
 					<tr class="notification">
 						<td>{{$invite->name}}</td>
@@ -59,7 +67,7 @@
 		</table>
 		<h3>Notifications</h3>
 		<table class="table table-condensed">
-			<tbody>	
+			<tbody>
 				@foreach ($notifications as $notification)
 					<tr class="notification">
 						<td>{{$notification['message']}}</td>
@@ -76,10 +84,17 @@
 	.notification:hover {
 		background-color:#006ddb;
 	}
-	
+
 	th {
 		text-align:left;
 	}
+
+	tr.private {
+		background-color:#EEEEEE;
+	}
+
+	tr.private.notification:hover {
+		background-color:#DDDDDD;
+	}
 </style>
 @stop
-
