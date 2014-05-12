@@ -438,7 +438,16 @@ class UserController extends BaseController {
 		$user = new User;
 		$invitee_name = Input::get('invitee_name');
 		$invitee_id = $user->getID($invitee_name);
-		$user->inviteUserToGroup($usergroup_id, $invitee_id);
+
+		if ($invitee_id == -1) {
+			// Nonexistant user
+		}
+		else if ($user->ID() == $invitee_id) {
+			// This user
+		}
+		else {
+			$user->inviteUserToGroup($usergroup_id, $invitee_id);
+		}
 
 		return Redirect::to('usergroup/'.$usergroup_id);
 	}

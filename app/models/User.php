@@ -268,7 +268,12 @@ class User {
 
 	public static function getID($username) {
 		$results = DB::select("SELECT id FROM user WHERE username = ?", array($username));
-		return $results[0]->id;
+		if (count($results) == 0) {
+			return -1;
+		}
+		else {
+			return $results[0]->id;
+		}
 	}
 
 	function getGroupsByID($id) {
