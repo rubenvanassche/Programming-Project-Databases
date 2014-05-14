@@ -36,7 +36,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 
 <div class="form-group">
 	<label>{{ Form::label('country', 'Country') }}</label>
-	{{ Form::select('country',  $countries, array('class'=>'form-control')) }}
+	{{ Form::select('country',  $countries,'', array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
