@@ -51,9 +51,20 @@ Route::get('user/facebooklogin', 'UserController@facebookLogin');
 Route::get('usergroups', 'UserController@usergroups');
 Route::get('usergroup/{id}', 'UserController@usergroup');
 Route::get('usergroup/{id}/addMe', 'UserController@addMe');
+Route::get('usergroup/{id}/{otherUser_id}/inviteUser', 'UserController@inviteUser');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
 Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
+Route::get('user/betmodal', 'UserController@betmodal');
 
+Route::get('myProfile', 'UserController@myProfile');
+Route::get('myProfile/{notif_id}/{ug_id}/acceptInvite', 'UserController@acceptInvite');
+Route::get('myProfile/{notif_id}/declineInvite', 'UserController@declineInvite');
+Route::match(array('GET', 'POST'), 'usergroup/{usergroup_id}', 'UserController@inviteUser');
+
+Route::get('profile/{id}', 'UserController@profile');
+
+Route::get('users', 'UserController@userOverview');
+Route::match(array('GET', 'POST'), 'user/editProfile', 'UserController@editProfile');
 
 Route::get('inserts', function() {
 	return View::make('inserts');
@@ -62,4 +73,3 @@ Route::get('inserts', function() {
 Route::get('schema', function() {
         return View::make('schema');
 });
-

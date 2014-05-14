@@ -7,16 +7,23 @@
 			<h3>International</h3>
 		</div>
 		<div class="col-md-12">
-			<table class="table table-condensed">
+			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
+						<th>Country</th>
 						<th>Name</th>
+						<th>Continent</th>
 					</tr>
 				</thead>
 				<tbody>	
 					@foreach ($teams as $team)
+						<?php
+							$flag = "flag-" . $team->abbreviation;
+						?>
 						<tr>
+							<td><i class={{$flag}}></td>
 							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
+							<td>{{$team->continent}}</td>
 						</tr>
 					@endforeach					
 				</tbody>
@@ -58,6 +65,19 @@
 @stop
 
 @section('javascript')
+	<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+	<script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+	<script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0]}); });
+	</script>
+  
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
      google.load('visualization', '1', {'packages': ['geochart']});

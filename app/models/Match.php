@@ -13,6 +13,12 @@ class Match {
     const TABLE_MATCH = "match";
 
     /**
+     * @var TABLE_PLAYER_PER_MATCH
+     * @brief The table where each player is linked to a match.
+     */
+    const TABLE_PLAYER_PER_MATCH = "playerPerMatch";
+
+    /**
      * @brief Get The ids of a given match.
      * @param hometeam_id The ID of the hometeam.
      * @param awayteam_id The ID of the awayteam.
@@ -39,6 +45,25 @@ class Match {
         $values = array( $hometeam_id, $awayteam_id, $competition_id, $date );
         DB::insert( $query, $values );
         return self::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
+    }
+
+    /**
+     * @brief Link player to the match.
+     * @param player_id The ID of the player.
+     * @param match_id The ID of the match.
+     * @return True if new link created, False otherwise.
+     */
+    public static function linkPlayer( $player_id, $match_id ) {
+        // first check whether the link was already created
+        $query = "SELECT * FROM `".self::TABLE_PLAYER_PER_MATCH."` WHERE player_id = ? AND match_id = ?";
+        $values = array( $player_id, $team_id );
+        $sql = DB::select( $query, $values );
+        if ( !empty( $sql ) ) return False;
+
+        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_MATCH.'` (player_id, team_id) VALUES (?, ?)';
+        $values = array( $player_id, $team_id );
+        DB::insert( $query, $values );
+        return True;
     }
 
     // TODO DOCUMENTIZE
@@ -75,17 +100,20 @@ class Match {
     }
     
     public static function goals($matchID, $teamID){
-        $results = DB::select("SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player FROM goal WHERE match_id = ? AND team_id = ?", array($matchID, $teamID));
+        $results = DB::select("SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player, 
+											(SELECT id FROM player WHERE id = goal.player_id) as player_id FROM goal 
+																										WHERE match_id = ? AND team_id = ?", array($matchID, $teamID));
         return $results;
     }
     
     public static function cards($matchID, $teamID){
-        $results = DB::select("SELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id) AS player FROM cards 
-									WHERE match_id = ? 
-									AND cards.player_id IN (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
+        $results = DB::select("SELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id) AS player,
+												   (SELECT id FROM player WHERE player.id = cards.player_id) AS player_id FROM cards 
+									WHERE match_id = ? "
+									/* TODO: AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
 																					  WHERE playerPerMatch.match_id = ?
 																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = ?)", array($matchID, $matchID, $teamID));
+																					  AND playerPerTeam.team_id = ?)"*/, array($matchID/*, $matchID, $teamID*/));
         return $results;
     }
     
@@ -180,17 +208,11 @@ class Match {
             $hGoals = Match::goals($rm->id, $rm->hometeam_id);
             $aGoals = Match::goals($rm->id, $rm->awayteam_id);
 
-			//echo count($hGoals);
-			//echo count($aGoals);
-			//echo "----";
-
             array_push($matchGoals, $hGoals, $aGoals);
             
             $hFlag = Country::getCountry($hid[0]->country_id);
             $aFlag = Country::getCountry($aid[0]->country_id);
-//            var_dump($hFlag);
-//            var_dump($aFlag);
-//            echo "+++++";
+
 
             array_push($countryFlags, $hFlag, $aFlag);
             
@@ -201,5 +223,27 @@ class Match {
             
             return $info;
     }
+
+	public static function isInFuture($matchID) {
+		$now = date('y-m-d h:i:s', time());;
+		//Convert sql datetime to php datetime
+		$match = Match::getMatchByID($matchID)[0];
+		$matchDateTime = new DateTime($match->date);
+		$matchDateTime = $matchDateTime->format("Y-m-d h:i:s");
+		return $matchDateTime > $now;
+	}
+
+	public static function isPlayed($matchID) {
+		$now = new DateTime();
+		//DELETE +1Y
+		$now->add(new DateInterval('P1Y'));
+		$now = $now->format("Y-m-d h:i:s");
+		//Convert sql datetime to php datetime
+		$match = Match::getMatchByID($matchID)[0];
+		$matchDateTime = new DateTime($match->date);
+		$matchDateTime->add(new DateInterval('PT3H'));  //+3 hours, match should be over by then
+		$matchDateTime = $matchDateTime->format("Y-m-d h:i:s");
+		return $matchDateTime < $now;
+	}
 }
 

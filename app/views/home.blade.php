@@ -55,10 +55,20 @@
                                                                         <?php
                                                                                 $hFlag = "flag-" . $fmi[1][0][0]->abbreviation;
                                                                                 $aFlag = "flag-" . $fmi[1][1][0]->abbreviation;
+                                                                                $start_date = $fmi[3]->date;
+                                                                                $date = substr($start_date, 0, 10);
+                                                                                $today = date("Y-m-d H:i:s"); 
+                                                                                $today = substr($today, 0, 10);
+                                                                                if ($today == $date) {
+                                                                                	$date = substr($start_date, 11, 5);
+                                                                                }
+                                                                                else {
+                                                                                	$date = substr($date, 8, 2) . "-" . substr($date, 5, 2) . "-" . substr($date, 0, 4);
+                                                                                }
                                                                         ?>
                                                                         <td><i class={{$hFlag}}></i></td>
                                                                         <td>{{$fmi[2][0][0]->name}}</td>
-                                                                        <td><a href="{{route('match', array('id'=>$fmi[4]))}}">...</a></td>
+                                                                        <td><a href="{{route('match', array('id'=>$fmi[4]))}}">{{$date}}</a></td>
 									<td>{{$fmi[2][1][0]->name}}</td>
                                                                         <td><i class={{$aFlag}}></i></td>
                                                                 </tr>
@@ -113,7 +123,7 @@
 					?>
 						<div class="item <?php if($counter==0){echo 'active';} ?>"><!-- class of active since it's the first item -->
 							<img src="<?php echo $picture; ?>" width='100%' />
-							<div class="carousel-caption">
+							<div class="carousel-caption" style="background: rgba(0,0,0,0.5);">
 								<h3><?php echo $article->get_title(); ?></h3>
 								<p><?php echo $article->get_description(); ?></p>
 								<p><a href="<?php echo $article->get_permalink(); ?>">Read More</a></p>

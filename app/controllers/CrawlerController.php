@@ -34,7 +34,7 @@ class CrawlerController extends BaseController {
             } catch ( ErrorException $ee ) {
                 $stop = time();
             } catch ( FatalErrorException $fee ) {
-                continue;
+                $stop = time();
             } // end try-catch
         } while ( $stop - $start <= $time_limit );
 
@@ -124,6 +124,7 @@ class CrawlerController extends BaseController {
      * @return An associative array with the following values mapped:
      *      "first name"    => $first_name,
      *      "last name"     => $last_name,
+     *      "position"      => $position,
      */
     public static function player_data( $url ) {
         // load document
@@ -145,11 +146,25 @@ class CrawlerController extends BaseController {
         $last_name = $data->filterXPath( $xpath )->getNode(0);
         $last_name = ( empty( $last_name ) ) ? NULL : trim( $last_name->textContent );
 
+        // query for players position
+        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[8]";
+
+        $position = $data->filterXPath( $xpath )->getNode(0);
+        $position = ( empty( $position ) ) ? NULL : strtolower( trim( $position->textContent ) );
+
+        if (! in_array( $position, array("goalkeeper", "defender", "midfielder", "attacker") ) ) {
+            $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[7]";
+
+            $position = $data->filterXPath( $xpath )->getNode(0);
+            $position = ( empty( $position ) ) ? NULL : strtolower( trim( $position->textContent ) );
+        } // end if
+
         // clear cache to avoid memory exhausting
         $data->clear();
         return array(
             "first name"    => $first_name,
             "last name"     => $last_name,
+            "position"      => $position,
         );
     }
 
@@ -260,7 +275,7 @@ class CrawlerController extends BaseController {
      * @brief Generator for parsing all the international teams from the 
      * official FIFA participant list.
      * @details A complete list can be found at 
-     * http://int.soccerway.com/teams/ranking/fifa/
+     * http://int.soccerway.com/teams/rankings/fifa/
      *
      * @return An associative array with the following values mapped:
      *      "name"          => $name,
@@ -354,7 +369,8 @@ class CrawlerController extends BaseController {
                 if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
                 $player_id = $ids[0]->id;
 
-                Team::linkPlayer( $player_id, $team_id );
+                // link player to team
+                Team::linkPlayer( $player_id, $team_id, $player_data["position"] );
             } // end foreach
         } // end foreach
 
@@ -396,7 +412,7 @@ class CrawlerController extends BaseController {
         $date = ( empty( $date ) ) ? NULL : trim( $date->textContent );
 
         // query for kick-off
-        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[3]";
+        $xpath = "//div[contains(@class, block_match_info)]/div/div/div/dl/dd[4]";
 
         $kick_off = $data->filterXPath( $xpath )->getNode(0);
         $kick_off = ( empty( $kick_off ) ) ? NULL : trim( $kick_off->textContent );
@@ -446,6 +462,8 @@ class CrawlerController extends BaseController {
             if ( !empty( $homegoal ) ) {
                 // get the player data
                 $href = $home->getElementsByTagName( 'a' );
+                if ( empty( $href->item(0) ) ) continue;
+
                 $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
                 $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
 
@@ -605,8 +623,8 @@ class CrawlerController extends BaseController {
             Competition::linkTeam( $awayteam_id, $competition_id );
 
             // alright, add the match (if not already added)
-            $date = new DateTime( $match_data["date"] );
-            $date = $date->format( "Y-m-d" );
+            $date = new DateTime( $match_data["date"] . ' ' . $match_data["kick-off"] );
+            $date = $date->format( "Y-m-d H:i:s" );
 
             $ids = Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
             if ( empty( $ids ) ) $ids = Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
@@ -617,6 +635,13 @@ class CrawlerController extends BaseController {
                 // get the time
                 $time = $goal["time"];
 
+                // get the team id
+                $team = $goal["team"];
+
+                $ids = Team::getIDsByName( $team );
+                if ( empty( $ids ) ) throw new DomainException( "Could not find team ".$team );
+                $team_id = $ids[0]->id;
+
                 // get the player id
                 $player_data = $goal["player data"];
 
@@ -625,15 +650,14 @@ class CrawlerController extends BaseController {
                 $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
 
                 $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
+                if ( empty( $ids ) && NULL != $player ) {
+                    $ids = Player::add( $player );
+                    $player_id = $ids[0]->id;
+
+                    // also link player to team
+                    Team::linkPlayer( $player_id, $team_id, $player_data["position"] );
+                } // end if
                 $player_id = $ids[0]->id;
-
-                // get the team id
-                $team = $goal["team"];
-
-                $ids = Team::getIDsByName( $team );
-                if ( empty( $ids ) ) throw new DomainException( "Could not find team ".$team );
-                $team_id = $ids[0]->id;
 
                 // now add the goal (if not already added)
                 if ( empty( Goal::getIDs( $match_id, $team_id, $player_id, $time ) ) ) Goal::add( $match_id, $team_id, $player_id, $time );

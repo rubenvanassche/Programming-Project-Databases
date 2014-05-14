@@ -14,15 +14,37 @@
 						<th>Score</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 					@foreach ($groups as $group)
-						<tr>
-							<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
-							<td>0</td>
-						</tr>
-					@endforeach					
+						<?php if ($group->private == false) { ?>
+							<tr>
+								<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
+								<td>0</td>
+							</tr>
+						<?php } else {
+								if ($group->ismember == false) { ?>
+									<tr class="private">
+										<td>{{$group->name}}</td>
+										<td>0</td>
+									</tr>
+									<?php } else { ?>
+										<tr class="private">
+											<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
+											<td>0</td>
+										</tr>
+									<?php }
+								} ?>
+					@endforeach
 				</tbody>
 			</table>
 		</div>
 	</div>
+@stop
+
+@section('css')
+<style>
+	tr.private {
+		background-color:#EEEEEE;
+	}
+</style>
 @stop

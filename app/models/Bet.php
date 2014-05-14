@@ -64,9 +64,57 @@ class Bet {
 		return $results;
 	}
 
-
-
-
-}
+	public static function processBets( $match_id ) {
+		$firstBet = DB::select("SELECT evaluated FROM bet WHERE match_id = ? LIMIT 1", array($match_id));
+		if ($firstBet == NULL || $firstBet[0]->evaluated == 1)
+			return;
+		$bets = DB::select("SELECT * FROM bet WHERE match_id = ?", array($match_id));
+		$match = Match::get($match_id);
+		$score = Match::getScore2($match_id);
+		$cards = Match::getCardCounts($match_id);
+		foreach ($bets as $bet) {
+			$user = DB::select("SELECT betscore FROM user WHERE id = $bet->user_id");
+			$points = $user[0]->betscore;
+			if ($bet->hometeam_score == $score[0] && $bet->awayteam_score == $score[1])
+				$points = $points + 30;
+			if ($bet->hometeam_score == $score[0] xor $bet->awayteam_score == $score[1])
+				$points = $points + 10;			
+			if ($bet->hometeam_score != $score[0] && $bet->awayteam_score != $score[1])
+				$points = $points - 5;
+			if ($bet->first_goal != NULL) {
+				if ($bet->first_goal == Match::getFirstGoalTeam($match_id))
+					$points = $points + 10;
+				else
+					$points = $points - 5;
+			}
+			if ($bet->hometeam_yellows != -1) {
+				if ($bet->hometeam_yellows == $cards[0])
+					$points = $points + 20;
+				else
+					$points = $points - 5;;
+			}
+			if ($bet->hometeam_reds != -1) {
+				if ($bet->hometeam_reds == $cards[0])
+					$points = $points + 20;
+				else
+					$points = $points - 5;;
+			}
+			if ($bet->awayteam_yellows != -1) {
+				if ($bet->awayteam_yellows == $cards[0])
+					$points = $points + 20;
+				else
+					$points = $points - 5;;
+			}
+			if ($bet->awayteam_reds != -1) {
+				if ($bet->awayteam_reds == $cards[0])
+					$points = $points + 20;
+				else
+					$points = $points - 5;;
+			}
+			DB::update("UPDATE bet SET evaluated = 1 WHERE id = $bet->id");
+			DB::update("UPDATE user SET betscore = $points WHERE id = $bet->user_id");
+		}
+	}
+}	
 
 ?>
