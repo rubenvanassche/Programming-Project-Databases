@@ -11,9 +11,9 @@ class UserGroup {
 		return $result[0]->id;
 	}
 	
-	public static function invite($user_id, $competition_id, $invitedBy_id) {
-		$query = "INSERT INTO `userGroupInvites` (userId, competitionId, invitedById) VALUES (?, ?, ?)";
-        $values = array($user_id, $competition_id, $invitedBy_id);
+	public static function invite($user_id, $userGroup_id, $invitedBy_id) {
+		$query = "INSERT INTO `userGroupInvites` (userId, usergroupId, invitedById) VALUES (?, ?, ?)";
+        $values = array($user_id, $userGroup_id, $invitedBy_id);
         DB::insert( $query, $values );
    }
 
