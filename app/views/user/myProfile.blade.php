@@ -14,7 +14,7 @@
 </div>
 <div class="row">
 	<div class="col-md-2">
-		<img class="img-responsive flag" src="{{$avatar}}" alt="" /> <!-- Optional -->
+		<img class="img-responsive flag" src="{{$profilepicture}}" alt="" /> <!-- Optional -->
 		<h2>{{$user->username}}</h2>
 		<p>Country: {{$user->country}}</p>
 		<p>Bet score: {{$user->betscore}}</p>

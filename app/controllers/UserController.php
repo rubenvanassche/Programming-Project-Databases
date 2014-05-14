@@ -284,6 +284,7 @@ class UserController extends BaseController {
 			        'lastname' => array('required'),
 			        'country' => array('required'),
 			        'email' => array('required', 'email'),
+			        'age' => array('numeric', 'between:1,99'),
 			);
 
 			$validation = Validator::make(Input::all(), $rules);
@@ -297,6 +298,7 @@ class UserController extends BaseController {
 				$data['lastname'] = Input::get('lastname');
 				$data['country'] = Input::get('country');
 				$data['email'] = Input::get('email');
+				$data['about'] = Input::get('about');
 
 				$user = new User;
 
@@ -320,8 +322,10 @@ class UserController extends BaseController {
     	}else{
 	    	// Show the form
 	    	$data['title'] = 'Account';
+	    	$data['countries'] = Country::getCountryNames();
 	    	$user = new User;
-	    	return View::make('layouts.simple', $data)->nest('content', 'user.account', array('user' => $user->get($user->ID())));
+	    	$data['user'] = $user->get($user->ID());
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.account', $data);
     	}
 	}
 
@@ -361,6 +365,64 @@ class UserController extends BaseController {
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.changepassword');
     	}
 	}
+	
+	function changeprofilepicture(){
+		$user = new User;
+		if($user->facebookOnlyUser($user->ID()) == false){
+			if(Request::isMethod('post')){
+				$rules = array(
+			        'image' => array('required')
+			    );
+
+				$validation = Validator::make(Input::all(), $rules);
+			
+				if ($validation->passes()) {
+	
+				   // Get the image input
+				   $file = Input::file('image');
+				
+				   $destinationPath    = 'public/profilepictures/';
+				   $filename           = $file->getClientOriginalName();
+				   $mime_type          = $file->getMimeType(); 
+				   $size 			   = $file->getSize();
+				   $extension          = $file->getClientOriginalExtension(); 
+				   				
+				   // This is were you would store the image path in a table
+				
+				   if($size > 1048576){
+				   		Notification::error("The image size is over 1mb.");
+					   return Redirect::back()->withErrors($validation);
+				   }
+				   
+				   $type = strtolower($extension);
+				   
+				   if($type == 'jpg' or $type == 'jpeg' or $type == 'png' or $type == 'gif'){
+					   	// Success
+					   	$filename = 'user'.$user->ID().'.'.$extension;
+					   	
+					   	$file->move(base_path().'/'.$destinationPath, $filename);
+					   	$url = url('profilepictures/'.$filename);
+						$user->changeProfilePicture($user->ID(), $url);
+						
+						return Redirect::to('profile/'.$user->ID());
+				   }else{
+				   	   Notification::error("The image size is not the right format(jpg, png, gif).");
+					   return Redirect::back()->withErrors($validation);   
+				   }
+				} else {
+				   return Redirect::back()->withErrors($validation)->withInput();
+				}
+			}else{
+				// Show the form
+				$data['title'] = 'Change Profile Picture';
+				return View::make('layouts.simple', $data)->nest('content', 'user.changeprofilepicture');
+			}
+		}else{
+			$data['title'] = 'Nothing to see over here';
+			$data['content'] = 'We are using your Facebook profile picture.';
+			return View::make('layouts.simple', $data);	
+		}
+	}
 
 	function logout(){
 		$user = new User;
@@ -378,7 +440,7 @@ class UserController extends BaseController {
 		$data['user'] = $user->get($user->ID());
 		$data['notifications'] = $user->getNotifications($user->ID());
 		$data['invites'] = $usergroup->getMyInvites();
-		$data['avatar'] = NULL;
+		$data['profilepicture'] = $user->getPicture($user->ID());
 		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
 		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
 	}
