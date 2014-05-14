@@ -22,6 +22,10 @@
 			<li class="active"><a href="{{  route('team.information', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Information</a></li>
 			<li><a href="{{  route('team.players', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Players</a></li>
 			<li><a href="{{  route('team.matches', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Matches</a></li>
+			<li><a href="{{  route('team.news', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">News</a></li>
+			@if ($teamObj->twitterAccount != '')
+				<li><a href="{{  route('team.twitter', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Twitter</a></li>
+			@endif
 		</ul>
 		<div class="tabcontent" style="margin-top:10px;">
 			Please wait

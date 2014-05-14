@@ -23,6 +23,8 @@ Route::get('team/{id}', array('as' => 'team', 'uses' => 'TeamController@index'))
 Route::get('team/{id}/players', array('as' => 'team.players', 'uses' => 'TeamController@players'));
 Route::get('team/{id}/information', array('as' => 'team.information', 'uses' => 'TeamController@information'));
 Route::get('team/{id}/matches', array('as' => 'team.matches', 'uses' => 'TeamController@matches'));
+Route::get('team/{id}/news', array('as' => 'team.news', 'uses' => 'TeamController@news'));
+Route::get('team/{id}/twitter', array('as' => 'team.twitter', 'uses' => 'TeamController@twitter'));
 
 Route::get('player/{id}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
