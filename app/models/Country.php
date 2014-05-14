@@ -51,4 +51,11 @@ class Country {
         return DB::select( $query, $values );
     }
 
+	public static function getCountryNames() {
+		$countries = DB::select("SELECT id, name FROM `".self::TABLE_COUNTRY);
+		foreach ($countries as $country) {
+			$result[$country->name] = $country->name;
+		}
+        return $result;
+	}
 }

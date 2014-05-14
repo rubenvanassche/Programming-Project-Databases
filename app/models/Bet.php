@@ -67,7 +67,7 @@ class Bet {
 	public static function processBets( $match_id ) {
 		$firstBet = DB::select("SELECT evaluated FROM bet WHERE match_id = ? LIMIT 1", array($match_id));
 		if ($firstBet == NULL || $firstBet[0]->evaluated == 1)
-			return;
+			return 0; //0 indicates no bets were processed
 		$bets = DB::select("SELECT * FROM bet WHERE match_id = ?", array($match_id));
 		$match = Match::get($match_id);
 		$score = Match::getScore2($match_id);
@@ -114,6 +114,25 @@ class Bet {
 			DB::update("UPDATE bet SET evaluated = 1 WHERE id = $bet->id");
 			DB::update("UPDATE user SET betscore = $points WHERE id = $bet->user_id");
 		}
+		return count($bets);
+	}
+
+	public static function processAllBets() {
+		$now = new DateTime();
+		$tomorrow = new DateTime();
+		$tomorrow = $tomorrow->add(new DateInterval('P1D'));
+		$now = $now->format("Y-m-d H:i:s");
+		$tomorrow = $tomorrow->format("Y-m-d H:i:s");
+		$matches = DB::select("SELECT id FROM `match` WHERE date > ? AND date < ?", array($now, $tomorrow));
+		$totalBetCount = 0;
+		$matchCount = 0;
+		foreach($matches as $match) {
+			$betCount = Bet::processBets($match->id);
+			$totalBetCount += $betCount;
+			if ($betCount != 0)
+				$matchCount += 1;
+		}
+		return array('matchCount' => $matchCount, 'betCount' => $totalBetCount);
 	}
 }	
 
