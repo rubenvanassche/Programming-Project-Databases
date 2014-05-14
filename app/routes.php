@@ -30,8 +30,6 @@ Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'
 
 Route::get('user/bets', array('as' => 'bets', 'uses' => 'BetController@index'));
 
-
-
 // ------------
 // USER
 // ------------

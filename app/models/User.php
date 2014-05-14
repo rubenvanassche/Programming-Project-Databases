@@ -55,8 +55,11 @@ class User {
 		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE facebookid = ?", array($id));
 		if($result[0]->count == 0){
 			// User doesn't exists
+			
+			// Check if someone has already this username
+			$username = $this->getFacebookUsername($username);
 
-			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username) VALUES (?,?,?,?,?)', array($firstname, $lastname, $id, $email, $username));
+			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username, country) VALUES (?,?,?,?,?,\'be\')', array($firstname, $lastname, $id, $email, $username));
 
 			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
 			Session::put('userID', $result[0]->id);
@@ -65,6 +68,76 @@ class User {
 			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
 			Session::put('userID', $result[0]->id);
 			Session::put('userEntrance', time());
+		}
+	}
+	
+	// Checks in the database if there is already auser with this username, if so: return another one
+	function getFacebookUsername($username){
+		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE username = ?", array($username));
+		if($result[0]->count == 0){
+			// This username is not in the DB so continue
+			return $username;
+		}else{
+			// Generate another username
+			$counter = 1;
+			while(true){
+				$newusername = $username.$counter;
+				$result = DB::select("SELECT COUNT(id) as count FROM user WHERE username = ?", array($newusername));
+				if($result[0]->count == 0){
+					return $newusername;
+				}else{
+					$counter++;
+					continue;
+				}
+			}
+		}
+	}
+	
+	function facebookOnlyUser($id){
+		$result = DB::select("SELECT facebookid, password FROM user WHERE id = ?", array($id));
+		if($result[0]->password == '' and !$result[0]->facebookid == ''){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function postToFacebook($title, $message, $link = '', $pictureUrl = ''){
+		if($this->facebookOnlyUser($this->ID())){
+			// Make connection with Facebook
+			$application = array(
+		   	 'appId' => '611155238979722',
+		   	 'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
+			);
+			
+			FacebookConnect::getFacebook($application);
+			$permissions = 'publish_stream,email';
+			$url_app = 'http://localhost:8000/user/facebooklogin';
+			$getUser = FacebookConnect::getUser($permissions, $url_app);
+			
+			if($link == ''){
+				$link = 'http://www.coachcenter.net';
+			}
+			
+			if($pictureUrl == ''){
+				$pictureUrl = 'http://coachcenter.net/favicon.ico';
+			}
+			
+			$messageX = array(
+			    'link'    => $link,
+			    'message' => $message,
+			    'picture'   => $pictureUrl,
+			    'name'    => $title,
+			    'description' => 'Coachcenter',
+			    'access_token' => $getUser['access_token'] // form FacebookConnect::getUser();
+			    );
+
+		    // and ... post
+			FacebookConnect::postToFacebook($messageX, 'feed');
+			
+			return true;
+		}else{
+			return false;
 		}
 	}
 

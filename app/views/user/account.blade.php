@@ -23,10 +23,15 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 	{{ Form::text('username', trim(Input::old('username')) != '' ? Input::old('username') : $user->username, array('class'=>'form-control', 'disabled'=> 'disabled')) }}
 </div>
 
+<?php
+	$userClass = new User;
+?>
+@if ($userClass->facebookOnlyUser($user->id) == false)
 <div class="form-group">
 	<label>Password</label>
 	<a href="{{ action('UserController@changepassword') }}" class="btn btn-danger form-control">Change Password</a>
 </div>
+@endif
 
 <div class="form-group">
 	<label>{{ Form::label('firstname', 'First Name') }}</label>
