@@ -7,8 +7,6 @@ class MatchController extends BaseController {
 				 It is probably better to just check this on a set interval, so this should be changed.
 				 This way it does not slow down opening Match pages and opening the page is not necessary to have bets evaluated.
 		*/
-		if (Match::isPlayed($matchID))
-			Bet::processBets($matchID);
 		$user = new User;
 		$data['match'] = Match::get($matchID);
 		$data['bet'] = Match::isInFuture($matchID) && $user->loggedIn(); /*TODO and user has not bet on this match yet*/
