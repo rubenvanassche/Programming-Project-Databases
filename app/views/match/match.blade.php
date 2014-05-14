@@ -10,20 +10,9 @@
 	}
 ?>
 @section('content')
-	@if($bet)
-	<!--TODO: These divs are a rather convoluted way to get the bet button somewhere to the center. It probably doesn't work on all resolutions.
-	It should probably be changed to something more elegant, if the button even stays there. Also bet button should not be shown if logged out
-	or user already bet on this match -->
-	<div class="row">
-	<div class="col-md-5" style="margin-top:20px;">
-	</div>
-	<div class="col-md-3" style="text-align:center;">
-	<ul class="nav nav-pills">
-	<li><a href="#" class="btn btn-lg btn-success" data-toggle="modal" data-target="#betModal">Bet</a></li>
-	</ul>
-	</div>
-	</div>
-	@endif
+
+
+	
 
 
 	<div class="row">
@@ -48,6 +37,9 @@
 			<a href="{{route('team', array('id'=>$match->hometeam_id))}}">Go to the team</a>
 		</div>
 		<div class="col-md-2" style="text-align:center;">
+			@if($bet)
+				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
+			@endif
 			<p>{{$match->date}}</p>
 		</div>
 		<div class="col-md-5">
