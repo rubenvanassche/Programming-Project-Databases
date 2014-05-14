@@ -52,10 +52,15 @@ class Country {
     }
 
 	public static function getCountryNames() {
-		$countries = DB::select("SELECT id, name FROM `".self::TABLE_COUNTRY);
+		$countries = DB::select("SELECT id, name FROM ".self::TABLE_COUNTRY);
 		foreach ($countries as $country) {
-			$result[$country->name] = $country->name;
+			$result[$country->id] = $country->name;
 		}
         return $result;
+	}
+
+	public static function getName( $id ) {
+		$result = DB::select("SELECT name FROM ".self::TABLE_COUNTRY." WHERE id = ?", array($id));
+		return $result[0]->name;
 	}
 }

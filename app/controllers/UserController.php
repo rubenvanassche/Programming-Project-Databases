@@ -90,7 +90,7 @@ class UserController extends BaseController {
 				$data['username'] = Input::get('username');
 				$data['firstname'] = Input::get('firstname');
 				$data['lastname'] = Input::get('lastname');
-				$data['country'] = Input::get('country');
+				$data['country_id'] = Input::get('country');
 				$data['email'] = Input::get('email');
 				$data['password'] = Input::get('password');
 

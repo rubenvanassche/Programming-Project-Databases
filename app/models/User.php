@@ -160,13 +160,13 @@ class User {
 		$data['registrationcode'] = str_random(24);
 		$data['password'] = Hash::make($data['password']);
 
-		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country, registrationcode) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country_id, registrationcode) VALUES (?, ?, ?, ?, ?, ?, ?)",
 		array($data['username'],
 			$data['firstname'],
 			$data['lastname'],
 			$data['email'],
 			$data['password'],
-			$data['country'],
+			$data['country_id'],
 			$data['registrationcode']));
 
 		if($result == 1){
