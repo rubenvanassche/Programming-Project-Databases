@@ -76,12 +76,10 @@ class UserController extends BaseController {
 			        'username' => array('required'),
 			        'firstname' => array('required'),
 			        'lastname' => array('required'),
-			        'country' => array('required'),
 			        'email' => array('required', 'email'),
 			        'password' => array('required'),
 			        'passwordagain' => array('required', 'same:password')
 			);
-
 			$validation = Validator::make(Input::all(), $rules);
 
 			if($validation->fails()) {
@@ -116,7 +114,8 @@ class UserController extends BaseController {
     	}else{
 	    	// Show the form
 	    	$data['title'] = 'Register';
-	    	return View::make('layouts.simple', $data)->nest('content', 'user.register');
+			$registerData['countries'] = Country::getCountryNames();
+	    	return View::make('layouts.simple', $data)->nest('content', 'user.register', $registerData);
     	}
 	}
 

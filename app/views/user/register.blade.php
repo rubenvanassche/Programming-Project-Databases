@@ -17,7 +17,6 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 }
 ?>
 
-
 {{ Form::open(array('url' => 'user/register')) }}
 
 <div class="form-group">
@@ -37,7 +36,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 
 <div class="form-group">
 	<label>{{ Form::label('country', 'Country') }}</label>
-	{{ Form::text('country', Input::old('country'), array('class'=>'form-control')) }}
+	{{ Form::select('country',  $countries, array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
