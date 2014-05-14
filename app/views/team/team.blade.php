@@ -1,6 +1,10 @@
 @extends('layouts.master')
 
 @section('content')
+@if($teamBackground != '')
+		<div id="teambg">
+		</div>
+@endif
 <div class="row">
 	<div class="col-md-12">
 		<ol class="breadcrumb">
@@ -16,6 +20,7 @@
 		<img class="img-responsive flag" src={{$teamImageURL}} alt="" />
 		<h2>{{$teamObj->name}}</h2>
 		<p><b>Ranking Points: </b> {{$teamObj->fifapoints}}</p>
+		<p></p>
 	</div>
 	<div class="col-md-10">
 		<ul class="nav nav-tabs">
@@ -32,6 +37,20 @@
 		</div>
     </div>
 </div>
+@stop
+
+@section('css')
+	@if($teamBackground != '')
+	<style>
+		#teambg{
+			background-image: url("{{$teamBackground}}");
+			background-size: cover;
+			height: 200px;
+			box-sizing: content-box;
+			width: 100%;	
+		}
+	</style>
+	@endif
 @stop
 
 

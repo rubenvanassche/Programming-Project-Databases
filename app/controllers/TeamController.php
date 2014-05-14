@@ -6,7 +6,18 @@ class TeamController extends BaseController {
 		$teamObj = Team::getTeamByID($teamID)[0];
 		$teamImageURL = Team::getTeamImageURL($teamObj->name);
 		
-		return View::make('team.team', compact('teamObj', 'teamImageURL'))->with('title', $teamObj->name);
+		// Check if we can find an background picture
+		$teamBackground = '';
+		if($teamObj->twitterAccount != ''){
+			$tweets = Twitter::getUserTimeline(array('screen_name' => $teamObj->twitterAccount, 'count' => 1, 'format' => 'array'));
+			$backgroundpicture = $tweets[0]['user']['profile_banner_url'];
+			if($backgroundpicture != ''){
+				//$teamBackground = substr($backgroundpicture, 0, -1);
+				$teamBackground = $backgroundpicture;
+			}
+		}
+		
+		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground'))->with('title', $teamObj->name);
 	}
 	
 	function all(){
@@ -61,7 +72,10 @@ class TeamController extends BaseController {
 	}
 	
 	public function twitter($teamID){
-		
+		$teamObj = Team::getTeamByID($teamID)[0];
+		$twitterAccount = $teamObj->twitterAccount;
+		$tweets = Twitter::getUserTimeline(array('screen_name' => $twitterAccount, 'count' => 20, 'format' => 'array'));
+		return View::make('team.twitter', compact('tweets', 'twitterAccount'));
 	}
 }
 
