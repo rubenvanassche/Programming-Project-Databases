@@ -16,7 +16,7 @@
 			<?php
 			}else{
 			?>
-				<a class="btn btn-success pull-right" style="margin-top:-45px;" href="{{url('usergroup/'.$id.'/addMe')}}">Join Group</a>
+				<a class="btn btn-success pull-right" style="margin-top:20px;" href="{{url('usergroup/'.$id.'/addMe')}}">Join Group</a>
 			<?php
 			}
 			?>

@@ -372,102 +372,13 @@ class UserController extends BaseController {
 		return View::make('layouts.simple', $data);
 	}
 
-	function usergroups(){
-		$user = new User;
-		$data['groups'] = $user->getUserGroups();
-		$data['title'] = 'User Groups';
-
-		return View::make('user.usergroups', $data);
-	}
-
-	function newusergroup(){
-		if(Request::isMethod('post')){
-			// Work On the Form
-			$rules = array(
-			        'name' => array('required'),
-			);
-
-			$validation = Validator::make(Input::all(), $rules);
-
-			if($validation->fails()) {
-				// Problem so show the user error messages
-				return Redirect::to('usergroups/new')->withInput()->withErrors($validation);
-			}else{
-				// Start working on this data
-				$name = Input::get('name');
-
-				$user = new User;
-				$success = $user->newUserGroup($name);
-
-				if($success){
-					// Add founder of the group to the group instantly.
-					$this->addMe(UserGroup::ID($name));
-
-					return Redirect::to('usergroups');
-				}else{
-					$data['title'] = 'There is already A User Group with this name';
-					$data['content'] = 'Please choose another one.';
-					return View::make('layouts.simple', $data);
-				}
-			}
-    	}else{
-	    	// Show the form
-	    	$data['title'] = 'New User Group';
-	    	return View::make('layouts.simple', $data)->nest('content', 'user.newusergroup');
-    	}
-	}
-
-	function usergroup($id){
-		$user = new User;
-		$data['users'] = $user->getUsersByGroup($id);
-		$data['title'] = $user->getUserGroupName($id);
-		$data['id'] = $id;
-
-
-		return View::make('user.usergroup', $data);
-	}
-
-	function addMe($usergroup){
-		$user = new User;
-		$user->addUserToUserGroup($usergroup, $user->ID());
-
-		return Redirect::to('usergroup/'.$usergroup);
-	}
-
-	function inviteUser($usergroup_id) {
-		$user = new User;
-		$invitee_name = Input::get('invitee_name');
-		$invitee_id = $user->getID($invitee_name);
-
-		if ($invitee_id == -1) {
-			// Nonexistant user
-		}
-		else if ($user->ID() == $invitee_id) {
-			// This user
-		}
-		else {
-			$user->inviteUserToGroup($usergroup_id, $invitee_id);
-		}
-
-		return Redirect::to('usergroup/'.$usergroup_id);
-	}
-
-	function acceptInvite($notif_id, $ug_id) {
-		User::acceptInvite($notif_id, $ug_id);
-		return Redirect::to('myProfile');
-	}
-
-	function declineInvite($notif_id) {
-		User::declineInvite($notif_id);
-		return Redirect::to('myProfile');
-	}
-
 	function myProfile() {
 		$user = new User;
-		$data['groups'] = $user->getGroupsByID($user->ID());
+		$usergroup = new Usergroup;
+		$data['groups'] = $usergroup->getGroupsByUser($user->ID());
 		$data['user'] = $user->get($user->ID());
 		$data['notifications'] = $user->getNotifications($user->ID());
-		$data['invites'] = $user->getMyInvites();
+		$data['invites'] = $usergroup->getMyInvites();
 		$data['avatar'] = NULL;
 		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
 		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
@@ -475,7 +386,8 @@ class UserController extends BaseController {
 
 	function profile($id) {
 		$user = new User;
-		$data['groups'] = $user->getGroupsByID($id);
+		$usergroup = new Usergroup;
+		$data['groups'] = $usergroup->getGroupsByUser($id);
 		$data['user'] = $user->get($id);
 		$data['avatar'] = NULL;
 		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";

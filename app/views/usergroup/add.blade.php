@@ -17,8 +17,11 @@ if(Notification::showAll() != '' or $errors->first('name') != ''){
 <div class="form-group">
 	<label>{{ Form::label('name', 'Name') }}</label>
 	{{ Form::text('name', Input::old('name'), array('class'=>'form-control')) }}
-  {{Form::label('private_label', 'Private group')}}
-  {{ Form::checkbox('private', 'true') }}
+	<div class="checkbox">
+		<label>
+			{{ Form::checkbox('private', 'true') }} Private Group
+		</label>
+	</div>
 </div>
 
 {{ Form::submit('Add', array('class'=>'btn btn-success pull-right')) }}
