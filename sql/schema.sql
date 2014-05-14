@@ -245,7 +245,7 @@ CREATE TABLE `user` (
   `lastname` varchar(60) NOT NULL,
   `email` varchar(60) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `country` varchar(60) NOT NULL,
+  `country_id` int(10) NOT NULL,
   `session_id` varchar(24) DEFAULT NULL,
   `registrationcode` varchar(24) DEFAULT NULL,
   `betscore` int(11) NOT NULL DEFAULT '0',
