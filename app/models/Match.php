@@ -108,12 +108,11 @@ class Match {
     
     public static function cards($matchID, $teamID){
         $results = DB::select("SELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id) AS player,
-												   (SELECT id FROM player WHERE player.id = cards.player_id) AS player_id FROM cards 
-									WHERE match_id = ? "
-									/* TODO: AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
-																					  WHERE playerPerMatch.match_id = ?
-																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = ?)"*/, array($matchID/*, $matchID, $teamID*/));
+												   player_id FROM cards 
+									WHERE match_id = ? 
+										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																WHERE playerPerTeam.player_id = cards.player_id
+																AND playerPerTeam.team_id = ?)", array($matchID, $teamID));
         return $results;
     }
     
