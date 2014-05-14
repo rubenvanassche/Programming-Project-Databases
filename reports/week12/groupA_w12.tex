@@ -1,0 +1,73 @@
+\documentclass[11pt, a4paper]{article}
+
+\begin{document}
+\title{}
+\author{Groep A}
+\date{14 mei 2014}
+\maketitle
+
+\section{Aanwezigheden}
+Iedereen was aanwezig.
+\section{Status}
+We zijn de verplichte functionaliteit aan het afwerken. Via Github issues houden we bij wat nog moet gebeuren.
+\subsection{Stijn}
+Veel meer data gecrawld. Nieuwe velden (zoals spelerpositie) toegevoegd.
+\subsection{Kristof}
+Bouwde notificatiesysteem. Bouwde user group systeem.
+\subsection{Jakob}
+Verbeterde en breidde betsysteem uit.
+\subsection{Ruben}
+..
+\subsection{Tom}
+Bugfixes
+
+\section{Besproken onderwerpen}
+De vergaderingen in persoon hebben grotendeels plaats gemaakt voor GitHub Issues. Iedereen kan hier opmerkingen over de website plaatsen. Dit kunnen bugmeldingen zijn, voorstellen tot veranderen van design, vragen, ... We bekijken allemaal regelmatig de Issuespagina op GitHub om zo up to date te blijven. Er waren de laatste weken zo goed als geen lessen waar we allemaal naartoe gingen, dus was het moeilijk om een moment te vinden om allemaal samen te zitten.\\
+\\
+Bij de Issues kunnen we makkelijk een taakverdeling bepalen door mensen te assignen aan verschillende Issues.
+\\
+\\
+We hebben Issues aangemaakt voor alles wat nog moet gebeuren qua verplichte functionaliteit. Concreet is dit momenteel: 
+\begin{enumerate}
+\item Om de zoveel tijd data updaten via een cronjob
+\item User groups toevoegen om zo in groepjes tegen elkaar te betten (nu grotendeels klaar)
+\item Data op verschillende manieren sorteren en filteren
+\item Afwerken van voorspellingsalgoritme
+\item Grafisch weergeven van data
+\end{enumerate}
+Verder hebben we ook een overzicht gemaakt van extra functionaliteit die we gaan implementeren:
+\begin{enumerate}
+\item Uitbreiden van Facebookintegratie (bv. sharen naar Facebookprofiel)
+\item Twitterfeed van teams op teampagina's
+\item Naast een nieuwsfeed op de homepage, gaan we ook op teampagina's een feed plaatsen met nieuws specifiek voor het huidige team.
+\end{enumerate}
+Daarnaast zijn er ook heel wat Issues gemaakt betreffende kleinere bugs, maar de meeste daarvan zijn ondertussen al gefixt.
+\\
+\\
+De grootste updates sinds de laatste evaluatie zijn het updaten van het betsysteem en het toevoegen van usergroups en een notificatiesysteem.
+\subsection{Betsysteem}
+Betten is nu enkel nog mogelijk via een knop op de pagina's van toekomstige matchen. Voorheen was er ook een betpagina waar de teams en datum handmatig moesten worden ingevuld, maar zoals opgemerkt op de evaluatie is dat niet echt nuttig. Het betformulier verschijnt nu niet meer in een volledig nieuwe pagina, maar wel in een zogenaamde 'modal'. Modals werden ook al gebruikt bij het inloggen. Een modal lijkt wat op een pop-up; het verschijnt bovenop de huidige pagina, maar dan binnen hetzelfde browservenster. Het "first goal" veld is nu een dropdown geworden waarbij de gebruiker kan voorspellen welk van de twee teams het eerste doelpunt scoort. Verder zijn de velden gelijk gebleven. Bij ongeldige input blijft het formulier in een modal geopend, waarbij dan wordt gemeld wat de foute input precies is. Als de bet geaccepteerd wordt, verschijnt er een melding, terug in een modal. Eens deze weggeklikt is, bevindt de gebruiker zich terug op de pagina van de match. Merk op dat meerdere keren betten op dezelfde match momenteel nog mogelijk is, dit moet nog aangepast worden. \\ \\
+Aan elke speler wordt een bet score toegekend. Een pas geregistreerde speler begint met een vast aantal punten (nu 1000) en kan er bijverdienen of verliezen afhankelijk van de correctheid van z'n bets. Er werd gewerkt aan het evalueren van de correctheid van een bet. Om het uur wordt er via een cronjob gecheckt of er bets op pas gespeelde matches moeten worden ge\"evalueerd. Het algoritme om de verdiende/verloren punten te bepalen is nog redelijk basic; voor elke correcte gok worden punten verdiend (precieze aantal varieert per item) en voor elke foutieve gok worden punten afgetrokken (niet noodzakelijk evenveel als kan verdiend worden met een correcte gok). Merk op dat niet-ingevulde items als goed noch fout worden gerekend.
+
+
+\section{Afspraken}
+De deadline komt dichterbij, iedereen moet dus goed doorwerken aan de aan hem geassignde issues.
+
+
+\section{Planning}
+Waarschijnlijk wordt er buiten de momenteel geplande functionaliteit geen extra functionaliteit meer toegevoegd. We moeten dus vooral afwerken waar we nu aan bezig zijn.
+\subsection{Stijn}
+Ontbrekende data toevoegen via crawler
+\subsection{Tom}
+Voorspellingsalgortime afwerken
+\subsection{Kristof}
+User groups en notificatiesysteem afwerken
+\subsection{Ruben}
+Searchfunctie verbeteren
+\subsection{Jakob}
+Betsysteem afwerken
+\subsection{Nog aan iemand toe te wijzen}
+Grafische voorstelling van data, ordenen/filteren van data, extra functionaliteit
+
+
+\end{document}
