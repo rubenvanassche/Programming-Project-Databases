@@ -55,8 +55,11 @@ class User {
 		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE facebookid = ?", array($id));
 		if($result[0]->count == 0){
 			// User doesn't exists
+			
+			// Check if someone has already this username
+			$username = $this->getFacebookUsername($username);
 
-			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username) VALUES (?,?,?,?,?)', array($firstname, $lastname, $id, $email, $username));
+			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username, country) VALUES (?,?,?,?,?,\'be\')', array($firstname, $lastname, $id, $email, $username));
 
 			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
 			Session::put('userID', $result[0]->id);
@@ -65,6 +68,76 @@ class User {
 			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
 			Session::put('userID', $result[0]->id);
 			Session::put('userEntrance', time());
+		}
+	}
+	
+	// Checks in the database if there is already auser with this username, if so: return another one
+	function getFacebookUsername($username){
+		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE username = ?", array($username));
+		if($result[0]->count == 0){
+			// This username is not in the DB so continue
+			return $username;
+		}else{
+			// Generate another username
+			$counter = 1;
+			while(true){
+				$newusername = $username.$counter;
+				$result = DB::select("SELECT COUNT(id) as count FROM user WHERE username = ?", array($newusername));
+				if($result[0]->count == 0){
+					return $newusername;
+				}else{
+					$counter++;
+					continue;
+				}
+			}
+		}
+	}
+	
+	function facebookOnlyUser($id){
+		$result = DB::select("SELECT facebookid, password FROM user WHERE id = ?", array($id));
+		if($result[0]->password == '' and !$result[0]->facebookid == ''){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	function postToFacebook($title, $message, $link = '', $pictureUrl = ''){
+		if($this->facebookOnlyUser($this->ID())){
+			// Make connection with Facebook
+			$application = array(
+		   	 'appId' => '611155238979722',
+		   	 'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
+			);
+			
+			FacebookConnect::getFacebook($application);
+			$permissions = 'publish_stream,email';
+			$url_app = 'http://localhost:8000/user/facebooklogin';
+			$getUser = FacebookConnect::getUser($permissions, $url_app);
+			
+			if($link == ''){
+				$link = 'http://www.coachcenter.net';
+			}
+			
+			if($pictureUrl == ''){
+				$pictureUrl = 'http://coachcenter.net/favicon.ico';
+			}
+			
+			$messageX = array(
+			    'link'    => $link,
+			    'message' => $message,
+			    'picture'   => $pictureUrl,
+			    'name'    => $title,
+			    'description' => 'Coachcenter',
+			    'access_token' => $getUser['access_token'] // form FacebookConnect::getUser();
+			    );
+
+		    // and ... post
+			FacebookConnect::postToFacebook($messageX, 'feed');
+			
+			return true;
+		}else{
+			return false;
 		}
 	}
 
@@ -160,47 +233,6 @@ class User {
 		return true;
 	}
 
-	function newUserGroup($name, $privateSettings = 0){
-		$result = DB::select("SELECT COUNT(id) AS count FROM userGroup WHERE name = ?", array($name));
-		if($result[0]->count == 0){
-			DB::insert("INSERT INTO userGroup (name, private) VALUES (?, ?)", array($name, $privateSettings));
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	function addUserToUserGroup($userGroupID, $userID){
-		DB::insert("INSERT INTO userPerUserGroup (user_id, userGroup_id) VALUES (?, ?)", array($userID, $userGroupID));
-	}
-
-	function getUsersByGroup($userGroupID){
-		$result = DB::select("SELECT (SELECT username FROM user WHERE id = userPerUserGroup.user_id) as username, (SELECT id FROM user WHERE id = userPerUserGroup.user_id) as id  FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
-		return $result;
-	}
-
-	function getUserGroupName($userGroupID){
-		$result = DB::select("SELECT name FROM userGroup WHERE id = ?", array($userGroupID));
-		return $result[0]->name;
-	}
-
-	function getUserGroups(){
-		$result = DB::select('SELECT * FROM userGroup');
-
-		foreach ($result as $r) {
-			$v = UserGroup::isMember($this->ID(), $r->id);
-			if (count($v) > 0) {
-				$r->ismember = true;
-			}
-			else {
-				$r->ismember = false;
-			}
-		}
-
-		return $result;
-	}
-
-
 	function get($userID){
 		$results = DB::select('SELECT * FROM user WHERE id = ?', array($userID));
 		return $results[0];
@@ -274,53 +306,5 @@ class User {
 		else {
 			return $results[0]->id;
 		}
-	}
-
-	function getGroupsByID($id) {
-		$results = DB::select('
-		SELECT *
-		FROM userGroup ug
-		INNER JOIN userPerUserGroup upug ON ug.id = upug.userGroup_id
-		WHERE upug.user_id = ? ', array($id));
-
-		foreach ($results as $r) {
-			$v = UserGroup::isMember($this->ID(), $r->id);
-			if (count($v) > 0) {
-				$r->ismember = true;
-			}
-			else {
-				$r->ismember = false;
-			}
-		}
-
-		return $results;
-	}
-
-	function getMyInvites() {
-		$results = DB::select("
-		SELECT ug.name, inviter.username, notif.created_date, notif.id AS notif_id, ug.id AS ug_id
-		FROM notifications notif
-		INNER JOIN userGroup ug ON notif.object_id = ug.id
-		INNER JOIN user inviter ON notif.actor_id = inviter.id
-		WHERE notif.subject_id = ?
-		AND notif.status = 'unseen'", array($this->ID()));
-
-		return $results;
-	}
-
-	public static function acceptInvite($notif_id, $ug_id) {
-		// Mark notification as seen.
-		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
-
-		// Add the user to the group.
-		$user = new User;
-		$user->addUserToUserGroup($ug_id, $user->ID());
-
-	}
-
-	public static function declineInvite($notif_id) {
-		// Mark notification as seen.
-		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
-
 	}
 }

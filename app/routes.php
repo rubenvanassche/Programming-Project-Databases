@@ -23,14 +23,14 @@ Route::get('team/{id}', array('as' => 'team', 'uses' => 'TeamController@index'))
 Route::get('team/{id}/players', array('as' => 'team.players', 'uses' => 'TeamController@players'));
 Route::get('team/{id}/information', array('as' => 'team.information', 'uses' => 'TeamController@information'));
 Route::get('team/{id}/matches', array('as' => 'team.matches', 'uses' => 'TeamController@matches'));
+Route::get('team/{id}/news', array('as' => 'team.news', 'uses' => 'TeamController@news'));
+Route::get('team/{id}/twitter', array('as' => 'team.twitter', 'uses' => 'TeamController@twitter'));
 
 Route::get('player/{id}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
 Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'));
 
 Route::get('user/bets', array('as' => 'bets', 'uses' => 'BetController@index'));
-
-
 
 // ------------
 // USER
@@ -48,11 +48,13 @@ Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changep
 
 Route::get('user/facebooklogin', 'UserController@facebookLogin');
 
-Route::get('usergroups', 'UserController@usergroups');
-Route::get('usergroup/{id}', 'UserController@usergroup');
-Route::get('usergroup/{id}/addMe', 'UserController@addMe');
-Route::get('usergroup/{id}/{otherUser_id}/inviteUser', 'UserController@inviteUser');
-Route::match(array('GET', 'POST'), 'usergroups/new', 'UserController@newusergroup');
+Route::get('usergroups', 'UsergroupController@index');
+Route::get('usergroup/{id}', 'UsergroupController@usergroup');
+Route::get('usergroup/{id}/addMe', 'UsergroupController@addMe');
+Route::get('usergroup/{id}/leave', 'UsergroupController@leave');
+Route::match(array('GET', 'POST'),'usergroup/{id}/invite', 'UsergroupController@inviteUser');
+Route::match(array('GET', 'POST'), 'usergroups/new', 'UsergroupController@add');
+
 Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
 Route::get('user/betmodal', 'UserController@betmodal');
 

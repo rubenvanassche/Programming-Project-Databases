@@ -1,6 +1,10 @@
 @extends('layouts.master')
 
 @section('content')
+@if($teamBackground != '')
+		<div id="teambg">
+		</div>
+@endif
 <div class="row">
 	<div class="col-md-12">
 		<ol class="breadcrumb">
@@ -16,18 +20,37 @@
 		<img class="img-responsive flag" src={{$teamImageURL}} alt="" />
 		<h2>{{$teamObj->name}}</h2>
 		<p><b>Ranking Points: </b> {{$teamObj->fifapoints}}</p>
+		<p></p>
 	</div>
 	<div class="col-md-10">
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{{  route('team.information', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Information</a></li>
 			<li><a href="{{  route('team.players', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Players</a></li>
 			<li><a href="{{  route('team.matches', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Matches</a></li>
+			<li><a href="{{  route('team.news', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">News</a></li>
+			@if ($teamObj->twitterAccount != '')
+				<li><a href="{{  route('team.twitter', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Twitter</a></li>
+			@endif
 		</ul>
 		<div class="tabcontent" style="margin-top:10px;">
 			Please wait
 		</div>
     </div>
 </div>
+@stop
+
+@section('css')
+	@if($teamBackground != '')
+	<style>
+		#teambg{
+			background-image: url("{{$teamBackground}}");
+			background-size: cover;
+			height: 200px;
+			box-sizing: content-box;
+			width: 100%;	
+		}
+	</style>
+	@endif
 @stop
 
 

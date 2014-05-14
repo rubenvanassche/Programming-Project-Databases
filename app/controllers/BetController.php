@@ -18,7 +18,14 @@ class BetController extends BaseController {
 			foreach ($futureBets as $bet) {
 				array_push($futureBetsMatches, Match::get($bet->match_id));
 			}
-			return View::make('user.betoverview', compact('pastBets', 'futureBets', 'pastBetsMatches', 'futureBetsMatches'))->with('title', "Bets overview");
+			
+			$data['title'] = 'Bets';
+			$data['pastBets'] = $pastBets;
+			$data['futureBets'] = $futureBets;
+			$data['pastBetsMatches'] = $pastBetsMatches;
+			$data['futureBetsMatches'] = $futureBetsMatches;
+			
+			return View::make('layouts.simple', $data)->nest('content', 'user.betoverview', $data);
 		}
 		
 

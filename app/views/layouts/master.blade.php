@@ -8,6 +8,7 @@
 		<title>{{{ $title or 'NOTITLE' }}} - Coach Center</title>
 		<link href="<?php echo asset('css/bootstrap.min.css'); ?>"  rel="stylesheet" type="text/css">
 		<link href="<?php echo asset('css/flags.css'); ?>"  rel="stylesheet" type="text/css">
+		<link href="<?php echo asset('css/font-awesome.min.css'); ?>"  rel="stylesheet" type="text/css">
 		<link href="<?php echo asset('css/style.css'); ?>"  rel="stylesheet" type="text/css">
 		@yield('css')
 	</head>
@@ -41,11 +42,9 @@
 							if($user->loggedIn()){
 							?>					
 								<li><a href="{{url('myProfile')}}">My Profile</a></li>
-								<li><a href="{{ url('usergroups') }}">User Groups</a></li>
-								<li><a href="{{ action('BetController@index') }}">View bets</a></li>
+								<li><a href="{{ action('BetController@index') }}">Bets</a></li>
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
-								<li><a href="{{url('users')}}">Users</a></li>
 								<li><a href="{{ action('UserController@logout') }}">Logout</a></li>
 							<?php
 							}else{
@@ -72,9 +71,12 @@
 								@endforeach					
 							</ul>
 						</li>
+						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
+						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
 					</ul>
 					<?php
-						}else{?>
+						}else{
+					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
@@ -82,8 +84,9 @@
 									<li><a href="{{url('myProfile')}}">No new notifications</a></li>				
 							</ul>
 						</li>
+						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
+						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
 					</ul>
-						
 					<?php
 						}
 					}?>

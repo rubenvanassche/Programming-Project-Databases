@@ -107,7 +107,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Krucas\Notification\NotificationServiceProvider',
-		'Pitchanon\FacebookConnect\FacebookConnectServiceProvider'
+		'Pitchanon\FacebookConnect\FacebookConnectServiceProvider',
+		'Thujohn\Twitter\TwitterServiceProvider'
 
 	),
 
@@ -174,7 +175,8 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'Notification' => 'Krucas\Notification\Facades\Notification'
+		'Notification' => 'Krucas\Notification\Facades\Notification',
+		'Twitter' => 'Thujohn\Twitter\TwitterFacade'
 	),
 
 );
