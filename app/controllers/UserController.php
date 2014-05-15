@@ -299,6 +299,7 @@ class UserController extends BaseController {
 				$data['country'] = Input::get('country');
 				$data['email'] = Input::get('email');
 				$data['about'] = Input::get('about');
+				$data['age'] = Input::get('age');
 
 				$user = new User;
 
