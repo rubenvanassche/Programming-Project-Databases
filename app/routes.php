@@ -45,6 +45,8 @@ Route::get('user/logout', 'UserController@logout');
 Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwordforgot');
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
+Route::match(array('GET', 'POST'),'user/changeprofilepicture', 'UserController@changeprofilepicture');
+
 
 Route::get('user/facebooklogin', 'UserController@facebookLogin');
 

@@ -59,7 +59,7 @@ class User {
 			// Check if someone has already this username
 			$username = $this->getFacebookUsername($username);
 
-			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username, country) VALUES (?,?,?,?,?,\'be\')', array($firstname, $lastname, $id, $email, $username));
+			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username, country) VALUES (?,?,?,?,?,\'None\')', array($firstname, $lastname, $id, $email, $username));
 
 			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
 			Session::put('userID', $result[0]->id);
@@ -305,6 +305,22 @@ class User {
 		}
 		else {
 			return $results[0]->id;
+		}
+	}
+	
+	public static function changeProfilePicture($id, $url){
+		DB::update("UPDATE user SET picture = ? WHERE id = ?",array($url, $id));
+	}
+	
+	public function getPicture($id){
+		if($this->facebookOnlyUser($id) == false){
+			$result = DB::select("SELECT picture FROM user WHERE id = ?", array($id));
+			return $result[0]->picture;
+		}else{
+			$result = DB::select("SELECT facebookid FROM user WHERE id = ?", array($id));
+			$facebookid = $result[0]->facebookid;
+			
+			return 'https://graph.facebook.com/'.$facebookid.'/picture?type=large';
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-if(Notification::showAll() != '' or $errors->first('username') != '' or $errors->first('firstname') != '' or $errors->first('lastname') != '' or $errors->first('country') != '' or $errors->first('email') != ''){
+if(Notification::showAll() != '' or $errors->first('username') != '' or $errors->first('firstname') != '' or $errors->first('lastname') != '' or $errors->first('country') != '' or $errors->first('email') != '' or $errors->first('about') != ''){
 ?>
 <div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -10,6 +10,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
   <p>{{ $errors->first('firstname') }}</p>
   <p>{{ $errors->first('lastname') }}</p>
   <p>{{ $errors->first('email') }}</p>
+  <p>{{ $errors->first('about') }}</p>
 </div>
 <?php
 }
@@ -31,6 +32,11 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 	<label>Password</label>
 	<a href="{{ action('UserController@changepassword') }}" class="btn btn-danger form-control">Change Password</a>
 </div>
+
+<div class="form-group">
+	<label>Profile Picture</label>
+	<a href="{{ action('UserController@changeprofilepicture') }}" class="btn btn-warning form-control">Change Profile Picture</a>
+</div>
 @endif
 
 <div class="form-group">
@@ -44,8 +50,13 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 </div>
 
 <div class="form-group">
+	<label>{{ Form::label('age', 'Age') }}</label>
+	{{ Form::text('age', trim(Input::old('age')) != '' ? Input::old('age') : $user->age, array('class'=>'form-control')) }}
+</div>
+
+<div class="form-group">
 	<label>{{ Form::label('country', 'Country') }}</label>
-	{{ Form::text('country', trim(Input::old('country')) != '' ? Input::old('country') : $user->country, array('class'=>'form-control')) }}
+	{{ Form::select('country',  $countries, trim(Input::old('country')) != '' ? Input::old('country') : $user->country, array('class'=>'form-control')) }}
 </div>
 
 <div class="form-group">
@@ -53,6 +64,10 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 	{{ Form::text('email', trim(Input::old('email')) != '' ? Input::old('email') : $user->email, array('class'=>'form-control')) }}
 </div>
 
+<div class="form-group">
+	<label>{{ Form::label('about', 'About Me') }}</label>
+	{{ Form::textarea('about', trim(Input::old('about')) != '' ? Input::old('about') : $user->about, array('class'=>'form-control')) }}
+</div>
 
 {{ Form::submit('Change', array('class'=>'btn btn-success pull-right')) }}
 
