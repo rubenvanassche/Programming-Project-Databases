@@ -17,7 +17,7 @@ Bouwde notificatiesysteem. Bouwde user group systeem.
 \subsection{Jakob}
 Verbeterde en breidde betsysteem uit.
 \subsection{Ruben}
-..
+Redesign van betsysteem, verbetering in Facebook integratie, extra profielinformatie en twitter integratie + nieuws integratie bij teams
 \subsection{Tom}
 Bugfixes
 
@@ -61,16 +61,19 @@ Om dit mogelijk te maken is er een notificatiesysteem geschreven dat gemakkelijk
 De manier waarop het notificatiesysteem geimplementeerd is zorgt ervoor dat we zonder al te veel moeite een nieuw soort notificatie kunnen toevoegen.
 
 \subsection{Usergroups}
-Usergroups zijn nu ook aanwezig in ons systeem: een gebruiker kan een (al dan niet private) usergroup opstarten en mensen inviten. De uitgenodigde user wordt hiervan op de hoogte gebracht door middel van een notificatie waarop hij deze kan accepteren of afwijzen.
+Usergroups zijn nu ook aanwezig in ons systeem: een gebruiker kan een (al dan niet private) usergroup opstarten en mensen inviten. De uitgenodigde user wordt hiervan op de hoogte gebracht door middel van een notificatie waarop hij deze kan accepteren of afwijzen. Een eerste basis voor een tijdslijn met info over de groep is nu al aanwezig zonder concerete gevens. Een eventuele toevoeging om berichten naar elkaar te sturen wordt nog bekeken.
 \subsubsection{Public usergroups}
 Elke persoon kan deze usergroup joinen en mensen uitnodigen.
 \subsubsection{Private usergroups}
 Enkel members in deze groep kunnen mensen uitnodigen. Andere mensen kunnen deze groep wel zien maar kunnen buiten de groepnaam geen details zien. (De link is niet klikbaar en de achtergrond is lichtgrijs)
 
 \subsection{User profiles}
-Gebruikers hebben nu ook hun eigen profiel: dit profiel toont wat informatie over de gebruiker zoals in welk land ze wonen, in welke groepen ze zitten, hun betscore, ...
+Gebruikers hebben nu ook hun eigen profiel: dit profiel toont wat informatie over de gebruiker zoals in welk land ze wonen, in welke groepen ze zitten, hun betscore, profielfoto, leeftijd, ...
 Als je als gebruiker je eigen profiel bekijkt kan je ook je notificaties bekijken en je bio aanpassen.
 Er is in het menu nu ook een "Users" link waarin je alle andere gebruikers kan zien (en doorklikken naar hun profiel).
+
+\section{Twitter & Facebook}
+De mogelijkheid om in te loggen via Facebook is nu volledig uitgewerkt zonder rare meldingen doorheen de site. De mogelijkheid om berichten te plaatsen op een Facebook tijdslijn is nu ook aanwezig. Deze moet enkel nog bij de gewenste onderdelen van de site geplaatst worden. Twitter integratie is nu ook aanwezig bij teams, hierbij wordt voor teams de twitterfeed ingeladen. De namen van deze twitter feeds worden manueel toegekend, hierbij zijn we nog bezig om de database met deze namen aan te vullen in mate van mogelijke. Bij elke team pagina worden nu ook nieuwsberichten getoond indien deze aanwezig zijn in de nieuwsberichten van FIFA.
 
 \section{Afspraken}
 De deadline komt dichterbij, iedereen moet dus goed doorwerken aan de aan hem geassignde issues.
@@ -85,7 +88,7 @@ Voorspellingsalgortime afwerken
 \subsection{Kristof}
 User groups, user profiles en notificatiesysteem afwerken
 \subsection{Ruben}
-Searchfunctie verbeteren
+Searchfunctie verbeteren en tijdslijn bij usergroups
 \subsection{Jakob}
 Betsysteem afwerken
 \subsection{Nog aan iemand toe te wijzen}
