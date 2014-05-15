@@ -61,6 +61,8 @@ class Country {
 
 	public static function getName( $id ) {
 		$result = DB::select("SELECT name FROM ".self::TABLE_COUNTRY." WHERE id = ?", array($id));
+		if (empty($result))
+			return "";
 		return $result[0]->name;
 	}
 }
