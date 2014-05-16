@@ -10,8 +10,8 @@ class TeamController extends BaseController {
 		$teamBackground = '';
 		if($teamObj->twitterAccount != ''){
 			$tweets = Twitter::getUserTimeline(array('screen_name' => $teamObj->twitterAccount, 'count' => 1, 'format' => 'array'));
-			$backgroundpicture = $tweets[0]['user']['profile_banner_url'];
-			if($backgroundpicture != ''){
+			if (isset($tweets[0]['user']['profile_banner_url'])) {
+				$backgroundpicture = $tweets[0]['user']['profile_banner_url'];
 				//$teamBackground = substr($backgroundpicture, 0, -1);
 				$teamBackground = $backgroundpicture;
 			}
