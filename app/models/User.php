@@ -55,7 +55,7 @@ class User {
 		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE facebookid = ?", array($id));
 		if($result[0]->count == 0){
 			// User doesn't exists
-			
+
 			// Check if someone has already this username
 			$username = $this->getFacebookUsername($username);
 
@@ -70,7 +70,7 @@ class User {
 			Session::put('userEntrance', time());
 		}
 	}
-	
+
 	// Checks in the database if there is already auser with this username, if so: return another one
 	function getFacebookUsername($username){
 		$result = DB::select("SELECT COUNT(id) as count FROM user WHERE username = ?", array($username));
@@ -92,7 +92,7 @@ class User {
 			}
 		}
 	}
-	
+
 	function facebookOnlyUser($id){
 		$result = DB::select("SELECT facebookid, password FROM user WHERE id = ?", array($id));
 		if($result[0]->password == '' and !$result[0]->facebookid == ''){
@@ -101,7 +101,7 @@ class User {
 			return false;
 		}
 	}
-	
+
 	function postToFacebook($title, $message, $link = '', $pictureUrl = ''){
 		if($this->facebookOnlyUser($this->ID())){
 			// Make connection with Facebook
@@ -109,20 +109,20 @@ class User {
 		   	 'appId' => '611155238979722',
 		   	 'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
 			);
-			
+
 			FacebookConnect::getFacebook($application);
 			$permissions = 'publish_stream,email';
 			$url_app = 'http://localhost:8000/user/facebooklogin';
 			$getUser = FacebookConnect::getUser($permissions, $url_app);
-			
+
 			if($link == ''){
 				$link = 'http://www.coachcenter.net';
 			}
-			
+
 			if($pictureUrl == ''){
 				$pictureUrl = 'http://coachcenter.net/favicon.ico';
 			}
-			
+
 			$messageX = array(
 			    'link'    => $link,
 			    'message' => $message,
@@ -134,7 +134,7 @@ class User {
 
 		    // and ... post
 			FacebookConnect::postToFacebook($messageX, 'feed');
-			
+
 			return true;
 		}else{
 			return false;
@@ -307,11 +307,11 @@ class User {
 			return $results[0]->id;
 		}
 	}
-	
+
 	public static function changeProfilePicture($id, $url){
 		DB::update("UPDATE user SET picture = ? WHERE id = ?",array($url, $id));
 	}
-	
+
 	public function getPicture($id){
 		if($this->facebookOnlyUser($id) == false){
 			$result = DB::select("SELECT picture FROM user WHERE id = ?", array($id));
@@ -319,8 +319,15 @@ class User {
 		}else{
 			$result = DB::select("SELECT facebookid FROM user WHERE id = ?", array($id));
 			$facebookid = $result[0]->facebookid;
-			
+
 			return 'https://graph.facebook.com/'.$facebookid.'/picture?type=large';
 		}
 	}
+
+	public static function getEmailUsers() {
+		// Returns all users who want to be emailed.
+		$result = DB::select("SELECT * FROM user WHERE `recieve_email` = 1");
+		return $result;
+	}
+
 }
