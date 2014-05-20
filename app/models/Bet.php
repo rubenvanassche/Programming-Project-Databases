@@ -41,7 +41,7 @@ class Bet {
 	 */
 	public static function getPastBetsByUserID( $user_id ) {
 		//Check if uid exists?
-		$results = DB::select("SELECT * FROM bet WHERE user_id = ? 
+		$results = DB::select("SELECT * FROM bet WHERE user_id = ?
 												 AND EXISTS (
 														SELECT * FROM `match`
 														WHERE id = match_id
@@ -56,7 +56,7 @@ class Bet {
 	 */
 	public static function getFutureBetsByUserID( $user_id ) {
 		//Check if uid exists?
-		$results = DB::select("SELECT * FROM bet WHERE user_id = ? 
+		$results = DB::select("SELECT * FROM bet WHERE user_id = ?
 												 AND EXISTS (
 														SELECT * FROM `match`
 														WHERE id = match_id
@@ -78,7 +78,7 @@ class Bet {
 			if ($bet->hometeam_score == $score[0] && $bet->awayteam_score == $score[1])
 				$points = $points + 30;
 			if ($bet->hometeam_score == $score[0] xor $bet->awayteam_score == $score[1])
-				$points = $points + 10;			
+				$points = $points + 10;
 			if ($bet->hometeam_score != $score[0] && $bet->awayteam_score != $score[1])
 				$points = $points - 5;
 			if ($bet->first_goal != NULL) {
@@ -134,6 +134,6 @@ class Bet {
 		}
 		return array('matchCount' => $matchCount, 'betCount' => $totalBetCount);
 	}
-}	
+}
 
 ?>
