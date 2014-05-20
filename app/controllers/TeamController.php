@@ -13,8 +13,9 @@ class TeamController extends BaseController {
 			if (isset($tweets[0]['user']['profile_banner_url'])) {
 				$backgroundpicture = $tweets[0]['user']['profile_banner_url'];
 				//$teamBackground = substr($backgroundpicture, 0, -1);
-				$teamBackground = $backgroundpicture;
+				$teamBackground = $backgroundpicture . "/1500x500";
 			}
+			
 		}
 		
 		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground'))->with('title', $teamObj->name);
