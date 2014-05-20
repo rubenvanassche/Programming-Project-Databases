@@ -169,6 +169,14 @@ class User {
 			$data['country_id'],
 			$data['registrationcode']));
 
+		//Send email
+		$message = new stdClass();
+		$user_email = $data['email'];
+		$username = $data['username'];
+		Mail::send('mails.register', $data, function($message) use ($user_email, $username){
+    	$message->to($user_email, $username)->subject("Welcome to Coach Center: email address validation");
+		});
+
 		if($result == 1){
 			return true;
 		}else{

@@ -103,7 +103,7 @@ class UserController extends BaseController {
 					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
 					//});
 
-					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account.';
+					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account (check your spambox!).';
 					$data['title'] = 'Welcome!';
 					return View::make('layouts.simple', $data);
 				}else{
