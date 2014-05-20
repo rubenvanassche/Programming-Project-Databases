@@ -296,7 +296,8 @@ hr {
 	
 	  var rowIndex = chart.getSelection()[0].row;
 	  var teamID = data.getValue(rowIndex, 2);
-	  window.open('{{route('teamNoIndex')}}/' + teamID, '_self'); //Add teamID in js
+	  if (teamID != 0)  //id 0 means no page for this national team
+  	    window.open('{{route('teamNoIndex')}}/' + teamID, '_self'); //Add teamID in js
 
 		
     };
