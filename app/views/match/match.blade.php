@@ -239,7 +239,7 @@
 <!-- Open bet modal if input contains 'autoOpenModal', open accept modal if input contains 'accepted' -->
 <script>
 $(document).ready(function () {
-    if ({{ Input::old('autoOpenModal', 'false') }}) {
+    if ({{ Input::old('autoOpenBetModal', 'false') }}) {
         $('#betModal').modal('show');
     }
     if ({{ Input::old('accepted', 'false') }}) {
