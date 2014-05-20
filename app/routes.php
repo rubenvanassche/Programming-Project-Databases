@@ -26,6 +26,8 @@ Route::get('team/{id}/matches', array('as' => 'team.matches', 'uses' => 'TeamCon
 Route::get('team/{id}/news', array('as' => 'team.news', 'uses' => 'TeamController@news'));
 Route::get('team/{id}/twitter', array('as' => 'team.twitter', 'uses' => 'TeamController@twitter'));
 
+Route::get('team', array('as' => 'teamNoIndex', 'uses' => 'TeamController@index')); //for GeoCharts
+
 Route::get('player/{id}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
 Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'));

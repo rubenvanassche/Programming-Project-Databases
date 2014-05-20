@@ -136,15 +136,16 @@ class Team {
      * @return array where each country is mapped to a point.
      */
     public static function getFIFAPoints($geoCharts=false) {
-        $query = "SELECT name, fifapoints FROM `".self::TABLE_TEAM."`";
+        $query = "SELECT id, name, fifapoints FROM `".self::TABLE_TEAM."`";
 
         $records = DB::select( $query );
 
         $points = array();
         foreach ( DB::select( $query ) as $row ) {
             $thesePoints = array(
+				"id"        => $row->id,
                 "name"      => $row->name,
-                "points"    => $row->fifapoints,
+                "points"    => $row->fifapoints
             );
 
             array_push( $points, $thesePoints );
@@ -168,11 +169,12 @@ class Team {
 							$row["name"] = "Taiwan";
 					}
 					//Add countries without national team (in database) with 0 FIFA Points
-          array_push( $points, array("name" => "Svalbard and Jan Mayen", "points" => 0) );
-          array_push( $points, array("name" => "French Guiana", "points" => 0) );
-          array_push( $points, array("name" => "Greenland", "points" => 0) );
-          array_push( $points, array("name" => "Western Sahara", "points" => 0) );
-          array_push( $points, array("name" => "Kosovo", "points" => 0) );
+					//Note that id 0 is invalid, it indicates the country has no team in the db
+          array_push( $points, array("id" => 0, "name" => "Svalbard and Jan Mayen", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "French Guiana", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "Greenland", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "Western Sahara", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "Kosovo", "points" => 0) );
 				}
 
         return $points;
