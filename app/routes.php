@@ -59,8 +59,8 @@ Route::get('usergroup/{id}/leave', 'UsergroupController@leave');
 Route::match(array('GET', 'POST'),'usergroup/{id}/invite', 'UsergroupController@inviteUser');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UsergroupController@add');
 
-Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
-Route::get('user/betmodal', 'UserController@betmodal');
+Route::match(array('GET', 'POST'), 'user/bet', 'BetController@bet');
+Route::get('user/betmodal', 'BetController@betmodal');
 
 Route::get('myProfile', 'UserController@myProfile');
 Route::get('myProfile/{notif_id}/{ug_id}/acceptInvite', 'UserController@acceptInvite');
