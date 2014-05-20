@@ -237,7 +237,7 @@ CREATE TABLE `teamPerCompetition` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `facebookid` varchar(30) NOT NULL,
   `username` varchar(100) NOT NULL,
@@ -250,8 +250,9 @@ CREATE TABLE `user` (
   `registrationcode` varchar(24) DEFAULT NULL,
   `betscore` int(11) NOT NULL DEFAULT '0',
   `about` varchar(1024) NOT NULL,
+  `recieve_email` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
