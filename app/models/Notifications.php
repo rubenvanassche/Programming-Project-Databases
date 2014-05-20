@@ -121,14 +121,15 @@ class Notifications {
 		// Will send an email + notification reminding the users that they still need to bet on a match.
 		// Set $days to the amount of days you want to check for upcoming matches.
 
-		//$matches = Match::getNextMatches($days);
 		$users = User::getEmailUsers();
 
 		foreach($users as $user) {
-				// check if user has already betted on that match or not.
 				$matches = Match::getNextUnbettedMatches($days, $user);
-				Notifications::sendMailReminder($user->id, $matches);
-				Notifications::betReminder($user->id, $matches);
+
+				if (count($matches) > 0) {
+					Notifications::sendMailReminder($user->id, $matches);
+					Notifications::betReminder($user->id, $matches);
+				}
 		}
 
 	}
