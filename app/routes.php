@@ -42,7 +42,7 @@ Route::match(array('GET', 'POST'), 'user/login', 'UserController@login');
 Route::get('user/loginmodal', 'UserController@loginmodal');
 Route::get('user', 'UserController@index');
 Route::match(array('GET', 'POST'), 'user/register', 'UserController@register');
-Route::get('user/activate/{username}/{registrationcode}', 'UserController@activate');
+Route::get('user/activate/{username}/{registrationcode}', array('as' => 'user/activate', 'uses' =>'UserController@activate'));
 Route::get('user/logout', 'UserController@logout');
 Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwordforgot');
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
@@ -59,8 +59,8 @@ Route::get('usergroup/{id}/leave', 'UsergroupController@leave');
 Route::match(array('GET', 'POST'),'usergroup/{id}/invite', 'UsergroupController@inviteUser');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UsergroupController@add');
 
-Route::match(array('GET', 'POST'), 'user/bet', 'UserController@bet');
-Route::get('user/betmodal', 'UserController@betmodal');
+Route::match(array('GET', 'POST'), 'user/bet', 'BetController@bet');
+Route::get('user/betmodal', 'BetController@betmodal');
 
 Route::get('myProfile', 'UserController@myProfile');
 Route::get('myProfile/{notif_id}/{ug_id}/acceptInvite', 'UserController@acceptInvite');
