@@ -69,7 +69,7 @@
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
 									<?php $id = $notification["id"]?>
-									<li><a href="{{route('notification/'.$id)}}">{{$notification['message']}}</a></li>
+									<li><a href="{{route('notification', array('id'=>$id))}}">{{$notification['message']}}</a></li>
 								@endforeach
 							</ul>
 						</li>
@@ -221,4 +221,3 @@
     	</div>
   	</div>
 </div>
-

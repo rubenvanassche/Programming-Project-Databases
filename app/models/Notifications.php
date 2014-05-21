@@ -118,6 +118,11 @@ class Notifications {
 		});
 	}
 
+	public static function get($id) {
+		$results = DB::select("SELECT * FROM `notifications` WHERE id = ?", array($id));
+		return $results[0];
+	}
+
 	public static function betReminder($user_id, $matches) {
 		// Sends a notification reminding one user that they still need to bet on a match.
 		$user = new User;
