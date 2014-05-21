@@ -5,7 +5,7 @@
   </head>
   <body>
     <h1>Hi, {{$user->username}}!</h1>
-    <p>Just a reminder to bet on these upcoming matches:</p>
+    <p>Just a reminder that you haven't betted yet on these matches:</p>
       <div class="row">
         <div class="col-md-12">
           <h1>Upcoming matches</h1>

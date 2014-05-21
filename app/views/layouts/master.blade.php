@@ -50,7 +50,6 @@
 							}else{
 							?>
 								<li><a href="" data-toggle="modal" data-target="#loginModal">Login</a></li>
-
 								<li><a href="{{ action('UserController@register') }}">New Account</a></li>
 							<?php
 							}
@@ -75,7 +74,7 @@
 						</li>
 						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
 						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-					</ul>
+						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
 					<?php
 						}else{
 					?>
@@ -88,10 +87,16 @@
 						</li>
 						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
 						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
+						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
 					</ul>
 					<?php
 						}
-					}?>
+					}
+					else {?>
+						<ul class="nav navbar-nav navbar-left">
+							<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
+						</ul>
+					<?php } ?>
 
 				</div><!--/.nav-collapse -->
 			</div>

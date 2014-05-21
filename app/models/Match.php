@@ -246,7 +246,7 @@ class Match {
   public static function getNextMatches($days) {
     // Returns all matches that will be played in the following $days.
     $results = DB::select('
-      SELECT date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+      SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
       (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
       FROM `match` WHERE DATEDIFF(`date`, CURDATE()) >= ?', array($days));
 
@@ -267,5 +267,19 @@ class Match {
       ', array($days, $user->id));
 
     return $results;
+  }
+
+  public static function getNextMatchesCustom($days, $user) {
+    $unbetted = Match::getNextUnbettedMatches($days, $user);
+    $all = Match::getNextMatches($days);
+    foreach($all as $match) {
+      if (in_array($match, $unbetted)) {
+        $match->betted = false;
+      }
+      else {
+        $match->betted = true;
+      }
+    }
+    return $all;
   }
 }

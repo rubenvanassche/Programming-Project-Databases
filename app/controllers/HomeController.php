@@ -16,7 +16,7 @@ class HomeController extends BaseController {
     */
 
     public function index(){
-
+        $user = new User;
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches(5);
 	      $futureMatches = Match::getFutureMatches(5);
