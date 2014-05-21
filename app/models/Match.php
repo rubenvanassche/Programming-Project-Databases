@@ -248,25 +248,33 @@ class Match {
     $results = DB::select('
       SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
       (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
-      FROM `match` WHERE DATEDIFF(`date`, CURDATE()) >= ?', array($days));
+      FROM `match`
+      WHERE DATEDIFF(`date`, CURDATE()) <= ?
+      AND DATEDIFF(`date`, CURDATE()) >= 0', array($days));
 
     return $results;
   }
 
   public static function getNextUnbetMatches($days, $user) {
     // Returns all matches that will be played in the following $days where $user hasn't yet bet on.
-    $results = DB::select('
-      SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
-        (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
-        FROM `match`, `bet`
-        WHERE DATEDIFF(`date`, CURDATE()) >= ?
-        AND `match`.id NOT IN (
-          SELECT match_id
-          FROM `bet`
-          WHERE `bet`.user_id = ?)
-      ', array($days, $user->id));
+    if (Bet::noBets()) {
+      return Match::getNextMatches($days);
+    }
+    else {
+      $results = DB::select('
+        SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+          (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
+          FROM `match`, `bet`
+          WHERE DATEDIFF(`date`, CURDATE()) <= ?
+          AND DATEDIFF(`date`, CURDATE()) >= 0
+          AND `match`.id NOT IN (
+            SELECT match_id
+            FROM `bet`
+            WHERE `bet`.user_id = ?)
+        ', array($days, $user->id));
 
-    return $results;
+      return $results;
+    }
   }
 
   public static function getNextMatchesCustom($days, $user) {

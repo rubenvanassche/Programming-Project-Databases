@@ -30,13 +30,13 @@ class MatchController extends BaseController {
 	function betMatches() {
 		$user = new User;
 		if ($user->loggedIn()) {
-			$matches = Match::getNextMatchesCustom(0, $user->get($user->ID()));
+			$matches = Match::getNextMatchesCustom(999, $user->get($user->ID()));
 			$data['matches'] = $matches;
 			$data['user'] = $user->get($user->ID());
 			return View::make('match.matches', $data)->with('title', 'Upcoming Matches');
 		}
 		else {
-			$matches = Match::getNextMatches(0);
+			$matches = Match::getNextMatches(999);
 			$data['matches'] = $matches;
 			return View::make('match.matches', $data)->with('title', 'Upcoming Matches');
 		}
