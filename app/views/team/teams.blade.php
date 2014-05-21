@@ -15,7 +15,7 @@
 						<th>Continent</th>
 					</tr>
 				</thead>
-				<tbody>	
+				<tbody>
 					@foreach ($teams as $team)
 						<?php
 							$flag = "flag-" . $team->abbreviation;
@@ -25,7 +25,7 @@
 							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
 							<td>{{$team->continent}}</td>
 						</tr>
-					@endforeach					
+					@endforeach
 				</tbody>
 			</table>
 		</div>
@@ -37,27 +37,27 @@
 		.row.row-padded {
 			margin-top: 1%;
 		}
-	
+
 		dt {
 			background-color:#006DDB;;
 		}
-		
+
 		dt, dd {
 			text-align:center;
 			border-bottom:1px solid black;
 		}
-		
-		.shadowbox { 
+
+		.shadowbox {
 			-webkit-border-radius: 5px;
 			-moz-border-radius: 5px;
 			border-radius: 5px;
 			margin-top:1.5%;
 		}
-		
+
 		.rounded {
 			border-radius: 4px;
 		}
-		
+
 		.hackity {
 			margin-top:-2%;
 		}
@@ -77,7 +77,7 @@
                             filterClearContainer: "#filter-clear-button",
                             filterColumns: [0]}); });
 	</script>
-  
+
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
      google.load('visualization', '1', {'packages': ['geochart']});
@@ -87,7 +87,7 @@
         var data = google.visualization.arrayToDataTable([
           ['Country'],
           ['Belgium']
-          
+
         ]);
 
         var options = {
@@ -105,7 +105,7 @@
 		   //doSomething(e['region']);
 		   alert("ayo");
 		});
-	
+
 		google.visualization.events.addListener(geomap, 'select', function() {
 		alert('Select event called, selected row is ' +
 			geomap.getSelection()[0].row);

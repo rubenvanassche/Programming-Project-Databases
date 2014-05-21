@@ -34,6 +34,10 @@ Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'
 
 Route::get('user/bets', array('as' => 'bets', 'uses' => 'BetController@index'));
 
+Route::get('matches', 'MatchController@matches');
+
+Route::get('notification/{id}', array('as' => 'notification', 'uses' => 'NotificationController@redirect'));
+
 // ------------
 // USER
 // ------------

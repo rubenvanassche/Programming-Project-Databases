@@ -258,7 +258,7 @@ class Match {
   public static function getNextUnbettedMatches($days, $user) {
     // Returns all matches that will be played in the following $days where $user hasn't yet betted on.
     $results = DB::select('
-      SELECT date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+      SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
           (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
           FROM `match`, `bet`
           WHERE DATEDIFF(`date`, CURDATE()) >= ?
