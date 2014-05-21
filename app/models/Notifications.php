@@ -25,7 +25,7 @@ class Notifications {
 					INNER JOIN user subject ON nf.subject_id = subject.id
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
-					LIMIT 0, 5";
+					LIMIT 0, 10";
 		}
 		else {
 			$query = "SELECT nf.*, actor.username AS actor_name, subject.username AS subject_name
@@ -35,7 +35,7 @@ class Notifications {
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
 					AND type_id = $type
-					LIMIT 0, 5";
+					LIMIT 0, 10";
 		}
 
 		$result = DB::select($query);
@@ -79,27 +79,32 @@ class Notifications {
         }
     }
 
-	    protected static function getNotificationMessage($row){
-			switch($row['type_id']){
-				case self::INVITE_USER_GROUP:
-					$group = DB::select("
-					SELECT name
-							FROM userGroup
-							WHERE id = {$row['object']->competitionId}
-					");
+    protected static function getNotificationMessage($row){
+		switch($row['type_id']){
+			case self::INVITE_USER_GROUP:
+				$group = DB::select("
+				SELECT name
+						FROM userGroup
+						WHERE id = {$row['object']->competitionId}
+				");
 
-					$actor = DB::select("
-					SELECT username
-					FROM user
-					WHERE id = {$row['actor_id']}
-					");
+				$actor = DB::select("
+				SELECT username
+				FROM user
+				WHERE id = {$row['actor_id']}
+				");
 
-					return " {$actor[0]->username} invited you to join the group: {$group[0]->name}";
+				return " {$actor[0]->username} invited you to join the group: {$group[0]->name}";
 
-				case self::REMIND_USER_BETS:
-					return "Don't forget to bet on these matches!";
-        }
-    }
+			case self::REMIND_USER_BETS:
+				return "Don't forget to bet on these matches!";
+      }
+  }
+
+	public static function get($id) {
+		$results = DB::select("SELECT * FROM `notifications` WHERE id = ?", array($id));
+		return $results[0];
+	}
 
 	public static function sendMailReminder($user_id, $matches) {
 		// Sends an email reminding one user that they still need to bet on a match.
@@ -116,11 +121,6 @@ class Notifications {
 		Mail::send('mails.reminder', $data, function($message) use ($user_email, $username){
     	$message->to($user_email, $username)->subject("Don't forget to bet on these upcoming matches!");
 		});
-	}
-
-	public static function get($id) {
-		$results = DB::select("SELECT * FROM `notifications` WHERE id = ?", array($id));
-		return $results[0];
 	}
 
 	public static function betReminder($user_id, $matches) {
