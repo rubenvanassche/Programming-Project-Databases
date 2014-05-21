@@ -32,8 +32,9 @@
                   // Logged in user.
               ?>
               @foreach($matches as $match)
-                <?php if ($match->betted) { ?>
-                  <tr class="betted">
+                <?php
+                  if ($match->bet) { ?>
+                  <tr class="bet">
                 <?php } else { ?>
                   <tr class="regular">
                 <?php } ?>
@@ -77,7 +78,7 @@
     text-align:center;
   }
 
-  .betted {
+  .bet {
     background-color:#EDEDED;
   }
 </style>

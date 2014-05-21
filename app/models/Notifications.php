@@ -136,7 +136,7 @@ class Notifications {
 		$users = User::getEmailUsers();
 
 		foreach($users as $user) {
-				$matches = Match::getNextUnbettedMatches($days, $user);
+				$matches = Match::getNextunbetMatches($days, $user);
 
 				if (count($matches) > 0) {
 					Notifications::sendMailReminder($user->id, $matches);

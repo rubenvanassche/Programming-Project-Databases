@@ -20,7 +20,7 @@ class MatchController extends BaseController {
 	function matches() {
 		$user = new User;
 
-		$matches = Match::getNextUnbettedMatches(0, $user->get($user->ID()));
+		$matches = Match::getNextunbetMatches(0, $user->get($user->ID()));
 		$data['matches'] = $matches;
 		$data['user'] = $user->get($user->ID());
 
