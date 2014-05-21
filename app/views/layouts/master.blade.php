@@ -38,8 +38,8 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 							<?php
-							$user = new User;
-							if($user->loggedIn()){
+								$user = new User;
+								if($user->loggedIn()){
 							?>
 								<li><a href="{{url('myProfile')}}">My Profile</a></li>
 								<li><a href="{{ action('BetController@index') }}">Bets</a></li>

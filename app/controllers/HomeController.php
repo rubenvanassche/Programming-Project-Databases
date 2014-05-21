@@ -16,7 +16,11 @@ class HomeController extends BaseController {
     */
 
     public function index(){
+
+
         $user = new User;
+      //  print_r(Match::getNextMatchesCustom(0, $user->get($user->ID())));
+        print_r(Match::getNextUnbettedMatches(0, $user->get($user->ID())));
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches(5);
 	      $futureMatches = Match::getFutureMatches(5);

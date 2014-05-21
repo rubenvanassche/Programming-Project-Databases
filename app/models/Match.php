@@ -257,13 +257,13 @@ class Match {
     // Returns all matches that will be played in the following $days where $user hasn't yet betted on.
     $results = DB::select('
       SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
-          (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
-          FROM `match`, `bet`
-          WHERE DATEDIFF(`date`, CURDATE()) >= ?
-          AND `match`.id NOT IN (
-              SELECT id
-              FROM `bet`
-              WHERE `bet`.user_id = ?)
+        (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
+        FROM `match`, `bet`
+        WHERE DATEDIFF(`date`, CURDATE()) >= ?
+        AND `match`.id NOT IN (
+          SELECT match_id
+          FROM `bet`
+          WHERE `bet`.user_id = ?)
       ', array($days, $user->id));
 
     return $results;
@@ -273,6 +273,9 @@ class Match {
     $unbetted = Match::getNextUnbettedMatches($days, $user);
     $all = Match::getNextMatches($days);
     foreach($all as $match) {
+      // print_r($match->hometeam);
+      // print_r($match->awayteam);
+      // print_r(in_array($match, $unbetted));
       if (in_array($match, $unbetted)) {
         $match->betted = false;
       }
