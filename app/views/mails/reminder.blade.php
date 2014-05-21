@@ -5,7 +5,7 @@
   </head>
   <body>
     <h1>Hi, {{$user->username}}!</h1>
-    <p>Just a reminder that you haven't betted yet on these matches:</p>
+    <p>Just a reminder that you haven't bet yet on these matches:</p>
       <div class="row">
         <div class="col-md-12">
           <h1>Upcoming matches</h1>
@@ -24,7 +24,11 @@
             <tbody>
                   @foreach($matches as $match)
                       <tr class="mark">
-                        <td>{{$match->date}}</td>
+                        <td><?php $date = new DateTime($match->date);
+								  echo $date->format('d-m-Y H:i');
+
+							?>
+						</td>
                         <td><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{$match->hometeam}}</a></td>
                         <td> - </td>
                         <td><a href="{{route('team', array('id'=>$match->awayteam_id))}}">{{$match->awayteam}}</a></td>

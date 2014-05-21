@@ -9,7 +9,7 @@
         if($user->loggedIn()){
           // Logged in user.
       ?>
-      <p>Grey rows mean that you've already betted on them.</p>
+      <p>Grey rows mean that you've already bet on them.</p>
       <?php
         }
       ?>
@@ -37,7 +37,10 @@
                 <?php } else { ?>
                   <tr class="regular">
                 <?php } ?>
-                    <td>{{$match->date}}</td>
+                    <td><?php $date = new DateTime($match->date);
+								  echo $date->format('d-m-Y H:i');
+						?>
+					</td>
                     <td><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{$match->hometeam}}</a></td>
                     <td> - </td>
                     <td><a href="{{route('team', array('id'=>$match->awayteam_id))}}">{{$match->awayteam}}</a></td>
