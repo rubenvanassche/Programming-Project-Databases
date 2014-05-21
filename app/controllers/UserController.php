@@ -59,7 +59,7 @@ class UserController extends BaseController {
 		    'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
 		    );
 		$permissions = 'publish_stream,email';
-		$url_app = 'http://localhost:8000/user/facebooklogin';
+		$url_app = url('user/facebooklogin');
 
 		// getInstance
 		FacebookConnect::getFacebook($application);
