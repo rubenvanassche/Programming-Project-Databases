@@ -78,6 +78,13 @@ class TeamController extends BaseController {
 		$tweets = Twitter::getUserTimeline(array('screen_name' => $twitterAccount, 'count' => 20, 'format' => 'array'));
 		return View::make('team.twitter', compact('tweets', 'twitterAccount'));
 	}
+
+	public function graphs($teamID){
+		$outcomes = Team::getWinsLossesTies($teamID);
+		$yearlyGoals = Team::getYearlyGoals($teamID);
+		ksort($yearlyGoals); //Otherwise the graph is all messed up
+		return View::make('team.graphs', compact('outcomes', 'yearlyGoals'));
+	}
 }
 
 ?>

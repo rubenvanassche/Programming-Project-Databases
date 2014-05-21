@@ -59,7 +59,7 @@ class BetController extends BaseController {
 		if($validation->fails()) {
 			// Problem so show the user error messages
 			$input = Input::all();//Get all the old input.
-			$input['autoOpenModal'] = 'true';//Add the auto open indicator flag as an input.
+			$input['autoOpenBetModal'] = 'true';//Add the auto open indicator flag as an input.
 			return Redirect::back()
 				->withErrors($validation)
 				->withInput($input);//Passing the old input and the flag.

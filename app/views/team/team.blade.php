@@ -31,12 +31,14 @@
 			@if ($teamObj->twitterAccount != '')
 				<li><a href="{{  route('team.twitter', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Twitter</a></li>
 			@endif
+			<!--<li><a href="{{  route('team.graphs', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Graphs</a></li>-->
 		</ul>
 		<div class="tabcontent" style="margin-top:10px;">
 			Please wait
 		</div>
     </div>
 </div>
+
 @stop
 
 @section('css')

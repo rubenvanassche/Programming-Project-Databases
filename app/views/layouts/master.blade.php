@@ -49,7 +49,8 @@
 							<?php
 							}else{
 							?>
-								<li><a href="{{ action('UserController@loginmodal') }}" data-toggle="modal" data-target="#dasModel">Login</a></li>
+								<li><a href="" data-toggle="modal" data-target="#loginModal">Login</a></li>
+
 								<li><a href="{{ action('UserController@register') }}">New Account</a></li>
 							<?php
 							}
@@ -140,6 +141,84 @@
 		<!-- Placed at the end of the document so the pages load faster -->
 		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
 		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
+
+
+
+		<!-- This script makes sure login and logout modals appear on any page -->
+		<script>
+		$(document).ready(function () {
+			if ({{ Input::old('autoOpenLoginModal', 'false') }}) {
+				$('#loginModal').modal('show');
+			}
+			if ({{ Input::old('loggedOut', 'false') }}) {
+				$('#logoutModal').modal('show');
+			}
+		});
+		</script>
+
 		@yield('javascript')
 	</body>
 </html>
+
+<!-- This is the  modal that appears once a user has logged out-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Logged out!</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Most of our content is still available to logged out users!</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- This is the modal for logging in -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Bet</h4>
+            </div>
+            <div class="modal-body">
+
+				<?php
+				if(Notification::showAll() != '' or $errors->first('username') != '' or $errors->first('password') != ''){
+				?>
+				<div class="alert alert-danger alert-dismissable">
+				  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				  <strong>Error!</strong> Please check these things:
+				  <p>{{ Notification::showAll() }}</p>
+				  <p>{{ $errors->first('username') }}</p>
+				  <p>{{ $errors->first('password') }}</p>
+				</div>
+				<?php
+				}
+				?>
+
+				{{ Form::open(array('url' => 'user/login')) }}
+
+				<div class="form-group">
+					<label>{{ Form::label('username', 'Username') }}</label>
+					{{ Form::text('username', Input::old('username'), array('class'=>'form-control')) }}
+				</div>
+
+				<div class="form-group">
+					<label>{{ Form::label('password', 'Password') }}</label>
+					{{ Form::password('password', array('class'=>'form-control')) }}
+				</div>
+
+				<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
+				<a href="{{ url('user/facebooklogin') }}" class="btn btn-primary pull-right">Facebook Login</a>
+				{{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
+
+				{{ Form::token() . Form::close() }}
+			<div><p/>&nbsp;</div>  <!--makes sure login button is inside modal-->
+    	</div>
+  	</div>
+</div>
+

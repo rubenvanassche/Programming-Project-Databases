@@ -19,7 +19,11 @@ class UserController extends BaseController {
 
 			if($validation->fails()) {
 				// Problem so show the user error messages
-				return Redirect::to('user/login')->withInput()->withErrors($validation);
+				$input = Input::all();//Get all the old input.
+				$input['autoOpenLoginModal'] = 'true';//Add the auto open indicator flag as an input.
+				return Redirect::back()
+					->withErrors($validation)
+					->withInput($input);//Passing the old input and the flag.
 			}else{
 				// Start working on this data
 				$username = Input::get('username');
@@ -28,9 +32,13 @@ class UserController extends BaseController {
 				$user = new User;
 				if($user->login($username, $password)){
 					// Logged in
-					return Redirect::to('/');
+					return Redirect::back();
 				}else{
-					return Redirect::to('user/login')->withInput();
+				$input = Input::all();//Get all the old input.
+				$input['autoOpenLoginModal'] = 'true';//Add the auto open indicator flag as an input.
+				return Redirect::back()
+					->withErrors($validation)
+					->withInput($input);//Passing the old input and the flag.
 				}
 			}
     	}else{
@@ -51,7 +59,7 @@ class UserController extends BaseController {
 		    'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
 		    );
 		$permissions = 'publish_stream,email';
-		$url_app = 'http://localhost:8000/user/facebooklogin';
+		$url_app = url('user/facebooklogin');
 
 		// getInstance
 		FacebookConnect::getFacebook($application);
@@ -326,9 +334,7 @@ class UserController extends BaseController {
 		$user = new User;
 		$user->logout();
 
-		$data['title'] = 'Logged Out!';
-		$data['content'] = 'Enjoy the rest of the world wide web.';
-		return View::make('layouts.simple', $data);
+		return Redirect::back()->withInput(array("loggedOut" => true));
 	}
 
 	function myProfile() {

@@ -234,8 +234,6 @@ class Match {
 
 	public static function isPlayed($matchID) {
 		$now = new DateTime();
-		//DELETE +1Y
-		$now->add(new DateInterval('P1Y'));
 		$now = $now->format("Y-m-d h:i:s");
 		//Convert sql datetime to php datetime
 		$match = Match::getMatchByID($matchID)[0];
