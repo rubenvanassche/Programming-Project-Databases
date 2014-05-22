@@ -127,6 +127,14 @@ class Prediction {
 		if ($matches_played)
 			$awayteam_points += ($matches_won / $matches_played);
 
+		$fifapoints_home = Team::getFifaPointsByID($hometeam_id);
+		$fifapoints_away = Team::getFifaPointsByID($awayteam_id);
+
+		$hometeam_points += ($fifapoints_home->fifapoints / 1000);
+		$awayteam_points += ($fifapoints_away->fifapoints / 1000);
+
+		print($hometeam_points . " " . $awayteam_points);
+
 	
 		// Make up the chances
 

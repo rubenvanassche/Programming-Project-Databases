@@ -316,6 +316,11 @@ class Team {
 		return ($stats);
 	}
 
+    public static function getFifaPointsByID( $teamID ) {
+        $results = DB::select('SELECT team.fifapoints FROM `team` WHERE id = ?', array($teamID));
+        return $results[0];
+    }
+
 
 
 }
