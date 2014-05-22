@@ -7,6 +7,9 @@
 			<h3>International</h3>
 		</div>
 		<div class="col-md-12">
+
+			Search: <input name="filter" id="filter-box" value="" maxlength="30" size="30" type="text">
+    		<input id="filter-clear-button" type="submit" value="Clear"/>
 			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
@@ -77,7 +80,7 @@
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]], headers: {0: {sorter: false}}})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0]}); });
+                            filterColumns: [1, 2]}); });
 	</script>
 
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>

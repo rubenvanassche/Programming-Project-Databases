@@ -15,6 +15,8 @@
       ?>
     </div>
     <div class="col-md-12">
+      Search: <input name="filter" id="filter-box" value="" maxlength="30" size="30" type="text">
+      <input id="filter-clear-button" type="submit" value="Clear"/>
       <table id="myTable" class="tablesorter">
         <thead class="center">
           <tr>
@@ -95,6 +97,6 @@
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]], headers: {2: {sorter: false}, 4: {sorter: false}}})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0]}); });
+                            filterColumns: [0, 1, 3]}); });
   </script>
 @stop
