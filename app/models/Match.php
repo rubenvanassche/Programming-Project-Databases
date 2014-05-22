@@ -66,6 +66,31 @@ class Match {
         return True;
     }
 
+    /**
+     * @brief Check whether there are matches already played.
+     * @param competition The competition to be checked.
+     * @return True if there are match played, False otherwise.
+     */
+    public static function match_played( $competition ) {
+        // ask competition id (if any)
+        $query = "SELECT id FROM `competition` WHERE name = ?";
+        $values = array( $competition );
+        $sql = DB::select( $query, $values );
+
+        if ( empty( $sql ) ) return False;
+
+        // get competition id and current date
+        $competition_id = $sql[0]->id;
+        $now = new DateTime();
+
+        // get all matches past today's date
+        $query = "SELECT `id`, `date` FROM `match` WHERE `competition_id` = ? AND `date` <= ?";
+        $values = array( $competition_id, $now->format( "Y-m-d H:i:s" ) );
+        $sql = DB::select( $query, $values );
+
+        return !( empty( $sql ) );
+    }
+
     // TODO DOCUMENTIZE
     public static function getRecentMatches($amount){
         // Will return a certain amount of last played matches.
