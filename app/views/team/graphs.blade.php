@@ -53,6 +53,9 @@
 			  ?>
 		]);
 
+		//Column select found on http://jsfiddle.net/asgallant/WaUu2/
+		//Mention license on page?
+
 		var columnsTable = new google.visualization.DataTable();
 		columnsTable.addColumn('number', 'colIndex');
 		columnsTable.addColumn('string', 'colLabel');
