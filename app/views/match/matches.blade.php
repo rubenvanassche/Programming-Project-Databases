@@ -15,7 +15,7 @@
       ?>
     </div>
     <div class="col-md-12">
-      <table class="table table-condensed center">
+      <table id="myTable" class="tablesorter">
         <thead class="center">
           <tr>
             <th>Date</th>
@@ -82,4 +82,19 @@
     background-color:#EDEDED;
   }
 </style>
+@stop
+
+@section('javascript')
+<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]], headers: {2: {sorter: false}, 4: {sorter: false}}})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0]}); });
+  </script>
 @stop

@@ -74,7 +74,7 @@
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
         $("#myTable")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]]})
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]], headers: {0: {sorter: false}}})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
                             filterColumns: [0]}); });
