@@ -28,10 +28,10 @@ class Prediction {
 			$score_away = Match::getScore2($match->id)[1];
 
 			if ($score_home > $score_away) {
-				$hometeam_points += 1;
+				$hometeam_points += 5;
 			}
 			elseif ($score_home < $score_away) {
-				$awayteam_points += 1;
+				$awayteam_points += 5;
 			}
 	 	}
 	
@@ -43,12 +43,13 @@ class Prediction {
 			$score_away = Match::getScore2($match->id)[1];
 
 			if ($score_home > $score_away) {
-				$hometeam_points += 0.75;
+				$awayteam_points += 3;
 			}
 			elseif ($score_home < $score_away) {
-				$awayteam_points += 0.75;
+				$hometeam_points += 3;
 			}
 		}
+
 	
 		// Calculate average win/loss hometeam @ home
 		$matches_played = 0;
@@ -66,7 +67,7 @@ class Prediction {
 		}
 	
 		// add average to the score.
-		if ($matches_played)
+		if ($matches_played != 0)
 			$hometeam_points += $matches_won / $matches_played;
 	
 		// Calculate average win/loss hometeam @ away
@@ -85,8 +86,8 @@ class Prediction {
 		}
 	
 		// add average multiplied by factor to the score.
-		if ($matches_played)
-			$hometeam_points += ($matches_won / $matches_played) * 0.75;
+		if ($matches_played != 0)
+			$hometeam_points += ($matches_won / $matches_played);
 	
 		// Calculate average win/loss awayteam @ away
 		$matches_played = 0;
@@ -104,7 +105,7 @@ class Prediction {
 		}
 	
 		// add average to the score.
-		if ($matches_played)
+		if ($matches_played != 0)
 			$awayteam_points += $matches_won / $matches_played;
 	
 		// Calculate average win/loss awayteam @ home
@@ -124,10 +125,11 @@ class Prediction {
 	
 		// add average multiplied by factor to the score.
 		if ($matches_played)
-			$awayteam_points += ($matches_won / $matches_played) * 0.75;
+			$awayteam_points += ($matches_won / $matches_played);
 
 	
 		// Make up the chances
+
 	
 		$totalpoints = $hometeam_points + $awayteam_points;
 	

@@ -13,6 +13,7 @@
 						<th>Country</th>
 						<th>Name</th>
 						<th>Continent</th>
+						<th>Fifa Points</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -24,6 +25,7 @@
 							<td><i class={{$flag}}></td>
 							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
 							<td>{{$team->continent}}</td>
+							<td>{{$team->fifapoints}}</td>
 						</tr>
 					@endforeach
 				</tbody>

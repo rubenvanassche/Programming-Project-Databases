@@ -83,7 +83,7 @@ class Team {
      * @return Results after the query.
      */
     public static function getAll(){
-        $query = "SELECT team.id, team.name, country.abbreviation, continent.name AS continent FROM team, country, continent WHERE team.country_id = country.id AND country.continent_id = continent.id";
+        $query = "SELECT team.id, team.name, team.fifapoints, country.abbreviation, continent.name AS continent FROM team, country, continent WHERE team.country_id = country.id AND country.continent_id = continent.id";
 
         return DB::select( $query );
     }
