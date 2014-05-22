@@ -136,15 +136,16 @@ class Team {
      * @return array where each country is mapped to a point.
      */
     public static function getFIFAPoints($geoCharts=false) {
-        $query = "SELECT name, fifapoints FROM `".self::TABLE_TEAM."`";
+        $query = "SELECT id, name, fifapoints FROM `".self::TABLE_TEAM."`";
 
         $records = DB::select( $query );
 
         $points = array();
         foreach ( DB::select( $query ) as $row ) {
             $thesePoints = array(
+				"id"        => $row->id,
                 "name"      => $row->name,
-                "points"    => $row->fifapoints,
+                "points"    => $row->fifapoints
             );
 
             array_push( $points, $thesePoints );
@@ -168,11 +169,12 @@ class Team {
 							$row["name"] = "Taiwan";
 					}
 					//Add countries without national team (in database) with 0 FIFA Points
-          array_push( $points, array("name" => "Svalbard and Jan Mayen", "points" => 0) );
-          array_push( $points, array("name" => "French Guiana", "points" => 0) );
-          array_push( $points, array("name" => "Greenland", "points" => 0) );
-          array_push( $points, array("name" => "Western Sahara", "points" => 0) );
-          array_push( $points, array("name" => "Kosovo", "points" => 0) );
+					//Note that id 0 is invalid, it indicates the country has no team in the db
+          array_push( $points, array("id" => 0, "name" => "Svalbard and Jan Mayen", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "French Guiana", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "Greenland", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "Western Sahara", "points" => 0) );
+          array_push( $points, array("id" => 0, "name" => "Kosovo", "points" => 0) );
 				}
 
         return $points;
@@ -253,5 +255,54 @@ class Team {
             return "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQDBQGDMwwKrrjyl5frVZhTV1qDP6u3YtPhFW_XM6zjdStHkm0";
         } // end try-catch
     }
+
+	public static function getWinsLossesTies( $teamID ) {
+		$matches = Team::getMatches( $teamID );
+		$wins = 0;
+		$losses = 0;
+		$ties = 0;
+		foreach ($matches as $match) {
+			if (!Match::isPlayed($match->match_id))
+				continue;
+			if (Team::getIDsByName($match->hometeam)[0]->id == $teamID) {
+				$thisTeam = 0;
+				$otherTeam = 1;
+			}
+			else {
+				$thisTeam = 1;
+				$otherTeam = 0;
+			}
+			$score = Match::getScore2($match->match_id);
+			if ($score[$thisTeam] > $score[$otherTeam])
+				$wins += 1;
+			if ($score[$thisTeam] == $score[$otherTeam])
+				$ties += 1;
+			if ($score[$thisTeam] < $score[$otherTeam])
+				$losses += 1;
+		}
+		return array("wins" => $wins, "losses" => $losses, "ties" => $ties);
+	}
+
+	public static function getYearlyGoals( $teamID ) {
+		$matches = Team::getMatches( $teamID );
+		$goalStats = array();
+		foreach ($matches as $match) {
+			if (!Match::isPlayed($match->match_id))
+				continue;
+			$matchYear = new DateTime($match->date);
+			$matchYear = $matchYear->format("Y");
+			if (Team::getIDsByName($match->hometeam)[0]->id == $teamID)
+				$score = Match::getScore2($match->match_id)[0];
+			else
+				$score = Match::getScore2($match->match_id)[1];
+			if (array_key_exists($matchYear, $goalStats)) {
+				$goalStats[$matchYear]["totalScore"] = $goalStats[$matchYear]["totalScore"] + $score;
+				$goalStats[$matchYear]["matchCount"] = $goalStats[$matchYear]["matchCount"] + 1;
+			}
+			else
+				$goalStats[$matchYear] = array("totalScore" => $score, "matchCount" => 1);
+		}
+		return ($goalStats);
+	}
 
 }

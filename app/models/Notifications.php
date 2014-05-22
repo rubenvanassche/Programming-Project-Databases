@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 class Notifications {
 
-	const INVITE_USER_GROUP = 1; 
+	const INVITE_USER_GROUP = 1;
 
 	public static function saveNotification($object_id, $subject_id, $actor_id, $type_id){
 		$created_date = date("Y-m-d H:i:s");
@@ -11,12 +11,12 @@ class Notifications {
         DB::insert( $query, $values );
 	}
 
-	
+
 	public static function getNotifications($subjectID, $type = 0, $page = 1){
 		// By default type = 0. This means it will select all notifications.
-		// If you just want notifications of 1 type (like only invites for example) then 
+		// If you just want notifications of 1 type (like only invites for example) then
 		// you can just give in the type.
-		
+
 		if ($type == 0) {
 			$query = "SELECT nf.*, actor.username AS actor_name, subject.username AS subject_name
 					FROM notifications nf
@@ -34,13 +34,13 @@ class Notifications {
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
 					AND type_id = $type
-					LIMIT 0, 5";	
+					LIMIT 0, 5";
 		}
-		
+
 		$result = DB::select($query);
 
         $rows = array();
-				
+
 		foreach($result as $rs) {
 			$row['object_id'] = $rs->object_id;
 			$row['actor_id'] = $rs->actor_id;
@@ -49,9 +49,9 @@ class Notifications {
 			$row['object'] = Notifications::getObjectRow($rs->type_id, $rs->object_id);
 			$rows[] = $row;
 		}
-			
+
 		$notifications = array();
-		
+
 		foreach($rows as $row){
             $notification = array(
                 'message' => Notifications::getNotificationMessage($row),
@@ -61,10 +61,10 @@ class Notifications {
             );
             $notifications[] = $notification;
         }
-         
+
         return $notifications;
 	}
-	
+
 	protected static function getObjectRow($typeId, $objectId)
     {
         switch($typeId){
@@ -75,7 +75,7 @@ class Notifications {
 				return $result;
         }
     }
-	
+
 	    protected static function getNotificationMessage($row){
 			switch($row['type_id']){
 				case self::INVITE_USER_GROUP:
@@ -90,22 +90,48 @@ class Notifications {
 			FROM user
 			WHERE id = {$row['actor_id']}
 			");
-			
+
 			return " {$actor[0]->username} invited you to join the group: {$group[0]->name}";
         }
     }
 
-	public static function test() {
-			
-		$query = "INSERT INTO `userGroupInvites` (userId, competitionId, invitedById) VALUES (?, ?, ?)";
-        $values = array(8, 4, 7);
-        DB::insert( $query, $values );
-		
-		Notifications::saveNotification(4, 8, 7, self::INVITE_USER_GROUP);
-		
-		$result = Notifications::getNotifications(8);
-		
-		print($result[0]['message']);
+	public static function sendMailReminder($user_id, $matches) {
+		// Sends an email reminding one user that they still need to bet on a match.
+
+		$user = new User;
+
+		$data['matches'] = $matches;
+		$data['user'] = $user->get($user_id);
+
+		$message = new stdClass();
+		$user_email = $data['user']->email;
+		$username = $data['user']->username;
+
+		Mail::send('mails.reminder', $data, function($message) use ($user_email, $username){
+    	$message->to($user_email, $username)->subject("Don't forget to bet on these upcoming matches!");
+		});
 	}
-	
+
+	public static function betReminder($user_id, $matches) {
+		// Sends a notification reminding one user that they still need to bet on a match.
+
+	}
+
+	public static function sendReminders($days) {
+		// Will send an email + notification reminding the users that they still need to bet on a match.
+		// Set $days to the amount of days you want to check for upcoming matches.
+
+		$users = User::getEmailUsers();
+
+		foreach($users as $user) {
+				$matches = Match::getNextUnbettedMatches($days, $user);
+
+				if (count($matches) > 0) {
+					Notifications::sendMailReminder($user->id, $matches);
+					Notifications::betReminder($user->id, $matches);
+				}
+		}
+
+	}
+
 }

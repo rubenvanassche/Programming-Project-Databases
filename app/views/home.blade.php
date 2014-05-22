@@ -244,39 +244,62 @@ hr {
      google.setOnLoadCallback(drawRegionsMap);
 
       function drawRegionsMap() {
-        data = google.visualization.arrayToDataTable(
-										//Create the Country/FIFA points table in PHP, as Javascript has no access to these codes
-										<?php 
-										echo "[['Country', 'FIFA points'], ";
-										foreach($fifaPoints as $points) {
-											echo "[\"";
-											echo $points["name"];
-											echo "\", ";
-											echo $points["points"];
-											echo "], ";
-										}
-										echo "]";
+		data = new google.visualization.DataTable();
+		data.addColumn('string', 'Country');
+		data.addColumn('number', 'FIFA points');
+		data.addColumn('number', 'id');
+		data.addColumn({type:'string', role:'tooltip'});  // Will make sure only FIFA points and not id is shown in tooltip
+        data.addRows(
+				//Create the Country/FIFA points table in PHP, as Javascript has no access to these codes
+				<?php 
+				echo "[";
+				foreach($fifaPoints as $points) {
+					echo "[\"";
+					echo $points["name"];
+					echo "\", ";
+					echo $points["points"];
+					echo ", ";
+					echo $points["id"];
+					echo ", \"";
+					echo "FIFA points: " . $points["points"];
+					echo "\"], ";
+				}
+				echo "]";
 
-										?>);
+				?>);
 
 
         options =   {};
 
         chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-   		  google.visualization.events.addListener(chart, 'regionClick', selectHandler);
+   		google.visualization.events.addListener(chart, 'regionClick', selectHandler);
+		google.visualization.events.addListener(chart, 'select', toPage);
     };
 
-function selectHandler(e) {  //Allows user to zoom in on Great Britain
+
+
+	function selectHandler(e) {  //Allows user to zoom in on Great Britain
 
 		  var selection = e['region'];
 			if (selection == "GB") {
-		  //alert(selection);
 		      options['resolution'] = 'provinces';
 		      options['region'] = selection;
-		          chart.draw(data, options);
-		          document.getElementById('goback').style.display='block';
+		      chart.draw(data, options);
+		      document.getElementById('goback').style.display='block';
 			}
+
+		
+    };
+
+	function toPage() {  //Allows user click on country to go to its national team
+	
+	  var rowIndex = chart.getSelection()[0].row;
+	  var teamID = data.getValue(rowIndex, 2);
+	  if (teamID != 0)  //id 0 means no page for this national team
+  	    window.open('{{route('teamNoIndex')}}/' + teamID, '_self'); //Add teamID in js
+
+		
     };
 
     </script>

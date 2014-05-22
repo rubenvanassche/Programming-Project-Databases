@@ -10,11 +10,12 @@ class TeamController extends BaseController {
 		$teamBackground = '';
 		if($teamObj->twitterAccount != ''){
 			$tweets = Twitter::getUserTimeline(array('screen_name' => $teamObj->twitterAccount, 'count' => 1, 'format' => 'array'));
-			$backgroundpicture = $tweets[0]['user']['profile_banner_url'];
-			if($backgroundpicture != ''){
+			if (isset($tweets[0]['user']['profile_banner_url'])) {
+				$backgroundpicture = $tweets[0]['user']['profile_banner_url'];
 				//$teamBackground = substr($backgroundpicture, 0, -1);
-				$teamBackground = $backgroundpicture;
+				$teamBackground = $backgroundpicture . "/1500x500";
 			}
+			
 		}
 		
 		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground'))->with('title', $teamObj->name);
@@ -76,6 +77,13 @@ class TeamController extends BaseController {
 		$twitterAccount = $teamObj->twitterAccount;
 		$tweets = Twitter::getUserTimeline(array('screen_name' => $twitterAccount, 'count' => 20, 'format' => 'array'));
 		return View::make('team.twitter', compact('tweets', 'twitterAccount'));
+	}
+
+	public function graphs($teamID){
+		$outcomes = Team::getWinsLossesTies($teamID);
+		$yearlyGoals = Team::getYearlyGoals($teamID);
+		ksort($yearlyGoals); //Otherwise the graph is all messed up
+		return View::make('team.graphs', compact('outcomes', 'yearlyGoals'));
 	}
 }
 

@@ -19,7 +19,11 @@ class UserController extends BaseController {
 
 			if($validation->fails()) {
 				// Problem so show the user error messages
-				return Redirect::to('user/login')->withInput()->withErrors($validation);
+				$input = Input::all();//Get all the old input.
+				$input['autoOpenLoginModal'] = 'true';//Add the auto open indicator flag as an input.
+				return Redirect::back()
+					->withErrors($validation)
+					->withInput($input);//Passing the old input and the flag.
 			}else{
 				// Start working on this data
 				$username = Input::get('username');
@@ -28,9 +32,13 @@ class UserController extends BaseController {
 				$user = new User;
 				if($user->login($username, $password)){
 					// Logged in
-					return Redirect::to('/');
+					return Redirect::back();
 				}else{
-					return Redirect::to('user/login')->withInput();
+				$input = Input::all();//Get all the old input.
+				$input['autoOpenLoginModal'] = 'true';//Add the auto open indicator flag as an input.
+				return Redirect::back()
+					->withErrors($validation)
+					->withInput($input);//Passing the old input and the flag.
 				}
 			}
     	}else{
@@ -51,7 +59,7 @@ class UserController extends BaseController {
 		    'secret' => 'b9415e5f5a111335ab36f14ff1d6f92e'
 		    );
 		$permissions = 'publish_stream,email';
-		$url_app = 'http://localhost:8000/user/facebooklogin';
+		$url_app = url('user/facebooklogin');
 
 		// getInstance
 		FacebookConnect::getFacebook($application);
@@ -90,7 +98,7 @@ class UserController extends BaseController {
 				$data['username'] = Input::get('username');
 				$data['firstname'] = Input::get('firstname');
 				$data['lastname'] = Input::get('lastname');
-				$data['country'] = Input::get('country');
+				$data['country_id'] = Input::get('country');
 				$data['email'] = Input::get('email');
 				$data['password'] = Input::get('password');
 
@@ -103,7 +111,7 @@ class UserController extends BaseController {
 					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
 					//});
 
-					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account.';
+					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account (check your spambox!).';
 					$data['title'] = 'Welcome!';
 					return View::make('layouts.simple', $data);
 				}else{
@@ -119,109 +127,6 @@ class UserController extends BaseController {
     	}
 	}
 
-	//Note that $presetValues if supplied should contain keys presetHome, presetAway and presetDate
-	function bet(){
-		/*TODO: Laravel probably provides a better way to fetch variables from a Match page after a bet page was pressed there than through $_GET
-		They are passed through the URL now, maybe that can be circumvented too.
-		If anyone knows how, please tell me (Jakob) or feel free to change it yourselves.
-		Also note if one of the three parameters is provided (presetHome/Away/Date), all three should be.
-		UPDATE: as this goes through modal now, URL is invisible for user */
-		if (isset($_GET["presetHome"]))
-			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
-		else
-			$presetValues = array();
-
-		// Work On the Form
-		$rules = array(
-		        'hometeam' => array('required'),
-		        'awayteam' => array('required'),
-		        'date' => array('required'),
-		        'hometeamScore' => array('integer', 'between:0,100', 'required'),
-		        'awayteamScore' => array('integer', 'between:0,100', 'required'),
-		        'firstGoal' => array(),
-		        'hometeamYellows' => array('integer', 'between:0,100'),
-		        'hometeamReds' => array('integer', 'between:0,100'),
-		        'awayteamYellows' => array('integer', 'between:0,100'),
-		        'awayteamReds' => array('integer', 'between:0,100')
-		);
-
-		$validation = Validator::make(Input::all(), $rules);
-
-		if($validation->fails()) {
-			// Problem so show the user error messages
-			$input = Input::all();//Get all the old input.
-			$input['autoOpenModal'] = 'true';//Add the auto open indicator flag as an input.
-			return Redirect::back()
-				->withErrors($validation)
-				->withInput($input);//Passing the old input and the flag.
-			//return Redirect::to('user/bet')->withInput()->withErrors($validation);
-		}else{
-			// Start working on this data
-			$hometeam = Input::get('hometeam');
-			$awayteam = Input::get('awayteam');
-			$date = Input::get('date');
-			$hometeam_score = Input::get('hometeamScore');
-			$awayteam_score = Input::get('awayteamScore');
-			$firstGoal = Input::get('firstGoal');
-			$hometeam_yellows = Input::get('hometeamYellows');
-			$hometeam_reds = Input::get('hometeamReds');
-			$awayteam_yellows = Input::get('awayteamYellows');
-			$awayteam_reds = Input::get('awayteamReds');
-			$hometeamIDs = Team::getIDsByName($hometeam);
-			$awayteamIDs = Team::getIDsByName($awayteam);
-			$hometeamID = $hometeamIDs[0]->id;
-			$awayteamID = $awayteamIDs[0]->id;
-			if ($firstGoal == "none")
-				$firstGoal_id = NULL;
-			if ($firstGoal == "home")
-				$firstGoal_id = $hometeamID;
-			if ($firstGoal == "away")
-				$firstGoal_id = $awayteamID;
-			//save blank guesses as -1 internally
-			if ($hometeam_yellows == "")
-				$hometeam_yellows = -1;
-			if ($hometeam_reds == "")
-				$hometeam_reds = -1;
-			if ($awayteam_yellows == "")
-				$awayteam_yellows = -1;
-			if ($awayteam_reds == "")
-				$awayteam_reds = -1;
-
-			$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
-			$user = new User;
-			$now = date('y-m-d h:i:s', time());;
-			$matchDateTime = new DateTime( $match->date);
-			$matchDateTime = $matchDateTime->format("y-m-d h:i:s");
-			//Only add if match exists, user is logged in and match is in the future
-			//Note that this function should not be called otherwise, this check might be unneeded
-			$success = ($match != NULL) && $user->loggedIn() && $now < $matchDateTime;
-			if($success == true){
-				Bet:: add($match->id, $user->ID(), $hometeam_score, $awayteam_score, $firstGoal_id, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds);
-				$data['content'] = 'Thank you for filling in your bet.';
-				$data['title'] = 'Bet registered!';
-				$acceptedInput = array("accepted" => true); //Add the bet accepted indicator flag as an input.
-				return Redirect::back()->withInput($acceptedInput);//Go back to match page
-			}else{
-				// Something went wrong (shouldn't happen)
-				return Redirect::to('user/bet')->withInput();
-			}
-    	}
-	}
-
-	function betmodal(){
-		$data['title'] = 'Bet';
-		//Propagate the presets if given
-		if (isset($_GET["presetHome"]))
-			$presetValues = array("presetHome" =>  $_GET["presetHome"], "presetAway" => $_GET["presetAway"], "presetDate" => $_GET["presetDate"]);
-		else
-			$presetValues = array();
-		return View::make('layouts.modal', $data)->nest('content', 'user.bet', $presetValues);
-	}
-
-
-	function showBets() {
-		return View::make('layouts.simple', $data)->nest('content', 'user.bets');
-	}
 
 	function activate($username, $registrationcode){
 		$user = new User;
@@ -366,7 +271,7 @@ class UserController extends BaseController {
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.changepassword');
     	}
 	}
-	
+
 	function changeprofilepicture(){
 		$user = new User;
 		if($user->facebookOnlyUser($user->ID()) == false){
@@ -376,39 +281,39 @@ class UserController extends BaseController {
 			    );
 
 				$validation = Validator::make(Input::all(), $rules);
-			
+
 				if ($validation->passes()) {
-	
+
 				   // Get the image input
 				   $file = Input::file('image');
-				
+
 				   $destinationPath    = 'public/profilepictures/';
 				   $filename           = $file->getClientOriginalName();
-				   $mime_type          = $file->getMimeType(); 
+				   $mime_type          = $file->getMimeType();
 				   $size 			   = $file->getSize();
-				   $extension          = $file->getClientOriginalExtension(); 
-				   				
+				   $extension          = $file->getClientOriginalExtension();
+
 				   // This is were you would store the image path in a table
-				
+
 				   if($size > 1048576){
 				   		Notification::error("The image size is over 1mb.");
 					   return Redirect::back()->withErrors($validation);
 				   }
-				   
+
 				   $type = strtolower($extension);
-				   
+
 				   if($type == 'jpg' or $type == 'jpeg' or $type == 'png' or $type == 'gif'){
 					   	// Success
 					   	$filename = 'user'.$user->ID().'.'.$extension;
-					   	
+
 					   	$file->move(base_path().'/'.$destinationPath, $filename);
 					   	$url = url('profilepictures/'.$filename);
 						$user->changeProfilePicture($user->ID(), $url);
-						
+
 						return Redirect::to('profile/'.$user->ID());
 				   }else{
 				   	   Notification::error("The image size is not the right format(jpg, png, gif).");
-					   return Redirect::back()->withErrors($validation);   
+					   return Redirect::back()->withErrors($validation);
 				   }
 				} else {
 				   return Redirect::back()->withErrors($validation)->withInput();
@@ -421,7 +326,7 @@ class UserController extends BaseController {
 		}else{
 			$data['title'] = 'Nothing to see over here';
 			$data['content'] = 'We are using your Facebook profile picture.';
-			return View::make('layouts.simple', $data);	
+			return View::make('layouts.simple', $data);
 		}
 	}
 
@@ -429,14 +334,12 @@ class UserController extends BaseController {
 		$user = new User;
 		$user->logout();
 
-		$data['title'] = 'Logged Out!';
-		$data['content'] = 'Enjoy the rest of the world wide web.';
-		return View::make('layouts.simple', $data);
+		return Redirect::back()->withInput(array("loggedOut" => true));
 	}
 
 	function myProfile() {
 		$user = new User;
-		$usergroup = new Usergroup;
+		$usergroup = new UserGroup;
 		$data['groups'] = $usergroup->getGroupsByUser($user->ID());
 		$data['user'] = $user->get($user->ID());
 		$data['notifications'] = $user->getNotifications($user->ID());
@@ -448,11 +351,12 @@ class UserController extends BaseController {
 
 	function profile($id) {
 		$user = new User;
-		$usergroup = new Usergroup;
+		$usergroup = new UserGroup;
 		$data['groups'] = $usergroup->getGroupsByUser($id);
 		$data['user'] = $user->get($id);
 		$data['avatar'] = NULL;
 		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";
+		$data['country'] = Country::getCountry($data['user']->country_id);
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
 

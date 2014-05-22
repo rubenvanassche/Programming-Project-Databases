@@ -3,7 +3,7 @@
 class UsergroupController extends BaseController {
 
 	function index(){
-		$usergroup = new Usergroup;
+		$usergroup = new UserGroup;
 		$data['groups'] = $usergroup->getGroups();
 		$data['title'] = 'User Groups';
 
@@ -27,7 +27,7 @@ class UsergroupController extends BaseController {
 				$name = Input::get('name');
 
 				$user = new User;
-				$usergroup = new Usergroup;
+				$usergroup = new UserGroup;
 				$success = $usergroup->addGroup($name);
 
 				if($success){
@@ -49,7 +49,7 @@ class UsergroupController extends BaseController {
 	}
 
 	function usergroup($id){
-		$usergroup = new Usergroup;
+		$usergroup = new UserGroup;
 		$data['users'] = $usergroup->getUsers($id);
 		$data['title'] = $usergroup->getName($id);
 		$data['id'] = $id;
@@ -59,16 +59,16 @@ class UsergroupController extends BaseController {
 	}
 
 	function addMe($id){
-		$usergroup = new Usergroup;
+		$usergroup = new UserGroup;
 		$user = new user;
-		
+
 		if(!$usergroup->isMember($user->ID(), $id)){
 			$usergroup->addUser($id, $user->ID());
 			return Redirect::to('usergroup/'.$id);
 		}else{
 			$data['title'] = 'Problem';
 			$data['content'] = 'You are not in this group.';
-			return View::make('layouts.simple', $data);		
+			return View::make('layouts.simple', $data);
 		}
 	}
 
@@ -89,7 +89,7 @@ class UsergroupController extends BaseController {
 				$invitee_name = Input::get('invitee_name');
 				$user = new User;
 				$invitee_id = $user->getID($invitee_name);
-		
+
 				if ($invitee_id == -1){
 					$data['title'] = 'Problem';
 					$data['content'] = 'This user doesn\'t exist.';
@@ -99,9 +99,9 @@ class UsergroupController extends BaseController {
 					$data['content'] = 'You are already part of this group.';
 					return View::make('layouts.simple', $data);
 				}else{
-					$usergroup = new Usergroup();
+					$usergroup = new UserGroup();
 					$usergroup->invite($user->ID(),$usergroup_id, $invitee_id);
-					
+
 					$data['title'] = 'User Invited!';
 					$data['content'] = '<a href="'.url('usergroup/'.$usergroup_id).'">Click here</a> to go back to the usergroup.';
 					return View::make('layouts.simple', $data);
@@ -109,29 +109,29 @@ class UsergroupController extends BaseController {
 			}
     	}else{
 	    	// Show the form
-	    	$usergroup = new Usergroup;
-	    	
+	    	$usergroup = new UserGroup;
+
 	    	$data['title'] = 'Invite User To '.$usergroup->getName($usergroup_id);
 	    	$data['usergroup_id'] = $usergroup_id;
-	    	
+
 	    	return View::make('layouts.simple', $data)->nest('content', 'usergroup.invite', $data);
     	}
 	}
-	
+
 	function leave($id){
-		$usergroup = new Usergroup;
+		$usergroup = new UserGroup;
 		$user = new user;
-		
+
 		if($usergroup->isMember($user->ID(), $id)){
 			$usergroup->leave($user->ID(), $id);
-			
+
 			$data['title'] = 'Success';
 			$data['content'] = 'You are not in this group anymore.';
-			return View::make('layouts.simple', $data);		
+			return View::make('layouts.simple', $data);
 		}else{
 			$data['title'] = 'Problem';
 			$data['content'] = 'You are not in this group.';
-			return View::make('layouts.simple', $data);	
+			return View::make('layouts.simple', $data);
 		}
 	}
 
