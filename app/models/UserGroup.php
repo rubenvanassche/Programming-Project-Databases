@@ -140,7 +140,7 @@ class UserGroup {
 	function timeline($userGroup_id){
 		$timeline = array();
 		// get the stared date
-		$result = DB::select("SELECT created,name FROM UserGroup WHERE id = ?", array($userGroup_id));
+		$result = DB::select("SELECT created,name FROM userGroup WHERE id = ?", array($userGroup_id));
 		
 		$name = $result[0]->name;
 		$usergroupcreatedate = $result[0]->created;
