@@ -24,6 +24,10 @@ class BetController extends BaseController {
 			
 			return View::make('layouts.simple', $data)->nest('content', 'user.betoverview', $data);
 		}
+		else {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 		
 
 	}
