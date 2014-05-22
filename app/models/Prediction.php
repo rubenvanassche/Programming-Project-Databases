@@ -271,7 +271,7 @@ class Prediction {
 
 		$match_chance = Prediction::predictOutcome($matchID);
 
-		if ($match_chance >= 0.48 And $match_chance <= 0.52) {
+		if ($match_chance >= 0.45 And $match_chance <= 0.55) {
 			while(true) {
 				if ($home_team_score < $away_team_score) {
 					$home_team_score++;
@@ -284,7 +284,7 @@ class Prediction {
 				}
 			}
 		}
-		elseif ($match_chance > 0.52) {
+		elseif ($match_chance > 0.55) {
 			while(true) {
 				if ($home_team_score <= $away_team_score) {
 					$home_team_score++;
@@ -294,7 +294,7 @@ class Prediction {
 				}
 			}
 		}
-		elseif ($match_chance < 0.48) {
+		elseif ($match_chance < 0.45) {
 			while(true) {
 				if ($home_team_score >= $away_team_score) {
 					$away_team_score++;
