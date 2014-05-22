@@ -81,9 +81,9 @@ class TeamController extends BaseController {
 
 	public function graphs($teamID){
 		$outcomes = Team::getWinsLossesTies($teamID);
-		$yearlyGoals = Team::getYearlyGoals($teamID);
-		ksort($yearlyGoals); //Otherwise the graph is all messed up
-		return View::make('team.graphs', compact('outcomes', 'yearlyGoals'));
+		$yearlyGoalsCards = Team::getYearlyGoalsCards($teamID);
+		ksort($yearlyGoalsCards); //Otherwise the graph is all messed up
+		return View::make('team.graphs', compact('outcomes', 'yearlyGoals', 'yearlyGoalsCards'));
 	}
 }
 
