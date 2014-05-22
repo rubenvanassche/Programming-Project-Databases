@@ -11,7 +11,7 @@ class updateDB extends Command {
 	 *
 	 * @var string
 	 */
-	protected $name = 'command:updateDB';
+	protected $name = 'updateDB';
 
 	/**
 	 * The console command description.
@@ -38,9 +38,7 @@ class updateDB extends Command {
 	public function fire()
 	{
 		// Call the update functions.
-		DBCrawlerController::update_matches();
-		DBCrawlerController::update_teams();
-		DBCrawlerController::update_countries();
+		CrawlerController::updateDB();
 	}
 
 	/**
@@ -50,9 +48,7 @@ class updateDB extends Command {
 	 */
 	protected function getArguments()
 	{
-		return array(
-			array('example', InputArgument::REQUIRED, 'An example argument.'),
-		);
+		return array();
 	}
 
 	/**

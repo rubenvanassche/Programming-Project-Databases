@@ -17,12 +17,31 @@ class TeamController extends BaseController {
 			}
 			
 		}
+		//Check if there's news for this team
+		$teamName = $teamObj->name;
+		$articles = RSS::getFIFAtext();
+		$hasNews = false;
+		foreach ($articles as $article){
+			$title = $article->get_title();
+			$description = $article->get_description();
+			
+			$inTitle = strstr($title,$teamName);
+			$inDescription = strstr($description,$teamName);
+			
+			if($inTitle == true or $inDescription == true){
+				$hasNews = true;
+				break;
+			}
+		}
+
 		
-		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground'))->with('title', $teamObj->name);
+		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground', 'hasNews'))->with('title', $teamObj->name);
 	}
 	
 	function all(){
 		$teams = Team::getAll();
+
+
 		return View::make('team.teams', compact('teams'))->with('title', 'Teams');
 	}
 	
@@ -81,9 +100,9 @@ class TeamController extends BaseController {
 
 	public function graphs($teamID){
 		$outcomes = Team::getWinsLossesTies($teamID);
-		$yearlyGoals = Team::getYearlyGoals($teamID);
-		ksort($yearlyGoals); //Otherwise the graph is all messed up
-		return View::make('team.graphs', compact('outcomes', 'yearlyGoals'));
+		$yearlyGoalsCards = Team::getYearlyGoalsCards($teamID);
+		ksort($yearlyGoalsCards); //Otherwise the graph is all messed up
+		return View::make('team.graphs', compact('outcomes', 'yearlyGoals', 'yearlyGoalsCards'));
 	}
 }
 

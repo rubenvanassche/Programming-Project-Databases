@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		
+
 		<title>{{{ $title or 'NOTITLE' }}} - Coach Center</title>
 		<link href="<?php echo asset('css/bootstrap.min.css'); ?>"  rel="stylesheet" type="text/css">
 		<link href="<?php echo asset('css/flags.css'); ?>"  rel="stylesheet" type="text/css">
@@ -12,7 +12,7 @@
 		<link href="<?php echo asset('css/style.css'); ?>"  rel="stylesheet" type="text/css">
 		@yield('css')
 	</head>
-	
+
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
@@ -26,7 +26,7 @@
 					<a class="navbar-brand" href="<?php echo url('/'); ?>">Coach Center</a>
 				</div>
 				<div class="collapse navbar-collapse">
-					
+
 					{{ Form::open(array('url' => 'search', 'class'=>'navbar-form navbar-right')) }}
 						<div class="form-group">
 							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%;', 'placeholder'=>'Type searchterm here')) }}
@@ -38,9 +38,9 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 							<?php
-							$user = new User;
-							if($user->loggedIn()){
-							?>					
+								$user = new User;
+								if($user->loggedIn()){
+							?>
 								<li><a href="{{url('myProfile')}}">My Profile</a></li>
 								<li><a href="{{ action('BetController@index') }}">Bets</a></li>
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
@@ -50,7 +50,6 @@
 							}else{
 							?>
 								<li><a href="" data-toggle="modal" data-target="#loginModal">Login</a></li>
-
 								<li><a href="{{ action('UserController@register') }}">New Account</a></li>
 							<?php
 							}
@@ -68,13 +67,14 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i></a>
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
-									<li><a href="{{url('myProfile')}}">{{$notification['message']}}</a></li>
-								@endforeach					
+									<?php $id = $notification["id"]?>
+									<li><a href="{{route('notification', array('id'=>$id))}}">{{$notification['message']}}</a></li>
+								@endforeach
 							</ul>
 						</li>
 						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
 						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-					</ul>
+						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
 					<?php
 						}else{
 					?>
@@ -82,20 +82,26 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
 							<ul class="dropdown-menu">
-									<li><a href="{{url('myProfile')}}">No new notifications</a></li>				
+									<li><a href="{{url('myProfile')}}">No new notifications</a></li>
 							</ul>
 						</li>
 						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
 						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
+						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
 					</ul>
 					<?php
 						}
-					}?>
+					}
+					else {?>
+						<ul class="nav navbar-nav navbar-left">
+							<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
+						</ul>
+					<?php } ?>
 
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>
-		
+
 		<div class="container">
 			<?php
 				if(isset($view) == true){
@@ -108,12 +114,12 @@
 				}
 			?>
 		</div><!-- /.container -->
-		
+
 		<!--
 		<div id="bottom" >
 			&copy; CoachCenter 2014
 		</div><!-- End Bottom -->
-			
+
 		<!-- Modal -->
 		<div class="modal fade" id="dasModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -132,9 +138,9 @@
 				</div>
 			</div>
 		</div>
-		
-		
-		
+
+
+
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
@@ -220,4 +226,3 @@
     	</div>
   	</div>
 </div>
-

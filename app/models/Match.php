@@ -135,35 +135,32 @@ class Match {
 
 	public static function getCardCounts($matchID) {
 		//Color 0 is yellow, color 1 is red
+		$hometeam = DB::select("SELECT hometeam_id FROM `match` WHERE id = ?", array($matchID))[0]->hometeam_id;
+		$awayteam = DB::select("SELECT awayteam_id FROM `match` WHERE id = ?", array($matchID))[0]->awayteam_id;
 		$hometeam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 0
 																	AND match_id = ?
-																	AND player_id IN (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
-																					  WHERE playerPerMatch.match_id = ?
-																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = (SELECT hometeam_id FROM `match` WHERE id = ?))",
-										array($matchID, $matchID, $matchID));
+										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																WHERE playerPerTeam.player_id = cards.player_id
+																AND playerPerTeam.team_id = ?)",
+										array($matchID, $hometeam));
 		$hometeam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 1
 																	AND match_id = ?
-																	AND player_id IN (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
-																					  WHERE playerPerMatch.match_id = ?
-																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = (SELECT hometeam_id FROM `match` WHERE id = ?))",
-										array($matchID, $matchID, $matchID));
+										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																WHERE playerPerTeam.player_id = cards.player_id
+																AND playerPerTeam.team_id = ?)",
+										array($matchID, $hometeam));
 		$awayteam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 0
 																	AND match_id = ?
-																	AND player_id IN (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
-																					  WHERE playerPerMatch.match_id = ?
-																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = (SELECT awayteam_id FROM `match` WHERE id = ?))",
-										array($matchID, $matchID, $matchID));
+										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																WHERE playerPerTeam.player_id = cards.player_id
+																AND playerPerTeam.team_id = ?)",
+										array($matchID, $awayteam));
 		$awayteam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 1
 																	AND match_id = ?
-																	AND player_id IN (SELECT playerPerTeam.player_id FROM playerPerTeam, playerPerMatch
-																					  WHERE playerPerMatch.match_id = ?
-																					  AND playerPerTeam.player_id = playerPerMatch.player_id
-																					  AND playerPerTeam.team_id = (SELECT awayteam_id FROM `match` WHERE id = ?))",
-										array($matchID, $matchID, $matchID));
-
+										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																WHERE playerPerTeam.player_id = cards.player_id
+																AND playerPerTeam.team_id = ?)",
+										array($matchID, $awayteam));
 		return array($hometeam_yellows[0]->yellows, $hometeam_reds[0]->reds, $awayteam_yellows[0]->yellows, $awayteam_reds[0]->reds);
 	}
 
@@ -246,26 +243,48 @@ class Match {
   public static function getNextMatches($days) {
     // Returns all matches that will be played in the following $days.
     $results = DB::select('
-      SELECT date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+      SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
       (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
-      FROM `match` WHERE DATEDIFF(`date`, CURDATE()) >= ?', array($days));
+      FROM `match`
+      WHERE DATEDIFF(`date`, CURDATE()) <= ?
+      AND DATEDIFF(`date`, CURDATE()) >= 0', array($days));
 
     return $results;
   }
 
-  public static function getNextUnbettedMatches($days, $user) {
-    // Returns all matches that will be played in the following $days where $user hasn't yet betted on.
-    $results = DB::select('
-      SELECT date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+  public static function getNextUnbetMatches($days, $user) {
+    // Returns all matches that will be played in the following $days where $user hasn't yet bet on.
+    if (Bet::noBets()) {
+      return Match::getNextMatches($days);
+    }
+    else {
+      $results = DB::select('
+        SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
           (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
           FROM `match`, `bet`
-          WHERE DATEDIFF(`date`, CURDATE()) >= ?
+          WHERE DATEDIFF(`date`, CURDATE()) <= ?
+          AND DATEDIFF(`date`, CURDATE()) >= 0
           AND `match`.id NOT IN (
-              SELECT id
-              FROM `bet`
-              WHERE `bet`.user_id = ?)
-      ', array($days, $user->id));
+            SELECT match_id
+            FROM `bet`
+            WHERE `bet`.user_id = ?)
+        ', array($days, $user->id));
 
-    return $results;
+      return $results;
+    }
+  }
+
+  public static function getNextMatchesCustom($days, $user) {
+    $unbet = Match::getNextUnbetMatches($days, $user);
+    $all = Match::getNextMatches($days);
+    foreach($all as $match) {
+      if (Bet::noBets() || in_array($match, $unbet)) {
+        $match->bet = false;
+      }
+      else {
+        $match->bet = true;
+      }
+    }
+    return $all;
   }
 }

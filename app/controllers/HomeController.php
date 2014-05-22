@@ -16,13 +16,13 @@ class HomeController extends BaseController {
     */
 
     public function index(){
-
+        $user = new User;
         //require_once('../lib/autoloader.php');
         $recentMatches = Match::getRecentMatches(5);
-	$futureMatches = Match::getFutureMatches(5);
+	      $futureMatches = Match::getFutureMatches(5);
         $articles = RSS::getFIFAtext();
         $playedMatchInfo = array();
-	$futureMatchInfo = array();
+	      $futureMatchInfo = array();
         $topteams = Team::getTopTeams(5);
         $fifaPoints = Team::getFIFAPoints(true);
 

@@ -12,3 +12,5 @@
 */
 
 Artisan::add(new ProcessBets);
+Artisan::add(new updateDB);
+Artisan::add(new remindUsers);

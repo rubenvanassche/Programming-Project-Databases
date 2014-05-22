@@ -283,26 +283,39 @@ class Team {
 		return array("wins" => $wins, "losses" => $losses, "ties" => $ties);
 	}
 
-	public static function getYearlyGoals( $teamID ) {
+
+
+	public static function getYearlyGoalsCards( $teamID ) {
 		$matches = Team::getMatches( $teamID );
-		$goalStats = array();
+		$stats = array();
 		foreach ($matches as $match) {
 			if (!Match::isPlayed($match->match_id))
 				continue;
 			$matchYear = new DateTime($match->date);
 			$matchYear = $matchYear->format("Y");
-			if (Team::getIDsByName($match->hometeam)[0]->id == $teamID)
+			$cards = Match::getCardCounts($match->match_id);
+			if (Team::getIDsByName($match->hometeam)[0]->id == $teamID) {
+				$yellows = $cards[0];
+				$reds = $cards[1];
 				$score = Match::getScore2($match->match_id)[0];
-			else
+			}
+			else {
+				$yellows = $cards[2];
+				$reds = $cards[3];
 				$score = Match::getScore2($match->match_id)[1];
-			if (array_key_exists($matchYear, $goalStats)) {
-				$goalStats[$matchYear]["totalScore"] = $goalStats[$matchYear]["totalScore"] + $score;
-				$goalStats[$matchYear]["matchCount"] = $goalStats[$matchYear]["matchCount"] + 1;
+			}
+			if (array_key_exists($matchYear, $stats)) {
+				$stats[$matchYear]["totalScore"] = $stats[$matchYear]["totalScore"] + $score;
+				$stats[$matchYear]["totalYellows"] = $stats[$matchYear]["totalYellows"] + $yellows;
+				$stats[$matchYear]["totalReds"] = $stats[$matchYear]["totalReds"] + $reds;
+				$stats[$matchYear]["matchCount"] = $stats[$matchYear]["matchCount"] + 1;
 			}
 			else
-				$goalStats[$matchYear] = array("totalScore" => $score, "matchCount" => 1);
+				$stats[$matchYear] = array("totalScore" => $score, "totalYellows" => $yellows, "totalReds" => $reds, "matchCount" => 1);
 		}
-		return ($goalStats);
+		return ($stats);
 	}
+
+
 
 }

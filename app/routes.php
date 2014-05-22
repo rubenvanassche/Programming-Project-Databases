@@ -32,8 +32,13 @@ Route::get('team', array('as' => 'teamNoIndex', 'uses' => 'TeamController@index'
 Route::get('player/{id}', array('as' => 'player', 'uses' =>'PlayerController@index'));
 
 Route::get('match/{id}', array('as' => 'match', 'uses' =>'MatchController@index'));
+Route::get('upcoming', 'MatchController@betMatches');
 
 Route::get('user/bets', array('as' => 'bets', 'uses' => 'BetController@index'));
+
+Route::get('matches', 'MatchController@matches');
+
+Route::get('notification/{id}', array('as' => 'notification', 'uses' => 'NotificationController@redirect'));
 
 // ------------
 // USER

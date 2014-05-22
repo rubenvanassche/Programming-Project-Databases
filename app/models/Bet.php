@@ -134,6 +134,16 @@ class Bet {
 		}
 		return array('matchCount' => $matchCount, 'betCount' => $totalBetCount);
 	}
+
+  public static function noBets() {
+    $results = DB::select("SELECT * FROM `bet` LIMIT 1");
+    if (count($results) > 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 }
 
 ?>

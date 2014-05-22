@@ -5,12 +5,12 @@ class UserGroup {
 		$result = DB::select('SELECT * FROM userPerUserGroup WHERE user_id = ? AND userGroup_id = ?', array($user_id, $userGroup_id));
 		return $result;
 	}
-	
+
 	public static function ID($name) {
 		$result = DB::select("SELECT id FROM userGroup WHERE name = ?", array($name));
 		return $result[0]->id;
 	}
-	
+
 	public static function invite($user_id, $userGroup_id, $invitedBy_id) {
 		$query = "INSERT INTO `userGroupInvites` (userId, usergroupId, invitedById) VALUES (?, ?, ?)";
         $values = array($user_id, $userGroup_id, $invitedBy_id);
@@ -26,7 +26,7 @@ class UserGroup {
 			return false;
 		}
 	}
-	
+
 	function addUser($userGroupID, $userID){
 		DB::insert("INSERT INTO userPerUserGroup (user_id, userGroup_id) VALUES (?, ?)", array($userID, $userGroupID));
 	}
@@ -44,7 +44,7 @@ class UserGroup {
 	function getGroups(){
 		$result = DB::select('SELECT * FROM userGroup');
 		$user = new User();
-		
+
 		foreach ($result as $r) {
 			$v = $this->isMember($user->ID(), $r->id);
 			if (count($v) > 0) {
@@ -57,10 +57,10 @@ class UserGroup {
 
 		return $result;
 	}
-	
+
 	function getMyInvites() {
 		$user = new User();
-	
+
 		$results = DB::select("
 		SELECT ug.name, inviter.username, notif.created_date, notif.id AS notif_id, ug.id AS ug_id
 		FROM notifications notif
@@ -85,7 +85,7 @@ class UserGroup {
 		// Mark notification as seen.
 		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
 	}
-	
+
 	function getGroupsByUser($id) {
 		$results = DB::select('
 		SELECT *
