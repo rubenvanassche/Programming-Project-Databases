@@ -8,7 +8,7 @@
 		</div>
 		<div class="col-md-12">
 
-			Search: <input name="filter" id="filter-box" value="" maxlength="30" size="30" type="text">
+			Search: <input name="filter" id="filter-box" value="" maxlength="30" size="30" type="text" placeholder="Name or Continent">
     		<input id="filter-clear-button" type="submit" value="Clear"/>
 			<table id="myTable" class="tablesorter">
 				<thead>
