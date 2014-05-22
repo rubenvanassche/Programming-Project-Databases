@@ -59,7 +59,7 @@ class User {
 			// Check if someone has already this username
 			$username = $this->getFacebookUsername($username);
 
-			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username, country) VALUES (?,?,?,?,?,\'None\')', array($firstname, $lastname, $id, $email, $username));
+			DB::insert('INSERT INTO user (firstname, lastname, facebookid, email, username, country_id) VALUES (?,?,?,?,?,\'20\')', array($firstname, $lastname, $id, $email, $username));
 
 			$result = DB::select('SELECT id FROM user WHERE facebookid = ?', array($id));
 			Session::put('userID', $result[0]->id);

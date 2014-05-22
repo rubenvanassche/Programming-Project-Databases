@@ -201,7 +201,7 @@ class UserController extends BaseController {
 				// Start working on this data
 				$data['firstname'] = Input::get('firstname');
 				$data['lastname'] = Input::get('lastname');
-				$data['country'] = Input::get('country');
+				$data['country_id'] = Input::get('country');
 				$data['email'] = Input::get('email');
 				$data['about'] = Input::get('about');
 				$data['age'] = Input::get('age');
@@ -337,44 +337,29 @@ class UserController extends BaseController {
 		return Redirect::back()->withInput(array("loggedOut" => true));
 	}
 
-	function myProfile() {
+	function profile($id='') {
 		$user = new User;
-		$usergroup = new UserGroup;
-		$data['groups'] = $usergroup->getGroupsByUser($user->ID());
-		$data['user'] = $user->get($user->ID());
-		$data['notifications'] = $user->getNotifications($user->ID());
-		$data['invites'] = $usergroup->getMyInvites();
-		$data['profilepicture'] = $user->getPicture($user->ID());
-		$data['text'] = "Hey! Welcome to my awesome profile. I'm not a huge football fan but when if I should take sides... MAUVE-WIT. AAAIGHT.";
-		return View::make('user.myProfile', $data)->with('title', $data['user']->username);
-	}
-
-	function profile($id) {
-		$user = new User;
-		$usergroup = new UserGroup;
-		$data['groups'] = $usergroup->getGroupsByUser($id);
-		$data['user'] = $user->get($id);
-		$data['avatar'] = NULL;
-		$data['text'] = "This is a public profile yo. Watch out before I start throwing pizzas around.";
-		$data['country'] = Country::getCountry($data['user']->country_id);
+		$usergroup = new UserGroup;		
+		if($id == ''){
+			$data['groups'] = $usergroup->getGroupsByUser($user->ID());
+			$data['user'] = $user->get($user->ID());
+			$data['profilepicture'] = $user->getPicture($user->ID());
+			$data['personal'] = true;
+			$data['notifications'] = $user->getNotifications($user->ID());
+			$data['invites'] = $usergroup->getMyInvites();
+		}else{
+			$data['groups'] = $usergroup->getGroupsByUser($id);
+			$data['user'] = $user->get($id);
+			$data['profilepicture'] = $user->getPicture($id);
+			$data['personal'] = false;
+		}
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
+
 
 	function userOverview() {
 		$user = new User;
 		$data['users'] = $user->getAllUsers();
 		return View::make('user.userOverview', $data)->with('title', 'users');
-	}
-
-	function editProfile(){
-			$aboutme = Input::get('aboutme');
-
-			$user = new User;
-			DB::update('UPDATE user SET about = ? WHERE id = ?', array($aboutme, $user->ID()));
-
-			$data['content'] = 'Thank you for personalizing your profile.';
-			$data['title'] = 'Update profile!';
-			$acceptedInput = array("accepted" => true);
-			return Redirect::back()->withInput($acceptedInput);//Go back to match page
 	}
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 14, 2014 at 11:05 PM
+-- Generation Time: May 22, 2014 at 04:40 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -237,7 +237,7 @@ CREATE TABLE `teamPerCompetition` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `facebookid` varchar(30) NOT NULL,
   `username` varchar(100) NOT NULL,
@@ -251,8 +251,10 @@ CREATE TABLE IF NOT EXISTS `user` (
   `betscore` int(11) NOT NULL DEFAULT '0',
   `about` varchar(1024) NOT NULL,
   `recieve_email` tinyint(1) NOT NULL DEFAULT '1',
+  `age` int(3) NOT NULL,
+  `picture` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
