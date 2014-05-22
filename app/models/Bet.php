@@ -26,8 +26,9 @@ class Bet {
      * @param awayteam_reds The predicted number of red cards for the awat team
      */
     public static function add( $match_id, $user_id, $hometeam_score, $awayteam_score, $firstGoal, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds ) {
-        $query = "INSERT INTO `".self::TABLE_BET."` (match_id, user_id, hometeam_score, awayteam_score, first_goal, hometeam_yellows, hometeam_reds, awayteam_yellows, awayteam_reds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $values = array( $match_id, $user_id, $hometeam_score, $awayteam_score, $firstGoal, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds );
+        $query = "INSERT INTO `".self::TABLE_BET."` (match_id, user_id, hometeam_score, awayteam_score, first_goal, hometeam_yellows, hometeam_reds, awayteam_yellows, awayteam_reds, betdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$now = date("Y-m-d- H:i:s");
+        $values = array( $match_id, $user_id, $hometeam_score, $awayteam_score, $firstGoal, $hometeam_yellows, $hometeam_reds, $awayteam_yellows, $awayteam_reds, $now);
         DB::insert( $query, $values );
         //return self::getIDs( ... );
 		return true;
@@ -62,6 +63,11 @@ class Bet {
 														WHERE id = match_id
 														AND date > CURDATE())", array($user_id));
 		return $results;
+	}
+
+	public static function hasBet( $user_id, $match_id ) {
+		$results = DB::select("SELECT id FROM `bet` WHERE user_id = ? AND match_id = ?", array($user_id, $match_id));
+		return !(empty($results));
 	}
 
 	public static function processBets( $match_id ) {
