@@ -28,10 +28,10 @@ class Prediction {
 			$score_away = Match::getScore2($match->id)[1];
 
 			if ($score_home > $score_away) {
-				$hometeam_points += 5;
+				$hometeam_points += 1;
 			}
 			elseif ($score_home < $score_away) {
-				$awayteam_points += 5;
+				$awayteam_points += 1;
 			}
 	 	}
 	
@@ -43,10 +43,10 @@ class Prediction {
 			$score_away = Match::getScore2($match->id)[1];
 
 			if ($score_home > $score_away) {
-				$awayteam_points += 3;
+				$awayteam_points += 0.9;
 			}
 			elseif ($score_home < $score_away) {
-				$hometeam_points += 3;
+				$hometeam_points += 0.9;
 			}
 		}
 
