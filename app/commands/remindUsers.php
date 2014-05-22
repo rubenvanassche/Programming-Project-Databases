@@ -4,21 +4,21 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class updateDB extends Command {
+class remindUsers extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'updateDB';
+	protected $name = 'remindUsers';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Calls the crawler\'s updateDB method.';
+	protected $description = 'Reminds users to bet on the matches.';
 
 	/**
 	 * Create a new command instance.
@@ -37,8 +37,9 @@ class updateDB extends Command {
 	 */
 	public function fire()
 	{
-		// Call the update functions.
-		CrawlerController::updateDB();
+		$days = $this->argument('days');
+		Notifications::sendReminders($days);
+		print("done!\n");
 	}
 
 	/**
@@ -48,7 +49,9 @@ class updateDB extends Command {
 	 */
 	protected function getArguments()
 	{
-		return array();
+		return array(
+			array('days', InputArgument::REQUIRED, 'The amount of days we need to check in the future (May be equal to the interval the cronjob runs).'),
+		);
 	}
 
 	/**

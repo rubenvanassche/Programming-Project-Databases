@@ -13,7 +13,7 @@ class CrawlerController extends BaseController {
 
     /**
      * @brief Request the page.
-     * @details Sometimes, the site is too busy, but you can then send another 
+     * @details Sometimes, the site is too busy, but you can then send another
      * request again.
      *
      * @param url The url to be requested.
@@ -43,9 +43,9 @@ class CrawlerController extends BaseController {
 
     /**
      * @brief Generator for parsing all the country data from site.
-     * @details A complete list can be found at 
+     * @details A complete list can be found at
      * http://www.cloford.com/resources/codes/index.htm
-     * 
+     *
      * @return An associative array with the following values mapped:
      *          "name"       => $name,
      *          "continent"     => $continent,
@@ -116,7 +116,7 @@ class CrawlerController extends BaseController {
 
     /**
      * @brief Get all the desired data from the player page.
-     * @details An example of the player page can be found at 
+     * @details An example of the player page can be found at
      * http://int.soccerway.com/players/iker-casillas-fernandez/317/
      *
      * @param url The url of the player page.
@@ -170,7 +170,7 @@ class CrawlerController extends BaseController {
 
     /**
      * @brief Get all the desired data from the coach page.
-     * @details An example of the coach page can be found at 
+     * @details An example of the coach page can be found at
      * http://int.soccerway.com/coaches/vicente-del-bosque/130179/
      *
      * @param url The url of the coach page.
@@ -243,9 +243,9 @@ class CrawlerController extends BaseController {
         // now get all the participating players
         $players_data = array();
 
-        // squad < 5 because of (1) Goalkeeper, (2) Defender, (3) Midfielder, 
-        // (4) Attacker. (We don't want to include the coach, and besides those 
-        // players are always available (e.g. no goalkeeper or midfielder is 
+        // squad < 5 because of (1) Goalkeeper, (2) Defender, (3) Midfielder,
+        // (4) Attacker. (We don't want to include the coach, and besides those
+        // players are always available (e.g. no goalkeeper or midfielder is
         // against the rules of football).
         for ( $index = 1; $index < 5; $index++ ) {
             // query for player href
@@ -272,9 +272,9 @@ class CrawlerController extends BaseController {
     }
 
     /**
-     * @brief Generator for parsing all the international teams from the 
+     * @brief Generator for parsing all the international teams from the
      * official FIFA participant list.
-     * @details A complete list can be found at 
+     * @details A complete list can be found at
      * http://int.soccerway.com/teams/rankings/fifa/
      *
      * @return An associative array with the following values mapped:
@@ -392,10 +392,10 @@ class CrawlerController extends BaseController {
      *      "awayteam"  => $awayteam,
      *      "goals"     => $goals
      *
-     *  Where as $goals is an array of associative arrays with the following 
+     *  Where as $goals is an array of associative arrays with the following
      *  values mapped:
      *      "team"          => $hometeam or $awayteam,
-     *      "player data"   => $player_data, 
+     *      "player data"   => $player_data,
      */
     public static function match_data( $url ) {
         // load document
@@ -433,7 +433,7 @@ class CrawlerController extends BaseController {
         $awayteam = $heading->getNode(2);
         $awayteam = ( empty( $awayteam ) ) ? NULL : trim( $awayteam->textContent );
 
-        // query for goals, it seems quite strange, but it's the only way this 
+        // query for goals, it seems quite strange, but it's the only way this
         // works
         $xpath = "//div[contains(@class, block_match_goals)]/div/table[contains(@class, matches)]";
 
@@ -584,7 +584,7 @@ class CrawlerController extends BaseController {
             "matches data"  => $matches_data,
         );
     }
-    
+
     /**
      * @brief Update the competition.
      *
@@ -666,6 +666,12 @@ class CrawlerController extends BaseController {
         } // end foreach
 
         return;
+    }
+
+    public static function updateDB() {
+      // Updates matches/teams
+      print("Updating matches\n");
+      print("Updating teams\n");
     }
 
 #    /**
