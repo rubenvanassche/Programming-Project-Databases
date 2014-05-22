@@ -13,7 +13,7 @@
 		@foreach ($futureBets as $bet)
 			<div class="panel panel-primary" style="margin-top:10px;">
 				<div class="panel-heading">
-					<h3 class="panel-title"><b>{{$bet->hometeam_score}}</b> {{$futureBetsMatches[$matchIndex]->hometeam}} - {{$futureBetsMatches[$matchIndex]->awayteam}} <b>{{$bet->awayteam_score}}</b><span class="pull-right">{{$futureBetsMatches[$matchIndex]->date}}</span></h3>
+					<h3 class="panel-title"><b>{{$bet->hometeam_score}}</b> <a href="{{route('match', array('id'=>$bet->match_id))}}">{{$futureBetsMatches[$matchIndex]->hometeam}} - {{$futureBetsMatches[$matchIndex]->awayteam}} </a> <b>{{$bet->awayteam_score}}</b><span class="pull-right">{{$futureBetsMatches[$matchIndex]->date}}</span></h3>
 				</div>
 				<div class="panel-body">
 					<p><a href="{{ route('team', array('hometeam'=>urlencode($futureBetsMatches[$matchIndex]->hometeam_id))) }}">{{$futureBetsMatches[$matchIndex]->hometeam}}</a>: <?php if ($bet->hometeam_reds != -1)echo $bet->hometeam_reds; else echo "0"; ?><img style="height:16px; margin-bottom:7px;" src="{{asset('img/redcard.png')}}"/> <?php if ($bet->hometeam_yellows != -1)echo $bet->hometeam_yellows; else echo "0"; ?><img style="height:16px; margin-bottom:7px;" src="{{asset('img/yellowcard.png')}}"/></p>
@@ -32,7 +32,7 @@
       	@foreach ($pastBets as $bet)
 			<div class="panel panel-primary" style="margin-top:10px;">
 				<div class="panel-heading">
-					<h3 class="panel-title"><b>{{$bet->hometeam_score}}</b> {{$pastBetsMatches[$matchIndex]->hometeam}} - {{$pastBetsMatches[$matchIndex]->awayteam}} <b>{{$bet->awayteam_score}}</b><span class="pull-right">{{$pastBetsMatches[$matchIndex]->date}}</span></h3>
+					<h3 class="panel-title"><b>{{$bet->hometeam_score}}</b> <a href="{{route('match', array('id'=>$bet->match_id))}}">{{$pastBetsMatches[$matchIndex]->hometeam}} - {{$pastBetsMatches[$matchIndex]->awayteam}} </a><b>{{$bet->awayteam_score}}</b><span class="pull-right">{{$pastBetsMatches[$matchIndex]->date}}</span></h3>
 				</div>
 				<div class="panel-body">
 					<p><a href="{{ route('team', array('hometeam'=>urlencode($pastBetsMatches[$matchIndex]->hometeam_id))) }}">{{$pastBetsMatches[$matchIndex]->hometeam}}</a>: <?php if ($bet->hometeam_reds != -1)echo $bet->hometeam_reds; else echo "0"; ?><img style="height:16px; margin-bottom:7px;" src="{{asset('img/redcard.png')}}"/> <?php if ($bet->hometeam_yellows != -1)echo $bet->hometeam_yellows; else echo "0"; ?><img style="height:16px; margin-bottom:7px;" src="{{asset('img/yellowcard.png')}}"/></p>
