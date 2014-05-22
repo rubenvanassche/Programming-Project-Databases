@@ -53,7 +53,9 @@ class UsergroupController extends BaseController {
 		$data['users'] = $usergroup->getUsers($id);
 		$data['title'] = $usergroup->getName($id);
 		$data['id'] = $id;
+		$data['timeline'] = $usergroup->timeline($id);
 
+		//print_r($usergroup->timeline($id));
 
 		return View::make('usergroup.usergroup', $data);
 	}

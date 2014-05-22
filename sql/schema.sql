@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 22, 2014 at 04:40 PM
+-- Generation Time: May 22, 2014 at 05:37 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -267,8 +267,9 @@ CREATE TABLE `userGroup` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   `private` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -281,8 +282,9 @@ CREATE TABLE `userGroupInvites` (
   `userId` int(11) NOT NULL,
   `usergroupId` int(11) NOT NULL,
   `invitedById` int(11) NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -293,6 +295,7 @@ CREATE TABLE `userGroupInvites` (
 CREATE TABLE `userPerUserGroup` (
   `user_id` int(11) NOT NULL,
   `userGroup_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`user_id`,`userGroup_id`),
   KEY `userGroup_id` (`userGroup_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
