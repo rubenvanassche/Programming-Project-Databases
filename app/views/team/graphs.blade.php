@@ -77,9 +77,7 @@
 		        title: 'Foobar',
 		        width: 600,
 		        height: 400,
-				'tooltip' : {
-				  trigger: 'none'
-				},
+				colors: ['#A5F2A6', '#1FDB22', '#126614']
 			}
 		});
 		
