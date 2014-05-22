@@ -133,8 +133,6 @@ class Prediction {
 		$hometeam_points += ($fifapoints_home->fifapoints / 1000);
 		$awayteam_points += ($fifapoints_away->fifapoints / 1000);
 
-		print($hometeam_points . " " . $awayteam_points);
-
 	
 		// Make up the chances
 
