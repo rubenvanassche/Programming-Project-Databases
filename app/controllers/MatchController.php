@@ -9,11 +9,20 @@ class MatchController extends BaseController {
 		*/
 		$user = new User;
 		$data['match'] = Match::get($matchID);
-		$data['bet'] = Match::isInFuture($matchID) && $user->loggedIn(); /*TODO and user has not bet on this match yet*/
+		$data['inFuture'] = Match::isInFuture($matchID);
+		$data['bet'] = $data['inFuture'] && $user->loggedIn() && !(Bet::hasBet($user->ID(), $matchID));
 		$data['goalshometeam'] = Match::goals($matchID, $data['match']->hometeam_id);
 		$data['cardshometeam'] = Match::cards($matchID, $data['match']->hometeam_id);
 		$data['goalsawayteam'] = Match::goals($matchID, $data['match']->awayteam_id);
 		$data['cardsawayteam'] = Match::cards($matchID, $data['match']->awayteam_id);
+		if ($data['inFuture']) {
+			$data['predictedScores'] = Prediction::predictScore($matchID);
+			$data['predictedOutcome'] = Prediction::predictOutcome($matchID);
+		}
+		else {
+			$data['predictedScores'] = array(0, 0); //Prevents crash
+			$data['predictedOutcome'] = 0;
+		}
 		return View::make('match.match',$data)->with('title', 'Match');
 	}
 

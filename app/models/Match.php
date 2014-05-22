@@ -221,7 +221,7 @@ class Match {
     }
 
 	public static function isInFuture($matchID) {
-		$now = date('y-m-d h:i:s', time());;
+		$now = date('Y-m-d h:i:s', time());;
 		//Convert sql datetime to php datetime
 		$match = Match::getMatchByID($matchID)[0];
 		$matchDateTime = new DateTime($match->date);

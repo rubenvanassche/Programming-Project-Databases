@@ -64,6 +64,11 @@ class Bet {
 		return $results;
 	}
 
+	public static function hasBet( $user_id, $match_id ) {
+		$results = DB::select("SELECT id FROM `bet` WHERE user_id = ? AND match_id = ?", array($user_id, $match_id));
+		return !(empty($results));
+	}
+
 	public static function processBets( $match_id ) {
 		$firstBet = DB::select("SELECT evaluated FROM bet WHERE match_id = ? LIMIT 1", array($match_id));
 		if ($firstBet == NULL || $firstBet[0]->evaluated == 1)

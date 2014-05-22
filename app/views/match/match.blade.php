@@ -23,7 +23,11 @@
 			<h1>{{ $match->hometeam }}</h1>
 		</div>
 		<div class="col-md-2" style="text-align:center;">
+			@if ($inFuture)
+			<h1>? - ?</h1>
+			@else
 			<h1>{{ $match->hometeam_score }} - {{ $match->awayteam_score }}</h1>
+			@endif
 		</div>
 		<div class="col-md-4">
 			<h1 class="pull-right">{{ $match->awayteam }}</h1>
@@ -41,6 +45,12 @@
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
 			@endif
 			<p>{{$match->date}}</p>
+			@if($inFuture)
+			<p>Predictions:</p>
+			<p><h2>{{ $predictedScores[0] }} - {{ $predictedScores[1] }}</h2></p>
+		    <div id="chart_div" style="width: 500px; height: 150px;"></div>
+			@endif
+
 		</div>
 		<div class="col-md-5">
 			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
@@ -165,13 +175,13 @@
 
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamScore', 'Home team score') }}</label>
+					<label>{{ Form::label('hometeamScore', 'Home team score (we predict: ' . $predictedScores[0] . ')') }}</label>
 					{{ Form::text('hometeamScore', Input::old('hometeamScore'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamScore', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamScore', 'Away team score') }}</label>
+					<label>{{ Form::label('awayteamScore', 'Away team score (we predict: ' . $predictedScores[1] . ')') }}</label>
 					{{ Form::text('awayteamScore', Input::old('awayteamScore'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamScore', '<label class="error">:message</label>') }}
 				</div>
@@ -247,4 +257,28 @@ $(document).ready(function () {
     }
 });
 </script>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+      ["Match", "{{$match->hometeam}}", {'role': 'tooltip'}, {'role': 'annotation'}, "{{$match->awayteam}}", {'role': 'tooltip'}, {'role': 'annotation'}],
+      [2, {{$predictedOutcome}}, "{{100 * $predictedOutcome}}%", "{{$match->hometeam}}",  {{1 - $predictedOutcome}}, "{{100*(1 - $predictedOutcome)}}%", "{{$match->awayteam}}"]
+    ]);
+
+    var options = {
+      title: '',
+      vAxis: {title: '', baselineColor: '#FFFFFF',gridlines: {color: 'transparent'} , ticks: []},
+	  hAxis: {baselineColor: '#FFFFFF', ticks: []},
+      legend: {position: 'none'},
+	  isStacked: true
+    };
+
+    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }
+</script>
+
 @stop
