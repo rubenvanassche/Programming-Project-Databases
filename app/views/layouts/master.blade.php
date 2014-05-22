@@ -41,7 +41,7 @@
 								$user = new User;
 								if($user->loggedIn()){
 							?>
-								<li><a href="{{url('myProfile')}}">My Profile</a></li>
+								<li><a href="{{url('profile')}}">My Profile</a></li>
 								<li><a href="{{ action('BetController@index') }}">Bets</a></li>
 								<li><a href="{{ action('UserController@account') }}">Preferences</a></li>
 								<li class="divider"></li>
