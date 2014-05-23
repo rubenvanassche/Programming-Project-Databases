@@ -91,14 +91,17 @@ class CrawlerController extends BaseController {
                 if ("name" == $key) {
                     // get country name
                     $name = $row->childNodes->item(4);
+
                     $country_data[$key] = empty($name) ? NULL : trim($name->textContent);
                 } else if ("continent" == $key) {
                     // get continent name
                     $continent = $row->childNodes->item(0);
+
                     $country_data[$key] = empty($continent) ? NULL : trim($continent->textContent);
                 } else if ("abbreviation" == $key) {
                     // get abbreviation
                     $abbreviation = $row->childNodes->item(12);
+
                     $country_data[$key] = empty($abbreviation) ? NULL : trim($abbreviation->textContent);
                 } else {
                     // other data
@@ -116,10 +119,78 @@ class CrawlerController extends BaseController {
     }
 
     /**
+     * @brief Get all the desired data from the player page.
+     * @details An example of the player page can be found at
+     * http://int.soccerway.com/players/iker-casillas-fernandez/317/
+     *
+     * @param url The url of the player page.
+     * @param keys Array of keys if you want to parse specific information. 
+     * Available keys are:
+     *
+     *      - first name
+     *      - last name
+     *      - position
+     *
+     * Use empty array or NULL to catch'em all.
+     *
+     * @return Associative array with the keys mapped to a value.
+     */
+    public static function player_data($url, $keys=array()) {
+        // all data in case no keys were given
+        if (empty($keys)) $keys = array("first name", "last name", "position");
+
+        // load document
+        $doc = self::request( $url );
+        if (empty($doc)) return self::empty_data($keys);    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // parse player info from players passport
+        $player_data = array();
+        foreach ($keys as $key) {
+            $passport = $data->filterXPath("//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd");
+
+            if ("first name" == $key) {
+                // get first name
+                $first_name = $passport->getNode(0);
+
+                $player_data[$key] = empty($first_name) ? NULL : trim($first_name->textContent);
+            } else if ("last name" == $key) {
+                // get last name
+                $last_name = $passport->getNode(1);
+
+                $player_data[$key] = empty($last_name) ? NULL : trim($last_name->textContent);
+            } else if ("position" == $key) {
+                // get players position
+                $position = $passport->getNode(7);
+
+                $position = empty($position) ? NULL : strtolower(trim($position->textContent));
+
+                if (in_array($position, array("goalkeeper", "defender", "midfielder", "attacker"))) {
+                    $player_data[$key] = $position;
+                } else {
+                    $position = $passport->getNode(6);
+
+                    $position = 
+                    $player_data[$key] = empty($position) ? NULL : strtolower(trim($position->textContent));
+                } // end if-else
+            } else {
+                // other data
+                $player_data[$key] = NULL;
+            } // end if-else
+        } // end foreach
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        var_dump($player_data);
+        return $player_data;
+    }
+
+    /**
      * @brief Update the countries from database.
      */
     public static function update_countries() {
-        // use generator (so it'll do it really fast)
         foreach ( self::countries_generator() as $country_data ) {
             $name = $country_data["name"];
             $continent = $country_data["continent"];
@@ -135,60 +206,6 @@ class CrawlerController extends BaseController {
         } // end foreach
 
         return;
-    }
-
-    /**
-     * @brief Get all the desired data from the player page.
-     * @details An example of the player page can be found at
-     * http://int.soccerway.com/players/iker-casillas-fernandez/317/
-     *
-     * @param url The url of the player page.
-     *
-     * @return An associative array with the following values mapped:
-     *      "first name"    => $first_name,
-     *      "last name"     => $last_name,
-     *      "position"      => $position,
-     */
-    public static function player_data( $url ) {
-        // load document
-        $doc = self::request( $url );
-        if ( empty( $doc ) ) return array();    // request failed
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-
-        // query for first name
-        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]";
-
-        $first_name = $data->filterXPath( $xpath )->getNode(0);
-        $first_name = ( empty( $first_name ) ) ? NULL : trim( $first_name->textContent );
-
-        // query for last name
-        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]";
-
-        $last_name = $data->filterXPath( $xpath )->getNode(0);
-        $last_name = ( empty( $last_name ) ) ? NULL : trim( $last_name->textContent );
-
-        // query for players position
-        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[8]";
-
-        $position = $data->filterXPath( $xpath )->getNode(0);
-        $position = ( empty( $position ) ) ? NULL : strtolower( trim( $position->textContent ) );
-
-        if (! in_array( $position, array("goalkeeper", "defender", "midfielder", "attacker") ) ) {
-            $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[7]";
-
-            $position = $data->filterXPath( $xpath )->getNode(0);
-            $position = ( empty( $position ) ) ? NULL : strtolower( trim( $position->textContent ) );
-        } // end if
-
-        // clear cache to avoid memory exhausting
-        $data->clear();
-        return array(
-            "first name"    => $first_name,
-            "last name"     => $last_name,
-            "position"      => $position,
-        );
     }
 
     /**
