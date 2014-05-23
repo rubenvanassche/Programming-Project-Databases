@@ -38,6 +38,7 @@ class MatchController extends BaseController {
 
 	public static function betMatches() {
 		$user = new User;
+		$data['loggedIn'] = $user->loggedIn();
 		if ($user->loggedIn()) {
 			$matches = Match::getNextMatchesCustom(999, $user->get($user->ID()));
 			$data['matches'] = $matches;

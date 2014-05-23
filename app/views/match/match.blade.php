@@ -13,8 +13,10 @@
 
 
 	
-
-
+	<?php $autoOpenBetModal = 0;
+		  if (isset($_GET["openBet"]) && $bet)
+			$autoOpenBetModal = true;
+	?>
 	<div class="row">
 		<div class="col-md-1" style="margin-top:20px;">
 			<img style="width:100%;" src="<?php echo Team::getTeamImageURL($match->hometeam); ?>" />
@@ -246,9 +248,12 @@
 @stop
 
 @section('javascript')
-<!-- Open bet modal if input contains 'autoOpenModal', open accept modal if input contains 'accepted' -->
+<!-- Open bet modal if input contains 'autoOpenModal' or URL openBet, open accept modal if input contains 'accepted' -->
 <script>
 $(document).ready(function () {
+    if ({{$autoOpenBetModal}}) {
+        $('#betModal').modal('show');
+    }
     if ({{ Input::old('autoOpenBetModal', 'false') }}) {
         $('#betModal').modal('show');
     }
