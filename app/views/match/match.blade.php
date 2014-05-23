@@ -50,7 +50,14 @@
 			@if($inFuture)
 			<p>Predictions:</p>
 			<p><h2>{{ $predictedScores[0] }} - {{ $predictedScores[1] }}</h2></p>
-		    <div id="chart_div" style="width: 500px; height: 150px;"></div>
+			<div class="progress">	
+			  <div class="progress-bar progress-bar-success" style="width: {{100 * $predictedOutcome}}%">
+				<span>{{$match->hometeam}}: {{100 * $predictedOutcome}}%</span>
+			  </div>
+			  <div class="progress-bar progress-bar-warning" style="width: {{100 * (1 - $predictedOutcome)}}%">
+				<span>{{$match->awayteam}}: {{100 * (1 - $predictedOutcome)}}%</span>
+			  </div>
+			</div>
 			@endif
 
 		</div>
@@ -263,27 +270,5 @@ $(document).ready(function () {
 });
 </script>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-  google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ["Match", "{{$match->hometeam}}", {'role': 'tooltip'}, {'role': 'annotation'}, "{{$match->awayteam}}", {'role': 'tooltip'}, {'role': 'annotation'}],
-      [2, {{$predictedOutcome}}, "{{100 * $predictedOutcome}}%", "{{$match->hometeam}}",  {{1 - $predictedOutcome}}, "{{100*(1 - $predictedOutcome)}}%", "{{$match->awayteam}}"]
-    ]);
-
-    var options = {
-      title: '',
-      vAxis: {title: '', baselineColor: '#FFFFFF',gridlines: {color: 'transparent'} , ticks: []},
-	  hAxis: {baselineColor: '#FFFFFF', ticks: []},
-      legend: {position: 'none'},
-	  isStacked: true
-    };
-
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-</script>
 
 @stop
