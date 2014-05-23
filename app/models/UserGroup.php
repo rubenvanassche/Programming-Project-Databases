@@ -33,7 +33,7 @@ class UserGroup {
 		}
 	}
 
-	function addUser($userGroupID, $userID){
+	public static function addUser($userGroupID, $userID){
 		$date = date('Y-m-d h:i:s',strtotime(date('Y-m-d H:i:s')) + 2); // plus 2 seoncds for right display in timeline
 		DB::insert("INSERT INTO userPerUserGroup (user_id, userGroup_id, created) VALUES (?, ?, ?)", array($userID, $userGroupID, $date));
 	}
@@ -65,24 +65,25 @@ class UserGroup {
 		return $result;
 	}
 
-	function getMyInvites() {
+	function getUsersInvites($user_id) {
 		$user = new User();
 
 		$results = DB::select("
 		SELECT ug.name, inviter.username, notif.created_date, notif.id AS notif_id, ug.id AS ug_id
 		FROM notifications notif
-		INNER JOIN userGroup ug ON notif.object_id = ug.id
+		INNER JOIN userGroupInvites ugi ON notif.object_id = ugi.id
 		INNER JOIN user inviter ON notif.actor_id = inviter.id
+    INNER JOIN userGroup ug ON ugi.usergroupId = ug.id
 		WHERE notif.subject_id = ?
-		AND notif.status = 'unseen'", array($user->ID()));
+		AND notif.status = 'unseen'", array($user_id));
 
 		return $results;
 	}
 
 	function getInvites($userGroup_id){
 		$result = DB::select("SELECT
-		(SELECT username FROM user WHERE id = userGroupInvites.invitedById) as invitee,
-		(SELECT username FROM user WHERE id = userGroupInvites.userId) as inviter,
+		(SELECT username FROM user WHERE id = userGroupInvites.invitedById) as inviter,
+		(SELECT username FROM user WHERE id = userGroupInvites.userId) as invitee,
 		 created, invitedById, userId FROM userGroupInvites WHERE usergroupId = ?", array($userGroup_id));
 		return $result;
 	}

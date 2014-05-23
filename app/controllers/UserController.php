@@ -350,7 +350,7 @@ class UserController extends BaseController {
 			$data['profilepicture'] = $user->getPicture($user->ID());
 			$data['personal'] = true;
 			$data['notifications'] = $user->getNotifications($user->ID());
-			$data['invites'] = $usergroup->getMyInvites();
+			$data['invites'] = $usergroup->getUsersInvites($user->ID());
 		}else{
 			$data['groups'] = $usergroup->getGroupsByUser($id);
 			$data['user'] = $user->get($id);
@@ -360,10 +360,24 @@ class UserController extends BaseController {
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
 
-
 	function userOverview() {
 		$user = new User;
 		$data['users'] = $user->getAllUsers();
 		return View::make('user.userOverview', $data)->with('title', 'users');
+	}
+
+	public static function acceptInvite($notif_id, $ug_id) {
+		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
+
+		$user = new User;
+		UserGroup::addUser($ug_id, $user->ID());
+
+		return UsergroupController::usergroup($ug_id);
+	}
+
+	public static function declineInvite($notif_id) {
+		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
+
+		return UserController::profile();
 	}
 }

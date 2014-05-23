@@ -53,7 +53,7 @@ class UsergroupController extends BaseController {
     	}
 	}
 
-	function usergroup($id){
+	public static function usergroup($id){
 		$usergroup = new UserGroup;
 		$data['users'] = $usergroup->getUsers($id);
 		$data['title'] = $usergroup->getName($id);
