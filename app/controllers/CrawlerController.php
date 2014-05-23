@@ -40,49 +40,74 @@ class CrawlerController extends BaseController {
     }
 
     /**
+     * @brief Generate empty set of data.
+     *
+     * @param keys Array of keys.
+     *
+     * @return Associative array where each key is mapped to NULL.
+     */
+    public static function empty_data($keys) {
+        $data = array();
+        foreach ($keys as $key) {
+            $data[$key] = NULL;
+        } // end foreach
+        return $data;
+    }
+
+    /**
      * @brief Generator for parsing all the country data from site.
      * @details A complete list can be found at
      * http://www.cloford.com/resources/codes/index.htm
      *
-     * @return An associative array with the following values mapped:
-     *          "name"       => $name,
-     *          "continent"     => $continent,
-     *          "abbreviation"  => $abbreviation,
+     * @param keys What you want to parse, the following keys are available for 
+     * use:
+     *
+     *      - name
+     *      - continent
+     *      - abbreviation
+     *
+     * Use empty (array or NULL) to catch'em all.
+     *
+     * @return An associative array with the given keys mapped to the parsed value.
      */
-    public static function countries_generator() {
+    public static function countries_data($keys=array()) {
+        // all data in case no keys were given
+        if (empty($keys)) $keys = array("name", "continent", "abbreviation");
+
         // load document
-        $doc = self::request( "http://www.cloford.com/resources/codes/index.htm" );
-        if ( empty( $doc ) ) return;    // request failed
+        $doc = self::request("http://www.cloford.com/resources/codes/index.htm");
+        if (empty($doc)) { yield self::empty_data($keys); return; } // request failed
 
         $data = new Crawler();
         $data->addDocument( $doc );
 
-        foreach ( $data->filterXPath( "//table[@class=\"outlinetable\"]/tr/td/.." ) as $row ) {
-            // skip empty rows
-            if ( 0 == $row->childNodes->length ) continue;
+        // parse country from table
+        foreach ($data->filterXPath("//table[@class=\"outlinetable\"]/tr/td/..") as $row) {
+            // skip short rows
+            if (12 > $row->childNodes->length) continue;
 
-            // get the country name
-            $name = $row->childNodes->item(4);
-            if ( empty( $name ) ) continue;
-            $name = trim( $name->textContent );
+            $country_data = array();
+            foreach ($keys as $key) {
+                if ("name" == $key) {
+                    // get country name
+                    $name = $row->childNodes->item(4);
+                    $country_data[$key] = empty($name) ? NULL : trim($name->textContent);
+                } else if ("continent" == $key) {
+                    // get continent name
+                    $continent = $row->childNodes->item(0);
+                    $country_data[$key] = empty($continent) ? NULL : trim($continent->textContent);
+                } else if ("abbreviation" == $key) {
+                    // get abbreviation
+                    $abbreviation = $row->childNodes->item(12);
+                    $country_data[$key] = empty($abbreviation) ? NULL : trim($abbreviation->textContent);
+                } else {
+                    // other data
+                    $country_data[$key] = NULL;
+                } // end if-else
+            } // end foreach
 
-            // get the continent and its id
-            $continent = $row->childNodes->item(0);
-            if ( empty( $continent ) ) continue;
-            $continent = trim( $continent->textContent );
-
-            // get the abbreviation
-            $abbreviation = $row->childNodes->item(12);
-            if ( empty( $abbreviation ) ) continue;
-            $abbreviation = trim( $abbreviation->textContent );
-
-            // yield data
-            yield array(
-                "name"          => $name,
-                "continent"     => $continent,
-                "abbreviation"  => $abbreviation,
-            );
-
+            // yield country data, because the list may be too long
+            yield $country_data;
         } // end foreach
 
         // clear cache to avoid memory exhausting
