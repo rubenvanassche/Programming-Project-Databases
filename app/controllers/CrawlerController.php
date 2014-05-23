@@ -492,7 +492,7 @@ class CrawlerController extends BaseController {
         if (empty($doc)) return self::empty_data($keys);    // request failed
 
         $data = new Crawler();
-        $data->addDocument( $doc );
+        $data->addDocument($doc);
 
         // parse competition data
         $competition_data = array();
@@ -551,18 +551,20 @@ class CrawlerController extends BaseController {
      * @brief Update the countries from database.
      */
     public static function update_countries() {
-        foreach ( self::countries_generator() as $country_data ) {
+        foreach (self::countries_data() as $country_data) {
             $name = $country_data["name"];
             $continent = $country_data["continent"];
             $abbreviation = $country_data["abbreviation"];
 
-            // need continent id
-            $ids = Continent::getIDsByName( $continent );
+            // add continent if necessary
+            $ids = Continent::getIDsByName($continent);
+            if (empty($ids)) $ids = Continent::add($continent);
+            $continent_id = $ids[0]->id;
 
-            $continent_id = ( empty( $ids ) ) ? Continent::add( $continent )[0]->id : $ids[0]->id;
-
-            // okay, add country if not yet added
-            if ( empty( Country::getIDsByName( $name ) ) ) Country::add( $name, $continent_id, $abbreviation );
+            // add country if necessary
+            $ids = Country::getIDsByName($name);
+            if (empty($ids)) $ids = Country::add($name, $continent_id, $abbreviation);
+            $country_id = $ids[0]->id;
         } // end foreach
 
         return;
