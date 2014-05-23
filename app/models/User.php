@@ -253,7 +253,6 @@ class User {
 			$value = Hash::make($value);
 		}
 
-		$field = mysql_real_escape_string($field);
 		$results = DB::update("UPDATE user SET $field = ? WHERE id = ?", array($value, $userID) );
 
 		if($results == 1){
