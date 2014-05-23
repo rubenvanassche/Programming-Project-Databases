@@ -498,7 +498,8 @@ class CrawlerController extends BaseController {
 
                     $players = $row->childNodes->item(2)->getElementsByTagName('a');
 
-                    $in_player = "http://int.soccerway.com/".$players->item(0)->getAttribute("href");
+                    $in_player = $players->item(0);
+                    $in_player = empty($in_player) ? NULL : "http://int.soccerway.com/".$in_player->getAttribute("href");
                     $out_player = $players->item(1);
                     if (!empty($out_player)) $out_player = "http://int.soccerway.com/".$out_player->getAttribute("href");
 
@@ -728,7 +729,7 @@ class CrawlerController extends BaseController {
 
         foreach ($matches as $match_url) {
             // get match data
-            $match_data = self::match_data($match_url);
+            $match_data = self::match_data($match_url, array("date", "kick-off", "scoretime", "hometeam", "awayteam"));
 
             // get match id
             $hometeam = $match_data["hometeam"];
@@ -751,6 +752,7 @@ class CrawlerController extends BaseController {
             if (empty($ids)) $ids = Match::add($hometeam_id, $awayteam_id, $competition_id, $date);
             $match_id = $ids[0]->id;
 
+/*
             // okay, let's update the lineups
             foreach (array("hometeam", "awayteam") as $team) {
                 $team_id = "hometeam" == $team ? $hometeam_id : $awayteam_id;
@@ -841,6 +843,7 @@ class CrawlerController extends BaseController {
                     Match::substitute($player_id1, $time);
                 } // end foreach
             } // end foreach
+*/
         } // end foreach
     }
 
@@ -851,8 +854,35 @@ class CrawlerController extends BaseController {
         // first update FIFA ranking
         //self::update_teams();
 
-        // update some competitions
+        /* WORLD CUP */
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/", "group");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2010-south-africa/group-stage/r10532/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2006-germany/group-stage/r2820/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2002-korea-rep-japan/group-stage/r741/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1998-france/group-stage/r747/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1994-usa/group-stage/r753/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1990-italy/group-stage/r759/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1986-mexico/group-stage/r765/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1982-spain/group-stage-1/r771/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1982-spain/group-stage-2/r772/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1978-argentina/group-stage-1/r776/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1978-argentina/group-stage-2/r777/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1974-germany/group-stage-1/r780/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1974-germany/group-stage-2/r781/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1970-mexico/group-stage/r784/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1966-england/group-stage/r789/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1962-chile/group-stage/r794/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1958-sweden/group-stage/r799/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1958-sweden/group-stage-play-offs/r804/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1954-switzerland/group-stage/r805/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1954-switzerland/group-stage-play-offs/r806/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1938-france/round-1/r813/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1938-france/round-1-replays/r816/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1934-italy/s613/", "final");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1930-uruguay/group-stage/r826/");
+
+        /* */
         return;
     }
 
