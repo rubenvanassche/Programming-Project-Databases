@@ -483,7 +483,7 @@ class CrawlerController extends BaseController {
                         if (preg_match("/G.png$/", $src)) $goals[] = $time;
                     } // end foreach
 
-                    $team_lineups[] = array($url, $yellows, $reds, $goals);
+                    $team_lineups[] = array($url, $goals, $yellows, $reds);
                 } // end foreach
 
                 $match_data[$key] = $team_lineups;
@@ -519,7 +519,7 @@ class CrawlerController extends BaseController {
                         if (preg_match("/G.png$/", $src)) $goals[] = $time;
                     } // end foreach
 
-                    $team_substitutes[] = array($in_player, $out_player, $subs_time, $yellows, $reds, $goals);
+                    $team_substitutes[] = array($in_player, $out_player, $subs_time, $goals, $yellows, $reds);
                 } // end foreach
 
                 $match_data[$key] = $team_substitutes;
@@ -849,10 +849,10 @@ class CrawlerController extends BaseController {
      */
     public static function update() {
         // first update FIFA ranking
-        self::update_teams();
+        //self::update_teams();
 
         // update some competitions
-        // TODO
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/", "group");
         return;
     }
 
