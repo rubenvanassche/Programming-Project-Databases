@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 22, 2014 at 05:37 PM
+-- Generation Time: May 23, 2014 at 03:36 PM
 -- Server version: 5.5.33
 -- PHP Version: 5.5.3
 
@@ -32,7 +32,6 @@ CREATE TABLE `bet` (
   `awayteam_yellows` int(5) DEFAULT NULL,
   `awayteam_reds` int(5) DEFAULT NULL,
   `evaluated` tinyint(1) NOT NULL DEFAULT '0',
-  `betdate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
@@ -285,6 +284,36 @@ CREATE TABLE `userGroupInvites` (
   `created` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userGroupMessages`
+--
+
+CREATE TABLE `userGroupMessages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usergroup_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(60) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userGroupMessagesContent`
+--
+
+CREATE TABLE `userGroupMessagesContent` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `message_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
