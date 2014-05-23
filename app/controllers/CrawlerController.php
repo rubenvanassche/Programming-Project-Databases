@@ -207,11 +207,11 @@ class CrawlerController extends BaseController {
         if (empty($keys)) $keys = array("first name", "last name");
 
         // load document
-        $doc = self::request( $url );
+        $doc = self::request($url);
         if (empty($doc)) return self::empty_data($keys);    // request failed
 
         $data = new Crawler();
-        $data->addDocument( $doc );
+        $data->addDocument($doc);
 
         // parse coach info from coach passport
         $coach_data = array();
@@ -240,6 +240,77 @@ class CrawlerController extends BaseController {
     }
 
     /**
+     * @brief Get all desired team data from the team page.
+     * @details An example of the team data can be found at
+     * http://int.soccerway.com/teams/south-africa/south-africa/2014/
+     *
+     * @param url The url from where you want get data.
+     * @param keys Array of keys whose info you want to get. The following keys
+     * are available:
+     *
+     *      - country name
+     *      - coach url
+     *      - players url
+     *
+     * Discard if you want to catch'em all.
+     *
+     * @return Associative array with the keys mapped to a value.
+     */
+    public static function team_data($url, $keys=array()) {
+        // all data in case no keys were given
+        if (empty($keys)) $keys = array("country name", "coach url", "players url");
+
+        // load document
+        $doc = self::request($url);
+        if (empty($doc)) return self::empty_data($keys);    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // gather all team information
+        $team_data = array();
+        foreach ($keys as $key) {
+            if ("country name" == $key) {
+                // get name of the country
+                $country_name = $data->filterXPath("//div[contains(@class, block_team_info)]/div/div/dl/dd[3]")->getNode(0);
+
+                $team_data[$key] = empty($country_name) ? NULL : trim($country_name->textContent);
+            } else if ("coach url" == $key) {
+                // get coach url
+                $coach_url = $data->filterXPath("//table[contains(@class, squad)]/tbody[5]/tr/td[2]/div/a")->getNode(0);
+
+                $team_data[$key] = empty($coach_url) ? NULL : "http://int.soccerway.com/".$coach_url->getAttribute("href");
+            } else if ("players url" == $key) {
+                // get players url
+                $players_url = array();
+
+                // squad < 5 because of (1) Goalkeeper, (2) Defender,
+                // (3) Midfielder, (4) Attacker. (We don't want to include the
+                // coach, and besides those players are always available (e.g.
+                // no goalkeeper or midfielder is illegal in football).
+                for ($index = 1; $index < 5; $index++) {
+                    foreach ($data->filterXPath("//table[contains(@class, squad)]/tbody[".$index."]/tr/td/a/img/..") as $href) {
+                        // skip if no href provided
+                        $href = $href->getAttribute("href");
+                        if (empty($href)) continue;
+
+                        $players_url[] = "http://int.soccerway.com/".$href;
+                    } // end foreach
+                } // end for
+
+                $team_data[$key] = $players_url;
+            } else {
+                // other data
+                $team_data[$key] = NULL;
+            } // end if-else
+        } // end foreach
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return $team_data;
+    }
+
+    /**
      * @brief Update the countries from database.
      */
     public static function update_countries() {
@@ -258,70 +329,6 @@ class CrawlerController extends BaseController {
         } // end foreach
 
         return;
-    }
-
-    /**
-     * @brief Get all desired team data from the team page.
-     * @details An example of the team data can be found at
-     * http://int.soccerway.com/teams/south-africa/south-africa/2014/
-     *
-     * @param url The url from where you want get data.
-     *
-     * @return An associative array with the following values mapped:
-     *      "country"       => $country,
-     *      "coach data"    => $coach_data,
-     *      "players data"  => $players_data,
-     */
-    public static function team_data( $url ) {
-        // load document
-        $doc = self::request( $url );
-        if ( empty( $doc ) ) return array();    // request failed
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-
-        // query for country
-        $xpath = "//div[contains(@class, block_team_info)]/div/div/dl/dd[3]";
-
-        $country = $data->filterXPath( $xpath )->getNode(0);
-        $country = ( empty( $country ) ) ? NULL : trim( $country->textContent );
-
-        // query for the coach
-        $xpath = "//table[contains(@class, squad)]/tbody[5]/tr/td[2]/div/a";
-
-        $href = $data->filterXPath( $xpath )->getNode(0);
-
-        $coach_data = ( empty( $href ) ) ? NULL : self::coach_data( "http://int.soccerway.com/".$href->getAttribute( "href" ) );
-
-        // now get all the participating players
-        $players_data = array();
-
-        // squad < 5 because of (1) Goalkeeper, (2) Defender, (3) Midfielder,
-        // (4) Attacker. (We don't want to include the coach, and besides those
-        // players are always available (e.g. no goalkeeper or midfielder is
-        // against the rules of football).
-        for ( $index = 1; $index < 5; $index++ ) {
-            // query for player href
-            $xpath = "//table[contains(@class, squad)]/tbody[".$index."]/tr/td/a/img/..";
-
-            foreach ( $data->filterXPath( $xpath ) as $href ) {
-                // skip if no href provided
-                $href = $href->getAttribute( "href" );
-                if ( empty( $href ) ) continue;
-
-                // add new player data
-                $players_data[] = self::player_data( "http://int.soccerway.com/".$href );
-            } // end foreach
-
-        } // end for
-
-        // clear cache to avoid memory exhausting
-        $data->clear();
-        return array(
-            "country"       => $country,
-            "coach data"    => $coach_data,
-            "players data"  => $players_data,
-        );
     }
 
     /**
