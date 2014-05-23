@@ -50,7 +50,7 @@ table.tablesorter {
 }
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 	background-color: #fff;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 2px solid #ddd;
 	padding: 4px;
 }
 table.tablesorter thead tr .header {
