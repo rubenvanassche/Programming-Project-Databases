@@ -93,7 +93,7 @@
 @stop
 
 @section('javascript')
-<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+
   <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
   <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
 
