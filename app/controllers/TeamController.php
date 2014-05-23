@@ -5,7 +5,11 @@ class TeamController extends BaseController {
 	public function index($teamID){
 		$teamObj = Team::getTeamByID($teamID)[0];
 		$teamImageURL = Team::getTeamImageURL($teamObj->name);
-		
+
+		$outcomes = Team::getWinsLossesTies($teamID);
+		$yearlyGoalsCards = Team::getYearlyGoalsCards($teamID);
+		ksort($yearlyGoalsCards); //Otherwise the graph is all messed up
+
 		// Check if we can find an background picture
 		$teamBackground = '';
 		if($teamObj->twitterAccount != ''){
@@ -35,7 +39,7 @@ class TeamController extends BaseController {
 		}
 
 		
-		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground', 'hasNews'))->with('title', $teamObj->name);
+		return View::make('team.team', compact('teamObj', 'teamImageURL', 'teamBackground', 'hasNews', 'outcomes', 'yearlyGoalsCards'))->with('title', $teamObj->name);
 	}
 	
 	function all(){
@@ -99,9 +103,6 @@ class TeamController extends BaseController {
 	}
 
 	public function graphs($teamID){
-		$outcomes = Team::getWinsLossesTies($teamID);
-		$yearlyGoalsCards = Team::getYearlyGoalsCards($teamID);
-		ksort($yearlyGoalsCards); //Otherwise the graph is all messed up
 		return View::make('team.graphs', compact('outcomes', 'yearlyGoals', 'yearlyGoalsCards'));
 	}
 }

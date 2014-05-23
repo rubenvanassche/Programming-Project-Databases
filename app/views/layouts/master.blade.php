@@ -144,9 +144,10 @@
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
-		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
 
+		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
 
 
 		<!-- This script makes sure login and logout modals appear on any page -->

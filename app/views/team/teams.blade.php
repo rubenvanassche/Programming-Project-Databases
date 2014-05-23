@@ -70,7 +70,7 @@
 @stop
 
 @section('javascript')
-	<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+
 	<script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
 	<script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
 
@@ -83,37 +83,5 @@
                             filterColumns: [1, 2]}); });
 	</script>
 
-    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-     google.load('visualization', '1', {'packages': ['geochart']});
-     google.setOnLoadCallback(drawRegionsMap);
 
-      function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-          ['Country'],
-          ['Belgium']
-
-        ]);
-
-        var options = {
-        	legend: 'none',
-			dataMode: 'regions'
-        };
-
-        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    };
-
-		// Won't run correctly if not hosted on server appareantly.
-		google.visualization.events.addListener(
-		globalGeomap, 'regionClick', function(e) {
-		   //doSomething(e['region']);
-		   alert("ayo");
-		});
-
-		google.visualization.events.addListener(geomap, 'select', function() {
-		alert('Select event called, selected row is ' +
-			geomap.getSelection()[0].row);
-		});
-    </script>
 @stop
