@@ -433,10 +433,14 @@ class CrawlerController extends BaseController {
                 if (empty($kick_off)) {
                     $match_data[$key] = NULL;
                 } else {
-                    if (!preg_match("/\d+:\d+/", $kick_off->textContent)) $kick_off = $match_info->getNode(2);
-                    $kick_off = new DateTime(trim($kick_off->textContent));
+                    try {
+                        if (!preg_match("/\d+:\d+/", $kick_off->textContent)) $kick_off = $match_info->getNode(2);
+                        $kick_off = new DateTime(trim($kick_off->textContent));
 
-                    $match_data[$key] = $kick_off->format("H:i:s");
+                        $match_data[$key] = $kick_off->format("H:i:s");
+                    } catch (Exception $ee) {
+                        $match_data[$key] = NULL;
+                    } // end try catch
                 } // end if-else
             } else if ("scoretime" == $key) {
                 // get scoretime
@@ -676,238 +680,180 @@ class CrawlerController extends BaseController {
      * @brief Update the competition.
      *
      * @param url The url to be used for parsing competition.
-     * @param name The name of the competition (or let the crawler find out).
+     * @param what What stage needs to be updated? Following values are
+     * allowed:
+     *
+     *      - all   (default, all stages)
+     *      - group (only group stage)
+     *      - final (only final stages)
      */
-    public static function update_competition( $url, $name="" ) {
-        // get the competition data
-        $competition_data = self::competition_data( $url );
-        if ( empty( $competition_data ) ) return;
+    public static function update_competition($url, $what="all") {
+        $keys = array("name");
+        switch ($what) {
+        case "all":
+            $keys[] = "group matches";
+            $keys[] = "final matches";
+            break;
+        case "group":
+            $keys[] = "group matches";
+            break;
+        case "final":
+            $keys[] = "final matches";
+            break;
+        } // end switch
 
-        // get the competition id
-        $competition = empty($name) ? $competition_data["name"] : $name;
+        // get competition data
+        $competition_data = self::competition_data($url, $keys);
+        if (empty($competition_data)) return;
 
-        $ids = Competition::getIDsByName( $competition );
-        if ( empty( $ids ) ) $ids = Competition::add( $competition );
+        // get competition id
+        $name = $competition_data["name"];
+        $ids = Competition::getIDsByName($name);
+        if (empty($ids)) $ids = Competition::add($name);
         $competition_id = $ids[0]->id;
 
-        // update match to the competition (and also link team to the competition)
-        foreach ( $competition_data["matches data"] as $match_data ) {
-            // get the hometeam ID
+        // now do all the matches
+        $matches = array();
+        switch ($what) {
+        case "all":
+            $matches = array_merge($competition_data["group matches"], $competition_data["final matches"]);
+            break;
+        case "group":
+            $matches = $competition_data["group matches"];
+            break;
+        case "final":
+            $matches = $competition_data["final matches"];
+            break;
+        } // end switch
+
+        foreach ($matches as $match_url) {
+            // get match data
+            $match_data = self::match_data($match_url);
+
+            // get match id
             $hometeam = $match_data["hometeam"];
-
-            $ids = Team::getIDsByName( $hometeam );
-            if ( empty( $ids ) ) throw new DomainException( "Missing team ".$hometeam );
+            $ids = Team::getIDsByName($hometeam);
+            if (empty($ids)) throw new Exception("No such team: ".$hometeam);
             $hometeam_id = $ids[0]->id;
+            Competition::linkTeam($hometeam_id, $competition_id);
 
-            // get the awayteam ID
             $awayteam = $match_data["awayteam"];
-
-            $ids = Team::getIDsByName( $awayteam );
-            if ( empty( $ids ) ) throw new DomainException( "Missing team ".$awayteam );
+            $ids = Team::getIDsByName($awayteam);
+            if (empty($ids)) throw new Exception("No such team: ".$awayteam);
             $awayteam_id = $ids[0]->id;
+            Competition::linkTeam($awayteam_id, $competition_id);
 
-            // link both teams to the competition
-            Competition::linkTeam( $hometeam_id, $competition_id );
-            Competition::linkTeam( $awayteam_id, $competition_id );
+            $kick_off = $match_data["kick-off"];
+            if (empty($kick_off)) $kick_off = $match_data["scoretime"]; 
+            $date = $match_data["date"].' '.$kick_off;
 
-            // alright, add the match (if not already added)
-            $date = new DateTime( $match_data["date"] . ' ' . $match_data["kick-off"] );
-            $date = $date->format( "Y-m-d H:i:s" );
-
-            $ids = Match::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
-            if ( empty( $ids ) ) $ids = Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
+            $ids = Match::getIDs($hometeam_id, $awayteam_id, $competition_id, $date);
+            if (empty($ids)) $ids = Match::add($hometeam_id, $awayteam_id, $competition_id, $date);
             $match_id = $ids[0]->id;
 
-            // okay, let's update lineups, substitutes and goals
-            foreach ($match_data["home lineups"] as $lineup_data) {
-                // get the player id
-                $player_data = $lineup_data["player data"];
+            // okay, let's update the lineups
+            foreach (array("hometeam", "awayteam") as $team) {
+                $team_id = "hometeam" == $team ? $hometeam_id : $awayteam_id;
 
-                $first_name = $player_data["first name"];
-                $last_name = $player_data["last name"];
-                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+                // lineups
+                foreach ($match_data[$team." lineups"] as $player) {
+                    // get player id
+                    $url = $player[0];
+                    $player_data = self::player_data($url);
 
-                $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) {
-                    $ids = Player::add( $player );
+                    $first_name = $player_data["first name"];
+                    $last_name = $player_data["last name"];
+                    $name = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+                    if (empty($name)) continue;
+
+                    $ids = Player::getIDsByName($name);
+                    if (empty($ids)) $ids = Player::add($name);
                     $player_id = $ids[0]->id;
 
-                    // also link player to team
-                    Team::linkPlayer( $player_id, $hometeam_id, $player_data["position"] );
-                } // end if
-                $player_id = $ids[0]->id;
+                    Team::linkPlayer($player_id, $team_id, $player_data["position"]);
+                    Match::linkPlayer($player_id, $match_id);
 
-                // link player to match
-                Match::linkPlayer( $player_id, $match_id);
+                    // add goals (if any)
+                    foreach ($player[1] as $time) {
+                        if (empty(Goal::getIDs($match_id, $team_id, $player_id, $time))) Goal::add($match_id, $team_id, $player_id, $time);
+                    } // end foreach
 
-                // cards
-                foreach ($lineup_data["yellow cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
+                    // add yellow cards if any
+                    foreach ($player[2] as $time) {
+                        if (empty(Card::getIDs($player_id, $match_id, "yellow", $time ))) Card::add($player_id, $match_id, "yellow", $time);
+                    } // end foreach
+
+                    // add red cards if any
+                    foreach ($player[3] as $time) {
+                        if (empty(Card::getIDs($player_id, $match_id, "red", $time))) Card::add($player_id, $match_id, "red", $time);
+                    } // end foreach
                 } // end foreach
 
-                foreach ($lineup_data["red cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
-                } // end foreach
+                // substitutes
+                foreach ($match_data[$team." substitutes"] as $player) {
+                    $time = $player[2];
 
-                // goals
-                foreach ( $lineup_data["goals"] as $timegoal ) {
-                    if ( empty( Goal::getIDs( $match_id, $hometeam_id, $player_id, $time ) ) ) Goal::add( $match_id, $hometeam_id, $player_id, $time );
-                } // end foreach
+                    // get player id
+                    $url = $player[0];
+                    $player_data = self::player_data($url);
 
-            } // end foreach
+                    $first_name = $player_data["first name"];
+                    $last_name = $player_data["last name"];
+                    $name = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+                    if (empty($name)) continue;
 
-            foreach ($match_data["away lineups"] as $lineup_data) {
-                // get the player id
-                $player_data = $lineup_data["player data"];
-
-                $first_name = $player_data["first name"];
-                $last_name = $player_data["last name"];
-                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
-
-                $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) {
-                    $ids = Player::add( $player );
+                    $ids = Player::getIDsByName($name);
+                    if (empty($ids)) $ids = Player::add($name);
                     $player_id = $ids[0]->id;
 
-                    // also link player to team
-                    Team::linkPlayer( $player_id, $awayteam_id, $player_data["position"] );
-                } // end if
-                $player_id = $ids[0]->id;
+                    Team::linkPlayer($player_id, $team_id, $player_data["position"]);
+                    Match::linkPlayer($player_id, $match_id, $time);
 
-                // link player to match
-                Match::linkPlayer( $player_id, $match_id);
+                    // add goals (if any)
+                    foreach ($player[3] as $time) {
+                        if (empty(Goal::getIDs($match_id, $team_id, $player_id, $time))) Goal::add($match_id, $team_id, $player_id, $time);
+                    } // end foreach
 
-                // cards
-                foreach ($lineup_data["yellow cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
+                    // add yellow cards if any
+                    foreach ($player[4] as $time) {
+                        if (empty(Card::getIDs($player_id, $match_id, "yellow", $time ))) Card::add($player_id, $match_id, "yellow", $time);
+                    } // end foreach
+
+                    // add red cards if any
+                    foreach ($player[5] as $time) {
+                        if (empty(Card::getIDs($player_id, $match_id, "red", $time))) Card::add($player_id, $match_id, "red", $time);
+                    } // end foreach
+
+                    $url = $player[1];
+                    $player_data = self::player_data($url);
+
+                    $first_name = $player_data["first name"];
+                    $last_name = $player_data["last name"];
+                    $name = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+                    if (empty($name)) continue;
+
+                    $ids = Player::getIDsByName($name);
+                    if (empty($ids)) $ids = Player::add($name);
+                    $player_id1 = $ids[0]->id;
+
+                    Team::linkPlayer($player_id1, $team_id, $player_data["position"]);
+                    Match::linkPlayer($player_id1, $match_id);
+                    Match::substitute($player_id1, $time);
                 } // end foreach
-
-                foreach ($lineup_data["red cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
-                } // end foreach
-
-                // goals
-                foreach ( $lineup_data["goals"] as $timegoal ) {
-                    if ( empty( Goal::getIDs( $match_id, $awayteam_id, $player_id, $time ) ) ) Goal::add( $match_id, $awayteam_id, $player_id, $time );
-                } // end foreach
-
             } // end foreach
-
-            foreach ($match_data["home substitutes"] as $lineup_data) {
-                // get the player id
-                $player_data = $lineup_data["player data"];
-
-                $first_name = $player_data["first name"];
-                $last_name = $player_data["last name"];
-                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
-
-                $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) {
-                    $ids = Player::add( $player );
-                    $player_id = $ids[0]->id;
-
-                    // also link player to team
-                    Team::linkPlayer( $player_id, $hometeam_id, $player_data["position"] );
-                } // end if
-                $player_id = $ids[0]->id;
-
-                // link player to match
-                $time = $lineup_data["time"];
-
-                if (empty($time)) continue;
-                $out_player = $lineup_data["out player"];
-
-                $out_name = $out_player["first name"].' '.$out_player["last name"];
-                $ids = Player::getIDsByName( $out_name );
-
-                if (empty($ids)) continue;
-                $out_id = $ids[0]->id;
-
-                // link
-                Match::linkPlayer( $player_id, $match_id, $time);
-                Match::substitute( $out_id, $time);
-
-                // cards
-                foreach ($lineup_data["yellow cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
-                } // end foreach
-
-                foreach ($lineup_data["red cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
-                } // end foreach
-
-                // goals
-                foreach ( $lineup_data["goals"] as $timegoal ) {
-                    if ( empty( Goal::getIDs( $match_id, $hometeam_id, $player_id, $time ) ) ) Goal::add( $match_id, $hometeam_id, $player_id, $time );
-                } // end foreach
-
-            } // end foreach
-
-            foreach ($match_data["away substitutes"] as $lineup_data) {
-                // get the player id
-                $player_data = $lineup_data["player data"];
-
-                $first_name = $player_data["first name"];
-                $last_name = $player_data["last name"];
-                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
-
-                $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) {
-                    $ids = Player::add( $player );
-                    $player_id = $ids[0]->id;
-
-                    // also link player to team
-                    Team::linkPlayer( $player_id, $awayteam_id, $player_data["position"] );
-                } // end if
-                $player_id = $ids[0]->id;
-
-                // link player to match
-                $time = $lineup_data["time"];
-
-                if (empty($time)) continue;
-                $out_player = $lineup_data["out player"];
-
-                $out_name = $out_player["first name"].' '.$out_player["last name"];
-                $ids = Player::getIDsByName( $out_name );
-
-                if (empty($ids)) continue;
-                $out_id = $ids[0]->id;
-
-                // link
-                Match::linkPlayer( $player_id, $match_id, $time);
-                Match::substitute( $out_id, $time);
-
-                // cards
-                foreach ($lineup_data["yellow cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
-                } // end foreach
-
-                foreach ($lineup_data["red cards"] as $time) {
-                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
-                } // end foreach
-
-                // goals
-                foreach ( $lineup_data["goals"] as $timegoal ) {
-                    if ( empty( Goal::getIDs( $match_id, $awayteam_id, $player_id, $time ) ) ) Goal::add( $match_id, $awayteam_id, $player_id, $time );
-                } // end foreach
-
-            } // end foreach
-
         } // end foreach
-
-        return;
     }
 
     /**
-     * @brief
-     * @param competitions
+     * @brief Update all the stuffs.
      */
-    public static function update( $competition, $url ) {
-        // are there matches to be played?
-        if ( !Match::match_played( $competition ) ) return False;
+    public static function update() {
+        // first update FIFA ranking
+        self::update_teams();
 
-        self::update_competition( $url, $competition );
-        return True;
+        // update some competitions
+        // TODO
+        return;
     }
 
 }
