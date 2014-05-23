@@ -3,6 +3,11 @@
 class UsergroupController extends BaseController {
 
 	function index(){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 		$usergroup = new UserGroup;
 		$data['groups'] = $usergroup->getGroups();
 		$data['title'] = 'User Groups';
