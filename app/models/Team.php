@@ -47,6 +47,14 @@ class Team {
         return self::getIDsByName( $name );
     }
 
+    public static function update($team_id, $points) {
+        $query = "UPDATE `".self::TABLE_TEAM."` SET fifapoints = ? WHERE id = ?";
+        $values = array($points, $team_id);
+
+        DB::update($query, $values);
+        return;
+    }
+
     /**
      * @brief link a player to a team.
      * @param player_id The player ID.
