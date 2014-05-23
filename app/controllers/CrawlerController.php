@@ -33,8 +33,6 @@ class CrawlerController extends BaseController {
                 return $doc;
             } catch ( ErrorException $ee ) {
                 $stop = time();
-            } catch ( FatalErrorException $fee ) {
-                $stop = time();
             } // end try-catch
         } while ( $stop - $start <= $time_limit );
 
