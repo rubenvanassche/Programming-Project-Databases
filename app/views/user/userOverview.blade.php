@@ -6,7 +6,7 @@
 			<h1>Users</h1>
 		</div>
 		<div class="col-md-12">
-			<table id="myTable" class="tablesorter">
+			<table id="myTable" class="tablesorter ">
 				<thead>
 					<tr>
 						<th>Username</th>
@@ -23,7 +23,10 @@
 		</div>
 	</div>
 @stop
+<link rel="stylesheet" href="{{asset('css/tablesorter.bootstrap.css')}}">
+@section('css')
 
+@stop
 
 
 @section('javascript')
@@ -32,6 +35,7 @@
 
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
+		
         $("#myTable")
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]]})
         .tablesorterFilter({filterContainer: "#filter-box",
