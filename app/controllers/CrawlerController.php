@@ -353,6 +353,8 @@ class CrawlerController extends BaseController {
                     $url = empty($url) ? NULL : $url->getElementsByTagName('a');
                     $url = empty($url) ? NULL : $url->item(0);
                     $url = empty($url) ? NULL : "http://int.soccerway.com/".$url->getAttribute("href");
+
+                    $team_data[$key] = $url;
                 } else if ("points" == $key) {
                     $points = $row->childNodes->item(4);
 
@@ -634,50 +636,37 @@ class CrawlerController extends BaseController {
      * @brief Update the teams using the generator.
      */
     public static function update_teams() {
-        foreach ( self::teams_generator() as $team_data ) {
-            // skip if team already added
-            $name = $team_data["name"];
-
-            $ids = Team::getIDsByName( $name );
-            if ( !empty( $ids ) ) continue;
-
-            // query for country ID
-            $country = $team_data["country"];
-
-            $country_id = Country::getIDsByName( $country );
-            if ( empty( $country_id ) ) throw new DomainException( "Missing country ".$country );
-            $country_id = $country_id[0]->id;
-
-            // query for coach id
-            $first_name = $team_data["coach data"]["first name"];
-            $last_name = $team_data["coach data"]["last name"];
-            $coach = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
-
-            $coach_id = NULL;
-            if ( NULL != $coach ) {
-                $ids = Coach::getIDsByName( $coach );
-                if ( empty( $ids ) && NULL != $coach ) $ids = Coach::add( $coach );
-                $coach_id = $ids[0]->id;
-            } // end if
-
-            // add the team
+        foreach (self::teams_data() as $team_data) {
+            $name = $team_data["team name"];
             $points = $team_data["points"];
 
-            $team_id = Team::add( $name, $coach_id, $country_id, $points )[0]->id;
+            $ids = Team::getIDsByName($name);
+            if (empty($ids)) {
+                // get complete team data
+                $url = $team_data["team url"];
+                $team_data = self::team_data($url, array("country name", "coach url"));
 
-            // alright, link players to this team
-            foreach ( $team_data["players data"] as $player_data ) {
-                $first_name = $player_data["first name"];
-                $last_name = $player_data["last name"];
-                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+                // get coach id
+                $coach_url = $team_data["coach url"];
+                $coach = empty($coach_url) ? NULL : self::coach_data($coach_url, array("first name", "last name"));
+                if (!empty($coach)) $coach = $coach["first name"].' '.$coach["last name"];
 
-                $ids = Player::getIDsByName( $player );
-                if ( empty( $ids ) && NULL != $player ) $ids = Player::add( $player );
-                $player_id = $ids[0]->id;
+                $ids = Coach::getIDsByName($coach);
+                if (empty($ids) && !empty($coach)) $ids = Coach::add($coach);
+                $coach_id = empty($ids) ? NULL : $ids[0]->id;
 
-                // link player to team
-                Team::linkPlayer( $player_id, $team_id, $player_data["position"] );
-            } // end foreach
+                // get country id
+                $country = $team_data["country name"];
+                $ids = Country::getIDsByName($country);
+                if (empty($ids)) throw new Exception("No such country: ".$country);
+                $country_id = $ids[0]->id;
+
+                // add team
+                Team::add($name, $coach_id, $country_id, $points);
+            } else {
+                // just update the fifa points
+                Team::update($ids[0]->id, $points);
+            } // end if-else
         } // end foreach
 
         return;
