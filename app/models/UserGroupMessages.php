@@ -30,7 +30,7 @@ class UserGroupMessages {
 		
 		DB::insert('INSERT INTO UserGroupMessagesContent (user_id, message_id, content, created) VALUES (?,?,?,?)', array($userID, $discussion_id, $content, $date));
 		
-		return $message_id;
+		return $discussion_id;
 	}
 	
 	function addMessage($content, $usergroup_id, $discussion_id){
