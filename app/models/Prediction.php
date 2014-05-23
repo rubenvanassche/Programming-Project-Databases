@@ -43,12 +43,13 @@ class Prediction {
 			$score_away = Match::getScore2($match->id)[1];
 
 			if ($score_home > $score_away) {
-				$hometeam_points += 0.75;
+				$awayteam_points += 0.9;
 			}
 			elseif ($score_home < $score_away) {
-				$awayteam_points += 0.75;
+				$hometeam_points += 0.9;
 			}
 		}
+
 	
 		// Calculate average win/loss hometeam @ home
 		$matches_played = 0;
@@ -66,7 +67,7 @@ class Prediction {
 		}
 	
 		// add average to the score.
-		if ($matches_played)
+		if ($matches_played != 0)
 			$hometeam_points += $matches_won / $matches_played;
 	
 		// Calculate average win/loss hometeam @ away
@@ -85,8 +86,8 @@ class Prediction {
 		}
 	
 		// add average multiplied by factor to the score.
-		if ($matches_played)
-			$hometeam_points += ($matches_won / $matches_played) * 0.75;
+		if ($matches_played != 0)
+			$hometeam_points += ($matches_won / $matches_played);
 	
 		// Calculate average win/loss awayteam @ away
 		$matches_played = 0;
@@ -104,7 +105,7 @@ class Prediction {
 		}
 	
 		// add average to the score.
-		if ($matches_played)
+		if ($matches_played != 0)
 			$awayteam_points += $matches_won / $matches_played;
 	
 		// Calculate average win/loss awayteam @ home
@@ -124,10 +125,17 @@ class Prediction {
 	
 		// add average multiplied by factor to the score.
 		if ($matches_played)
-			$awayteam_points += ($matches_won / $matches_played) * 0.75;
+			$awayteam_points += ($matches_won / $matches_played);
+
+		$fifapoints_home = Team::getFifaPointsByID($hometeam_id);
+		$fifapoints_away = Team::getFifaPointsByID($awayteam_id);
+
+		$hometeam_points += ($fifapoints_home->fifapoints / 1000);
+		$awayteam_points += ($fifapoints_away->fifapoints / 1000);
 
 	
 		// Make up the chances
+
 	
 		$totalpoints = $hometeam_points + $awayteam_points;
 	
@@ -269,7 +277,7 @@ class Prediction {
 
 		$match_chance = Prediction::predictOutcome($matchID);
 
-		if ($match_chance >= 0.48 And $match_chance <= 0.52) {
+		if ($match_chance >= 0.45 And $match_chance <= 0.55) {
 			while(true) {
 				if ($home_team_score < $away_team_score) {
 					$home_team_score++;
@@ -282,7 +290,7 @@ class Prediction {
 				}
 			}
 		}
-		elseif ($match_chance > 0.52) {
+		elseif ($match_chance > 0.55) {
 			while(true) {
 				if ($home_team_score <= $away_team_score) {
 					$home_team_score++;
@@ -292,7 +300,7 @@ class Prediction {
 				}
 			}
 		}
-		elseif ($match_chance < 0.48) {
+		elseif ($match_chance < 0.45) {
 			while(true) {
 				if ($home_team_score >= $away_team_score) {
 					$away_team_score++;

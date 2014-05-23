@@ -7,12 +7,16 @@
 			<h3>International</h3>
 		</div>
 		<div class="col-md-12">
+
+			Search: <input name="filter" id="filter-box" value="" maxlength="30" size="30" type="text" placeholder="Name or Continent">
+    		<input id="filter-clear-button" type="submit" value="Clear"/>
 			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Country</th>
 						<th>Name</th>
 						<th>Continent</th>
+						<th>Fifa Points</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -24,6 +28,7 @@
 							<td><i class={{$flag}}></td>
 							<td><a href="{{ route('team', array('id'=>$team->id)) }}">{{$team->name}}</a></td>
 							<td>{{$team->continent}}</td>
+							<td>{{$team->fifapoints}}</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -72,10 +77,10 @@
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
         $("#myTable")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]]})
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[2,0], [1, 0]], headers: {0: {sorter: false}}})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0]}); });
+                            filterColumns: [1, 2]}); });
 	</script>
 
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>

@@ -391,6 +391,7 @@ class CrawlerController extends BaseController {
      *      "scoretime" => $scoretime,
      *      "awayteam"  => $awayteam,
      *      "goals"     => $goals
+     *      "cards"     => $cards,
      *
      *  Where as $goals is an array of associative arrays with the following
      *  values mapped:
@@ -433,84 +434,169 @@ class CrawlerController extends BaseController {
         $awayteam = $heading->getNode(2);
         $awayteam = ( empty( $awayteam ) ) ? NULL : trim( $awayteam->textContent );
 
+        // get lineup
+        $home_lineups = array();
+        $xpath = "//div[contains(@class, block_match_lineups)]/div[contains(@class, 'left')]/table[contains(@class, 'playerstats lineups')]/tbody/tr/td[contains(@class, player)]/a/../..";
+        foreach( $data->filterXPath( $xpath ) as $row ) {
+            // skip coaches
+            if (preg_match("/^Coach/", trim($row->textContent))) continue;
+
+            $url = "http://int.soccerway.com/".$row->childNodes->item(2)->getElementsByTagName('a')->item(0)->getAttribute("href");
+            $player_data = self::player_data($url);
+
+            // grab some info about goals and cards too
+            $yellows = array();
+            $reds = array();
+            $goals = array();
+            foreach ( $row->childNodes->item(4)->getElementsByTagName("img") as $booking ) {
+                $time = trim($booking->parentNode->textContent);
+
+                $src = $booking->getAttribute("src");
+                if ( preg_match("/Y2?C.png$/", $src) ) $yellows[] = $time;
+                if ( preg_match("/(R|Y2)C.png$/", $src) ) $reds[] = $time;
+                if ( preg_match("/G.png$/", $src) ) $goals[] = $time;
+            } // end foreach
+
+            $home_lineups[] = array(
+                "player data"   => $player_data, 
+                "yellow cards"  => $yellows,
+                "red cards"     => $reds,
+                "goals"         => $goals
+            );
+        } // end foreach
+
+        $away_lineups = array();
+        $xpath = "//div[contains(@class, block_match_lineups)]/div[contains(@class, 'right')]/table[contains(@class, 'playerstats lineups')]/tbody/tr/td[contains(@class, player)]/a/../..";
+        foreach( $data->filterXPath( $xpath ) as $row ) {
+            // skip coaches
+            if (preg_match("/^Coach/", trim($row->textContent))) continue;
+
+            $url = "http://int.soccerway.com/".$row->childNodes->item(2)->getElementsByTagName('a')->item(0)->getAttribute("href");
+            $player_data = self::player_data($url);
+
+            // grab some info about goals and cards too
+            $yellows = array();
+            $reds = array();
+            $goals = array();
+            foreach ( $row->childNodes->item(4)->getElementsByTagName("img") as $booking ) {
+                $time = trim($booking->parentNode->textContent);
+
+                $src = $booking->getAttribute("src");
+                if ( preg_match("/Y2?C.png$/", $src) ) $yellows[] = $time;
+                if ( preg_match("/(R|Y2)C.png$/", $src) ) $reds[] = $time;
+                if ( preg_match("/G.png$/", $src) ) $goals[] = $time;
+            } // end foreach
+
+            $away_lineups[] = array(
+                "player data"   => $player_data, 
+                "yellow cards"  => $yellows,
+                "red cards"     => $reds,
+                "goals"         => $goals
+            );
+        } // end foreach
+
+        $home_substitutes = array();
+        $xpath = "//div[contains(@class, block_match_substitutes)]/div[contains(@class, 'left')]/table[contains(@class, 'playerstats lineups')]/tbody/tr/td[contains(@class, player)]/p[contains(@class, substitute-in)]/a/../../..";
+        foreach( $data->filterXPath( $xpath ) as $row ) {
+            $out_player = $row->childNodes->item(2)->getElementsByTagName('a')->item(1);
+            $time = NULL;
+
+            if (empty($out_player)) {
+                $out_player = NULL;
+            } else {
+                preg_match("!\d+!", trim($row->childNodes->item(2)->textContent), $time);
+                $time = $time[0];
+
+                $url = "http://int.soccerway.com/".$out_player->getAttribute("href");
+                $out_player = self::player_data($url);
+            } // end if-else
+
+            $url = "http://int.soccerway.com/".$row->childNodes->item(2)->getElementsByTagName('a')->item(0)->getAttribute("href");
+            $player_data = self::player_data($url);
+
+            // grab some info about goals and cards too
+            $yellows = array();
+            $reds = array();
+            $goals = array();
+            foreach ( $row->childNodes->item(4)->getElementsByTagName("img") as $booking ) {
+                $time = trim($booking->parentNode->textContent);
+
+                $src = $booking->getAttribute("src");
+                if ( preg_match("/Y2?C.png$/", $src) ) $yellows[] = $time;
+                if ( preg_match("/(R|Y2)C.png$/", $src) ) $reds[] = $time;
+                if ( preg_match("/G.png$/", $src) ) $goals[] = $time;
+            } // end foreach
+
+            $home_substitutes[] = array(
+                "player data"   => $player_data, 
+                "yellow cards"  => $yellows,
+                "red cards"     => $reds,
+                "goals"         => $goals,
+                "out player"    => $out_player,
+                "time"          => $time,
+            );
+        } // end foreach
+
+        $away_substitutes = array();
+        $xpath = "//div[contains(@class, block_match_substitutes)]/div[contains(@class, 'right')]/table[contains(@class, 'playerstats lineups')]/tbody/tr/td[contains(@class, player)]/p[contains(@class, substitute-in)]/a/../../..";
+        foreach( $data->filterXPath( $xpath ) as $row ) {
+            $out_player = $row->childNodes->item(2)->getElementsByTagName('a')->item(1);
+            $time = NULL;
+
+            if (empty($out_player)) {
+                $out_player = NULL;
+            } else {
+                preg_match("!\d+!", trim($row->childNodes->item(2)->textContent), $time);
+                $time = $time[0];
+
+                $url = $out_player->getAttribute("href");
+                $out_player = self::player_data($url);
+            } // end if-else
+
+            $url = "http://int.soccerway.com/".$row->childNodes->item(2)->getElementsByTagName('a')->item(0)->getAttribute("href");
+            $player_data = self::player_data($url);
+
+            // grab some info about goals and cards too
+            $yellows = array();
+            $reds = array();
+            $goals = array();
+            foreach ( $row->childNodes->item(4)->getElementsByTagName("img") as $booking ) {
+                $time = trim($booking->parentNode->textContent);
+
+                $src = $booking->getAttribute("src");
+                if ( preg_match("/Y2?C.png$/", $src) ) $yellows[] = $time;
+                if ( preg_match("/(R|Y2)C.png$/", $src) ) $reds[] = $time;
+                if ( preg_match("/G.png$/", $src) ) $goals[] = $time;
+            } // end foreach
+
+            $away_substitutes[] = array(
+                "player data"   => $player_data, 
+                "yellow cards"  => $yellows,
+                "red cards"     => $reds,
+                "goals"         => $goals,
+                "out player"    => $out_player,
+                "time"          => $time,
+            );
+        } // end foreach
+
         // query for goals, it seems quite strange, but it's the only way this
         // works
         $xpath = "//div[contains(@class, block_match_goals)]/div/table[contains(@class, matches)]";
 
         $goals = array();
 
-        // skip if no goals
-        if ( "0 - 0" == $scoretime ) return array(
-            "date"      => $date,
-            "kick-off"  => $kick_off,
-            "hometeam"  => $hometeam,
-            "scoretime" => $scoretime,
-            "awayteam"  => $awayteam,
-            "goals"     => $goals,
-        );
-
-        foreach ( $data->filterXPath( $xpath )->getNode(1)->childNodes as $row ) {
-            if ( 0 == $row->childNodes->length ) continue;
-
-            $home = $row->childNodes->item(0);
-            $away = $row->childNodes->item(4);
-
-            // determine which team has scored a goal
-            $homegoal = ( empty( $home ) ) ? NULL : trim( $home->textContent );
-            $awaygoal = ( empty( $away ) ) ? NULL : trim( $away->textContent );
-
-            if ( !empty( $homegoal ) ) {
-                // get the player data
-                $href = $home->getElementsByTagName( 'a' );
-                if ( empty( $href->item(0) ) ) continue;
-
-                $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
-                $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
-
-                $player_data = self::player_data( $url );
-
-                // get the time (using regular expressions)
-                preg_match('!\d+!', trim( $homegoal ), $time);
-                $time = $time[0];
-
-                $goals[] = array(
-                    "team"          => $hometeam,
-                    "player data"   => $player_data,
-                    "time"          => $time,
-                );
-            } else if ( !empty( $awaygoal ) ) {
-                // get the player data
-                $href = $away->getElementsByTagName( 'a' );
-                $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
-                $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
-
-                $player_data = self::player_data( $url );
-
-                // get the time (using regular expressions)
-                preg_match('!\d+!', trim( $awaygoal ), $time);
-                $time = $time[0];
-
-                $goals[] = array(
-                    "team"          => $awayteam,
-                    "player data"   => $player_data,
-                    "time"          => $time,
-                );
-            } else {
-                continue;
-            } // end if-else
-
-        } // end foreach
-
-        // clear cache to avoid memory exhausting
-        $data->clear();
         return array(
             "date"      => $date,
             "kick-off"  => $kick_off,
             "hometeam"  => $hometeam,
             "scoretime" => $scoretime,
             "awayteam"  => $awayteam,
-            "goals"     => $goals,
+            "home lineups" => $home_lineups,
+            "home substitutes" => $home_substitutes,
+            "away lineups" => $away_lineups,
+            "away substitutes" => $away_substitutes,
         );
+
     }
 
     /**
@@ -589,20 +675,21 @@ class CrawlerController extends BaseController {
      * @brief Update the competition.
      *
      * @param url The url to be used for parsing competition.
+     * @param name The name of the competition (or let the crawler find out).
      */
-    public static function update_competition( $url ) {
+    public static function update_competition( $url, $name="" ) {
         // get the competition data
         $competition_data = self::competition_data( $url );
         if ( empty( $competition_data ) ) return;
 
         // get the competition id
-        $competition = $competition_data["name"];
+        $competition = empty($name) ? $competition_data["name"] : $name;
 
         $ids = Competition::getIDsByName( $competition );
         if ( empty( $ids ) ) $ids = Competition::add( $competition );
         $competition_id = $ids[0]->id;
 
-        // add match to the competition (and also link team to the competition)
+        // update match to the competition (and also link team to the competition)
         foreach ( $competition_data["matches data"] as $match_data ) {
             // get the hometeam ID
             $hometeam = $match_data["hometeam"];
@@ -630,20 +717,10 @@ class CrawlerController extends BaseController {
             if ( empty( $ids ) ) $ids = Match::add( $hometeam_id, $awayteam_id, $competition_id, $date );
             $match_id = $ids[0]->id;
 
-            // okay, let's update the goals (if any)
-            foreach ( $match_data["goals"] as $goal ) {
-                // get the time
-                $time = $goal["time"];
-
-                // get the team id
-                $team = $goal["team"];
-
-                $ids = Team::getIDsByName( $team );
-                if ( empty( $ids ) ) throw new DomainException( "Could not find team ".$team );
-                $team_id = $ids[0]->id;
-
+            // okay, let's update lineups, substitutes and goals
+            foreach ($match_data["home lineups"] as $lineup_data) {
                 // get the player id
-                $player_data = $goal["player data"];
+                $player_data = $lineup_data["player data"];
 
                 $first_name = $player_data["first name"];
                 $last_name = $player_data["last name"];
@@ -655,12 +732,164 @@ class CrawlerController extends BaseController {
                     $player_id = $ids[0]->id;
 
                     // also link player to team
-                    Team::linkPlayer( $player_id, $team_id, $player_data["position"] );
+                    Team::linkPlayer( $player_id, $hometeam_id, $player_data["position"] );
                 } // end if
                 $player_id = $ids[0]->id;
 
-                // now add the goal (if not already added)
-                if ( empty( Goal::getIDs( $match_id, $team_id, $player_id, $time ) ) ) Goal::add( $match_id, $team_id, $player_id, $time );
+                // link player to match
+                Match::linkPlayer( $player_id, $match_id);
+
+                // cards
+                foreach ($lineup_data["yellow cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
+                } // end foreach
+
+                foreach ($lineup_data["red cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
+                } // end foreach
+
+                // goals
+                foreach ( $lineup_data["goals"] as $timegoal ) {
+                    if ( empty( Goal::getIDs( $match_id, $hometeam_id, $player_id, $time ) ) ) Goal::add( $match_id, $hometeam_id, $player_id, $time );
+                } // end foreach
+
+            } // end foreach
+
+            foreach ($match_data["away lineups"] as $lineup_data) {
+                // get the player id
+                $player_data = $lineup_data["player data"];
+
+                $first_name = $player_data["first name"];
+                $last_name = $player_data["last name"];
+                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+
+                $ids = Player::getIDsByName( $player );
+                if ( empty( $ids ) && NULL != $player ) {
+                    $ids = Player::add( $player );
+                    $player_id = $ids[0]->id;
+
+                    // also link player to team
+                    Team::linkPlayer( $player_id, $awayteam_id, $player_data["position"] );
+                } // end if
+                $player_id = $ids[0]->id;
+
+                // link player to match
+                Match::linkPlayer( $player_id, $match_id);
+
+                // cards
+                foreach ($lineup_data["yellow cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
+                } // end foreach
+
+                foreach ($lineup_data["red cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
+                } // end foreach
+
+                // goals
+                foreach ( $lineup_data["goals"] as $timegoal ) {
+                    if ( empty( Goal::getIDs( $match_id, $awayteam_id, $player_id, $time ) ) ) Goal::add( $match_id, $awayteam_id, $player_id, $time );
+                } // end foreach
+
+            } // end foreach
+
+            foreach ($match_data["home substitutes"] as $lineup_data) {
+                // get the player id
+                $player_data = $lineup_data["player data"];
+
+                $first_name = $player_data["first name"];
+                $last_name = $player_data["last name"];
+                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+
+                $ids = Player::getIDsByName( $player );
+                if ( empty( $ids ) && NULL != $player ) {
+                    $ids = Player::add( $player );
+                    $player_id = $ids[0]->id;
+
+                    // also link player to team
+                    Team::linkPlayer( $player_id, $hometeam_id, $player_data["position"] );
+                } // end if
+                $player_id = $ids[0]->id;
+
+                // link player to match
+                $time = $lineup_data["time"];
+
+                if (empty($time)) continue;
+                $out_player = $lineup_data["out player"];
+
+                $out_name = $out_player["first name"].' '.$out_player["last name"];
+                $ids = Player::getIDsByName( $out_name );
+
+                if (empty($ids)) continue;
+                $out_id = $ids[0]->id;
+
+                // link
+                Match::linkPlayer( $player_id, $match_id, $time);
+                Match::substitute( $out_id, $time);
+
+                // cards
+                foreach ($lineup_data["yellow cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
+                } // end foreach
+
+                foreach ($lineup_data["red cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
+                } // end foreach
+
+                // goals
+                foreach ( $lineup_data["goals"] as $timegoal ) {
+                    if ( empty( Goal::getIDs( $match_id, $hometeam_id, $player_id, $time ) ) ) Goal::add( $match_id, $hometeam_id, $player_id, $time );
+                } // end foreach
+
+            } // end foreach
+
+            foreach ($match_data["away substitutes"] as $lineup_data) {
+                // get the player id
+                $player_data = $lineup_data["player data"];
+
+                $first_name = $player_data["first name"];
+                $last_name = $player_data["last name"];
+                $player = ( empty( $first_name ) || empty( $last_name ) ) ? NULL : $first_name.' '.$last_name;
+
+                $ids = Player::getIDsByName( $player );
+                if ( empty( $ids ) && NULL != $player ) {
+                    $ids = Player::add( $player );
+                    $player_id = $ids[0]->id;
+
+                    // also link player to team
+                    Team::linkPlayer( $player_id, $awayteam_id, $player_data["position"] );
+                } // end if
+                $player_id = $ids[0]->id;
+
+                // link player to match
+                $time = $lineup_data["time"];
+
+                if (empty($time)) continue;
+                $out_player = $lineup_data["out player"];
+
+                $out_name = $out_player["first name"].' '.$out_player["last name"];
+                $ids = Player::getIDsByName( $out_name );
+
+                if (empty($ids)) continue;
+                $out_id = $ids[0]->id;
+
+                // link
+                Match::linkPlayer( $player_id, $match_id, $time);
+                Match::substitute( $out_id, $time);
+
+                // cards
+                foreach ($lineup_data["yellow cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "yellow", $time ))) Card::add( $player_id, $match_id, "yellow", $time );
+                } // end foreach
+
+                foreach ($lineup_data["red cards"] as $time) {
+                    if (empty(Card::getIDs( $player_id, $match_id, "red", $time ))) Card::add( $player_id, $match_id, "red", $time );
+                } // end foreach
+
+                // goals
+                foreach ( $lineup_data["goals"] as $timegoal ) {
+                    if ( empty( Goal::getIDs( $match_id, $awayteam_id, $player_id, $time ) ) ) Goal::add( $match_id, $awayteam_id, $player_id, $time );
+                } // end foreach
+
             } // end foreach
 
         } // end foreach
@@ -668,53 +897,16 @@ class CrawlerController extends BaseController {
         return;
     }
 
-    public static function updateDB() {
-      // Updates matches/teams
-      print("Updating matches\n");
-      print("Updating teams\n");
-    }
+    /**
+     * @brief
+     * @param competitions
+     */
+    public static function update( $competition, $url ) {
+        // are there matches to be played?
+        if ( !Match::match_played( $competition ) ) return False;
 
-#    /**
-#     * @brief Fetch live info and update our database.
-#     * @details Will use information from pages of this website:
-#     * http://www.livescore.com
-#     */
-#    public static function liveMatch($competition, $homeTeam, $awayTeam, $date) {
-#        // First we need to find the correct url for the match.
-#        // -> This means we need to crawl a webpage like this: http://www.livescore.com/worldcup/fixtures/ and look for the correct URL.
-#        $doc = self::request( "http://www.livescore.com/worldcup/fixtures/");
-#        if ( empty( $doc ) ) return;
-#
-#        $data = new Crawler();
-#        $data->addDocument( $doc );
-#
-#        foreach ( $data->filterXPath( "//table[contains(@class, league-wc)]/tbody/tr/td/.." ) as $row ) {
-#            // Skip empty rows.
-#            if ( 0 == $row->childNodes->length ) continue;
-#
-#            $teams = $row->childNodes->item(4);
-#            if ( empty( $name ) ) continue;
-#            $teams = trim( $teams->textContent );
-#
-#            // Check whether or not this is the correct match.
-#            if ((strpos($teams, $homeTeam) !== FALSE) && (strpos($teams, $awayTeam) !== FALSE) {
-#                $href = $row->childNodes->item(4)->getElementsByTagName( 'a' );
-#                if ( empty( $href ) ) continue;
-#                $href = $href->item(0)->getAttribute( "href" );
-#
-#                // At this point $href we need to concatenate $href with http://www.livescore.com
-#                $href = "http://www.livescore.com" . $href;
-#                break;
-#            } else {
-#                continue;
-#            }
-#        }
-#
-#        // Next extract the info from this webpage.
-#
-#        // Update the info in our database (this won't be visible on the website unless the user refreshes OR we could use Ajax)
-#        // We'll call a method of the match model in here that updates it.
-#
-#    }
+        self::update_competition( $url, $competition );
+        return True;
+    }
 
 }

@@ -24,6 +24,7 @@ class User {
 	}
 
 
+
 	function login($username, $password){
 		$results = DB::select('SELECT password, registrationcode, id FROM user WHERE username = ?', array($username));
 
@@ -222,16 +223,12 @@ class User {
 			return false;
 		}
 
-		// generate the enw password
+		// generate the new password
 		$newPasswordHashed = Hash::make($newPassword);
 
 		DB::Update("UPDATE user SET password = ? WHERE id = ?", array($newPasswordHashed, $results[0]->id));
 
-		if($result == 1){
-			return true;
-		}else{
-			return false;
-		}
+		return true;
 	}
 
 	function logout(){
@@ -256,7 +253,6 @@ class User {
 			$value = Hash::make($value);
 		}
 
-		$field = mysql_real_escape_string($field);
 		$results = DB::update("UPDATE user SET $field = ? WHERE id = ?", array($value, $userID) );
 
 		if($results == 1){
@@ -314,6 +310,13 @@ class User {
 		else {
 			return $results[0]->id;
 		}
+	}
+	
+	public static function getNameFromEmail($email) {
+		$results = DB::select("SELECT username FROM user WHERE email = ?", array($email));
+		if (empty($results))
+			return "";
+		return $results[0]->username;
 	}
 
 	public static function changeProfilePicture($id, $url){

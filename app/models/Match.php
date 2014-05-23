@@ -53,17 +53,49 @@ class Match {
      * @param match_id The ID of the match.
      * @return True if new link created, False otherwise.
      */
-    public static function linkPlayer( $player_id, $match_id ) {
+    public static function linkPlayer( $player_id, $match_id, $intime=NULL, $outtime=NULL ) {
         // first check whether the link was already created
         $query = "SELECT * FROM `".self::TABLE_PLAYER_PER_MATCH."` WHERE player_id = ? AND match_id = ?";
-        $values = array( $player_id, $team_id );
+        $values = array( $player_id, $match_id );
         $sql = DB::select( $query, $values );
         if ( !empty( $sql ) ) return False;
 
-        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_MATCH.'` (player_id, team_id) VALUES (?, ?)';
-        $values = array( $player_id, $team_id );
+        $query = 'INSERT INTO `'.self::TABLE_PLAYER_PER_MATCH.'` (player_id, match_id, intime, outtime) VALUES (?, ?, ?, ?)';
+        $values = array( $player_id, $match_id, $intime, $outtime );
         DB::insert( $query, $values );
         return True;
+    }
+
+    public static function substitute( $player_id, $outtime ) {
+        $query = "UPDATE `".self::TABLE_PLAYER_PER_MATCH."` SET `outtime` = ? WHERE `player_id` = ?";
+        $values = array( $outtime, $player_id);
+        DB::update( $query, $values );
+        return;
+    }
+
+    /**
+     * @brief Check whether there are matches already played.
+     * @param competition The competition to be checked.
+     * @return True if there are match played, False otherwise.
+     */
+    public static function match_played( $competition ) {
+        // ask competition id (if any)
+        $query = "SELECT id FROM `competition` WHERE name = ?";
+        $values = array( $competition );
+        $sql = DB::select( $query, $values );
+
+        if ( empty( $sql ) ) return False;
+
+        // get competition id and current date
+        $competition_id = $sql[0]->id;
+        $now = new DateTime();
+
+        // get all matches past today's date
+        $query = "SELECT `id` FROM `match` WHERE `competition_id` = ? AND `date` <= ?";
+        $values = array( $competition_id, $now->format( "Y-m-d H:i:s" ) );
+        $sql = DB::select( $query, $values );
+
+        return !( empty( $sql ) );
     }
 
     // TODO DOCUMENTIZE

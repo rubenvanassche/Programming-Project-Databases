@@ -106,10 +106,7 @@ class UserController extends BaseController {
 				$success = $user->register($data);
 
 				if($success == true){
-					// Insertion was succesfull, send an email with the activation
-					//Mail::send('user/emails/activation', array($username, $registrationCode), function($message){
-					//	$message->to($email, $firstname.$lastname)->subject('Welcome to coachCenter, please verify your account!');
-					//});
+
 
 					$data['content'] = 'Welcome to coachcenter! We have sent you an email to activate your account (check your spambox!).';
 					$data['title'] = 'Welcome!';
@@ -160,15 +157,16 @@ class UserController extends BaseController {
 
 				$user = new User;
 				if($user->passwordforgot($email, $newPassword)){
-					// Send an email to the user
-					//Mail::send('user/emails/passwordforgot', array($newPassword), function($message){
-					//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
-					//});
-
-					Notification::success('We have sent you an email with your new password');
-					return;
+					//Send email
+					$message = new stdClass();
+					$username = User::getNameFromEmail($email);
+					$data['username'] = $username;
+					$data['password'] = $newPassword;
+					Mail::send('mails.reset', $data, function($message) use ($email, $username){
+					$message->to($email, $username)->subject("Coach Center: password reset");
+					});
 					$data['title'] = 'Password Recovery';
-					$data['content'] = 'Your password was resetted, we have sent an email with your new password.';
+					$data['content'] = 'Your password was reset, we have sent an email with your new password.';
 					return View::make('layouts.simple', $data);
 				}else{
 					return Redirect::to('user/passwordforgot')->withInput();
@@ -182,6 +180,11 @@ class UserController extends BaseController {
 	}
 
 	function account(){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -206,8 +209,6 @@ class UserController extends BaseController {
 				$data['about'] = Input::get('about');
 				$data['age'] = Input::get('age');
 
-				$user = new User;
-
 
 				// Check if email is unique
 				$onlyOneEmail = $user->onlyOneEmail($data['email']);
@@ -229,7 +230,6 @@ class UserController extends BaseController {
 	    	// Show the form
 	    	$data['title'] = 'Account';
 	    	$data['countries'] = Country::getCountryNames();
-	    	$user = new User;
 	    	$data['user'] = $user->get($user->ID());
 	    	return View::make('layouts.simple', $data)->nest('content', 'user.account', $data);
     	}
@@ -339,6 +339,10 @@ class UserController extends BaseController {
 
 	function profile($id='') {
 		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 		$usergroup = new UserGroup;		
 		if($id == ''){
 			$data['groups'] = $usergroup->getGroupsByUser($user->ID());

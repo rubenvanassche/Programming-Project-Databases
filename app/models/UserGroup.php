@@ -81,6 +81,28 @@ class UserGroup {
 		return $result;		
 	}
 
+	function getPastBets($userGroup_id) {
+		$result = DB::select("SELECT match_id, betdate, user_id, (SELECT username FROM user WHERE user.id = bet.user_id) AS better FROM bet 
+								WHERE EXISTS (SELECT user_id FROM userPerUserGroup 
+											   WHERE userPerUserGroup.user_id = bet.user_id 
+												 AND userGroup_id = ?)
+								  AND EXISTS (SELECT id FROM `match` 
+											   WHERE `match`.id = bet.match_id
+												 AND `match`.date < NOW())", array($userGroup_id));
+		return $result;
+	}
+
+	function getFutureBets($userGroup_id) {
+		$result = DB::select("SELECT match_id, betdate, user_id, (SELECT username FROM user WHERE user.id = bet.user_id) AS better FROM bet 
+								WHERE EXISTS (SELECT user_id FROM userPerUserGroup 
+											   WHERE userPerUserGroup.user_id = bet.user_id 
+												 AND userGroup_id = ?)
+								  AND EXISTS (SELECT id FROM `match` 
+											   WHERE `match`.id = bet.match_id
+												 AND `match`.date > NOW())", array($userGroup_id));
+		return $result;
+	}
+
 	public static function acceptInvite($notif_id, $ug_id) {
 		// Mark notification as seen.
 		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
@@ -140,7 +162,7 @@ class UserGroup {
 	function timeline($userGroup_id){
 		$timeline = array();
 		// get the stared date
-		$result = DB::select("SELECT created,name FROM UserGroup WHERE id = ?", array($userGroup_id));
+		$result = DB::select("SELECT created,name FROM userGroup WHERE id = ?", array($userGroup_id));
 		
 		$name = $result[0]->name;
 		$usergroupcreatedate = $result[0]->created;
@@ -173,8 +195,26 @@ class UserGroup {
 		}
 		
 		// add the bets already passed(so games played)
-		
+		$pastBets = $this->getPastBets($userGroup_id);
+		foreach($pastBets as $bet){
+			$timeline_pastbet = array('date'=>$bet->betdate,
+									  'icon'=>'glyphicon-envelope',
+									  'color'=>'warning',
+									  'title'=>'<a href="'.url('profile').'/'.$bet->user_id.'">'.$bet->better.'</a> bet on <a href="'.url('match').'/'.$bet->match_id.'">this match</a>', 
+									 'content'=>'');
+			array_push($timeline, $timeline_pastbet);
+		}
+
 		// add the bets yet to play
+		$futureBets = $this->getFutureBets($userGroup_id);
+		foreach($futureBets as $bet){
+			$timeline_futurebet = array('date'=>$bet->betdate,
+									  'icon'=>'glyphicon-envelope',
+									  'color'=>'warning',
+									  'title'=>'<a href="'.url('profile').'/'.$bet->user_id.'">'.$bet->better.'</a> bet on <a href="'.url('match').'/'.$bet->match_id.'">this match</a>', 
+									 'content'=>'');
+			array_push($timeline, $timeline_futurebet);
+		}
 		
 		return $this->array_orderby($timeline, 'date',SORT_DESC);
 	}
