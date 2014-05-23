@@ -4,6 +4,7 @@ class Notifications {
 
 	const INVITE_USER_GROUP = 1;
 	const REMIND_USER_BETS = 2;
+	const NEW_DISCUSSION = 3;
 
 	public static function saveNotification($object_id, $subject_id, $actor_id, $type_id){
 		$created_date = date("Y-m-d H:i:s");
@@ -72,10 +73,15 @@ class Notifications {
     {
         switch($typeId){
             case self::INVITE_USER_GROUP:
-                $query = "SELECT * FROM `userGroupInvites` WHERE `id` = ?";
-				$values = array($objectId);
-				$result = DB::select($query, $values)[0];
-				return $result;
+              $query = "SELECT * FROM `userGroupInvites` WHERE `id` = ?";
+							$values = array($objectId);
+							$result = DB::select($query, $values)[0];
+							return $result;
+						case self::NEW_DISCUSSION:
+							$query = "SELECT * FROM `userGroupMessages` WHERE `id` = ?";
+							$values = array($objectId);
+							$result = DB::select($query, $values)[0];
+							return $result;
         }
     }
 
@@ -98,6 +104,15 @@ class Notifications {
 
 			case self::REMIND_USER_BETS:
 				return "Don't forget to bet on these matches!";
+			case self::NEW_DISCUSSION:
+				$result = DB::select("
+				SELECT ug.name, us.username
+				FROM userGroup as ug, user as us
+				WHERE ug.id = {$row['object']->usergroup_id}
+				AND us.id = {$row['object']->user_id}
+				")[0];
+				$message = $result->username . " started a new discussion in " . $result->name;
+				return $message;
       }
   }
 
@@ -143,7 +158,17 @@ class Notifications {
 					}
 				}
 		}
+	}
 
+	public static function notifyNewDiscussion($ug_id, $discussion_id) {
+		$user = new User;
+		$members = UserGroup::getUsers($ug_id);
+		
+		foreach($members as $member) {
+			if ($member->id != $user->ID()) {
+				Notifications::saveNotification($discussion_id, $member->id, $user->ID(), Notifications::NEW_DISCUSSION);
+			}
+		}
 	}
 
 }

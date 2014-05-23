@@ -38,7 +38,7 @@ class UserGroup {
 		DB::insert("INSERT INTO userPerUserGroup (user_id, userGroup_id, created) VALUES (?, ?, ?)", array($userID, $userGroupID, $date));
 	}
 
-	function getUsers($userGroupID){
+	public static function getUsers($userGroupID){
 		$result = DB::select("SELECT (SELECT username FROM user WHERE id = userPerUserGroup.user_id) as username, (SELECT id FROM user WHERE id = userPerUserGroup.user_id) as id, created  FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
 		return $result;
 	}
@@ -225,4 +225,9 @@ class UserGroup {
 
 		return $this->array_orderby($timeline, 'date',SORT_DESC);
 	}
+
+	// public static function getUsers($ug_id) {
+	// 	$result = DB::select("SELECT user_id FROM `userPerUserGroup` WHERE userGroup_id = ?", array($ug_id));
+	// 	return $result;
+	// }
 }
