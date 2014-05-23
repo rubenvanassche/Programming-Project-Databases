@@ -469,6 +469,85 @@ class CrawlerController extends BaseController {
     }
 
     /**
+     * @brief Get all the desired competition data from the competition page.
+     * @details An example of the competition page can be found at
+     * http://int.soccerway.com/international/world/world-cup/c72/
+     *
+     * @param url The url to the competition page.
+     * @param key Array of keys for parsing specific parts of competition data.
+     * The following keys are available:
+     *
+     *      - name
+     *      - group matches [array(url)]
+     *      - final matches [array(url)]
+     *
+     * @return Associative array with the keys mapped to either NULL or a value.
+     */
+    public static function competition_data($url, $keys=array()) {
+        // all data in case no keys were given
+        if (empty($keys)) $keys = array("name", "group matches", "final matches");
+
+        // load document
+        $doc = self::request($url);
+        if (empty($doc)) return self::empty_data($keys);    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // parse competition data
+        $competition_data = array();
+        foreach ($keys as $key) {
+            $list = $data->filterXPath("//div[contains(@class, block_competition_left_tree)]/ul/li[contains(@class, expanded)]/ul[contains(@class, expanded)]")->getNode(0);
+
+            if ("name" == $key) {
+                // get competition name and edition
+                $name = $data->filterXPath("//div[@id=\"subheading\"]/h1")->getNode(0);
+                $name = empty($name) ? NULL : trim($name->textContent);
+
+                $edition = empty($list) ? NULL : $list->childNodes->item(0);
+                $edition = empty($edition) ? NULL : $edition->childNodes->item(1);
+                $edition = empty($edition) ? NULL : trim($edition->textContent);
+
+                $competition_data[$key] = !(empty($name) || empty($edition)) ? $name.' '.$edition : NULL;
+            } else if ("group matches" == $key || "final matches" == $key) {
+                $xpath = "group matches" == $key ? "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/ul/li/a" : "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/a";
+
+                // get matches urls
+                $matches = array();
+                foreach ($data->filterXPath($xpath) as $stage) {
+                    $stage_url = $stage->getAttribute("href");
+                    if (empty($stage_url) || ("final matches" == $key && strpos($stage_url, "group") !== false)) continue;
+
+                    $stage_page = self::request("http://int.soccerway.com/".$stage_url);
+                    if (empty($stage_page)) continue;
+
+                    $stage_data = new Crawler();
+                    $stage_data->addDocument($stage_page);
+
+                    foreach ($stage_data->filterXPath("//table[contains(@class, matches)]/tbody/tr[contains(@class, match)]/td[4]/a") as $match_url) {
+                        // get match url
+                        $match_url = $match_url->getAttribute("href");
+                        if (empty($match_url) || preg_match("/^\?/", $match_url)) continue;
+
+                        $matches[] = "http://int.soccerway.com/".$match_url;
+                    } // end foreach
+
+                    $stage_data->clear();
+                } // end foreach
+
+                $competition_data[$key] = $matches;
+            } else {
+                // other data
+                $competition_data[$key] = NULL;
+            } // end if-else
+        } // end foreach
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return $competition_data;
+    }
+
+    /**
      * @brief Update the countries from database.
      */
     public static function update_countries() {
@@ -593,78 +672,6 @@ class CrawlerController extends BaseController {
         } // end foreach
 
         return;
-    }
-
-    /**
-     * @brief Get all the desired competition data from the competition page.
-     * @details An example of the competition page can be found at
-     * http://int.soccerway.com/international/world/world-cup/c72/
-     *
-     * @param url The url to the competition page.
-     *
-     * @return An associative array with the following values mapped:
-     *      "name"          => $name,
-     *      "matches data"  => $matches_data,
-     */
-    public static function competition_data( $url ) {
-        // load document
-        $doc = self::request( $url );
-        if ( empty( $doc ) ) return array();    // request failed
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-
-        // query for the name of the competition
-        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a/../../../a";
-
-        $competition_name = $data->filterXPath( $xpath )->getNode(0);
-        $competition_name = ( empty( $competition_name ) ) ? NULL : trim( $competition_name->textContent );
-
-        // query for the edition
-        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/a";
-
-        $edition = $data->filterXPath( $xpath )->getNode(0);
-        $edition = ( empty( $edition ) ) ? NULL : trim( $edition->textContent );
-
-        // name is the competition name + edition
-        $name = $competition_name.' '.$edition;
-
-        // query for the matches of the group stages
-        $xpath = "//div[contains(@class, block_competition_left_tree)]/ul/li/ul/li/ul/li/ul/li/a";
-
-        $matches_data = array();
-        foreach ( $data->filterXPath( $xpath ) as $group ) {
-            $href = $group->getAttribute( "href" );
-            if ( empty( $href ) ) continue;
-            $url = "http://int.soccerway.com/".$href;
-
-            $group_page = self::request( $url );
-            if ( empty( $group_page ) ) continue;
-
-            $group_data = new Crawler();
-            $group_data->addDocument( $group_page );
-
-            // query for href
-            $xpath_href = "//table[contains(@class, matches)]/tbody/tr[contains(@class, match)]/td[4]/a";
-
-            foreach ( $group_data->filterXPath( $xpath_href ) as $href ) {
-                $href = $href->getAttribute( "href" );
-                if ( empty( $href ) ) continue;
-                $url = "http://int.soccerway.com/".$href;
-
-                // add match data
-                $matches_data[] = self::match_data( $url );
-            } // end foreach
-
-            $group_data->clear();
-        } // end foreach
-
-        // clear cache to avoid memory exhausting
-        $data->clear();
-        return array(
-            "name"          => $name,
-            "matches data"  => $matches_data,
-        );
     }
 
     /**
