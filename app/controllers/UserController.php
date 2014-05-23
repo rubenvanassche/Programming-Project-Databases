@@ -337,7 +337,7 @@ class UserController extends BaseController {
 		return Redirect::back()->withInput(array("loggedOut" => true));
 	}
 
-	function profile($id='') {
+	public static function profile($id='') {
 		$user = new User;
 		if (!$user->loggedIn()) {
 	    	$data['title'] = 'Not logged in';

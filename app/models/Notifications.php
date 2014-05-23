@@ -72,7 +72,7 @@ class Notifications {
     {
         switch($typeId){
             case self::INVITE_USER_GROUP:
-                $query = "SELECT * FROM `userGroupInvites` WHERE `competitionId` = ?";
+                $query = "SELECT * FROM `userGroupInvites` WHERE `id` = ?";
 				$values = array($objectId);
 				$result = DB::select($query, $values)[0];
 				return $result;
@@ -85,7 +85,7 @@ class Notifications {
 				$group = DB::select("
 				SELECT name
 						FROM userGroup
-						WHERE id = {$row['object']->competitionId}
+						WHERE id = {$row['object']->usergroupId}
 				");
 
 				$actor = DB::select("
@@ -123,22 +123,24 @@ class Notifications {
 		});
 	}
 
-	public static function betReminder($user_id, $matches) {
-		// Sends a notification reminding one user that they still need to bet on a match.
-		$user = new User;
-		Notifications::saveNotification(NULL, $user->ID(), $user->ID(), Notifications::REMIND_USER_BETS);
+	public static function betReminder($user_id) {
+		// Sends a notification reminding one user that they still need to bet some matches.
+		Notifications::saveNotification(NULL, $user_id, $user_id, Notifications::REMIND_USER_BETS);
 	}
 
 	public static function sendReminders($days) {
 		// Will send an email + notification reminding the users that they still need to bet on a match.
 		// Set $days to the amount of days you want to check for upcoming matches.
-		$users = User::getEmailUsers();
+		$a_user = new User;
+		$users = $a_user->getAllUsers();
 
 		foreach($users as $user) {
 				$matches = Match::getNextunbetMatches($days, $user);
 				if (count($matches) > 0) {
-					Notifications::sendMailReminder($user->id, $matches);
-					Notifications::betReminder($user->id, $matches);
+					Notifications::betReminder($user->id);
+					if ($user->recieve_email == 1) {
+						Notifications::sendMailReminder($user->id, $matches);
+					}
 				}
 		}
 

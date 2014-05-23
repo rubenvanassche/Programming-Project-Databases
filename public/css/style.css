@@ -3,9 +3,9 @@
  * Copyright 2011-2014 CoachCenter
  * Licensed under GNU GPL-v3
 */
- 
-body{ 
-	padding-top: 50px; 
+
+body{
+	padding-top: 50px;
 }
 
 .widepicture{
@@ -62,12 +62,14 @@ table.tablesorter thead tr .header {
 	background-position: center right;
 	cursor: pointer;
 }
+
 table.tablesorter tbody td {
 	color: #3D3D3D;
 	padding: 4px;
 	background-color: #FFF;
 	vertical-align: top;
 }
+
 table.tablesorter tbody tr.odd td {
 	background-color:#F0F0F6;
 }
@@ -79,5 +81,3 @@ table.tablesorter thead tr .headerSortDown {
 }
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 background-color: #8dbdd8;
-}
-
