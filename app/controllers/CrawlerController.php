@@ -311,6 +311,66 @@ class CrawlerController extends BaseController {
     }
 
     /**
+     * @brief Generator for parsing all the international teams from the
+     * official FIFA participant list.
+     * @details A complete list can be found at
+     * http://int.soccerway.com/teams/rankings/fifa/
+     *
+     * @param keys Array of keys indicating what kind of data you want to get.
+     * The following data is available:
+     *
+     *      - team name
+     *      - team url
+     *      - points
+     *
+     * @return Associative array with the keys mapped to either NULL or a
+     * value.
+     */
+    public static function teams_data($keys=array()) {
+        // use all keys when no keys were given
+        if (empty($keys)) $keys = array("team name", "team url", "points");
+
+        // load document
+        $doc = self::request( "http://int.soccerway.com/teams/rankings/fifa/" );
+        if (empty($doc)) { yield self::empty_data($keys); return; } // request failed
+
+        $data = new Crawler();
+        $data->addDocument($doc);
+
+        foreach ($data->filterXPath("//table[contains(@class, fifa_rankings)]/tbody/tr/td/..") as $row) {
+            // skip invalid rows
+            if (4 > $row->childNodes->length) continue;
+
+            // get team data
+            $team_data = array();
+            foreach ($keys as $key) {
+                if ("team name" == $key) {
+                    $name = $row->childNodes->item(2);
+
+                    $team_data[$key] = empty($name) ? NULL : trim($name->textContent);
+                } else if ("team url" == $key) {
+                    $url = $row->childNodes->item(2);
+                    $url = empty($url) ? NULL : $url->getElementsByTagName('a');
+                    $url = empty($url) ? NULL : $url->item(0);
+                    $url = empty($url) ? NULL : "http://int.soccerway.com/".$url->getAttribute("href");
+                } else if ("points" == $key) {
+                    $points = $row->childNodes->item(4);
+
+                    $team_data[$key] = empty($points) ? 0 : trim($points->textContent);
+                } else {
+                    // other data
+                    $team_data[$key] = NULL;
+                } // end if-else
+            } // end foreach
+            yield $team_data;
+        } // end foreach
+
+        // clear cache to avoid memory exhausting
+        $data->clear();
+        return;
+    }
+
+    /**
      * @brief Get all desired match data from the match page.
      * @details An example of the match data can be found at
      * http://int.soccerway.com/matches/2014/06/12/world/world-cup/brazil/croatia/1220070/?ICID=PL_MS_01
@@ -567,59 +627,6 @@ class CrawlerController extends BaseController {
             $country_id = $ids[0]->id;
         } // end foreach
 
-        return;
-    }
-
-    /**
-     * @brief Generator for parsing all the international teams from the
-     * official FIFA participant list.
-     * @details A complete list can be found at
-     * http://int.soccerway.com/teams/rankings/fifa/
-     *
-     * @return An associative array with the following values mapped:
-     *      "name"          => $name,
-     *      "points"        => $points,
-     *      "country"       => $country,
-     *      "coach data"    => $coach_data,
-     *      "players data"  => $players_data,
-     */
-    public static function teams_generator() {
-        // load document
-        $doc = self::request( "http://int.soccerway.com/teams/rankings/fifa/" );
-        if ( empty( $doc ) ) return;    // request failed
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-
-        // query for row
-        $xpath = "//table[contains(@class, fifa_rankings)]/tbody/tr/td/..";
-        foreach ( $data->filterXPath( $xpath ) as $row ) {
-            // skip empty rows
-            if ( 0 == $row->childNodes->length ) continue;
-
-            $name = $row->childNodes->item(2);
-            $name = ( empty( $name ) ) ? NULL : trim( $name->textContent );
-
-            $points = $row->childNodes->item(4);
-            $points = ( empty( $points ) ) ? 0 : trim( $points->textContent );
-
-            // get more data from the team's page
-            $href = $row->childNodes->item(2)->getElementsByTagName( 'a' );
-            $href = ( empty( $href ) ) ? NULL : $href->item(0)->getAttribute( "href" );
-            $url = ( empty( $href ) ) ? NULL : "http://int.soccerway.com/".$href;
-
-            $team_data = ( empty( $url ) ) ? array() : self::team_data( $url );
-
-            // merge team data with what you already have
-            yield array_merge(
-                array( "name" => $name, "points" => $points ),
-                $team_data
-            );
-
-        } // end foreach
-
-        // clear cache to avoid memory exhausting
-        $data->clear();
         return;
     }
 
