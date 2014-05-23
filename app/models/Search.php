@@ -36,6 +36,31 @@ class Search{
 		}
 	    return $out;
 	}
+	
+	public static function users($input){		
+	    $query = DB::table('user');
+	    $query->select(DB::raw('username, id'));
+	
+	    foreach($input as $term){
+	        $query->where('username', 'LIKE', '%'. $term .'%');
+	    }
+	
+	    $results = $query->get();
+	    return $results;
+	}
+
+	public static function usergroups($input){		
+	    $query = DB::table('userGroup');
+	    $query->select(DB::raw('name, id, private'));
+	
+	    foreach($input as $term){
+	        $query->where('name', 'LIKE', '%'. $term .'%');
+	    }
+	
+	    $results = $query->get();
+	    return $results;
+	}
+	
 }
 
 ?>

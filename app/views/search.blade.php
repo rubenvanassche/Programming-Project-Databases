@@ -38,6 +38,7 @@
 				</div>
 			@endforeach
 		@endif
+		
 		@if (empty($matches) == false)
 			<div class="col-md-12">
 				<h3>Matches</h3>
@@ -45,6 +46,30 @@
 			@foreach ($matches as $match)
 				<div class="col-md-2">
 					<a href="{{route('match', array('id'=>$match->id))}}">{{$match->hometeam}} - {{$match->awayteam}}</a>
+				</div>
+			@endforeach
+		@endif
+		
+		@if (empty($users) == false)
+			<div class="col-md-12">
+				<h3>Users</h3>
+			</div>
+			@foreach ($users as $user)
+				<div class="col-md-2">
+					<a href="{{url('profile').'/'.$user->id}}">{{$user->username}}</a>
+				</div>
+			@endforeach
+		@endif
+		
+		@if (empty($usergroups) == false)
+			<div class="col-md-12">
+				<h3>Usergroups</h3>
+			</div>
+			@foreach ($usergroups as $usergroup)
+				<div class="col-md-2">
+					@if($usergroup->private != 1)
+					<a href="{{url('usergroup').'/'.$usergroup->id}}">{{$usergroup->name}}</a>
+					@endif
 				</div>
 			@endforeach
 		@endif
