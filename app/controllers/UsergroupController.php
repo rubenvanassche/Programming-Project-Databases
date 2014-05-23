@@ -55,10 +55,12 @@ class UsergroupController extends BaseController {
 
 	public static function usergroup($id){
 		$usergroup = new UserGroup;
+		$usergroupmessages = new UserGroupMessages;
 		$data['users'] = $usergroup->getUsers($id);
 		$data['title'] = $usergroup->getName($id);
 		$data['id'] = $id;
 		$data['timeline'] = $usergroup->timeline($id);
+		$data['messages'] = $usergroupmessages->getAll($id);
 
 		//print_r($usergroup->timeline($id));
 

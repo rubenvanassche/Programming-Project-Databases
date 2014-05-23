@@ -11,7 +11,7 @@
 			if(UserGroup::isMember($user->ID(), $id)) {
 			?>	
 						<a class="btn btn-danger pull-right" style="margin-top:20px;" href="{{url('usergroup/'.$id.'/leave')}}">Leave Group</a>
-						<a class="btn btn-warning pull-right" style="margin-top:20px;" href="{{url('usergroup/'.$id.'/invite')}}">Invite users</a>
+						<a class="btn btn-warning pull-right" style="margin-top:20px;" href="{{url('usergroup/'.$id.'/invite')}}">Invite users</a><a class="btn btn-success pull-right" style="margin-top:20px;" href="{{url('usergroup/'.$id.'/adddiscussion')}}">New Discussion</a>
 						
 			<?php
 			}else{
@@ -23,15 +23,41 @@
 		</div>
 	</div>
 	<div class="row">
-		@foreach ($users as $user)
-			<div class="col-md-3">
-				<a href="{{url('profile/'.$user->id)}}"><i class="glyphicon glyphicon-user"></i> {{$user->username}}</a>
-			</div>
-		@endforeach				
+		
+		
+			@foreach ($users as $user)
+				<div class="col-md-3">
+					<a href="{{url('profile/'.$user->id)}}"><i class="glyphicon glyphicon-user"></i> {{$user->username}}</a>
+				</div>
+			@endforeach
+			
 	</div>
 	<div class="row">
 		<hr />
 	</div>
+	<?php
+	$user = new User;
+	?>
+	@if(UserGroup::isMember($user->ID(), $id))
+		<div class="row">
+			<div class="col-md-12">
+				@if(empty($messages))
+					<p>No discussions, <a href="{{url('usergroup/'.$id.'/adddiscussion')}}">create a new one</a>.
+				@else
+				<h4>Discussions:</h4>
+					<ul class="list-group">
+					  @foreach($messages as $message)
+					   <a href="{{url('usergroup/'.$id.'/discussion/'.$message->id)}}" class="list-group-item">{{$message->title}}<span class="badge">{{$message->count}}</span></a>
+					  @endforeach
+					</ul>
+				@endif
+			</div>
+		</div>
+		
+		<div class="row">
+			<hr />
+		</div>
+	@endif	
 	
 	<ul class="timeline">
 		<?php

@@ -11,6 +11,8 @@ class SearchController extends BaseController {
 		$data['teams'] = Search::teams($input);
 		$data['players'] = Search::players($input);
 		$data['matches'] = Search::matches($input);
+		$data['users'] = Search::users($input);
+		$data['usergroups'] = Search::usergroups($input);
 
 		return View::make('search', $data)->with('title', 'Search');
 	}

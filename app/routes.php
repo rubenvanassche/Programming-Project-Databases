@@ -62,6 +62,9 @@ Route::get('usergroups', 'UsergroupController@index');
 Route::get('usergroup/{id}', 'UsergroupController@usergroup');
 Route::get('usergroup/{id}/addMe', 'UsergroupController@addMe');
 Route::get('usergroup/{id}/leave', 'UsergroupController@leave');
+Route::get('usergroup/{id}/discussion/{message_id}', 'UsergroupMessagesController@discussion');
+Route::match(array('GET', 'POST'),'usergroup/{id}/adddiscussion', 'UsergroupMessagesController@addDiscussion');
+Route::match(array('GET', 'POST'),'usergroup/{id}/discussion/{message_id}/add', 'UsergroupMessagesController@addMessage');
 Route::match(array('GET', 'POST'),'usergroup/{id}/invite', 'UsergroupController@inviteUser');
 Route::match(array('GET', 'POST'), 'usergroups/new', 'UsergroupController@add');
 
