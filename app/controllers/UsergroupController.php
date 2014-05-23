@@ -53,7 +53,7 @@ class UsergroupController extends BaseController {
     	}
 	}
 
-	function usergroup($id){
+	public static function usergroup($id){
 		$usergroup = new UserGroup;
 		$usergroupmessages = new UserGroupMessages;
 		$data['users'] = $usergroup->getUsers($id);
@@ -109,7 +109,7 @@ class UsergroupController extends BaseController {
 					return View::make('layouts.simple', $data);
 				}else{
 					$usergroup = new UserGroup();
-					$usergroup->invite($user->ID(),$usergroup_id, $invitee_id);
+					$usergroup->invite($invitee_id,$usergroup_id, $user->ID());
 
 					$data['title'] = 'User Invited!';
 					$data['content'] = '<a href="'.url('usergroup/'.$usergroup_id).'">Click here</a> to go back to the usergroup.';

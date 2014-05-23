@@ -82,7 +82,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
 							<ul class="dropdown-menu">
-									<li><a href="{{url('myProfile')}}">No new notifications</a></li>
+									<li><a href="{{url('profile')}}">No new notifications</a></li>
 							</ul>
 						</li>
 						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>

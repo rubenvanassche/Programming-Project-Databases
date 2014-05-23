@@ -32,6 +32,8 @@ CREATE TABLE `bet` (
   `awayteam_yellows` int(5) DEFAULT NULL,
   `awayteam_reds` int(5) DEFAULT NULL,
   `evaluated` tinyint(1) NOT NULL DEFAULT '0',
+  `betdate` datetime DEFAULT NULL,
+
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
