@@ -157,15 +157,16 @@ class UserController extends BaseController {
 
 				$user = new User;
 				if($user->passwordforgot($email, $newPassword)){
-					// Send an email to the user
-					//Mail::send('user/emails/passwordforgot', array($newPassword), function($message){
-					//	$message->to($result, $results[0]->firstname.$results[0]->lastname)->subject('We have resetted your password!');
-					//});
-
-					Notification::success('We have sent you an email with your new password');
-					return;
+					//Send email
+					$message = new stdClass();
+					$username = User::getNameFromEmail($email);
+					$data['username'] = $username;
+					$data['password'] = $newPassword;
+					Mail::send('mails.reset', $data, function($message) use ($email, $username){
+					$message->to($email, $username)->subject("Coach Center: password reset");
+					});
 					$data['title'] = 'Password Recovery';
-					$data['content'] = 'Your password was resetted, we have sent an email with your new password.';
+					$data['content'] = 'Your password was reset, we have sent an email with your new password.';
 					return View::make('layouts.simple', $data);
 				}else{
 					return Redirect::to('user/passwordforgot')->withInput();
