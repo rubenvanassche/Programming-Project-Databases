@@ -124,7 +124,7 @@ class CrawlerController extends BaseController {
      * http://int.soccerway.com/players/iker-casillas-fernandez/317/
      *
      * @param url The url of the player page.
-     * @param keys Array of keys if you want to parse specific information. 
+     * @param keys Array of keys if you want to parse specific information.
      * Available keys are:
      *
      *      - first name
@@ -140,11 +140,11 @@ class CrawlerController extends BaseController {
         if (empty($keys)) $keys = array("first name", "last name", "position");
 
         // load document
-        $doc = self::request( $url );
+        $doc = self::request($url);
         if (empty($doc)) return self::empty_data($keys);    // request failed
 
         $data = new Crawler();
-        $data->addDocument( $doc );
+        $data->addDocument($doc);
 
         // parse player info from players passport
         $player_data = array();
@@ -183,8 +183,60 @@ class CrawlerController extends BaseController {
 
         // clear cache to avoid memory exhausting
         $data->clear();
-        var_dump($player_data);
         return $player_data;
+    }
+
+    /**
+     * @brief Get all the desired data from the coach page.
+     * @details An example of the coach page can be found at
+     * http://int.soccerway.com/coaches/vicente-del-bosque/130179/
+     *
+     * @param url The url of the coach page.
+     * @param keys Array of keys if you want to parse specific information.
+     * Available keys are:
+     *
+     *      - first name
+     *      - last name
+     *
+     * Use empty array or NULL to catch'em all.
+     *
+     * @return Associative array with the keys mapped to a value.
+     */
+    public static function coach_data($url, $keys=array()) {
+        // all data in case no keys were given
+        if (empty($keys)) $keys = array("first name", "last name");
+
+        // load document
+        $doc = self::request( $url );
+        if (empty($doc)) return self::empty_data($keys);    // request failed
+
+        $data = new Crawler();
+        $data->addDocument( $doc );
+
+        // parse coach info from coach passport
+        $coach_data = array();
+        foreach ($keys as $key) {
+            $passport = $data->filterXPath("//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd");
+
+            if ("first name" == $key) {
+                // get first name
+                $first_name = $passport->getNode(0);
+
+                $coach_data[$key] = empty($first_name) ? NULL : trim($first_name->textContent);
+            } else if ("last name" == $key) {
+                // get last name
+                $last_name = $passport->getNode(1);
+
+                $coach_data[$key] = empty($last_name) ? NULL : trim($last_name->textContent);
+            } else {
+                // other data
+                $coach_data[$key] = NULL;
+            } // end if-else
+        } // end foreach
+
+        // clear data to avoid memory exhausting
+        $data->clear();
+        return $coach_data;
     }
 
     /**
@@ -206,45 +258,6 @@ class CrawlerController extends BaseController {
         } // end foreach
 
         return;
-    }
-
-    /**
-     * @brief Get all the desired data from the coach page.
-     * @details An example of the coach page can be found at
-     * http://int.soccerway.com/coaches/vicente-del-bosque/130179/
-     *
-     * @param url The url of the coach page.
-     *
-     * @return An associative array with the following values mapped:
-     *      "first name"    => $first_name,
-     *      "last name"     => $last_name,
-     */
-    public static function coach_data( $url ) {
-        // load document
-        $doc = self::request( $url );
-        if ( empty( $doc ) ) return array();    // request failed
-
-        $data = new Crawler();
-        $data->addDocument( $doc );
-
-        // query for first name
-        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[1]";
-
-        $first_name = $data->filterXPath( $xpath )->getNode(0);
-        $first_name = ( empty( $first_name ) ) ? NULL : trim( $first_name->textContent );
-
-        // query for last name
-        $xpath = "//div[contains(@class, block_player_passport)]/div/div/div/div/dl/dd[2]";
-
-        $last_name = $data->filterXPath( $xpath )->getNode(0);
-        $last_name = ( empty( $last_name ) ) ? NULL : trim( $last_name->textContent );
-
-        // clear data to avoid memory exhausting
-        $data->clear();
-        return array(
-            "first name"    => $first_name,
-            "last name"     => $last_name,
-        );
     }
 
     /**
