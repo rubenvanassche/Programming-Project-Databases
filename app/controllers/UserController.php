@@ -343,8 +343,8 @@ class UserController extends BaseController {
 	    	$data['title'] = 'Not logged in';
 	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
 		}
-		$usergroup = new UserGroup;		
-		if($id == ''){
+		$usergroup = new UserGroup;
+		if($id == '' || $id == $user->ID()){
 			$data['groups'] = $usergroup->getGroupsByUser($user->ID());
 			$data['user'] = $user->get($user->ID());
 			$data['profilepicture'] = $user->getPicture($user->ID());
