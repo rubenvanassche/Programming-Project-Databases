@@ -236,6 +236,12 @@ class UserController extends BaseController {
 	}
 
 	function changepassword(){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
+
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -251,8 +257,6 @@ class UserController extends BaseController {
 			}else{
 				// Start working on this data
 				$data['password'] = Input::get('password');
-
-				$user = new User;
 
 				if($user->change($user->ID(), 'password', $data['password'])){
 					$user->logout();
@@ -274,6 +278,11 @@ class UserController extends BaseController {
 
 	function changeprofilepicture(){
 		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
+
 		if($user->facebookOnlyUser($user->ID()) == false){
 			if(Request::isMethod('post')){
 				$rules = array(
