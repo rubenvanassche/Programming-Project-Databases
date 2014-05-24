@@ -12,7 +12,7 @@
 	  </div>
     </div>
     <div class="col-md-12">
-      <table id="myTable" class="tablesorter">
+      <table id="myTable" class="tablesorter" style="text-align: center;">
         <thead class="center">
           <tr>
             <th>Date</th>
@@ -40,7 +40,7 @@
                   <tr class="regular">
                 <?php } ?>
                     <td><?php $date = new DateTime($match->date);
-								  echo $date->format('d-m-Y H:i');
+								  echo date_format($date, 'd-m-Y H:i');
 						?>
 					</td>
                     <td><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{$match->hometeam}}</a></td>
@@ -61,7 +61,10 @@
               ?>
               @foreach($matches as $match)
                   <tr class="mark">
-                    <td>{{$match->date}}</td>
+                    <td><?php $date = new DateTime($match->date);
+                  echo date_format($date, 'd-m-Y H:i');
+            ?>
+          </td>
                     <td><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{$match->hometeam}}</a></td>
                     <td> - </td>
                     <td><a href="{{route('team', array('id'=>$match->awayteam_id))}}">{{$match->awayteam}}</a></td>

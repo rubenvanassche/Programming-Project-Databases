@@ -44,7 +44,9 @@
 			<tbody>
 				@foreach ($goals as $goal)
 					<tr>
-						<td><?php echo $goal->date; ?></td>
+						<td><?php $date = new DateTime($goal->date);
+								  echo date_format($date, 'd-m-Y H:i');
+						?></td>
 						<td><?php echo $goal->time; ?></td>
 						<td><a href="<?php echo route('match', array('id'=>$goal->match_id)); ?>">{{$goal->hometeam}} - {{$goal->awayteam}} </a></td>
 					<tr>
@@ -64,7 +66,9 @@
 			<tbody>	
 				@foreach ($cards as $card)
 					<tr>
-						<td><?php echo $card->date; ?></td>
+						<td><?php $date = new DateTime($card->date);
+								  echo date_format($date, 'd-m-Y H:i');
+						?></td>
 						<td><?php echo $card->time; ?></td>
 						<td><a href="<?php echo route('match', array('id'=>$card->match_id)); ?>">{{$card->hometeam}} - {{$card->awayteam}} </a></td>
 						<td><?php echo cardColorToImg($card->color);?></td>
