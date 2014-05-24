@@ -10,12 +10,14 @@
 				<thead>
 					<tr>
 						<th>Username</th>
+						<th>Bet score</th>
 					</tr>
 				</thead>
 				<tbody>	
 					@foreach ($users as $user)
 						<tr>
 							<td><a href="{{url('profile/'.$user->id)}}">{{$user->username}}</a></td>
+							<td>{{$user->betscore}}</td>
 						</tr>
 					@endforeach					
 				</tbody>
