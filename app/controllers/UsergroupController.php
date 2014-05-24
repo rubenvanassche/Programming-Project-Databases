@@ -30,10 +30,14 @@ class UsergroupController extends BaseController {
 			}else{
 				// Start working on this data
 				$name = Input::get('name');
+				$private = Input::get('private');
+				if ($private == 'true') {
+					$private = true;
+				}
 
 				$user = new User;
 				$usergroup = new UserGroup;
-				$success = $usergroup->addGroup($name);
+				$success = $usergroup->addGroup($name, $private);
 
 				if($success){
 					// Add founder of the group to the group instantly.
