@@ -2,9 +2,9 @@
 
 <?php
 	function cardColorToImg($color){
-		if($color == 1){
+		if($color == 'red'){
 			return "<img src='". asset('img/redcard.png') ."' style='height:16px;' />";
-		}else if($color == 0){
+		}else if($color == 'yellow'){
 			return "<img src='". asset('img/yellowcard.png') ."' style='height:16px;' />";
 		}
 	}

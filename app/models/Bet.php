@@ -100,19 +100,19 @@ class Bet {
 					$points = $points - 5;;
 			}
 			if ($bet->hometeam_reds != -1) {
-				if ($bet->hometeam_reds == $cards[0])
+				if ($bet->hometeam_reds == $cards[1])
 					$points = $points + 20;
 				else
 					$points = $points - 5;;
 			}
 			if ($bet->awayteam_yellows != -1) {
-				if ($bet->awayteam_yellows == $cards[0])
+				if ($bet->awayteam_yellows == $cards[2])
 					$points = $points + 20;
 				else
 					$points = $points - 5;;
 			}
 			if ($bet->awayteam_reds != -1) {
-				if ($bet->awayteam_reds == $cards[0])
+				if ($bet->awayteam_reds == $cards[3])
 					$points = $points + 20;
 				else
 					$points = $points - 5;;
@@ -125,11 +125,9 @@ class Bet {
 
 	public static function processAllBets() {
 		$now = new DateTime();
-		$tomorrow = new DateTime();
-		$tomorrow = $tomorrow->add(new DateInterval('P1D'));
 		$now = $now->format("Y-m-d H:i:s");
-		$tomorrow = $tomorrow->format("Y-m-d H:i:s");
-		$matches = DB::select("SELECT id FROM `match` WHERE date > ? AND date < ?", array($now, $tomorrow));
+
+		$matches = DB::select("SELECT id FROM `match` WHERE date < ?", array($now));
 		$totalBetCount = 0;
 		$matchCount = 0;
 		foreach($matches as $match) {
