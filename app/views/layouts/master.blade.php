@@ -29,7 +29,7 @@
 
 					{{ Form::open(array('url' => 'search', 'class'=>'navbar-form navbar-right')) }}
 						<div class="form-group">
-							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%;', 'placeholder'=>'Type searchterm here')) }}
+							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%; padding:0.35em; ', 'placeholder'=>'Type searchterm here')) }}
 						</div>
 						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i></button>
 					{{ Form::token() . Form::close() }}
