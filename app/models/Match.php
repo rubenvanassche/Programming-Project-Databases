@@ -66,9 +66,9 @@ class Match {
         return True;
     }
 
-    public static function substitute( $player_id, $outtime ) {
-        $query = "UPDATE `".self::TABLE_PLAYER_PER_MATCH."` SET `outtime` = ? WHERE `player_id` = ?";
-        $values = array( $outtime, $player_id);
+    public static function substitute( $player_id, $match_id, $outtime ) {
+        $query = "UPDATE `".self::TABLE_PLAYER_PER_MATCH."` SET `outtime` = ? WHERE `player_id` = ? AND `match_id` = ?";
+        $values = array( $outtime, $player_id, $match_id);
         DB::update( $query, $values );
         return;
     }
