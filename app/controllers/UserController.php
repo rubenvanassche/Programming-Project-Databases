@@ -347,10 +347,7 @@ class UserController extends BaseController {
 
 	public static function profile($id='') {
 		$user = new User;
-		if (!$user->loggedIn()) {
-	    	$data['title'] = 'Not logged in';
-	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
-		}
+
 		$usergroup = new UserGroup;
 		if($id == '' || $id == $user->ID()){
 			$data['groups'] = $usergroup->getGroupsByUser($user->ID());

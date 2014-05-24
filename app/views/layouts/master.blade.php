@@ -58,7 +58,6 @@
 						</li>
 					</ul>
 					<?php
-					$user = new User;
 					if($user->loggedIn()) {
 						if (count($notifications) > 0) {
 					?>
@@ -72,9 +71,7 @@
 								@endforeach
 							</ul>
 						</li>
-						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
-						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
+
 					<?php
 						}else{
 					?>
@@ -85,15 +82,18 @@
 									<li><a href="{{url('profile')}}">No new notifications</a></li>
 							</ul>
 						</li>
+					<?php
+						}
+					?>
 						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
 						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
 						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-euro"></i></a></li>
 					</ul>
 					<?php
-						}
 					}
 					else {?>
 						<ul class="nav navbar-nav navbar-left">
+							<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
 							<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-euro"></i></a></li>
 						</ul>
 					<?php } ?>
