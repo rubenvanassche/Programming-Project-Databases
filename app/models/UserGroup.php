@@ -54,7 +54,7 @@ class UserGroup {
 	}
 
 	public static function getUsers($userGroupID){
-		$result = DB::select("SELECT (SELECT username FROM user WHERE id = userPerUserGroup.user_id) as username, (SELECT id FROM user WHERE id = userPerUserGroup.user_id) as id, created  FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
+		$result = DB::select("SELECT (SELECT username FROM user WHERE id = userPerUserGroup.user_id) as username, (SELECT betscore FROM user WHERE id = userPerUserGroup.user_id) as betscore, (SELECT id FROM user WHERE id = userPerUserGroup.user_id) as id, created  FROM userPerUserGroup WHERE userGroup_id = ?", array($userGroupID));
 		return $result;
 	}
 

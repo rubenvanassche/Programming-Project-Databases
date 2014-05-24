@@ -27,7 +27,7 @@
 		
 			@foreach ($users as $user)
 				<div class="col-md-3">
-					<a href="{{url('profile/'.$user->id)}}"><i class="glyphicon glyphicon-user"></i> {{$user->username}}</a>
+					<a href="{{url('profile/'.$user->id)}}"><i class="glyphicon glyphicon-user"></i> {{$user->username}} </a> (betscore: {{$user->betscore}})
 				</div>
 			@endforeach
 			

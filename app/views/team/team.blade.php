@@ -23,6 +23,12 @@
 		<img class="img-responsive flag" src={{$teamImageURL}} alt="" />
 		<h2>{{$teamObj->name}}</h2>
 		<p><b>Ranking Points: </b> {{$teamObj->fifapoints}}</p>
+		<?php
+		$coach = Coach::get($teamObj->coach_id);
+		if($coach != ''){
+			echo '<td><b>Coach: </b>'.$coach.'</td>';
+		}
+		?>
 		<p></p>
 	</div>
 	<div class="col-md-10">
