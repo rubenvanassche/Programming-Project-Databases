@@ -71,6 +71,9 @@ class UsergroupMessagesController extends BaseController {
 				$usergroupmessages = new UserGroupMessages;
 				$usergroupmessages->addMessage($content, $usergroup_id, $discussion_id);
 
+				// Notify all participants in the discussion that there's a new reply.
+				Notifications::notifyNewMessage($usergroup_id, $discussion_id);
+
 				return Redirect::to('usergroup/'.$usergroup_id.'/discussion/'.$discussion_id);
 			}
     	}else{

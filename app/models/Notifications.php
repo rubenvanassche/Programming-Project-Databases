@@ -5,6 +5,7 @@ class Notifications {
 	const INVITE_USER_GROUP = 1;
 	const REMIND_USER_BETS = 2;
 	const NEW_DISCUSSION = 3;
+	const NEW_MESSAGE = 4;
 
 	public static function saveNotification($object_id, $subject_id, $actor_id, $type_id){
 		$created_date = date("Y-m-d H:i:s");
@@ -78,6 +79,8 @@ class Notifications {
 							$result = DB::select($query, $values)[0];
 							return $result;
 						case self::NEW_DISCUSSION:
+						case self::NEW_MESSAGE:
+						// Both cases have the same object.
 							$query = "SELECT * FROM `userGroupMessages` WHERE `id` = ?";
 							$values = array($objectId);
 							$result = DB::select($query, $values)[0];
@@ -104,6 +107,7 @@ class Notifications {
 
 			case self::REMIND_USER_BETS:
 				return "Don't forget to bet on these matches!";
+
 			case self::NEW_DISCUSSION:
 				$result = DB::select("
 				SELECT ug.name, us.username
@@ -113,7 +117,13 @@ class Notifications {
 				")[0];
 				$message = $result->username . " started a new discussion in " . $result->name;
 				return $message;
-      }
+
+			case self::NEW_MESSAGE:
+				$user = new User;
+				$actor = $user->get($row['actor_id']);
+				$message = $actor->username . " replied in discussion: " . $row['object']->title;
+				return $message;
+    }
   }
 
 	public static function get($id) {
@@ -163,7 +173,7 @@ class Notifications {
 	public static function notifyNewDiscussion($ug_id, $discussion_id) {
 		$user = new User;
 		$members = UserGroup::getUsers($ug_id);
-		
+
 		foreach($members as $member) {
 			if ($member->id != $user->ID()) {
 				Notifications::saveNotification($discussion_id, $member->id, $user->ID(), Notifications::NEW_DISCUSSION);
@@ -171,4 +181,11 @@ class Notifications {
 		}
 	}
 
+	public static function notifyNewMessage($ug_id, $discussion_id) {
+		$user = new User;
+		$participants = UserGroup::getParticipants($discussion_id);
+		foreach($participants as $participant) {
+			Notifications::saveNotification($discussion_id, $participant->user_id, $user->ID(), Notifications::NEW_MESSAGE);
+		}
+	}
 }

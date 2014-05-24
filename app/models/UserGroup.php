@@ -226,8 +226,11 @@ class UserGroup {
 		return $this->array_orderby($timeline, 'date',SORT_DESC);
 	}
 
-	// public static function getUsers($ug_id) {
-	// 	$result = DB::select("SELECT user_id FROM `userPerUserGroup` WHERE userGroup_id = ?", array($ug_id));
-	// 	return $result;
-	// }
+	public static function getParticipants($discussion_id) {
+		// Returns all people that are participating in a certain discussion except for the user himself.
+		$user = new User;
+		$result = DB::select("SELECT DISTINCT user_id FROM `userGroupMessagesContent`
+			WHERE message_id = ? AND user_id <> ?", array($discussion_id, $user->ID()));
+		return $result;
+	}
 }
