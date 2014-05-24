@@ -1,0 +1,989 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.5.14)  24 MAY 2014 20:59
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**rapport.tex
+(./rapport.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+
+! LaTeX Error: File `listings.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: l
+
+! LaTeX Error: File `l.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: l
+
+! LaTeX Error: File `l.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: 
+! Interruption.
+<to be read again> 
+                   }
+l.4 \usepackage
+               {color}^^M
+? 
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count87
+))
+
+! LaTeX Error: File `ulem.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: 
+
+! LaTeX Error: Unknown option `normalem' for package `ulem'.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.6 \usepackage
+               {graphicx}
+? 
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+)
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+! Undefined control sequence.
+l.14 \lstset
+            {frame=tb,
+? 
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.14 \lstset{f
+              rame=tb,
+? 
+
+Overfull \hbox (68.69019pt too wide) in paragraph at lines 14--30
+[]\OT1/cmr/m/n/10.95 frame=tb, lan-guage=SQL, aboveskip=3mm, be-lowskip=3mm, sh
+ow-stringspaces=false,
+ []
+
+
+Overfull \hbox (1.31537pt too wide) in paragraph at lines 14--30
+\OT1/cmr/m/n/10.95 columns=flexible, ba-sic-style=, num-bers=none, num-ber-styl
+e=[]\OT1/cmr/m/n/6 , key-word-style=[], com-
+ []
+
+No file rapport.aux.
+\openout1 = `rapport.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count88
+\scratchdimen=\dimen105
+\scratchbox=\box26
+\nofMPsegments=\count89
+\nofMParguments=\count90
+\everyMPshowfont=\toks15
+\MPscratchCnt=\count91
+\MPscratchDim=\dimen106
+\MPnumerator=\count92
+\makeMPintoPDFobject=\count93
+\everyMPtoPDFconversion=\toks16
+) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 35.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 35.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 35.
+ [2]
+Overfull \hbox (6.06505pt too wide) in paragraph at lines 59--72
+\OT1/cmr/m/n/10.95 Het voor-spellingssys-teem hebben wij opge-s-plitst in 2 es-
+senti^^?ele de-len, namelijk
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--72
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--72
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 59--72
+
+ []
+
+[3] [4] [5] [6]
+! Undefined control sequence.
+l.102 continent(\uline
+                      {id}, name) \\
+? 
+! Undefined control sequence.
+l.103 country(\uline
+                    {id}, name, continent\_id, abbreviation) \\
+? 
+! Undefined control sequence.
+l.104 player(\uline
+                   {id}, name, injured) \\
+? 
+! Undefined control sequence.
+l.105 coach(\uline
+                  {id}, name) \\
+? 
+! Undefined control sequence.
+l.106 team(\uline
+                 {id}, name, country\_id, coach\_id, fifascore) \\
+? 
+! Undefined control sequence.
+l.107 competition(\uline
+                        {id}, name) \\
+? 
+! Undefined control sequence.
+l.108 match(\uline
+                  {id}, hometeam\_id, awayteam\_id, competition\_id, date) \\
+? 
+! Undefined control sequence.
+l.109 playerPerTeam(\uline
+                          {player\_id}, \uline{team\_id}) \\
+? 
+! Undefined control sequence.
+l.109 playerPerTeam(\uline{player\_id}, \uline
+                                              {team\_id}) \\
+? 
+! Undefined control sequence.
+l.110 playerPerMatch(\uline
+                           {player\_id}, \uline{match\_id}, intime, outtime) \\
+
+? 
+! Undefined control sequence.
+l.110 playerPerMatch(\uline{player\_id}, \uline
+                                               {match\_id}, intime, outtime) \\
+
+? 
+! Undefined control sequence.
+l.111 playerPerCompetition(\uline
+                                 {team\_id}, \uline{competition\_id}) \\
+? 
+! Undefined control sequence.
+l.111 ...erPerCompetition(\uline{team\_id}, \uline
+                                                  {competition\_id}) \\
+? 
+! Undefined control sequence.
+l.113 cards(\uline
+                  {id}, player\_id, color, time) \\
+? 
+! Undefined control sequence.
+l.114 user(\uline
+                 {id}, username, firstname, lastname, email, password, count...
+
+? 
+! Undefined control sequence.
+l.115 bet(\uline
+                {id}, user\_id, match\_id, hometeam\_score, awayteam\_score,...
+
+? 
+
+Overfull \hbox (2.20206pt too wide) in paragraph at lines 102--116
+\OT1/cmr/m/n/10.95 bet(id, user[]id, match[]id, home-team[]score, awayteam[]sco
+re, first[]goal, home-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--116
+
+ []
+
+
+! LaTeX Error: Environment lstlisting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.118 \begin{lstlisting}
+                        
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.122 ...D CONSTRAINT `match` FOREIGN KEY (`match_
+                                                  id`) REFERENCES `match` (`...
+
+? 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 122.
+! Missing $ inserted.
+<inserted text> 
+                $
+l.124 
+      
+? 
+
+Overfull \hbox (4.2972pt too wide) in paragraph at lines 119--124
+\OT1/cmr/m/n/10.95 -- Con-straints for ta-ble `cards` -- AL-TER TA-BLE `cards` 
+ADD CON-STRAINT
+ []
+
+
+Overfull \hbox (925.00874pt too wide) in paragraph at lines 119--124
+\OT1/cmr/m/n/10.95 `match` FOR-EIGN KEY (`match$[]\OML/cmm/m/it/10.95 d\OT1/cmr
+/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10
+.95 match\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `)\OML/
+cmm/m/it/10.95 ONDELETENOACTIONONUPDATECASCADE; ADDCONSTRAINT\OT1/cmr/m/n/10.95
+ `\OML/cmm/m/it/10.95 player\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FOREIGNKEY\
+OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 player[]d\OT1/cmr/m/n/10.95 `)\OML/cmm/
+m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 player\OT1/cmr/m/n
+/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 ONDELE
+TECASCADEONUPDATECASCADE\OT1/cmr/m/n/10.95 ;$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.129 ...AINT `continent` FOREIGN KEY (`continent_
+                                                  id`) REFERENCES `continent...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.130 
+      
+? 
+
+Overfull \hbox (85.01846pt too wide) in paragraph at lines 125--130
+\OT1/cmr/m/n/10.95 CON-STRAINT `con-ti-nent` FOR-EIGN KEY (`continent$[]\OML/cm
+m/m/it/10.95 d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/1
+0.95 `\OML/cmm/m/it/10.95 continent\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id
+\OT1/cmr/m/n/10.95 `);$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.135   ADD CONSTRAINT `goal_
+                             match` FOREIGN KEY (`match_id`) REFERENCES `mat...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.138 
+      
+? 
+
+Overfull \hbox (1734.61069pt too wide) in paragraph at lines 131--138
+\OT1/cmr/m/n/10.95 STRAINT `goal$[]\OML/cmm/m/it/10.95 atch\OT1/cmr/m/n/10.95 `
+\OML/cmm/m/it/10.95 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 match[]d
+\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm
+/m/it/10.95 match\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95
+ `)\OML/cmm/m/it/10.95 ONDELETENOACTIONONUPDATECASCADE; ADDCONSTRAINT\OT1/cmr/m
+/n/10.95 `\OML/cmm/m/it/10.95 goal[]layer\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.9
+5 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 player[]d\OT1/cmr/m/n/10.9
+5 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 playe
+r\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it
+/10.95 ONDELETENOACTIONONUPDATECASCADE; ADDCONSTRAINT\OT1/cmr/m/n/10.95 `\OML/c
+mm/m/it/10.95 goal[]eam\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FOREIGNKEY\OT1/c
+mr/m/n/10.95 (`\OML/cmm/m/it/10.95 team[]d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10
+.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 team\OT1/cmr/m/n/10.95 `(
+`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 ONDELETENOACTIO
+NONUPDATECASCADE\OT1/cmr/m/n/10.95 ;$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.143 ...TRAINT `awayteam` FOREIGN KEY (`awayteam_
+                                                  id`) REFERENCES `team` (`i...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.146 
+      
+? 
+
+Overfull \hbox (1582.2411pt too wide) in paragraph at lines 139--146
+\OT1/cmr/m/n/10.95 STRAINT `awayteam` FOR-EIGN KEY (`awayteam$[]\OML/cmm/m/it/1
+0.95 d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\O
+ML/cmm/m/it/10.95 team\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/
+10.95 `)\OML/cmm/m/it/10.95 ONDELETECASCADEONUPDATECASCADE; ADDCONSTRAINT\OT1/c
+mr/m/n/10.95 `\OML/cmm/m/it/10.95 hometeam\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.
+95 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 hometeam[]d\OT1/cmr/m/n/1
+0.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 te
+am\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/i
+t/10.95 ONDELETECASCADEONUPDATECASCADE; ADDCONSTRAINT\OT1/cmr/m/n/10.95 `\OML/c
+mm/m/it/10.95 match[]ompetition\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FOREIGNK
+EY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 competition[]d\OT1/cmr/m/n/10.95 `)\
+OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 competitio
+n\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `);$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.151   ADD CONSTRAINT `player_
+                               per_match` FOREIGN KEY (`match_id`) REFERENCE...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.152 
+      
+? 
+
+Overfull \hbox (407.13348pt too wide) in paragraph at lines 147--152
+\OT1/cmr/m/n/10.95 Match` ADD CON-STRAINT `player$[]\OML/cmm/m/it/10.95 er[]atc
+h\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cm
+m/m/it/10.95 match[]d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cm
+r/m/n/10.95 `\OML/cmm/m/it/10.95 match\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95
+ id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 ONDELETECASCADEONUPDATECASCADE\OT1/
+cmr/m/n/10.95 ;$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.157   ADD CONSTRAINT `player_
+                               per_team` FOREIGN KEY (`team_id`) REFERENCES ...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.158 
+      
+? 
+
+Overfull \hbox (402.84654pt too wide) in paragraph at lines 153--158
+\OT1/cmr/m/n/10.95 PerTeam` ADD CON-STRAINT `player$[]\OML/cmm/m/it/10.95 er[]e
+am\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/c
+mm/m/it/10.95 team[]d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cm
+r/m/n/10.95 `\OML/cmm/m/it/10.95 team\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 
+id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 ONDELETECASCADEONUPDATECASCADE\OT1/c
+mr/m/n/10.95 ;$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.163   ADD CONSTRAINT `team_
+                             coach` FOREIGN KEY (`coach_id`) REFERENCES `coa...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.165 
+      
+? 
+
+Overfull \hbox (782.1962pt too wide) in paragraph at lines 159--165
+\OT1/cmr/m/n/10.95 STRAINT `team$[]\OML/cmm/m/it/10.95 oach\OT1/cmr/m/n/10.95 `
+\OML/cmm/m/it/10.95 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 coach[]d
+\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm
+/m/it/10.95 coach\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95
+ `)\OML/cmm/m/it/10.95 ONDELETENOACTIONONUPDATECASCADE; ADDCONSTRAINT\OT1/cmr/m
+/n/10.95 `\OML/cmm/m/it/10.95 team[]ountry\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.
+95 FOREIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 country[]d\OT1/cmr/m/n/10
+.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 cou
+ntry\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `);$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.170   ADD CONSTRAINT `tpc_
+                            competition` FOREIGN KEY (`competition_id`) REFE...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.171 
+      
+? 
+
+Overfull \hbox (249.57513pt too wide) in paragraph at lines 166--171
+\OT1/cmr/m/n/10.95 Per-Com-pe-ti-tion` ADD CON-STRAINT `tpc$[]\OML/cmm/m/it/10.
+95 ompetition\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FOREIGNKEY\OT1/cmr/m/n/10.
+95 (`\OML/cmm/m/it/10.95 competition[]d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95
+ REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 competition\OT1/cmr/m/n/10.9
+5 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `);$ 
+ []
+
+! Missing $ inserted.
+<inserted text> 
+                $
+l.176 ...CONSTRAINT `matchID` FOREIGN KEY (`match_
+                                                  id`) REFERENCES `match` (`...
+
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.178 
+      
+? 
+
+Overfull \hbox (977.72108pt too wide) in paragraph at lines 172--178
+\OT1/cmr/m/n/10.95 STRAINT `matchID` FOR-EIGN KEY (`match$[]\OML/cmm/m/it/10.95
+ d\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/c
+mm/m/it/10.95 match\OT1/cmr/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.
+95 `)\OML/cmm/m/it/10.95 ONDELETECASCADEONUPDATECASCADE; ADDCONSTRAINT\OT1/cmr/
+m/n/10.95 `\OML/cmm/m/it/10.95 userID\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 FO
+REIGNKEY\OT1/cmr/m/n/10.95 (`\OML/cmm/m/it/10.95 user[]d\OT1/cmr/m/n/10.95 `)\O
+ML/cmm/m/it/10.95 REFERENCES\OT1/cmr/m/n/10.95 `\OML/cmm/m/it/10.95 user\OT1/cm
+r/m/n/10.95 `(`\OML/cmm/m/it/10.95 id\OT1/cmr/m/n/10.95 `)\OML/cmm/m/it/10.95 O
+NDELETENOACTIONONUPDATECASCADE\OT1/cmr/m/n/10.95 ;$ 
+ []
+
+
+! LaTeX Error: \begin{document} ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.179 \end{lstlisting}
+                      
+? 
+
+Underfull \hbox (badness 10000) in paragraph at lines 183--190
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 183--190
+
+ []
+
+[7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 192--205
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--205
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 192--205
+
+ []
+
+[9]
+Overfull \hbox (26.86993pt too wide) in paragraph at lines 217--218
+\OT1/cmr/m/n/10.95 Rechtsbovenaan alle pag-ina's staat een search-bar waarin je
+ een speler/match/team
+ []
+
+
+! LaTeX Error: Environment lstlisting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.223 \begin{lstlisting}
+                        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.230 \end{lstlisting}
+                      
+? 
+
+Overfull \hbox (25.75713pt too wide) in paragraph at lines 220--231
+\OT1/cmr/m/n/10.95 Team mod-els:  $\OML/cmm/m/it/10.95 playerObj \OT1/cmr/m/n/1
+0.95 = \OML/cmm/m/it/10.95 Player \OT1/cmr/m/n/10.95 :: \OML/cmm/m/it/10.95 get
+Player\OT1/cmr/m/n/10.95 ($playerName)[0]; $\OML/cmm/m/it/10.95 playerTeam \OT1
+/cmr/m/n/10.95 =
+ []
+
+
+Overfull \hbox (103.78409pt too wide) in paragraph at lines 220--231
+\OML/cmm/m/it/10.95 getPlayerText\OT1/cmr/m/n/10.95 ($playerName); $\OML/cmm/m/
+it/10.95 playerImageURL \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 Player \OT1/cm
+r/m/n/10.95 :: \OML/cmm/m/it/10.95 getPlayerImageURL\OT1/cmr/m/n/10.95 ($player
+Name);
+ []
+
+
+Overfull \hbox (0.45782pt too wide) in paragraph at lines 220--231
+\OML/cmm/m/it/10.95 goals \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 Player \OT1/
+cmr/m/n/10.95 :: \OML/cmm/m/it/10.95 goals\OT1/cmr/m/n/10.95 ($playerObj->id); 
+$\OML/cmm/m/it/10.95 cards \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 Player \OT1
+/cmr/m/n/10.95 :: \OML/cmm/m/it/10.95 cards\OT1/cmr/m/n/10.95 ($playerObj-
+ []
+
+
+Overfull \hbox (6.52126pt too wide) in paragraph at lines 235--236
+\OT1/cmr/m/n/10.95 Deze pag-ina be-vat in-for-matie over een bepaald team, zoal
+s de spel-ers, matchen
+ []
+
+
+! LaTeX Error: Environment lstlisting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.238 \begin{lstlisting}
+                        
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.240 		$
+         teamObj = Team::getTeamByID($teamID)[0];
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.242 
+      
+? 
+
+Overfull \hbox (117.85971pt too wide) in paragraph at lines 237--242
+\OT1/cmr/m/n/10.95 beeld.  pub-lic func-tion index($\OML/cmm/m/it/10.95 teamID\
+OT1/cmr/m/n/10.95 )[]$teamObj = Team::getTeamByID($\OML/cmm/m/it/10.95 teamID\O
+T1/cmr/m/n/10.95 )[0];$teamImageURL
+ []
+
+! Extra }, or forgotten $.
+l.244 	}
+        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.245 \end{lstlisting}
+                      
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.245 \end{lstlisting}
+                      
+? 
+
+Overfull \hbox (3.3855pt too wide) in paragraph at lines 243--246
+[]\OT1/cmr/m/n/10.95 return View::make('team.team', com-pact('teamObj', 'teamIm
+ageURL'))-
+ []
+
+
+! LaTeX Error: Environment lstlisting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.253 \begin{lstlisting}
+                        
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.255 		$
+         playerObj = Player::getPlayer($playerName)[0];
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.261 
+      
+? 
+
+Overfull \hbox (0.19456pt too wide) in paragraph at lines 250--261
+\OT1/cmr/m/n/10.95 In de Play-er-sCon-troller wordt vol-gende info opgevraagd v
+an het Team model:
+ []
+
+
+Overfull \hbox (91.0722pt too wide) in paragraph at lines 250--261
+\OT1/cmr/m/n/10.95 pub-lic func-tion index($\OML/cmm/m/it/10.95 playerName\OT1/
+cmr/m/n/10.95 )[]$playerObj = Player::getPlayer($\OML/cmm/m/it/10.95 playerName
+\OT1/cmr/m/n/10.95 )[0];$playerTeam
+ []
+
+
+Overfull \hbox (204.76523pt too wide) in paragraph at lines 250--261
+\OT1/cmr/m/n/10.95 = Team::getTeambyPlayerID($\OML/cmm/m/it/10.95 playerObj\OMS
+/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 > id\OT1/cmr/m/n/10.95 )[0];$playerText
+ = Player::getPlayerText($\OML/cmm/m/it/10.95 playerName\OT1/cmr/m/n/10.95 );$p
+layerImageURL
+ []
+
+
+Overfull \hbox (28.21468pt too wide) in paragraph at lines 250--261
+\OT1/cmr/m/n/10.95 = Player::getPlayerImageURL($\OML/cmm/m/it/10.95 playerName\
+OT1/cmr/m/n/10.95 );$goals = Player::goals($\OML/cmm/m/it/10.95 playerObj\OMS/c
+msy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 >
+ []
+
+[10]
+! Extra }, or forgotten $.
+l.263 	}
+        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.264 \end{lstlisting}
+                      
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.264 \end{lstlisting}
+                      
+? 
+
+Overfull \hbox (4.66212pt too wide) in paragraph at lines 262--265
+\OT1/cmr/m/n/10.95 'play-er-Text', 'play-er-ImageURL', 'goals', 'cards'))->with
+('title', $\OML/cmm/m/it/10.95 playerName\OT1/cmr/m/n/10.95 );$ 
+ []
+
+
+! LaTeX Error: Environment lstlisting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.277 \begin{lstlisting}
+                        
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.279 		$
+         data['match'] = Match::get($matchID);
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.280 ...goals($matchID, $data['match']->hometeam_
+                                                  id);
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.281 ...cards($matchID, $data['match']->hometeam_
+                                                  id);
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.282 ...goals($matchID, $data['match']->awayteam_
+                                                  id);
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.283 ...cards($matchID, $data['match']->awayteam_
+                                                  id);
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.284 
+      
+? 
+
+Overfull \hbox (47.6529pt too wide) in paragraph at lines 275--284
+\OT1/cmr/m/n/10.95 Match::get($\OML/cmm/m/it/10.95 matchID\OT1/cmr/m/n/10.95 );
+$data['goalshometeam'] = Match::goals($\OML/cmm/m/it/10.95 matchID;$\OT1/cmr/m/
+n/10.95 data['match']-
+ []
+
+
+Overfull \hbox (12.88121pt too wide) in paragraph at lines 275--284
+\OT1/cmr/m/n/10.95 >hometeam$[]\OML/cmm/m/it/10.95 d\OT1/cmr/m/n/10.95 );$data[
+'cardshometeam'] = Match::cards($\OML/cmm/m/it/10.95 matchID;$\OT1/cmr/m/n/10.9
+5 data['match']-
+ []
+
+
+Overfull \hbox (8.562pt too wide) in paragraph at lines 275--284
+\OT1/cmr/m/n/10.95 >hometeam$[]\OML/cmm/m/it/10.95 d\OT1/cmr/m/n/10.95 );$data[
+'goalsawayteam'] = Match::goals($\OML/cmm/m/it/10.95 matchID;$\OT1/cmr/m/n/10.9
+5 data['match']-
+ []
+
+
+Overfull \hbox (9.23112pt too wide) in paragraph at lines 275--284
+\OT1/cmr/m/n/10.95 >awayteam$[]\OML/cmm/m/it/10.95 d\OT1/cmr/m/n/10.95 );$data[
+'cardsawayteam'] = Match::cards($\OML/cmm/m/it/10.95 matchID;$\OT1/cmr/m/n/10.9
+5 data['match']-
+ []
+
+! Extra }, or forgotten $.
+l.286 	}
+        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.287 \end{lstlisting}
+                      
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.287 \end{lstlisting}
+                      
+? 
+
+! LaTeX Error: Environment lstlisting undefined.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.290 \begin{lstlisting}
+                        
+? 
+! Missing } inserted.
+<inserted text> 
+                }
+l.292 		$
+         playerObj = Player::getPlayer($playerName)[0];
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.298 
+      
+? 
+
+Overfull \hbox (179.00397pt too wide) in paragraph at lines 289--298
+[]\OT1/cmr/m/n/10.95 in plaats van:  pub-lic func-tion index($\OML/cmm/m/it/10.
+95 playerName\OT1/cmr/m/n/10.95 )[]$playerObj = Player::getPlayer($\OML/cmm/m/i
+t/10.95 playerName\OT1/cmr/m/n/10.95 )[0];$playerTeam
+ []
+
+
+Overfull \hbox (204.76523pt too wide) in paragraph at lines 289--298
+\OT1/cmr/m/n/10.95 = Team::getTeambyPlayerID($\OML/cmm/m/it/10.95 playerObj\OMS
+/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 > id\OT1/cmr/m/n/10.95 )[0];$playerText
+ = Player::getPlayerText($\OML/cmm/m/it/10.95 playerName\OT1/cmr/m/n/10.95 );$p
+layerImageURL
+ []
+
+
+Overfull \hbox (28.21468pt too wide) in paragraph at lines 289--298
+\OT1/cmr/m/n/10.95 = Player::getPlayerImageURL($\OML/cmm/m/it/10.95 playerName\
+OT1/cmr/m/n/10.95 );$goals = Player::goals($\OML/cmm/m/it/10.95 playerObj\OMS/c
+msy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 >
+ []
+
+! Extra }, or forgotten $.
+l.300 	}
+        
+? 
+
+! LaTeX Error: \begin{document} ended by \end{lstlisting}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.301 \end{lstlisting}
+                      
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.301 \end{lstlisting}
+                      
+? 
+
+Overfull \hbox (4.66212pt too wide) in paragraph at lines 299--302
+\OT1/cmr/m/n/10.95 'play-er-Text', 'play-er-ImageURL', 'goals', 'cards'))->with
+('title', $\OML/cmm/m/it/10.95 playerName\OT1/cmr/m/n/10.95 );$ 
+ []
+
+[11] <ER.png, id=46, 615.80063pt x 671.50874pt>
+File: ER.png Graphic file (type png)
+ <use ER.png>
+Package pdftex.def Info: ER.png used on input line 323.
+(pdftex.def)             Requested size: 256.0748pt x 279.24474pt.
+ [12] [13 <./ER.png>] (./rapport.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 1558 strings out of 495028
+ 22173 string characters out of 6181497
+ 88028 words of memory out of 5000000
+ 4770 multiletter control sequences out of 15000+600000
+ 8979 words of font info for 32 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 37i,6n,23p,1982b,229s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy8.pfb>
+Output written on rapport.pdf (13 pages, 266955 bytes).
+PDF statistics:
+ 84 PDF objects out of 1000 (max. 8388607)
+ 58 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+

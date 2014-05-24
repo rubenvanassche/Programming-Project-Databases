@@ -188,26 +188,6 @@ Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, st
 \\
 Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina weergegeven. Daar is ook een "forgot password"-functionaliteit voorzien. De gebruiker geeft of zijn username of zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Wederom, deze functionaliteit is nog niet actief. Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. Later zal een ingelogde gebruiker ook een knop te zien krijgen die linkt naar zijn persoonlijk controlepaneel, maar dit moet nog ge\"implementeerd worden. Aangezien alle functionaliteit die weggelegd is voor ingelogde gebruikers gebaseerd is op voorspellingen uitbrengen, wat momenteel nog niet ge\"implementeerd is, ziet de website er verder voor ingelogde en niet-ingelogde gebruikers hetzelfde uit.
 
-\section{Webpagina's}
-De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en dat proberen we dus ook te respecteren.
-Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
-\\
-\\
-Er wordt een pagina opgevraagd in de url. (Bv. /public/team?id=1). In de route-file wordt gedefinieerd welke controller er opgeroepen moet worden. Deze controller zal informatie opvragen van het
-relevante model en zal deze info doorspelen naar de view van de pagina.
-\\
-\\
-Aanvankelijk was het werken met het framework niet eenvoudig maar eens het wat duidelijker werd zagen we de waarde ervan in.
-Het design hebben we grotendeels te danken aan Twitter Bootstrap. Een website ziet er zo relatief gemakkelijk goed uit.
-\\
-\\
-De webpagina's zijn nog volop in development alsook kan het design hier en daar ook nog wel veranderen.
-\subsection{Email reminders}
-Gebruikers worden tijdig herinnerd wanneer ze nog niet op bepaalde wedstrijden hebben gebet. Dit wordt mogelijk gemaakt door een combinatie van een Laravel command die via een cronjob om de zoveel tijd loopt.
-Momenteel worden de gebruikers elke dag herinnerd om te wedden op de wedstrijden die de komende twee dagen worden gespeeld waar ze nog niet reeds hebben op gebet.
-Ook wordt er een wekelijks overzicht gegeven op zondag met een overzicht van de wedstrijden die in de komende week worden gespeeld.
-
-De functie die in het Laravel command wordt opgeroepen is de Notifications::sendReminders. Dit zal samen met een email ook een notificatie sturen naar de gebruiker.
 
 \subsection{Notifications}
 Ook is er in ons systeem een uitgebreid notificatiesysteem aanwezig. Wanneer een gebruiker ingelogd is, zal er bovenaan naast het user menu een nieuw item tevoorschijn komen (icoon: ster). Op het moment dat er een notificatie is voor de gebruiker wordt die hier getoond. Zonder op het item te klikken kan je al zien hoeveel ongelezen notificaties je hebt door het cijfer in superscript dat naast het sterretje staat. Als de gebruiker hierop klikt komt er een dropdown menu tevoorschijn met de meest recente notificaties. Deze notificaties linken naar de relevante pagina. \\
@@ -223,8 +203,8 @@ Elke notificatie komt dus overeen met een rij van de notifications table. Wannee
 Bij het opvragen van een notificatie (Notifications::getNotification) komt er wat meer bij kijken: in het resultaat wordt de informatie van het object erbij gezet.
 Wanneer er op de notificatie wordt geklikt wordt de redirect methode van de NotificationController opgeroepen die naargelang het type notificatie de gebruiker naar de juiste pagina redirect.
 
-\subsubsection{Soorten notifications}
-\subsubsubsection{Usergroup invites}
+\subsection{Soorten notifications}
+\subsubsection{Usergroup invites}
 Een gebruiker nodigt een andere gebruiker uit om een usergroup te joinen.
 \begin{enumerate}
 \item Actor: de gebruiker die de persoon uitnodigt
@@ -234,7 +214,7 @@ Een gebruiker nodigt een andere gebruiker uit om een usergroup te joinen.
 \end{enumerate}
 De notificatie zal linken naar de gebruiker zijn profiel waar die de invitatie zal kunnen accepteren of weigeren.
 
-\subsubsubsection{Remind user bets}
+\subsubsection{Remind user bets}
 Het systeem herinnert de gebruikers om te betten op matchen waar ze dat nog niet op hebben gedaan.
 Omdat het systeem dit verstuurt zullen we de actor en subject dezelfde personen nemen.
 \begin{enumerate}
@@ -245,7 +225,7 @@ Omdat het systeem dit verstuurt zullen we de actor en subject dezelfde personen 
 \end{enumerate}
 De notificatie zal linken naar de upcoming matches page, waar de gebruiker gemakkelijk kan zien op welke matches hij/zij nog niet op heeft gebet.
 
-\subsubsubsection{Nieuwe discussie in usergroup}
+\subsubsection{Nieuwe discussie in usergroup}
 Wanneer een gebruiker een nieuwe discussie start in een usergroup zullen alle members van die groep een notificatie hierover krijgen.
 \begin{enumerate}
 \item Actor: de gebruiker die de discussie heeft aangemaakt
@@ -255,7 +235,7 @@ Wanneer een gebruiker een nieuwe discussie start in een usergroup zullen alle me
 \end{enumerate}
 De notificatie zal linken naar de discussie.
 
-\subsubsubsection{Nieuwe reply in discussie}
+\subsubsection{Nieuwe reply in discussie}
 Als een gebruiker een bericht post in de discussie zullen alle deelnemers van die discussie hierover genotified worden.
 \begin{enumerate}
 \item Actor: de gebruiker die een nieuwe reply heeft gemaakt
@@ -264,6 +244,22 @@ Als een gebruiker een bericht post in de discussie zullen alle deelnemers van di
 \item Type: 4, Notifications::NEW_MESSASGE
 \end{enumerate}
 De notificatie linkt naar de discussie.
+
+
+\section{Webpagina's}
+De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en dat proberen we dus ook te respecteren.
+Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
+\\
+\\
+Er wordt een pagina opgevraagd in de url. (Bv. /public/team?id=1). In de route-file wordt gedefinieerd welke controller er opgeroepen moet worden. Deze controller zal informatie opvragen van het
+relevante model en zal deze info doorspelen naar de view van de pagina.
+\\
+\\
+Aanvankelijk was het werken met het framework niet eenvoudig maar eens het wat duidelijker werd zagen we de waarde ervan in.
+Het design hebben we grotendeels te danken aan Twitter Bootstrap. Een website ziet er zo relatief gemakkelijk goed uit.
+\\
+\\
+De webpagina's zijn nog volop in development alsook kan het design hier en daar ook nog wel veranderen.
 
 \subsection{Work in progress}
 
