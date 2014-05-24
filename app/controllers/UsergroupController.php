@@ -61,6 +61,12 @@ class UsergroupController extends BaseController {
 	}
 
 	public static function usergroup($id){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
+
 		$usergroup = new UserGroup;
 		$usergroupmessages = new UserGroupMessages;
 		$data['users'] = $usergroup->getUsers($id);
@@ -69,7 +75,7 @@ class UsergroupController extends BaseController {
 		$data['timeline'] = $usergroup->timeline($id);
 		$data['messages'] = $usergroupmessages->getAll($id);
 
-		$user = new User;
+
 		$ismember = UserGroup::isMember($user->ID(), $id);
 		$private = UserGroup::getPrivateSetting($id);
 		if ($private && count($ismember) == 0) {
@@ -85,6 +91,10 @@ class UsergroupController extends BaseController {
 	function addMe($id){
 		$usergroup = new UserGroup;
 		$user = new user;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 
 		if(!$usergroup->isMember($user->ID(), $id)){
 			$usergroup->addUser($id, $user->ID());
@@ -97,6 +107,11 @@ class UsergroupController extends BaseController {
 	}
 
 	function inviteUser($usergroup_id){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -111,7 +126,6 @@ class UsergroupController extends BaseController {
 			}else{
 				// Start working on this data
 				$invitee_name = Input::get('invitee_name');
-				$user = new User;
 				$invitee_id = $user->getID($invitee_name);
 
 				if ($invitee_id == -1){
@@ -145,6 +159,10 @@ class UsergroupController extends BaseController {
 	function leave($id){
 		$usergroup = new UserGroup;
 		$user = new user;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 
 		if($usergroup->isMember($user->ID(), $id)){
 			$usergroup->leave($user->ID(), $id);
