@@ -127,13 +127,13 @@ class UserGroup {
 
 	public static function acceptInvite($notif_id, $ug_id) {
 		// Check whether or not this invite is from the logged in user.
+		// Check whether or not this invite has already been processed.
 		$user = new User;
-		$result = DB::select("SELECT subject_id FROM `notifications` WHERE id = ?", array($notif_id))[0];
-		if ($result->subject_id == $user->ID()) {
+		$result1 = DB::select("SELECT subject_id, status FROM `notifications` WHERE id = ?", array($notif_id))[0];
+
+		if ($result1->subject_id == $user->ID() && $result1->status == 'unseen') {
 					// Mark notification as seen.
 					DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
-					// Add the user to the group.
-					$this->addUser($ug_id, $user->ID());
 		}
 		else {
 			// Do nothing. Someone else is trying to accept this invite.

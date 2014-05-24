@@ -371,18 +371,18 @@ class UserController extends BaseController {
 		return View::make('user.userOverview', $data)->with('title', 'users');
 	}
 
-	public static function acceptInvite($notif_id, $ug_id) {
-		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
-
+public static function acceptInvite($notif_id, $ug_id) {
 		$user = new User;
-		UserGroup::addUser($ug_id, $user->ID());
-
+		$result1 = DB::select("SELECT subject_id, status FROM `notifications` WHERE id = ?", array($notif_id))[0];
+		if ($result1->subject_id == $user->ID() && $result1->status == 'unseen') {
+			UserGroup::acceptInvite($notif_id, $ug_id);
+			UserGroup::addUser($ug_id, $user->ID());
+		}
 		return UsergroupController::usergroup($ug_id);
 	}
 
 	public static function declineInvite($notif_id) {
-		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
-
+		UserGroup::declineInvite($notif_id);
 		return UserController::profile();
 	}
 }
