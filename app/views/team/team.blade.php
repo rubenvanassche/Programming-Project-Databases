@@ -35,7 +35,7 @@
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="{{  route('team.information', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Information</a></li>
 			<li><a href="{{  route('team.players', array('id'=>$teamObj->id)) }}" data-toggle="tabajax">Players</a></li>
-			<li><a href="{{  route('team.matches', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">Matches</a></li>
+			<li><a href="{{  route('team.matches', array('id'=>$teamObj->id)) }}" id="matches"  data-toggle="tabajax">Matches</a></li>
 			@if ($hasNews)
 			<li><a href="{{  route('team.news', array('id'=>$teamObj->id)) }}"  data-toggle="tabajax">News</a></li>
 			@endif
@@ -103,9 +103,6 @@
 		    }
 		});     
 	});
-
-
-
 
 
 	function drawChart1() {
