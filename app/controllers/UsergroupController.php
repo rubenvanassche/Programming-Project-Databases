@@ -132,11 +132,22 @@ class UsergroupController extends BaseController {
 					$data['title'] = 'Problem';
 					$data['content'] = 'This user doesn\'t exist.';
 					return View::make('layouts.simple', $data);
-				}else if ($user->ID() == $invitee_id){
+				} else if ($user->ID() == $invitee_id){
 					$data['title'] = 'Problem';
 					$data['content'] = 'You are already part of this group.';
 					return View::make('layouts.simple', $data);
-				}else{
+				} else if (count(UserGroup::isMember($invitee_id, $usergroup_id)) > 0){
+					// Invitee is already member
+					$data['title'] = 'Problem';
+					$data['content'] = 'This user is already a member of this group.';
+					return View::make('layouts.simple', $data);
+				} else if (UserGroup::isInvited($invitee_id, $usergroup_id)){
+					// Invitee has already been invited.
+					$data['title'] = 'Problem';
+					$data['content'] = 'This user has already been invited to join this group.';
+					return View::make('layouts.simple', $data);
+				}
+				else {
 					$usergroup = new UserGroup();
 					$usergroup->invite($invitee_id,$usergroup_id, $user->ID());
 

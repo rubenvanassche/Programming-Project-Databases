@@ -6,6 +6,17 @@ class UserGroup {
 		return $result;
 	}
 
+	public static function isInvited($user_id, $userGroup_id) {
+		$result = DB::select("SELECT * FROM `notifications` as notif WHERE subject_id = ? AND status = 'unseen'
+		AND ? IN (SELECT usergroupId FROM `userGroupInvites` WHERE id = notif.object_id) ", array($user_id, $userGroup_id));
+		if (count($result) > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public static function getPrivateSetting($id) {
 		$result = DB::select("SELECT private FROM `userGroup` WHERE id = ?", array($id));
 		return $result[0]->private;
