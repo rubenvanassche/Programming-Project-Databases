@@ -248,18 +248,19 @@ class User {
 		return $results;
 	}
 
-	function change($userID, $field, $value){
-		if($field == 'password'){
-			$value = Hash::make($value);
-		}
+	function changePassword($userID, $password) {
+		$password = Hash::make($password);
+		$results = DB::update("UPDATE user SET password = ? WHERE id = ?", array($password, $userID) );
+		return $results;
+	}
 
-		$results = DB::update("UPDATE user SET $field = ? WHERE id = ?", array($value, $userID) );
+	function change($userID, $values){
+		$results = DB::update("UPDATE user SET firstname = ?, lastname = ?, email = ?, 
+								               country_id = ?, about = ?, age = ? WHERE id = ?", 
+								array($values['firstname'], $values['lastname'], $values['email'], 
+									  $values['country_id'], $values['about'], $values['age'], $userID) );
 
-		if($results == 1){
-			return true;
-		}else{
-			return false;
-		}
+		return $results;
 	}
 
 	function onlyOneEmail($email){
