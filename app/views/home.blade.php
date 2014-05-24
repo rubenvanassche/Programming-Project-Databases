@@ -76,6 +76,7 @@
 					</tbody>
 				</table>
 			</div>
+			<a href=" {{ url('upcoming') }}">More Upcoming Matches</a>
 		</div>
 		<div class="col-md-4">
 			<div class="matchListDiv">
