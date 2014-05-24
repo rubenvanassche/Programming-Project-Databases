@@ -87,7 +87,7 @@ class Team {
     }
 
     /**
-     * @brief Get all the teams.    
+     * @brief Get all the teams.
      * @return Results after the query.
      */
     public static function getAll(){
@@ -134,10 +134,10 @@ class Team {
             // add player
             array_push($players, $player);
         } // end foreach
-        
+
         return $players;*/
         $result = DB::select("SELECT player.id, player.name, player.injured, (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
-        
+
         return $result;
     }
 
@@ -225,13 +225,16 @@ class Team {
      * @return The team's biography (summary).
      */
     public static function getTeamText( $name ){
-    	$editedName = $name . " national football team";
-    	
+      	$editedName = $name . " national football team";
+        if ($name = "United States") {
+          $editedName = "United States men's national soccer team";
+        }
+
         $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $editedName );
 
         $json = file_get_contents($jsonurl);
         $decodedJSON = json_decode($json, true, JSON_UNESCAPED_UNICODE);
-        
+
         foreach ($decodedJSON['query']['pages'] as $key => $value) {
             $pagenr = $key;
         } // end foreach
@@ -258,7 +261,7 @@ class Team {
         foreach ($decodedJSON['query']['pages'] as $key => $value) {
             $pagenr = $key;
         } // end foreach
-        
+
         try {
             return $decodedJSON['query']['pages'][$pagenr]['thumbnail']['source'];
         }
