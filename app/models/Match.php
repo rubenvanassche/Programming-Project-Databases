@@ -148,6 +148,10 @@ class Match {
         return $results;
     }
 
+    public static function transfers($match_id, $teamID){
+    	$results = DB::select("SELECT intime, outtime, name, player_id FROM playerPerMatch, player WHERE match_id = ? AND player.id = playerPerMatch.player_id AND player_id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($match_id,$teamID));
+    	return $results;
+    }
 
     public static function getScore2($matchID){
         $results = DB::select('SELECT
@@ -223,6 +227,7 @@ class Match {
 		else
 	        return $results[0];
     }
+    
 
     public static function getInfo($rm) {
     		$recentTeamMatches = array();

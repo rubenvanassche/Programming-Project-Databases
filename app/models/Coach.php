@@ -36,5 +36,15 @@ class Coach {
 
         return self::getIDsByName( $name );
     }
+    
+    public static function get($id){
+	    $result = DB::select("SELECT name FROM coach WHERE id = ?", array($id));
+	    
+	    if(empty($result)){
+		    return '';
+	    }else{
+		    return $result[0]->name;
+	    }
+    }
 
 }
