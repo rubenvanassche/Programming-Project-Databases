@@ -2,7 +2,7 @@
 
 class UsergroupController extends BaseController {
 
-	function index(){
+	public static function index(){
 		$user = new User;
 		if (!$user->loggedIn()) {
 	    	$data['title'] = 'Not logged in';
@@ -69,9 +69,17 @@ class UsergroupController extends BaseController {
 		$data['timeline'] = $usergroup->timeline($id);
 		$data['messages'] = $usergroupmessages->getAll($id);
 
-		//print_r($usergroup->timeline($id));
-
-		return View::make('usergroup.usergroup', $data);
+		$user = new User;
+		$ismember = UserGroup::isMember($user->ID(), $id);
+		$private = UserGroup::getPrivateSetting($id);
+		if ($private && count($ismember) == 0) {
+			// Not allowed to see this!
+			// Send them back to the usergroups page.
+			return Redirect::to('usergroups');
+		}
+		else {
+			return View::make('usergroup.usergroup', $data);
+		}
 	}
 
 	function addMe($id){

@@ -6,6 +6,11 @@ class UserGroup {
 		return $result;
 	}
 
+	public static function getPrivateSetting($id) {
+		$result = DB::select("SELECT private FROM `userGroup` WHERE id = ?", array($id));
+		return $result[0]->private;
+	}
+
 	public static function ID($name) {
 		$result = DB::select("SELECT id FROM userGroup WHERE name = ?", array($name));
 		return $result[0]->id;

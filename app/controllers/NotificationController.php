@@ -11,7 +11,7 @@ class NotificationController extends BaseController {
 
         case Notifications::REMIND_USER_BETS:
           DB::update("UPDATE notifications notif SET status = 'seen' WHERE notif.id = ?", array($id));
-          return MatchController::betMatches();
+          return Redirect::to('upcoming');
 
         case Notifications::NEW_DISCUSSION:
         case Notifications::NEW_MESSAGE:
