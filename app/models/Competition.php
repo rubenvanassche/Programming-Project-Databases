@@ -114,6 +114,15 @@ class Competition {
     
     
     public static function getGoals($competition_id){
-	    return DB::select("SELECT (SELECT COUNT(id) FROM goal WHERE match_id = `match`.id) as goals , id, hometeam_id, awayteam_id FROM `match` WHERE competition_id = ?", array($competition_id));
+	    return DB::select("SELECT t.*, COUNT(g.id) 
+FROM `team` as t, `goal` as g, `match` as m 
+WHERE g.team_id = t.id 
+AND g.match_id = m.id 
+AND m.competition_id = ?", array($competition_id));
+    }
+    
+    public static function getWons($competition_id){
+	    DB::select("SELECT (SELECT Count)");
+	    
     }
 }

@@ -159,6 +159,96 @@
 			</table>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<h3>Transfers</h3>
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Player</th>
+						<th>In/Out</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($transfershometeam as $transferhometeam)
+						<?php
+						if($transferhometeam->intime != '' and $transferhometeam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';																		
+						}else if($transferhometeam->intime == '' and $transferhometeam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';							
+						}else if($transferhometeam->intime != '' and $transferhometeam->outtime == ''){
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+						}else{
+							// do nothing
+						}
+						?>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6">
+			<h3>Transfers</h3>
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Player</th>
+						<th>In/Out</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($transfersawayteam as $transferawayteam)
+						<?php
+						if($transferawayteam->intime != '' and $transferawayteam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';																		
+						}else if($transferawayteam->intime == '' and $transferawayteam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';							
+						}else if($transferawayteam->intime != '' and $transferawayteam->outtime == ''){
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+						}else{
+							// do nothing
+						}
+						?>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
 @stop
 
 @section('css')
