@@ -34,6 +34,9 @@ class UsergroupController extends BaseController {
 				if ($private == 'true') {
 					$private = true;
 				}
+				else {
+					$private = false;
+				}
 
 				$user = new User;
 				$usergroup = new UserGroup;
