@@ -479,7 +479,7 @@ class CrawlerController extends BaseController {
 
                         $src = $booking->getAttribute("src");
                         if (preg_match("/Y2?C.png$/", $src)) $yellows[] = $time;
-                        if (preg_match("/(R|Y2).png$/", $src)) $reds[] = $time;
+                        if (preg_match("/(R|Y2)C.png$/", $src)) $reds[] = $time;
                         if (preg_match("/G.png$/", $src)) $goals[] = $time;
                     } // end foreach
 
@@ -516,7 +516,7 @@ class CrawlerController extends BaseController {
 
                         $src = $booking->getAttribute("src");
                         if (preg_match("/Y2?C.png$/", $src)) $yellows[] = $time;
-                        if (preg_match("/(R|Y2).png$/", $src)) $reds[] = $time;
+                        if (preg_match("/(R|Y2)C.png$/", $src)) $reds[] = $time;
                         if (preg_match("/G.png$/", $src)) $goals[] = $time;
                     } // end foreach
 
@@ -729,7 +729,7 @@ class CrawlerController extends BaseController {
 
         foreach ($matches as $match_url) {
             // get match data
-            $match_data = self::match_data($match_url, array("date", "kick-off", "scoretime", "hometeam", "awayteam"));
+            $match_data = self::match_data($match_url);
 
             // get match id
             $hometeam = $match_data["hometeam"];
@@ -752,7 +752,6 @@ class CrawlerController extends BaseController {
             if (empty($ids)) $ids = Match::add($hometeam_id, $awayteam_id, $competition_id, $date);
             $match_id = $ids[0]->id;
 
-/*
             // okay, let's update the lineups
             foreach (array("hometeam", "awayteam") as $team) {
                 $team_id = "hometeam" == $team ? $hometeam_id : $awayteam_id;
@@ -827,6 +826,7 @@ class CrawlerController extends BaseController {
                     } // end foreach
 
                     $url = $player[1];
+                    if (empty($url)) continue;  // skip if no substitute
                     $player_data = self::player_data($url);
 
                     $first_name = $player_data["first name"];
@@ -840,10 +840,9 @@ class CrawlerController extends BaseController {
 
                     Team::linkPlayer($player_id1, $team_id, $player_data["position"]);
                     Match::linkPlayer($player_id1, $match_id);
-                    Match::substitute($player_id1, $time);
+                    Match::substitute($player_id1, $match_id, $time);
                 } // end foreach
             } // end foreach
-*/
         } // end foreach
     }
 
