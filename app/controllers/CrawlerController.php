@@ -653,22 +653,20 @@ class CrawlerController extends BaseController {
         foreach (self::teams_data() as $team_data) {
             $name = $team_data["team name"];
             $points = $team_data["points"];
+            $url = $team_data["team url"];
+            $team_data = self::team_data($url, array("country name", "coach url"));
+
+            // get coach id
+            $coach_url = $team_data["coach url"];
+            $coach = empty($coach_url) ? NULL : self::coach_data($coach_url, array("first name", "last name"));
+            if (!empty($coach)) $coach = $coach["first name"].' '.$coach["last name"];
+
+            $ids = Coach::getIDsByName($coach);
+            if (empty($ids) && !empty($coach)) $ids = Coach::add($coach);
+            $coach_id = empty($ids) ? NULL : $ids[0]->id;
 
             $ids = Team::getIDsByName($name);
             if (empty($ids)) {
-                // get complete team data
-                $url = $team_data["team url"];
-                $team_data = self::team_data($url, array("country name", "coach url"));
-
-                // get coach id
-                $coach_url = $team_data["coach url"];
-                $coach = empty($coach_url) ? NULL : self::coach_data($coach_url, array("first name", "last name"));
-                if (!empty($coach)) $coach = $coach["first name"].' '.$coach["last name"];
-
-                $ids = Coach::getIDsByName($coach);
-                if (empty($ids) && !empty($coach)) $ids = Coach::add($coach);
-                $coach_id = empty($ids) ? NULL : $ids[0]->id;
-
                 // get country id
                 $country = $team_data["country name"];
                 $ids = Country::getIDsByName($country);
@@ -678,8 +676,8 @@ class CrawlerController extends BaseController {
                 // add team
                 Team::add($name, $coach_id, $country_id, $points);
             } else {
-                // just update the fifa points
-                Team::update($ids[0]->id, $points);
+                // just update the fifa points and coach id
+                Team::update($ids[0]->id, $points, $coach_id);
             } // end if-else
         } // end foreach
 
@@ -916,6 +914,46 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1968-italy/s568/final-stages/", "final");
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
+
+        /* COPA AMERICA */
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2011-argentina/group-stage/r13240/");
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2007-venezuela/group-stage/r4518/");
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2004-peru/group-stage/r2085/");
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2001-colombia/group-stage/r2090/");
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1999-paraguay/group-stage/r2095/");
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1997-bolivia/group-stage/r2100/");
+        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1995-uruguay/group-stage/r2105/");
+
+        /* CONCACAF GOLD CUP */
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2013/group-stage/r20898/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2011/group-stage/r13986/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2009/group-stage/r8491/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2007/group-stage/r4574/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2005/group-stage/r1682/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2002/group-stage/r1688/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2000/group-stage/r1693/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1998/group-stage/r1697/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1996/group-stage/r1701/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1993/group-stage/r8473/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1991/group-stage/r8477/");
+
+        /* ASIAN CUP */
+        //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2011-qatar/group-stage/r11619/");
+        //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2007-indonesia---malaysia---thailand---vietnam/group-stage/r4522/");
+        //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2004-china/group-stage/r1762/");
+
+        /* AFRICA CUP OF NATIONS */
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2014/group-stage/r19328/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2012-equatorial-guinea-gabon/group-stage/r16436/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2010-angola/group-stage/r10704/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2008-ghana/group-stage/r5650/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2006-egypt/group-stage/r2901/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2004-tunisia/group-stage/r2906/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2002-mali/group-stage/r2911/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2000-ghananigeria/group-stage/r17436/");
+        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/1998-burkina-faso/group-stage/r17441/");
+
         return;
     }
 
