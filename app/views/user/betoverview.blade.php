@@ -5,7 +5,6 @@
 <ul id="myTab" class="nav nav-tabs">
       <li class="active"><a href="#future" data-toggle="tab">Future Matches</a></li>
       <li class=""><a href="#played" data-toggle="tab">Played Matches</a></li>
-      <li class=""><a href="#stats" data-toggle="tab">Statistics</a></li>
     </ul>
 <div id="myTabContent" class="tab-content">
       <div class="tab-pane fade active in" id="future">
@@ -44,9 +43,6 @@
 				</div>
 			</div>
 		@endforeach 
-      </div>
-      <div class="tab-pane fade" id="stats">
-        TODO
       </div>
     </div>
 
