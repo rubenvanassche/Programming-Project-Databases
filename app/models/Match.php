@@ -40,9 +40,9 @@ class Match {
      * @param date The date of the match.
      * @return The IDs of the given match.
      */
-    public static function add( $hometeam_id, $awayteam_id, $competition_id, $date ) {
-        $query = "INSERT INTO `".self::TABLE_MATCH."` (hometeam_id, awayteam_id, competition_id, date) VALUES (?, ?, ?, ?)";
-        $values = array( $hometeam_id, $awayteam_id, $competition_id, $date );
+    public static function add( $hometeam_id, $awayteam_id, $competition_id, $date, $phase=NULL, $group=NULL) {
+        $query = "INSERT INTO `".self::TABLE_MATCH."` (hometeam_id, awayteam_id, competition_id, date, phase, group_nr) VALUES (?, ?, ?, ?, ?, ?)";
+        $values = array( $hometeam_id, $awayteam_id, $competition_id, $date, $phase, $group );
         DB::insert( $query, $values );
         return self::getIDs( $hometeam_id, $awayteam_id, $competition_id, $date );
     }
