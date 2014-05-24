@@ -49,7 +49,7 @@
                     <td><a href="{{route('match', array('id'=>$match->id))}}"}}><button type="button" class="btn btn-default btn-sm">Go!</button></a></td>
 					@if(!$match->bet)
 					<?php $openBet = true; ?>
-                    <td><a href="{{route('match', array('id'=>$match->id))}}?openBet=true}}"><button type="button" class="btn btn-lg btn-success btn-sm">Bet</button></a></td>
+                    <td><a href="{{route('match', array('id'=>$match->id))}}?openBet=true"><button type="button" class="btn btn-lg btn-success btn-sm">Bet</button></a></td>
 					@else
                     <td><a href="#"><button type="button" class="btn btn-sm btn-primary disabled">Bet</button></a></td>
 					@endif
