@@ -192,7 +192,8 @@ class UserController extends BaseController {
 			        'lastname' => array('required'),
 			        'country' => array('required'),
 			        'email' => array('required', 'email'),
-			        'age' => array('numeric', 'between:1,99'),
+			        'age' => array('numeric', 'between:1,120'),
+			        'about' => array('digits_between:0,1024'),
 			);
 
 			$validation = Validator::make(Input::all(), $rules);
@@ -219,10 +220,7 @@ class UserController extends BaseController {
 					}
 				}
 
-
-				foreach($data as $field => $value){
-					$user->change($user->ID(), $field, $value);
-				}
+				$user->change($user->ID(), $data);
 
 				return Redirect::to('user/account')->withInput();
 			}
@@ -258,7 +256,7 @@ class UserController extends BaseController {
 				// Start working on this data
 				$data['password'] = Input::get('password');
 
-				if($user->change($user->ID(), 'password', $data['password'])){
+				if($user->changePassword($user->ID(), $data['password'])){
 					$user->logout();
 
 					$data['content'] = 'Please login again with your new password.';

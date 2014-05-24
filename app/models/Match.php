@@ -252,8 +252,10 @@ class Match {
             return $info;
     }
 
-	public static function isInFuture($matchID) {
-		$now = date('Y-m-d h:i:s', time());;
+	public static function isInFuture($matchID, $hourOffset=0) {
+		$now = new DateTime();
+		$now->add(new DateInterval('PT'.$hourOffset.'H'));  //hourOffset sets current time to x hours in the future
+		$now = $now->format("Y-m-d h:i:s");
 		//Convert sql datetime to php datetime
 		$match = Match::getMatchByID($matchID)[0];
 		$matchDateTime = new DateTime($match->date);
