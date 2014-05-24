@@ -17,7 +17,6 @@ class UserGroup {
 	}
 
 	public static function invite($user_id, $userGroup_id, $invitedBy_id) {
-		print("usergroup_id = " . $userGroup_id);
 		$date = date('Y-m-d h:i:s');
 		$query = "INSERT INTO `userGroupInvites` (userId, usergroupId, invitedById, created) VALUES (?, ?, ?, ?)";
     $values = array($user_id, $userGroup_id, $invitedBy_id, $date);
@@ -116,17 +115,33 @@ class UserGroup {
 	}
 
 	public static function acceptInvite($notif_id, $ug_id) {
-		// Mark notification as seen.
-		DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
+		// Check whether or not this invite is from the logged in user.
+		$user = new User;
+		$result = DB::select("SELECT subject_id FROM `notifications` WHERE id = ?", array($notif_id))[0];
+		if ($result->subject_id == $user->ID()) {
+					// Mark notification as seen.
+					DB::update("UPDATE notifications notif SET status = 'accepted' WHERE notif.id = ?", array($notif_id));
+					// Add the user to the group.
+					$this->addUser($ug_id, $user->ID());
+		}
+		else {
+			// Do nothing. Someone else is trying to accept this invite.
+		}
 
-		// Add the user to the group.
-		$this->addUser($ug_id, $user->ID());
 
 	}
 
 	public static function declineInvite($notif_id) {
-		// Mark notification as seen.
-		DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
+		// Check whether or not this invite is from the logged in user.
+		$user = new User;
+		$result = DB::select("SELECT subject_id FROM `notifications` WHERE id = ?", array($notif_id))[0];
+		if ($result->subject_id == $user->ID()) {
+			// Mark notification as seen.
+			DB::update("UPDATE notifications notif SET status = 'declined' WHERE notif.id = ?", array($notif_id));
+		}
+		else {
+			// Do nothing. Someone else is trying to decline this invite.
+		}
 	}
 
 	function getGroupsByUser($id) {
