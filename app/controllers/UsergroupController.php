@@ -122,7 +122,7 @@ class UsergroupController extends BaseController {
 
 			if($validation->fails()) {
 				// Problem so show the user error messages
-				return Redirect::to('usergroups/'.$usergroup_id.'/invite')->withInput()->withErrors($validation);
+				return Redirect::to('usergroup/'.$usergroup_id.'/invite')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
 				$invitee_name = Input::get('invitee_name');
