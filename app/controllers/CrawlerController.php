@@ -545,8 +545,8 @@ class CrawlerController extends BaseController {
      * The following keys are available:
      *
      *      - name
-     *      - group matches [array(url)]
-     *      - final matches [array(url)]
+     *      - group matches [array(url, "group stage", group_nr)]
+     *      - final matches [array(url, phase, NULL)]
      *
      * @return Associative array with the keys mapped to either NULL or a value.
      */
@@ -581,6 +581,7 @@ class CrawlerController extends BaseController {
 
                 // get matches urls
                 $matches = array();
+                $group = 1;
                 foreach ($data->filterXPath($xpath) as $stage) {
                     $stage_url = $stage->getAttribute("href");
                     if (empty($stage_url) || ("final matches" == $key && strpos($stage_url, "group") !== false)) continue;
@@ -592,12 +593,20 @@ class CrawlerController extends BaseController {
                     $stage_data->addDocument($stage_page);
 
                     foreach ($stage_data->filterXPath("//table[contains(@class, matches)]/tbody/tr[contains(@class, match)]/td[4]/a") as $match_url) {
+                        // get phase
+                        $phase = $match_url->parentNode->parentNode->parentNode->parentNode->parentNode->parentNode->parentNode->parentNode->getElementsByTagName("h2");
+                        if (empty($phase)) continue;
+                        $phase = "group matches" == $key ? "group stage" : strtolower(trim($phase->item(0)->textContent));
+                        $phase_nr = "group matches" == $key ? $group : NULL;
+
                         // get match url
                         $match_url = $match_url->getAttribute("href");
                         if (empty($match_url) || preg_match("/^\?/", $match_url)) continue;
 
-                        $matches[] = "http://int.soccerway.com/".$match_url;
+                        $matches[] = array("http://int.soccerway.com/".$match_url, $phase, $phase_nr);
                     } // end foreach
+
+                    $group++;
 
                     $stage_data->clear();
                 } // end foreach
@@ -689,6 +698,7 @@ class CrawlerController extends BaseController {
      *      - final (only final stages)
      */
     public static function update_competition($url, $what="all") {
+        Log::info("BEGIN");
         $keys = array("name");
         switch ($what) {
         case "all":
@@ -727,9 +737,13 @@ class CrawlerController extends BaseController {
             break;
         } // end switch
 
-        foreach ($matches as $match_url) {
+        foreach ($matches as $match_entity) {
+            $url = $match_entity[0];
+            $phase = $match_entity[1];
+            $group_nr = $match_entity[2];
+
             // get match data
-            $match_data = self::match_data($match_url);
+            $match_data = self::match_data($url);
 
             // get match id
             $hometeam = $match_data["hometeam"];
@@ -744,12 +758,14 @@ class CrawlerController extends BaseController {
             $awayteam_id = $ids[0]->id;
             Competition::linkTeam($awayteam_id, $competition_id);
 
+            Log::info("UPDATING MATCH ".$hometeam." - ".$awayteam."...");
+
             $kick_off = $match_data["kick-off"];
             if (empty($kick_off)) $kick_off = $match_data["scoretime"]; 
             $date = $match_data["date"].' '.$kick_off;
 
             $ids = Match::getIDs($hometeam_id, $awayteam_id, $competition_id, $date);
-            if (empty($ids)) $ids = Match::add($hometeam_id, $awayteam_id, $competition_id, $date);
+            if (empty($ids)) $ids = Match::add($hometeam_id, $awayteam_id, $competition_id, $date, $phase, $group_nr);
             $match_id = $ids[0]->id;
 
             // okay, let's update the lineups
@@ -843,13 +859,20 @@ class CrawlerController extends BaseController {
                     Match::substitute($player_id1, $match_id, $time);
                 } // end foreach
             } // end foreach
+
+            Log::info("     UPDATED");
         } // end foreach
+
+        Log::info("END");
+        return;
     }
 
     /**
      * @brief Update all the stuffs.
      */
     public static function update() {
+        //set_time_limit(0);
+
         // first update FIFA ranking
         //self::update_teams();
 
@@ -862,26 +885,37 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1994-usa/group-stage/r753/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1990-italy/group-stage/r759/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1986-mexico/group-stage/r765/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1982-spain/group-stage-1/r771/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1982-spain/group-stage-2/r772/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1978-argentina/group-stage-1/r776/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1978-argentina/group-stage-2/r777/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1974-germany/group-stage-1/r780/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1974-germany/group-stage-2/r781/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1970-mexico/group-stage/r784/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1966-england/group-stage/r789/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1962-chile/group-stage/r794/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1958-sweden/group-stage/r799/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1958-sweden/group-stage-play-offs/r804/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1954-switzerland/group-stage/r805/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1954-switzerland/group-stage-play-offs/r806/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1938-france/round-1/r813/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1938-france/round-1-replays/r816/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1934-italy/s613/", "final");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1930-uruguay/group-stage/r826/");
 
-        /* */
+        /* CONFEDERATION CUP */
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2013-brazil/group-stage/r16347/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1999-mexico/group-stage/r1660/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1997-saudi-arabia/group-stage/r1664/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1995-saudi-arabia/group-stage/r1668/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1992-saudi-arabia/s1024/final-stages/", "final");
+
+        /* EUROPEAN CHAMPIONSHIP */
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2012-poland-ukraine/group-stage/r13552/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2008-austria-switzerland/group-stage/r5803/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2004-portugal/group-stage/r166/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2000-netherlands-belgium/group-stage/r639/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1996-england/group-stage/r662/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1992-sweden/group-stage/r666/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1988-germany/group-stage/r669/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1984-france/group-stage/r672/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1980-italy/group-stage/r675/");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1976-yugoslavia/s566/final-stages/", "final");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1972-belgium/s567/final-stages/", "final");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1968-italy/s568/final-stages/", "final");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
         return;
     }
 
