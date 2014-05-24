@@ -53,11 +53,62 @@ class Competition {
         // first check whether the link was already created
         $query = "SELECT * FROM `".self::TABLE_TEAM_PER_COMPETITION."` WHERE team_id = ? AND competition_id = ?";
         $values = array( $team_id, $competition_id );
-        if ( !empty( DB::select( $query, $values ) ) ) return False;
+        $result = DB::select( $query, $values );
+        if ( !empty( $result ) ) return False;
 
         $query = 'INSERT INTO `'.self::TABLE_TEAM_PER_COMPETITION.'` (team_id, competition_id) VALUES (?, ?)';
         DB::insert( $query, $values );
         return True;
     }
+    
+    /**
+     * @brief Get all competitions
+     * @return Array containing competition objects
+     */
+    public static function getAll() {
+        $query = "SELECT * FROM `".self::TABLE_COMPETITION."`";
 
+        $result = DB::select( $query );
+
+        return $result;
+    }
+    
+    /**
+     * @brief Get a competition
+     * @param competition_id The competition ID
+     * @return Competition object
+     */
+    public static function get($competition_id) {
+        $query = "SELECT * FROM `".self::TABLE_COMPETITION."` WHERE id = ?";
+
+        $result = DB::select( $query, array($competition_id) );
+
+        return $result[0];
+    }
+
+    /**
+     * @brief Get all the teams from a certain competiton
+     * @param competition_id The competition ID
+     * @return Array containing team objects
+     */
+    public static function getTeams($competition_id) {
+        $query = "SELECT team.name, team.id as teamid,  country.abbreviation  FROM team, teamPerCompetition, country WHERE country.id = team.country_id AND team.id = teamPerCompetition.team_id AND teamPerCompetition.competition_id = ?";
+
+        $result = DB::select($query, array($competition_id));
+
+        return $result;
+    }
+    
+    /**
+     * @brief Get all the matches from a certain competiton
+     * @param competition_id The competition ID
+     * @return Array containing match objects
+     */
+    public static function getMatches($competition_id) {
+        $query = "SELECT id, hometeam_id, awayteam_id FROM `match` WHERE competition_id = ?";
+
+        $result = DB::select($query, array($competition_id));
+
+        return $result;
+    }
 }

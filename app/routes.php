@@ -55,6 +55,8 @@ Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 Route::match(array('GET', 'POST'),'user/changeprofilepicture', 'UserController@changeprofilepicture');
 
+Route::get('competitions', 'CompetitionController@index');
+Route::get('competition/{id}', 'CompetitionController@competition');
 
 Route::get('user/facebooklogin', 'UserController@facebookLogin');
 
