@@ -210,8 +210,8 @@ class UserGroup {
 		$pastBets = $this->getPastBets($userGroup_id);
 		foreach($pastBets as $bet){
 			$timeline_pastbet = array('date'=>$bet->betdate,
-									  'icon'=>'glyphicon-envelope',
-									  'color'=>'warning',
+									  'icon'=>'glyphicon-euro',
+									  'color'=>'primary',
 									  'title'=>'<a href="'.url('profile').'/'.$bet->user_id.'">'.$bet->better.'</a> bet on <a href="'.url('match').'/'.$bet->match_id.'">this match</a>',
 									 'content'=>'');
 			array_push($timeline, $timeline_pastbet);
@@ -221,8 +221,8 @@ class UserGroup {
 		$futureBets = $this->getFutureBets($userGroup_id);
 		foreach($futureBets as $bet){
 			$timeline_futurebet = array('date'=>$bet->betdate,
-									  'icon'=>'glyphicon-envelope',
-									  'color'=>'warning',
+									  'icon'=>'glyphicon-euro',
+									  'color'=>'primary',
 									  'title'=>'<a href="'.url('profile').'/'.$bet->user_id.'">'.$bet->better.'</a> bet on <a href="'.url('match').'/'.$bet->match_id.'">this match</a>',
 									 'content'=>'');
 			array_push($timeline, $timeline_futurebet);

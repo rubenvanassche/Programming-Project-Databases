@@ -47,10 +47,19 @@
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
 			@endif
 			<p>{{$match->date}}</p>
+		</div>
+		<div class="col-md-5">
+			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			@if($inFuture)
-			<p>Predictions:</p>
-			<p><h2>{{ $predictedScores[0] }} - {{ $predictedScores[1] }}</h2></p>
-			<div class="progress">	
+			<div style="text-align:center;">
+				<p>Predictions:</p>
+				<p><h2>{{ $predictedScores[0] }} - {{ $predictedScores[1] }}</h2></p>
+			</div>
+			<div class="progress" style="height:20px;">	
 			  <div class="progress-bar progress-bar-success" style="width: {{100 * $predictedOutcome}}%">
 				<span>{{$match->hometeam}}: {{100 * $predictedOutcome}}%</span>
 			  </div>
@@ -59,10 +68,6 @@
 			  </div>
 			</div>
 			@endif
-
-		</div>
-		<div class="col-md-5">
-			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
 		</div>
 	</div>
 	<div class="row">
