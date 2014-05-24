@@ -334,7 +334,8 @@ class UserController extends BaseController {
 		$user = new User;
 		$user->logout();
 
-		return Redirect::back()->withInput(array("loggedOut" => true));
+		//return Redirect::back()->withInput(array("loggedOut" => true));
+		return Redirect::to('/')->withInput(array("loggedOut" => true));
 	}
 
 	public static function profile($id='') {
