@@ -92,7 +92,7 @@ class Competition {
      * @return Array containing team objects
      */
     public static function getTeams($competition_id) {
-        $query = "SELECT team.name, team.id as teamid,  country.abbreviation  FROM team, teamPerCompetition, country WHERE country.id = team.country_id AND team.id = teamPerCompetition.team_id AND teamPerCompetition.competition_id = ?";
+        $query = "SELECT team.name, team.id as teamid,  country.abbreviation  FROM team, teamPerCompetition, country WHERE country.id = team.country_id AND team.id = teamPerCompetition.team_id AND teamPerCompetition.competition_id = ? ORDER BY team.name";
 
         $result = DB::select($query, array($competition_id));
 
@@ -105,10 +105,15 @@ class Competition {
      * @return Array containing match objects
      */
     public static function getMatches($competition_id) {
-        $query = "SELECT id, hometeam_id, awayteam_id FROM `match` WHERE competition_id = ?";
+        $query = "SELECT id, hometeam_id, awayteam_id FROM `match` WHERE competition_id = ? ORDER BY date DESC";
 
         $result = DB::select($query, array($competition_id));
 
         return $result;
+    }
+    
+    
+    public static function getGoals($competition_id){
+	    return DB::select("SELECT (SELECT COUNT(id) FROM goal WHERE match_id = `match`.id) as goals , id, hometeam_id, awayteam_id FROM `match` WHERE competition_id = ?", array($competition_id));
     }
 }

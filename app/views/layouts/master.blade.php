@@ -95,7 +95,8 @@
 					else {?>
 						<ul class="nav navbar-nav navbar-left">
 							<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-							<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-euro"></i></a></li>
+						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
+						<li><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
 						</ul>
 					<?php } ?>
 
