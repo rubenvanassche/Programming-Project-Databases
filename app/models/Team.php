@@ -118,7 +118,7 @@ class Team {
      */
     public static function getPlayers( $teamID ) {
         // query for player ID
-        $query = "SELECT player_id FROM`".self::TABLE_PLAYER_PER_TEAM."` WHERE team_id = ?";
+        /*$query = "SELECT player_id, position FROM`".self::TABLE_PLAYER_PER_TEAM."` WHERE team_id = ?";
         $values = array( $teamID );
 
         $playerIDs = DB::select( $query, $values );
@@ -135,7 +135,10 @@ class Team {
             array_push($players, $player);
         } // end foreach
         
-        return $players;
+        return $players;*/
+        $result = DB::select("SELECT player.id, player.name, player.injured, (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
+        
+        return $result;
     }
 
     /**
