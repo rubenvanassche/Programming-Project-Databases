@@ -79,7 +79,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Goals</h3>
-			<table class="table table-condensed">
+			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -98,7 +98,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Goals</h3>
-			<table class="table table-condensed">
+			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -119,7 +119,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Cards</h3>
-			<table class="table table-condensed">
+			<table id="myTable3"class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -140,7 +140,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Cards</h3>
-			<table class="table table-condensed">
+			<table id="myTable4" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -168,7 +168,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Transfers</h3>
-			<table class="table table-condensed">
+			<table id="myTable5" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -212,7 +212,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Transfers</h3>
-			<table class="table table-condensed">
+			<table id="myTable6" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -370,6 +370,64 @@ $(document).ready(function () {
     }
 });
 </script>
+
+
+
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable6")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable5")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable4")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable3")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1]}); });
+  </script>
 
 
 @stop

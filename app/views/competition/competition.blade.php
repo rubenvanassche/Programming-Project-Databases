@@ -25,7 +25,7 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<table id="myTable" class="tablesorter">
+			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Date</th>
@@ -56,4 +56,27 @@
 			</table>
 		</div>
 	</div>
+@stop
+
+@section('javascript')
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1,]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[1, 0]] , headers: {0: {sorter: false}}})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
 @stop
