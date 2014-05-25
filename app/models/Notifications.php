@@ -150,7 +150,13 @@ class Notifications {
 
 	public static function betReminder($user_id) {
 		// Sends a notification reminding one user that they still need to bet some matches.
-		Notifications::saveNotification(NULL, $user_id, $user_id, Notifications::REMIND_USER_BETS);
+		// First check if there's an old, unseen notification of this sort.
+		$result = DB::select("SELECT * FROM `notifications` WHERE subject_id = ? AND status = 'unseen'", array($user_id));
+		if (count($result) == 0) {
+			// No previous, unseen notification of this sort. We can add a new one.
+			Notifications::saveNotification(NULL, $user_id, $user_id, Notifications::REMIND_USER_BETS);
+		}
+		// else: there's still an unseen notification of this sort. Let's not spam the user with the same linking notifications.
 	}
 
 	public static function sendReminders($days) {
