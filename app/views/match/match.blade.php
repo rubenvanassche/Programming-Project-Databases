@@ -46,7 +46,7 @@
 			@if($bet)
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
 			@endif
-			<p>{{$match->date}}</p>
+			<p><?php $date = new DateTime($match->date); echo $date->format('d-m-Y H:i')?></p>
 		</div>
 		<div class="col-md-5">
 			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>

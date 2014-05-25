@@ -9,7 +9,7 @@ $("#myTable")
                     filterClearContainer: "#filter-clear-button",
                     filterColumns: [0]}); });
 </script>
-<table id="myTable" class="table table-condensed">
+<table id="myTable" class="tablesorter">
 	<thead>
 		<tr>
 			<th>Name</th>

@@ -40,7 +40,7 @@
                   <tr class="regular">
                 <?php } ?>
                     <td><?php $date = new DateTime($match->date);
-								  echo date_format($date, 'F jS Y g:ia');
+								  echo date_format($date, 'd-m-Y H:i');
 						?>
 					</td>
                     <td><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{$match->hometeam}}</a></td>
