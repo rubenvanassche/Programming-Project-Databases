@@ -161,14 +161,15 @@ class User {
 		$data['registrationcode'] = str_random(24);
 		$data['password'] = Hash::make($data['password']);
 
-		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country_id, registrationcode) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country_id, registrationcode, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 		array($data['username'],
 			$data['firstname'],
 			$data['lastname'],
 			$data['email'],
 			$data['password'],
 			$data['country_id'],
-			$data['registrationcode']));
+			$data['registrationcode'],
+			url('profilepictures/coachcenter.jpg')));
 
 		//Send email
 		$message = new stdClass();

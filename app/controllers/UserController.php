@@ -319,7 +319,7 @@ class UserController extends BaseController {
 
 						return Redirect::to('profile/'.$user->ID());
 				   }else{
-				   	   Notification::error("The image size is not the right format(jpg, png, gif).");
+				   	   Notification::error("The image is not the right format(jpg, png, gif).");
 					   return Redirect::back()->withErrors($validation);
 				   }
 				} else {
