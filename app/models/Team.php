@@ -136,7 +136,7 @@ class Team {
         } // end foreach
 
         return $players;*/
-        $result = DB::select("SELECT player.id, player.name, player.injured, (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
+        $result = DB::select("SELECT player.id, player.name (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
 
         return $result;
     }
