@@ -32,7 +32,7 @@
 		<h3>Information</h3>
 		<p>{{$playerText}}</p>
 		<h3>Goals</h3>
-		<table id="myTable2" class="tablesorter">
+		<table id="myTable" class="tablesorter">
 			<thead>
 				<tr>
 					<th>Date</th>
@@ -53,7 +53,7 @@
 			</tbody>
 		</table>
 		<h3>Cards</h3>
-		<table id="myTable" class="tablesorter">
+		<table id="myTable2" class="tablesorter">
 			<thead>
 				<tr>
 					<th>Date</th>
@@ -111,34 +111,28 @@
 
   <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#myTable")
+        $("#myTable3")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
                             filterColumns: [0, 1, 2]}); });
   </script>
 
-  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
-  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
-
     <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#myTable2")
+        $("#myTable")
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0, 1, 3]}); });
-  </script>
-
-  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
-  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
-
-    <script type="text/javascript">
-    jQuery(document).ready(function() {
-        $("#myTable3")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
-        .tablesorterFilter({filterContainer: "#filter-box",
-                            filterClearContainer: "#filter-clear-button" });
+                            filterColumns: [0, 1, 2]}); });
   </script>
 @stop
 
