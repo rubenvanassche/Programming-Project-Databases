@@ -78,6 +78,7 @@ Momenteel is het mogelijk om voorspellingen uit te voeren op reeds gespeelde mat
 Gemaakte voorspellingen worden opgeslagen in een specifieke tabel, `bet`, in de database. Concreet krijgt elke voorspelling een unieke id, en worden id van match en gebruiker en alle gemaakte voorspellingen bijgehouden.
 
 \section{Database}
+TODO: UPDATE
 Onze database bestaat 12 tabellen met voetbalgerelateerde data en 2 usergerelateerde tabellen.
 \begin{enumerate}
 \item 'continent': Tabel voor werelddelen. Bevat een id en een naam.
@@ -94,6 +95,7 @@ Onze database bestaat 12 tabellen met voetbalgerelateerde data en 2 usergerelate
 \item `cards`: Tabel voor gele en rode kaarten. Bevat een id, een id van de speler die de kaart kreeg, een id van de match waarin de kaart gegeven werd, de kleur van de kaart en de tijd waarop de kaart gegeven werd.
 \item `user`: Meer uitleg bij sectie over gebruikers.
 \item `bet`: Meer uitleg bij sectie over voorspellingen
+\item `notifications`:
 \end{enumerate}
 
 \subsection{ER-diagramma}
@@ -179,7 +181,7 @@ ALTER TABLE `bet`
 \end{lstlisting}
 
 \section{User interface}
-
+TODO: UPDATE
 Hoewel Laravel beschikt over een volledig uitgewerkt loginsysteem, besloten we ons eigen systeem te schrijven. Een dergelijk systeem gebruikt een database voor het opslaan van users, dus is het niet meer dan logisch dat we dit in een vak met betrekking tot databases zelf gaan programmeren. In de database bestaat een tabel 'user', met als fields 'id', 'username', 'firstname', 'lastname', 'email', 'password', 'country', 'session\_id' en 'registrationcode'. De id is een auto incrementing integer die dient als key voor elke entry van de tabel. We voorzien een username, aangezien dit gebruikers een zekere vorm van anonimiteit biedt op onze website. Daarnaast is het een makkelijke manier om gebruikers op de website een unieke benaming te geven. Voornaam en familienaam zijn apart opgeslagen, zodat we in bijvoorbeeld emails gebruikers niet altijd met hun volledige naam niet hoeven aan te spreken. Het paswoord is uiteraard gehasht opgeslagen. Het hashen gebeurt via Laravel, aan de hand van bcrypt. Bcrypt is gebaseerd op het Blowfishalgoritme en heeft een salt ingebouwd, wat accounts beschermt tegen aanvallen gebruik makende van rainbow tables. Laravel biedt een functie voor het vergelijken van een ongehasht en gehasht paswoord. We vragen gebruikers ook in welk land ze wonen, zo kunnen we bijvoorbeeld bepaalde competities en nieuwsberichten een prominentere plek op de website geven afhankelijk van de gebruiker. De session\_id wordt gebruikt om bij te houden of een gebruiker ingelogd is. We plaatsen een tijdelijke cookie met hetzelfde id bij de gebruiker, en kunnen dit zo nagaan. Ten slotte wordt de registratiecode gebruikt bij het nagaan van de validiteit van het emailadres van een gebruiker. De registratiecode wordt gemaild naar de gebruiker, en het account wordt pas geactiveerd wanneer deze code ingegeven wordt. Merk op dat deze functionaliteit momenteel nog niet actief is, gezien we nog niet beschikken over een mailserver.
 \\
 \\
@@ -283,135 +285,36 @@ Rechtsbovenaan alle pagina's staat een searchbar waarin je een zoekterm kunt inv
 Deze pagina bevat informatie over een bepaalde speler.
 \\
 In de PlayerController wordt volgende info opgevraagd van de Player en Team models:
-\begin{lstlisting}
-  $playerObj = Player::getPlayer($id)[0];
-  $playerTeam = Team::getTeambyPlayerID($id)[0];
-  $playerText = Player::getPlayerText($playerObj->name);
-  $playerImageURL = Player::getPlayerImageURL($playerObj->name);
-  $goals = Player::goals($id);
-  $cards = Player::cards($id);
-  $playerName = $playerObj->name;
-\end{lstlisting}
-
 Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Met andere woorden worden hun goals, kaarten etc. getoond. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
 in onze database zitten.
+
 \subsection{Team Page}
 Deze pagina bevat informatie over een bepaald team, zoals de spelers, matchen e.d.
-
-In de TeamController wordt de benodigde informatie uit de models gehaald. Dit gebeurt in meerdere verschillende functies. Hieronder een voorbeeld.
-\begin{lstlisting}
-    $teamObj = Team::getTeamByID($teamID)[0];
-    $teamImageURL = Team::getTeamImageURL($teamObj->name);
-
-    $outcomes = Team::getWinsLossesTies($teamID);
-    $yearlyGoalsCards = Team::getYearlyGoalsCards($teamID);
-    ksort($yearlyGoalsCards); //Otherwise the graph is all messed up
-
-    // Check if we can find an background picture
-    $teamBackground = '';
-    if($teamObj->twitterAccount != ''){
-      $tweets = Twitter::getUserTimeline(array('screen_name' => $teamObj->twitterAccount, 'count' => 1, 'format' => 'array'));
-      if (isset($tweets[0]['user']['profile_banner_url'])) {
-        $backgroundpicture = $tweets[0]['user']['profile_banner_url'];
-        //$teamBackground = substr($backgroundpicture, 0, -1);
-        $teamBackground = $backgroundpicture . "/1500x500";
-      }
-
-    }
-    //Check if there's news for this team
-    $teamName = $teamObj->name;
-    $articles = RSS::getFIFAtext();
-    $hasNews = false;
-    foreach ($articles as $article){
-      $title = $article->get_title();
-      $description = $article->get_description();
-
-      $inTitle = strstr($title,$teamName);
-      $inDescription = strstr($description,$teamName);
-
-      if($inTitle == true or $inDescription == true){
-        $hasNews = true;
-        break;
-      }
-    }
-	}
-\end{lstlisting}
-
-Deze informatie wordt vervolgens gebruikt om weer te geven op de webpagina. De spelers en dergelijke worden opgevraagd in andere methoden van de TeamController.
-
-\subsection{Team Players page}
-Deze pagina is een onderdeel van de bijhorende Team pagina. Door middel van Ajax wordt dit op de pagina geladen zonder de pagina te hoeven herladen.
-\\
-In de PlayersController wordt volgende info opgevraagd van het Team model:
-\begin{lstlisting}
-	public function index($playerName){
-		$playerObj = Player::getPlayer($playerName)[0];
-		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];
-		$playerText = Player::getPlayerText($playerName);
-		$playerImageURL = Player::getPlayerImageURL($playerName);
-		$goals = Player::goals($playerObj->id);
-		$cards = Player::cards($playerObj->id);
-
-		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards'))->with('title', $playerName);
-	}
-\end{lstlisting}
+In de TeamController wordt de benodigde informatie uit de models gehaald.
+Qua design zijn we voor een strak en propere stijl gegaan. De banners zijn van de team zijn twitter pagina gehaald.
+Al deze verkregen informatie wordt gebruikt in onze teampagina. Er zijn 6 tabs:
+\subsubsection{Information}
+Deze pagina is de standaard geselecteerde tab in de teampagina. Door middel van Ajax wordt dit op de pagina geladen zonder de pagina te hoeven herladen.
+Hierin staat een korte tekst, van Wikipedia, die de ploeg beschrijft.
+\subsubsection{Players}
+Hierin worden alle spelers (van vroeger en nu) van het team getoond. Deze zijn sorteerbaar op basis van naam, positie en goals. Uiteraard kan je naar de playerpage doorklikken.
+\subsubsection{Matches}
+Alle matches van dit team worden hier in een tabel getoond (toekomstig en reeds gespeeld). Weerom is deze tabel sorteerbaar, dit keer op basis van datum en naam.
+\subsubsection{News}
+In deze tab zijn nieuwsberichten beschikbaar die te maken hebben met het team. Deze nieuwsberichten komen van FIFA.com en worden dus gefilterd op het team.
+\subsubsection{Twitter}
+Hierin bevinden zich tweets van de officiele of toch zo goed mogelijke twitter account van het team.
+\subsubsection{Graphs}
+In deze tab zijn er gevisualiseerde statistieken te vinden over het team. Er is een 3D taartdiagram te zien met de wins/losses/ties op. en een staafdiagram die informatie bevat over de gemiddelde goals/gele en rode kaarten.
+Om deze visualisatie te verwezenlijken hebben we gebruik gemaakt van Google zijn visualisatie API.
 
 \subsection{Match page}
+TODO: update
 De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er dus info getoond over de match: de eindstand, wie er gescoord heeft, wie er een kaart heeft gekregen en dergelijke. Uiteraard kan er weer op meerdere manieren doorgeklikt worden door op de speler/teams te klikken en dergelijke.
 
 \subsection{Betting pages}
+TODO: update
 Het is momenteel enkel mogelijk om individueel pronostieken in te vullen; ondersteuning om in groep te spelen volgt nog. Er is een formulier om je pronostiek in te vullen en door te sturen en een pagina met een overzicht van alle gemaakte gokken. Later komt er onder andere nog een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
-
-\subsection{Optimalisatie van reeds bestaande pages}
-Een deel van de reeds geschreven code is niet altijd even proper. Daarom zal een deel ook een beetje herschreven worden; een voorbeeld hiervan zijn de controllers. In plaats van allemaal verschillende argumenten mee te geven aan een view is het properder om alles eerst in een array te steken en die dan gewoon mee te geven. Dit maakt het makkelijker om later argumenten toe te voegen.
-
-In concreto:
-Eerder dit:
-\begin{lstlisting}
-	function index($matchID){
-		$data['match'] = Match::get($matchID);
-		$data['goalshometeam'] = Match::goals($matchID, $data['match']->hometeam_id);
-		$data['cardshometeam'] = Match::cards($matchID, $data['match']->hometeam_id);
-		$data['goalsawayteam'] = Match::goals($matchID, $data['match']->awayteam_id);
-		$data['cardsawayteam'] = Match::cards($matchID, $data['match']->awayteam_id);
-
-		return View::make('match.match',$data)->with('title', 'Match');
-	}
-\end{lstlisting}
-
-in plaats van:
-\begin{lstlisting}
-	public function index($playerName){
-		$playerObj = Player::getPlayer($playerName)[0];
-		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];
-		$playerText = Player::getPlayerText($playerName);
-		$playerImageURL = Player::getPlayerImageURL($playerName);
-		$goals = Player::goals($playerObj->id);
-		$cards = Player::cards($playerObj->id);
-
-		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards'))->with('title', $playerName);
-	}
-\end{lstlisting}
-
-
-
-\section{Extra functionaliteit}
-De meeste extra functionaliteit die gesuggereerd wordt in de opgave is aanwezig of is ondersteuning voor ingebouwd. Er is heel wat data aanwezig over spelers, er is relevant nieuws te lezen, er is (ondersteuning voor) data uit andere competities, ... \\ Over verdere extra functionaliteiten hebben we nog niet echt nagedacht, het is nu in de eerste plaats belangrijk dat de verplichte functionaliteit er is. Daarna zou nog tijd over moeten zijn voor extra functionaliteit.
-
-\section{Planning}
-Het project heeft niet erg veel vorderingen geboekt sinds de laatste evaluatie. Om te vermijden dat dit nogmaals zou gebeuren, zullen we dit keer geen pauze invoeren na de evaluatie, maar blijven doorwerken. Zo zal het werk zich niet opstapelen bij de deadline, wat een ramp zou zijn gezien die in de examens valt. De taakverdeling verliep al goed, nu moeten we enkel zorgen dat het individuele werk ook effectief gebeurt. Bij de eerste evaluatie waren we wel al redelijk ver gevorderd in het project, wat betekent dat we nu toch geen onoverkomelijke achterstand hebben opgelopen. De resterende verplichte functionaliteit hebben we onder elkaar verdeeld, eens die aanwezig en stabiel is gaan we over op zo veel mogelijk extra functionaliteit (zolang het nuttig is voor de gebruiker)
-\subsection{Stijn}
-Mogelijk om e-mails te verzenden inbouwen, refactoring van code
-\subsection{Tom}
-Voorspellingen van systeem integreren met voorspellingen van user
-\subsection{Ruben}
-Ondersteuning voor groepen van gebruikers om samen te werken bij het voorspellen.
-\subsection{Jakob}
-Grafische weergave van data voor gebruikers implementeren
-\subsection{Kristof}
-Automatisch updaten van database implementeren
-
-
 
 \begin{figure}[ht!]
 \centering
