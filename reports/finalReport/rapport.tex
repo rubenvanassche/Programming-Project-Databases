@@ -4,8 +4,8 @@
 \usepackage{color}
 \usepackage[normalem]{ulem}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
-\setcounter{section}{-1}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -34,27 +34,21 @@
 \date{19 maart 2014}
 \maketitle
 
-
-\section{Enkele opmerkingen over dit rapport}
-We hebben ervoor gekozen om verder te bouwen op het rapport van de vorige keer. Grote delen van de tekst zijn dus dezelfde als een maand geleden. Op die manier behandelt ook dit rapport alle functionaliteit van de website, en is het niet nodig om het vroegere rapport erbij te leggen. Volledig veranderde en nieuwe (sub)secties zijn 'Status', 'Taakverdeling', 'Voorspellingen van gebruikers',  'Extra functionaliteit' en 'Planning'. Licht aangepaste (sub)secties zijn 'Design' (zonder subsecties) en 'Database'.
 \section{Status}
-Er is heel wat data toegevoegd aan de database; die bevat momenteel honderden teams en duizenden spelers. De database moet uiteraard nog steeds verder groeien. Daarnaast is ook de mogelijkheid om als ingelogde gebruiker voorspellingen uit te brengen toegevoegd. Heel wat bugs zijn gefixt. De site staat ondertussen ook online (www.coachcenter.net), maar na een wissel in servers zijn de meeste pagina's onbereikbaar geworden. Het is dus nog steeds aangewezen de lokale versie te gebruiken. Verder zijn er geen grote features toegevoegd; het project lag na de vorige presentatie een tijdje stil door een combinatie van een aantal plotse andere taken en drukke vakanties van de groepsleden.
-
+Het project is afgewerkt. Alle verplichte functionaliteit is afgewerkt en we hebben heel wat extra functionaliteit voorzien. De database is goed gevuld met ongeveer 86.000 entries. De afgewerkte versie van de website staat online op \url{www.coachcenter.net} en blijft automatisch up to date met de recentste data.
 \section{Taakverdeling}
+In deze sectie noemen we enkel de grote onderdelen waar we veel aan werkten. Dit is verre van een complete lijst. Voor een vollediger beeld is er het overzicht van de commits op onze git repository \\ \url{https://github.com/rubenvanassche/Programming-Project-Databases}
 \subsection{Stijn}
-Verzamelde heel wat meer data, vond nieuwe bronnen voor data. Refactorde grote delen van de code met oog op snelheid, effici\"entie en modulariteit. Betreft het design, is het nu een stuk eenvoudiger om aanpassingen door te voeren (vb. extra data van een speler parsen).
+
 \subsection{Kristof}
-Regelde een server om onze website online te krijgen, en ging aan het werk om de website online ook effectief aan de praat te krijgen. Fixte ook verschillende bugs.
 \subsection{Tom}
-Werkte aan de implementatie van het voorspellingsalgoritme.
 \subsection{Jakob}
-Werkte aan de interface om gebruikers voorspellingen uit te laten voeren.
+Maakte een gebruikerssysteem (registreren en inloggen). Maakte een interactieve wereldkaart met FIFA scores. Bouwde het betsysteem uit. Maakte een visualisatie van statistieken uit de database.
 \subsection{Ruben}
-Zorgde voor specifieke bugfixes.
+
 
 \section{Design}
-De meesten van ons groepje hadden totaal geen ervaring met het bouwen van websites. In het begin van het project zijn de meesten dus begonnen met het doornemen van allerlei tutorials. Dit nam redelijk wat tijd in beslag, waardoor het eigenlijke project met wat vertraging begon. In eerste geval werkten we aan de backend van de website: opstellen van databaseschema, bouwen van loginsysteem, ... We waren eerst van plan om onze data te verkrijgen via de OpenFooty API. Ongeveer een week na het versturen van onze API key request begonnen we te vrezen dat we deze niet meer gingen krijgen, wat inderdaad nog steeds niet gebeurd is. We moesten dus op zoek gaan naar andere manieren om onze data te vergaren. De enige andere optie leek het gebruik van een crawler. Niemand van ons had enige ervaring met het schrijven/gebruiken van crawlers, en de crawler bleek een struikelblok. Nu werkt de crawler goed, en kunnen we de crawler vertrouwen om goeie informatie te verzamelen. Aan de implementatie van het voorspellingsalgoritme wordt gewerkt, maar dit is nog niet in de website ge\"integreerd. De meeste, maar niet alle pagina's zijn ondertussen aangemaakt.
-
+TODO: LAMP, Laravel, Bootstrap
 \subsection{Voorspellingsalgoritme}
 Het voorspellingssysteem hebben wij opgesplitst in 2 essenti\"ele delen, namelijk het voorspellen van een winnaar van een wedstrijd, en het bepalen van de te verwachten score. Factoren die wij belangrijk vonden om rekening mee te houden in het voorspellen van dit alles zijn vooral onderlinge resultaten van eerder gespeelde wedstrijden, en gemiddeldes van andere wedstrijden tegen andere ploegen. Ook wordt altijd rekening gehouden met de locatie waar gespeeld wordt (uit of thuis).
 \\
@@ -79,7 +73,7 @@ Gemaakte voorspellingen worden opgeslagen in een specifieke tabel, `bet`, in de 
 
 \section{Database}
 TODO: UPDATE
-Onze database bestaat 12 tabellen met voetbalgerelateerde data en 2 usergerelateerde tabellen.
+Onze database bestaat 20 tabellen met voetbalgerelateerde data en 2 usergerelateerde tabellen.
 \begin{enumerate}
 \item 'continent': Tabel voor werelddelen. Bevat een id en een naam.
 \item `country`: Tabel voor landen. Bevat een id, een naam, de id van het werelddeel waarin het land ligt, en een afkorting voor de naam van het land. Die afkorting zal gebruikt worden op de website.
@@ -95,7 +89,13 @@ Onze database bestaat 12 tabellen met voetbalgerelateerde data en 2 usergerelate
 \item `cards`: Tabel voor gele en rode kaarten. Bevat een id, een id van de speler die de kaart kreeg, een id van de match waarin de kaart gegeven werd, de kleur van de kaart en de tijd waarop de kaart gegeven werd.
 \item `user`: Meer uitleg bij sectie over gebruikers.
 \item `bet`: Meer uitleg bij sectie over voorspellingen
-\item `notifications`:
+\item `notifications`: Meer uitleg bij sectie over notifications
+\item `userGroup`: Meer uitleg bij sectie over user groups
+\item `userGroupInvites`: Meer uitleg bij sectie over user groups
+\item `userGroupMessages`: Meer uitleg bij sectie over user groups
+\item `userGroupMessagesContent`: Meer uitleg bij sectie over user groups
+\item `userPerUserGroup`: Meer uitleg bij sectie over user groups
+
 \end{enumerate}
 
 \subsection{ER-diagramma}
@@ -103,18 +103,24 @@ Zie laatste pagina
 \subsection{Relational model}
 continent(\uline{id}, name) \\
 country(\uline{id}, name, continent\_id, abbreviation) \\
-player(\uline{id}, name, injured) \\
+player(\uline{id}, name) \\
 coach(\uline{id}, name) \\
-team(\uline{id}, name, country\_id, coach\_id, fifascore) \\
+team(\uline{id}, name, country\_id, coach\_id, fifapoints, twitterAccount) \\
 competition(\uline{id}, name) \\
 match(\uline{id}, hometeam\_id, awayteam\_id, competition\_id, date) \\
-playerPerTeam(\uline{player\_id}, \uline{team\_id}) \\
+playerPerTeam(\uline{player\_id}, \uline{team\_id}, position) \\
 playerPerMatch(\uline{player\_id}, \uline{match\_id}, intime, outtime) \\
-playerPerCompetition(\uline{team\_id}, \uline{competition\_id}) \\
-goal(match\_id, time, player\_id, team\_id, penaltyphase) \\
+teamPerCompetition(\uline{team\_id}, \uline{competition\_id}) \\
+goal(match\_id, time, player\_id, team\_id) \\
 cards(\uline{id}, player\_id, color, time) \\
-user(\uline{id}, username, firstname, lastname, email, password, country, session\_id, registrationcode) \\
-bet(\uline{id}, user\_id, match\_id, hometeam\_score, awayteam\_score, first\_goal, hometeam\_yellows, hometeam\_reds, awayteam\_yellows, awayteam\_reds) \\
+user(\uline{id}, facebookid, username, firstname, lastname, email, password, country\_id, session\_id, registrationcode, betscore, about, receive\_email, age, picture) \\
+bet(\uline{id}, user\_id, match\_id, hometeam\_score, awayteam\_score, first\_goal, hometeam\_yellows, hometeam\_reds, awayteam\_yellows, awayteam\_reds, evaluated, betdate) \\
+notifications(\uline{id}, actor\_id, subject\_id, object\_id, type\_id, status, created\_date, updated\_date) \\
+userGroup(\uline{id}, name, private, created) \\
+userGroupInvites(\uline{id}, user\_id, usergroup\_id, invitedby\_id, created) \\
+userGroupMessages(\uline{id}, usergroup\_id, user\_id, title, created) \\
+userGroupMessagesContent(\uline{id}, user\_id, message\_id, content, created) \\
+userPerUserGroup(\uline{user\_id}, \uline{usergroup\_id}, created)\\
 
 \subsection{Constraints}
 \begin{lstlisting}
@@ -181,14 +187,28 @@ ALTER TABLE `bet`
 \end{lstlisting}
 
 \section{User interface}
-TODO: UPDATE
-Hoewel Laravel beschikt over een volledig uitgewerkt loginsysteem, besloten we ons eigen systeem te schrijven. Een dergelijk systeem gebruikt een database voor het opslaan van users, dus is het niet meer dan logisch dat we dit in een vak met betrekking tot databases zelf gaan programmeren. In de database bestaat een tabel 'user', met als fields 'id', 'username', 'firstname', 'lastname', 'email', 'password', 'country', 'session\_id' en 'registrationcode'. De id is een auto incrementing integer die dient als key voor elke entry van de tabel. We voorzien een username, aangezien dit gebruikers een zekere vorm van anonimiteit biedt op onze website. Daarnaast is het een makkelijke manier om gebruikers op de website een unieke benaming te geven. Voornaam en familienaam zijn apart opgeslagen, zodat we in bijvoorbeeld emails gebruikers niet altijd met hun volledige naam niet hoeven aan te spreken. Het paswoord is uiteraard gehasht opgeslagen. Het hashen gebeurt via Laravel, aan de hand van bcrypt. Bcrypt is gebaseerd op het Blowfishalgoritme en heeft een salt ingebouwd, wat accounts beschermt tegen aanvallen gebruik makende van rainbow tables. Laravel biedt een functie voor het vergelijken van een ongehasht en gehasht paswoord. We vragen gebruikers ook in welk land ze wonen, zo kunnen we bijvoorbeeld bepaalde competities en nieuwsberichten een prominentere plek op de website geven afhankelijk van de gebruiker. De session\_id wordt gebruikt om bij te houden of een gebruiker ingelogd is. We plaatsen een tijdelijke cookie met hetzelfde id bij de gebruiker, en kunnen dit zo nagaan. Ten slotte wordt de registratiecode gebruikt bij het nagaan van de validiteit van het emailadres van een gebruiker. De registratiecode wordt gemaild naar de gebruiker, en het account wordt pas geactiveerd wanneer deze code ingegeven wordt. Merk op dat deze functionaliteit momenteel nog niet actief is, gezien we nog niet beschikken over een mailserver.
+
+Hoewel Laravel beschikt over een volledig uitgewerkt loginsysteem, besloten we ons eigen systeem te schrijven. Een dergelijk systeem gebruikt een database voor het opslaan van users, dus is het niet meer dan logisch dat we dit in een vak met betrekking tot databases zelf gaan programmeren. In de database bestaat een tabel 'user', met als fields 'id', 'username', 'firstname', 'lastname', 'email', 'password', 'country\_id', 'session\_id', 'registrationcode', 'betscore', 'about', 'receive\_email', 'age' en 'picture' . De id is een auto incrementing integer die dient als key voor elke entry van de tabel. We voorzien een username, zodat gebruikers niet noodzakelijk hun echte naam moeten prijsgeven. Daarnaast is het een makkelijke manier om gebruikers op de website een unieke benaming te geven. Voornaam en familienaam zijn apart opgeslagen, zodat we in bijvoorbeeld emails gebruikers niet altijd met hun volledige naam niet hoeven aan te spreken. Het paswoord is uiteraard gehasht opgeslagen. Het hashen gebeurt via Laravel, aan de hand van bcrypt. Bcrypt is gebaseerd op het Blowfishalgoritme en heeft een salt ingebouwd, wat accounts beschermt tegen aanvallen gebruik makende van rainbow tables. Laravel biedt een functie voor het vergelijken van een ongehasht en gehasht paswoord. Verder vragen we gebruikers ook in welk land ze wonen en wat hun leeftijd is. De session\_id wordt gebruikt om bij te houden of een gebruiker ingelogd is. We plaatsen een tijdelijke cookie met hetzelfde id bij de gebruiker, en kunnen dit zo nagaan. De registratiecode wordt gebruikt bij het nagaan van de validiteit van het emailadres van een gebruiker. De registratiecode wordt gemaild naar de gebruiker, en het account wordt pas geactiveerd wanneer deze code ingegeven wordt. De betscore houdt bij hoe goed een gebruiker presteert bij het gokken. De gebruiker kan een korte beschrijving van zichzelf geven, die in 'about' wordt opgeslagen. 'Receive\_email' is een boolean die bijhoudt of de gebruikers herinneringse-mails voor wedstrijden waar hij nog niet op gokte wil krijgen. Ten slotte bevat 'picture' de profielafbeelding van de gebruiker.
 \\
 \\
-Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, staat bij emailadres wel een emailadres, is tweemaal hetzelfde paswoord ingetypt, ...) is de validatie van Laravel gebruikt. Dergelijke validatiecode ziet er heel wat beter uit voor de programmeur dan via een hoop simpele if-statements en reguliere expressies. We gebruiken de prepared statements van Laravel om sql-injecties tegen te gaan. Verder gebruiken we de Laravel Query Builder voor makkelijker schrijven van SQL queries niet, dit gebeurt zoals opgegeven met ruwe SQL queries.
+Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, staat bij emailadres wel een emailadres, is tweemaal hetzelfde paswoord ingetypt, ...) is de validatie van Laravel gebruikt. Dergelijke validatiecode ziet er heel wat beter uit voor de programmeur dan via een hoop simpele if-statements en reguliere expressies. We gebruiken de Laravel Query Builder voor makkelijker schrijven van SQL queries niet, dit gebeurt zoals opgegeven met ruwe SQL queries.
 \\
 \\
-Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina weergegeven. Daar is ook een "forgot password"-functionaliteit voorzien. De gebruiker geeft of zijn username of zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Wederom, deze functionaliteit is nog niet actief. Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. Later zal een ingelogde gebruiker ook een knop te zien krijgen die linkt naar zijn persoonlijk controlepaneel, maar dit moet nog ge\"implementeerd worden. Aangezien alle functionaliteit die weggelegd is voor ingelogde gebruikers gebaseerd is op voorspellingen uitbrengen, wat momenteel nog niet ge\"implementeerd is, ziet de website er verder voor ingelogde en niet-ingelogde gebruikers hetzelfde uit.
+Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina (in een 'modal', een feature van Bootstrap) weergegeven. Indien de gebruiker met foute gegegvens probeert in te loggen, wordt dit afgehandeld in diezelfde modal. Eens inloggen succesvol is, verschijnt er in de modal nog een bericht om het inloggen te bevestigen. Eens dat weggeklikt wordt, bevindt de gebruiker zich terug op dezelfde pagina als voorheen. In de modal "forgot password"-functionaliteit voorzien. De gebruiker geeft zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Indien men probeert in te loggen met een account waarvan het emailadres nog niet gevalideerd is, verschijnt een knop om de activatiemail opnieuw te versturen. \\ Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. \\ \\
+
+TODO: Facebooklogin \\ \\
+
+Eens ingelogd, worden de registratie- en inlogknoppen vervangen door "My Profile", "Bets", "Preferences" en "Logout". \\
+"My Profile" is een pagina waarop wat persoonlijke informatie als land en bet score te zien zijn. Deze pagina is voor iedereen, zelfs niet-ingelogde gebruikers zichtbaar. Enkel op je eigen profiel verschijnen nog de tabs "Notifications", "My Groups" en "Invitations". Op deze functionaliteit wordt verder ingegaan in andere secties. \\
+Onder "Preferences" is het mogelijk je persoonlijke gegevens aan te passen.	Ook is er een opt-out voor herinneringsemails omtrent bets. Uploaden van profielafbeeldingen gebeurt ook daar.
+Als de gebruiker op "logout" klikt, wordt hij uitgelogd en naar de homepage gestuurd. \\ \\
+
+Uitgelogde gebruikers zullen niet gelinkt worden naar pagina's voor enkel gebruikers. Indien iemand toch probeert een dergelijke pagina te bezoeken door de URL in te typen, zal hij gevraagd worden eerst in te loggen of te registreren en de eigenlijke pagina niet te zien krijgen. \\ \\
+
+\subsection{Betsysteem}
+Gebruikers kunnen pronostieken invullen voor matchen in de toekomst. Voor een ingelogde gebruiker verschijnt op matchpagina's een knop genaamd "bet", zolang de gebruiker nog niet eerder een gok heeft uitgebracht op die match. Wanneer de gebruiker erop klikt, verschijnt het betformulier in een modal. De gebruiker is verplicht om een eindscore in te vullen. Eerste goal en aantallen kaarten zijn optioneel. De gok wordt geregistreerd van zodra er op "bet" geklikt wordt. Elke gebruiker heeft per match slechts \'e\'en kans per match, denk dus goed na over je bet. Een overzicht van gemaakte bets kan gevonden worden via "bets" in de bovenste balk op de website. Daar worden bets opgedeeld in bets op toekomstige matchen en bets op verleden matchen. Er kan telkens doorgeklikt worden naar de matchen en teams. \\ \\
+Eens een match gespeeld is, worden de bets erop binnen de drie uur ge\"evalueerd. Aan elke gebruiker wordt een aantal punten toegekend. Dat puntentotaal kan ook negatief zijn. Er kan met elke gemaakte gok een aantal punten gewonnen of verloren worden. Er kunnen altijd meer punten gewonnen worden dan verloren. Eerst hadden we het idee om correcte riskante gokken meer punten waard te maken. We waren van plan om "riskante gokken" te defini\"eren als keuzes waar weinig gebruikers voor gingen. Realistisch gezien zullen er waarschijnlijk niet erg veel gebruikers actief zijn tijdens het WK 2014 en zou een dergelijk systeem niet erg veel nut hebben. Daarom hebben we per optie een vast aantal punten toegekend (maar niet voor elke optie evenveel). \\ \\
+
 
 
 \subsection{Notificaties}
@@ -212,7 +232,7 @@ Een gebruiker nodigt een andere gebruiker uit om een usergroup te joinen.
 \item Actor: de gebruiker die de persoon uitnodigt
 \item Subject: de uitgenodigde gebruiker
 \item Object: de userGroupInvite
-\item Type: 1, Notifications::INVITE_USER_GROUP
+\item Type: 1, Notifications::INVITE\_USER\_GROUP
 \end{enumerate}
 De notificatie zal linken naar de gebruiker zijn profiel waar die de invitatie zal kunnen accepteren of weigeren.
 
@@ -223,7 +243,7 @@ Omdat het systeem dit verstuurt zullen we de actor en subject dezelfde personen 
 \item Actor: de gebruiker
 \item Subject: de gebruiker
 \item Object: NULL (Geen verdere info nodig)
-\item Type: 2, Notifications::REMIND_USER_BETS
+\item Type: 2, Notifications::REMIND\_USER\_BETS
 \end{enumerate}
 De notificatie zal linken naar de upcoming matches page, waar de gebruiker gemakkelijk kan zien op welke matches hij/zij nog niet op heeft gebet.
 
@@ -233,7 +253,7 @@ Wanneer een gebruiker een nieuwe discussie start in een usergroup zullen alle me
 \item Actor: de gebruiker die de discussie heeft aangemaakt
 \item Subject: een gebruiker die lid is van de groep
 \item Object: de discussie
-\item Type: 3, Notifications::NEW_DISCUSSION
+\item Type: 3, Notifications::NEW\_DISCUSSION
 \end{enumerate}
 De notificatie zal linken naar de discussie.
 
@@ -243,7 +263,7 @@ Als een gebruiker een bericht post in de discussie zullen alle deelnemers van di
 \item Actor: de gebruiker die een nieuwe reply heeft gemaakt
 \item Subject: deelnemer aan de discussie
 \item Object: discussie
-\item Type: 4, Notifications::NEW_MESSASGE
+\item Type: 4, Notifications::NEW\_MESSASGE
 \end{enumerate}
 De notificatie linkt naar de discussie.
 
@@ -257,6 +277,11 @@ De functie die in het Laravel command wordt opgeroepen is de Notifications::send
 Uiteraard moet de gebruiker de mogelijkheid krijgen om geen emails meer te ontvangen. Vandaar dat er ook een opt-out mogelijkheid is. Enerzijds kan je dit doen door op de link in de email te klikken,
 anderzijds kan je dit regelen door de knop op de preferences page te gebruiken. Deze knop/link togglet als het ware tussen het ontvangen van email en het niet ontvangen van de mail. Als de gebruiker zich op een later moment
 bedenkt kan deze dit dus gewoon via de preferences page (of een link in een email) regelen.
+
+\subsection{Grafische weergave van statistieken}
+Voor de grafische weergave van data gebruiken we Google Charts. Dat biedt heel wat verschillende grafieken. Momenteel zijn op elke teampagina twee grafieken beschikbaar. Er is een taartdiagram dat het percentage gewonnen, verloren en gelijkgespeelde matchen van een team toont. Ook is er een staafdiagram dat het gemiddelde aantal goals en/of kaarten per match per jaar toont. De gebruiker kan kiezen welke combinatie van 'gemiddeld aantal goals', 'gemiddeld aantal gele kaarten' en 'gemiddeld aantal rode kaarten' hij wil zien. De grafiek wordt meteen aangepast, zonder dat de pagina opnieuw geladen moet worden. Deze grafieken bevinden zich onder de tab 'Graphs' op elke teampagina. \\ \\
+Op de homepagina staat een grote wereldkaart. De kleur van elk land geeft zijn FIFA score weer. Hoe donkerder het land, hoe hoger de score. Wanneer op een land geklikt wordt, wordt meteen naar de teampagina van het nationale team gelinkt. Voor enkele kleine landen is geen teampagina aanwezig, er gebeurt dan ook niets wanneer erop geklikt wordt. Als op het Verenigd Koninkrijk geklikt wordt, zoomt de kaart in, zodat op de vier aparte delen (Wales, Engeland, Noord-Ierland en Schotland) kan worden geklikt. Deze hebben namelijk elk een apart nationaal team. \\ \\
+Ook de voorspellingen van het systeem worden gevisualiseerd. Concreet staat op elke matchpagina van toekomstige matchen een balk in twee kleuren. Het linkerdeel geeft de kans op winst voor de thuisploeg aan, het rechterdeel die voor de uitploeg. Deze balk is niet met Google Charts gemaakt, maar is een progress bar van Bootstrap.
 \section{Webpagina's}
 De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en dat proberen we dus ook te respecteren.
 Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
@@ -316,11 +341,24 @@ De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er du
 TODO: update
 Het is momenteel enkel mogelijk om individueel pronostieken in te vullen; ondersteuning om in groep te spelen volgt nog. Er is een formulier om je pronostiek in te vullen en door te sturen en een pagina met een overzicht van alle gemaakte gokken. Later komt er onder andere nog een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{ER.png}
-\caption{Onze database in ER-model}
-\label{overflow}
-\end{figure}
+\section{Extra functionaliteit}
+TODO:Extra competities + voorspellingen
+TODO:uitgebreide statistische data (bv data per speler, coaches, ...)
+TODO:nieuwsberichten
+TODO:searchfunctie
+TODO:uitgebreide user group interface
+TODO:twitterfeed
+TODO:...
+
+\section{Planning}
+Er hoeft uiteraard niet meer verder gepland worden, gezien het project af is.
+TODO:iets over hoe planning verliep?
+
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[width=90mm]{ER.png}
+%\caption{Onze database in ER-model}
+%\label{overflow}
+%\end{figure}
 
 \end{document}
