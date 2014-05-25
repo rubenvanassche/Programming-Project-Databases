@@ -33,7 +33,7 @@
 		<h3>Information</h3>
 		<p>{{$playerText}}</p>
 		<h3>Goals</h3>
-		<table class="table table-condensed">
+		<table id="myTable2" class="tablesorter" style="text-align: center;">
 			<thead>
 				<tr>
 					<th>Date</th>
@@ -54,7 +54,7 @@
 			</tbody>
 		</table>
 		<h3>Cards</h3>
-		<table class="table table-condensed">
+		<table id="myTable" class="tablesorter" style="text-align: center;">
 			<thead>
 				<tr>
 					<th>Date</th>
@@ -78,5 +78,28 @@
 		</table>
     </div>
 </div>
+@stop
+
+@section('javascript')
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 3]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 3]}); });
+  </script>
 @stop
 
