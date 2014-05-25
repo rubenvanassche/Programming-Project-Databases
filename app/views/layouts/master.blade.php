@@ -219,8 +219,12 @@
 					<label>{{ Form::label('password', 'Password') }}</label>
 					{{ Form::password('password', array('class'=>'form-control')) }}
 				</div>
-
 				<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
+				<?php
+				if(Notification::showAll() != '' and $errors->first('username') != "Email address hasn't been validated!") {
+				?>
+				<a href="{{ action('UserController@resendmail', array('username'=>Input::old('username'))) }}" class="btn btn-warning pull-left">Resend Email</a>
+				<?php } ?>
 				<a href="{{ url('user/facebooklogin') }}" class="btn btn-primary pull-right">Facebook Login</a>
 				{{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
 

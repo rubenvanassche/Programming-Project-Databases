@@ -215,6 +215,11 @@ class User {
 		}
 	}
 
+	public static function getRegistrationCodeAndEmail($username) {
+		$result = DB::select("SELECT registrationcode, email FROM user WHERE username = ?", array($username));
+		return array('registrationcode'=>$result[0]->registrationcode, 'email'=>$result[0]->email);
+	}
+
 	function passwordforgot($email, $newPassword){
 		$results = DB::select('SELECT id, firstname, lastname FROM user WHERE email = ?', array($email));
 

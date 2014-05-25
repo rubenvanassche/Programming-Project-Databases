@@ -138,6 +138,19 @@ class UserController extends BaseController {
 		}
 	}
 
+	function resendmail() {
+		$username = $_GET['username'];
+		$data = User::getRegistrationCodeAndEmail($username);
+		$data['username'] = $username;
+		$message = new stdClass();
+		$user_email = $data['email'];
+		Mail::send('mails.register', $data, function($message) use ($user_email, $username){
+    	$message->to($user_email, $username)->subject("Welcome to Coach Center: email address validation");
+		});
+		return Redirect::back();
+	}
+		
+
 	function passwordforgot(){
 		if(Request::isMethod('post')){
 			// Work On the Form
