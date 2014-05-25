@@ -27,7 +27,6 @@
 		<h2>{{$playerObj->name}}</h2>
 		<p><b>Team: </b> <a href="{{ route('team', array('id'=>$playerTeam->id)) }}">{{$playerTeam->name}}</a></p>
 		<p><b>Goals: </b> <?php echo Player::countGoals($playerObj->id); ?></p>
-		<p><b>Injured: </b> <?php if ($playerObj->injured == 0) {echo "No";} else { echo "Yes";}; ?></p>
 	</div>
 	<div class="col-md-10">
 		<h3>Information</h3>
