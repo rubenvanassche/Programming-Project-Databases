@@ -385,4 +385,12 @@ public static function acceptInvite($notif_id, $ug_id) {
 		UserGroup::declineInvite($notif_id);
 		return UserController::profile();
 	}
+
+	public static function optout() {
+		$user = new User;
+		DB::update("UPDATE user SET recieve_email = false WHERE id = ?", array($user->ID()));
+		$data['content'] = 'You will no longer recieve email from us.';
+		$data['title'] = 'Success!';
+		return View::make('layouts.simple', $data);
+	}
 }
