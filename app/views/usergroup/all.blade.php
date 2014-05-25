@@ -11,7 +11,6 @@
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Score</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -19,7 +18,6 @@
 						<?php if ($group->private == false) { ?>
 							<tr>
 								<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
-								<td>0</td>
 							</tr>
 						<?php } else {
 								if ($group->ismember == false) { ?>
@@ -30,7 +28,6 @@
 									<?php } else { ?>
 										<tr class="private">
 											<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
-											<td>0</td>
 										</tr>
 									<?php }
 								} ?>
