@@ -136,7 +136,7 @@ class Team {
         } // end foreach
 
         return $players;*/
-        $result = DB::select("SELECT player.id, player.name (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
+        $result = DB::select("SELECT player.id, player.name, (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
 
         return $result;
     }
@@ -303,7 +303,7 @@ class Team {
 		$matches = Team::getMatches( $teamID );
 		$stats = array();
 		foreach ($matches as $match) {
-			if (!Match::isPlayed($match->match_id))
+			if (!Match::isPlayed($match->match_id) or $match->date == "0000-00-00 00:00:00")
 				continue;
 			$matchYear = new DateTime($match->date);
 			$matchYear = $matchYear->format("Y");
