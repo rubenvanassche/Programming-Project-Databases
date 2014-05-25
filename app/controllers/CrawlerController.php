@@ -756,8 +756,6 @@ class CrawlerController extends BaseController {
             $awayteam_id = $ids[0]->id;
             Competition::linkTeam($awayteam_id, $competition_id);
 
-            Log::info("UPDATING MATCH ".$hometeam." - ".$awayteam."...");
-
             $kick_off = $match_data["kick-off"];
             if (empty($kick_off)) $kick_off = $match_data["scoretime"]; 
             $date = $match_data["date"].' '.$kick_off;
@@ -858,10 +856,8 @@ class CrawlerController extends BaseController {
                 } // end foreach
             } // end foreach
 
-            Log::info("     UPDATED");
         } // end foreach
 
-        Log::info("END");
         return;
     }
 
@@ -869,10 +865,16 @@ class CrawlerController extends BaseController {
      * @brief Update all the stuffs.
      */
     public static function update() {
-        //set_time_limit(0);
-
-        // first update FIFA ranking
+        set_time_limit(0);
         //self::update_teams();
+
+        /*
+         * COMPETITIONS
+         * Please uncomment the part you want to update.
+         *
+         * BUG: those marked with TODO: has a slightly different structure to
+         * parse (causes crashes on line 471).
+         */
 
         /* WORLD CUP */
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/", "group");
@@ -886,14 +888,14 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1970-mexico/group-stage/r784/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1966-england/group-stage/r789/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1962-chile/group-stage/r794/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
+        //TODO:self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
 
         /* CONFEDERATION CUP */
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2013-brazil/group-stage/r16347/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
+        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
+        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
+        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
+        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1999-mexico/group-stage/r1660/");
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1997-saudi-arabia/group-stage/r1664/");
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1995-saudi-arabia/group-stage/r1668/");
@@ -912,8 +914,8 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1976-yugoslavia/s566/final-stages/", "final");
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1972-belgium/s567/final-stages/", "final");
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1968-italy/s568/final-stages/", "final");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
+        //TODO:self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
+        //TODO:self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
 
         /* COPA AMERICA */
         //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2011-argentina/group-stage/r13240/");
@@ -930,7 +932,7 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2009/group-stage/r8491/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2007/group-stage/r4574/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2005/group-stage/r1682/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
+        //TODO:self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2002/group-stage/r1688/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2000/group-stage/r1693/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1998/group-stage/r1697/");
