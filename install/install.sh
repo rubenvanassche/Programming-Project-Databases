@@ -21,7 +21,7 @@ sed -i.bak 's/\x27password\x27  => \x27root\x27,/\x27password\x27  => \x27'$pass
 ##### ADD CRONJOBS ######
 #########################
 echo "### ADDING CRONJOBS ###"
-cd ../app/
+cd ../
 artisanLocation=`pwd`/artisan
 #Remind users daily (at 20:00) to bet on upcoming matches in the next 2 days.
 line="0 20 * * * php $artisanLocation remindUsers 2"
