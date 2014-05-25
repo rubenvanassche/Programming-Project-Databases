@@ -252,7 +252,9 @@ Ook wordt er een wekelijks overzicht gegeven op zondag met een overzicht van de 
 
 De functie die in het Laravel command wordt opgeroepen is de Notifications::sendReminders. Dit zal samen met een email ook een notificatie sturen naar de gebruiker.
 
-
+Uiteraard moet de gebruiker de mogelijkheid krijgen om geen emails meer te ontvangen. Vandaar dat er ook een opt-out mogelijkheid is. Enerzijds kan je dit doen door op de link in de email te klikken,
+anderzijds kan je dit regelen door de knop op de preferences page te gebruiken. Deze knop/link togglet als het ware tussen het ontvangen van email en het niet ontvangen van de mail. Als de gebruiker zich op een later moment
+bedenkt kan deze dit dus gewoon via de preferences page (of een link in een email) regelen.
 \section{Webpagina's}
 De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een framework dat MVC hoog in het vaandel draagt en dat proberen we dus ook te respecteren.
 Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
