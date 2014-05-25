@@ -386,11 +386,20 @@ public static function acceptInvite($notif_id, $ug_id) {
 		return UserController::profile();
 	}
 
-	public static function optout() {
+	public static function optoutin() {
 		$user = new User;
-		DB::update("UPDATE user SET recieve_email = false WHERE id = ?", array($user->ID()));
-		$data['content'] = 'You will no longer recieve email from us.';
-		$data['title'] = 'Success!';
+		$result = DB::select("SELECT recieve_email FROM `user` WHERE id = ?", array($user->ID()))[0];
+		if ($result->recieve_email == true) {
+			DB::update("UPDATE user SET recieve_email = false WHERE id = ?", array($user->ID()));
+			$data['content'] = 'Successfully opted out: you will no longer recieve email from us.';
+			$data['title'] = 'Success!';
+		}
+		else {
+			DB::update("UPDATE user SET recieve_email = true WHERE id = ?", array($user->ID()));
+			$data['content'] = 'Successfully opted in: you will now recieve email reminders from us.';
+			$data['title'] = 'Success!';
+		}
+
 		return View::make('layouts.simple', $data);
 	}
 }

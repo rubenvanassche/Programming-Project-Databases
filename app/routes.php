@@ -40,7 +40,7 @@ Route::get('matches', 'MatchController@matches');
 
 Route::get('notification/{id}', array('as' => 'notification', 'uses' => 'NotificationController@redirect'));
 
-Route::get('optout', 'UserController@optout');
+Route::get('optoutin', 'UserController@optoutin');
 
 // ------------
 // USER

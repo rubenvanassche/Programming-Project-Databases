@@ -6,7 +6,7 @@
   <body>
     <h1>Hi, {{$user->username}}!</h1>
     <p>Just a reminder that you haven't bet yet on these matches:</p>
-    <a href="{{url('optout')}}" style="font-size:10px">Don't want to recieve email reminders anymore?</a>
+    <a href="{{action('UserController@optoutin')}}" style="font-size:10px">Don't want to recieve email reminders anymore?</a>
       <div class="row">
         <div class="col-md-12">
           <h1>Upcoming matches</h1>
