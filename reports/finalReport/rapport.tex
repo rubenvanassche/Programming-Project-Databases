@@ -260,7 +260,7 @@ De gemaakte webpagina's zijn in het Laravel PHP Framework gemaakt. Dit is een fr
 Elke pagina (View) heeft een controller tot zijn beschikking. Deze dient als tussenstuk tussen het model van de pagina waar de werkelijke queries gebeuren. Over het algemeen is dit wat er gebeurt:
 \\
 \\
-Er wordt een pagina opgevraagd in de url. (Bv. /public/team?id=1). In de route-file wordt gedefinieerd welke controller er opgeroepen moet worden. Deze controller zal informatie opvragen van het
+Er wordt een pagina opgevraagd in de url. (Bv. /public/team/1). In de route-file wordt gedefinieerd welke controller er opgeroepen moet worden. Deze controller zal informatie opvragen van het
 relevante model en zal deze info doorspelen naar de view van de pagina.
 \\
 \\
@@ -268,52 +268,78 @@ Aanvankelijk was het werken met het framework niet eenvoudig maar eens het wat d
 Het design hebben we grotendeels te danken aan Twitter Bootstrap. Een website ziet er zo relatief gemakkelijk goed uit.
 \\
 \\
-De webpagina's zijn nog volop in development alsook kan het design hier en daar ook nog wel veranderen.
-
-\subsection{Work in progress}
-
-\subsubsection{Home page}
+\subsection{Home page}
 Bestaat uit 3 tabellen, een news foto feed en een wereldkaart die de landen kleurt in functie van hun WK-ranking.
-De 3 tabellen zullen data bevatten over de laatst gespeelde matchen, de opkomende matchen en de WK-ranking.
+De 3 tabellen bevatten data over de laatst gespeelde matchen, de opkomende matchen en de fifa-ranking.
 \\
 De foto newsfeed is een RSS feed van FIFA die we met SimplePie hebben geparsed.
 \\
-Op de wereldkaart krijgt elk land een tint groen toegekend; hoe hoger hun WK-ranking, hoe donkerder het groen. Later zul je op elk apart land kunnen klikken om op de pagina van het nationale team terecht te komen. Merk op dat het Verenigd Koninkrijk wegens beperkingen van de gebruikte Google GeoCharts-API niet ingekleurd is; zij hebben vier "nationale" teams (Engeland, Wales, Noord-Ierland, Schotland). Om dit op te lossen, wordt bij klikken op het VK ingezoomd, waarna de vier delen apart in de juiste kleur verschijnen.
+Op de wereldkaart krijgt elk land een tint groen toegekend; hoe hoger hun WK-ranking, hoe donkerder het groen. Wanneer men op een land klikt zal de gebruiker gelinkt worden naar de desbetreffende team pagina van het nationale team van dat land. Merk op dat het Verenigd-Koninkrijk wegens beperkingen van de gebruikte Google GeoCharts-API niet ingekleurd is; zij hebben vier "nationale" teams (Engeland, Wales, Noord-Ierland, Schotland). Om dit op te lossen, wordt bij klikken op het VK ingezoomd, waarna de vier delen apart in de juiste kleur verschijnen.
 
-\subsubsection{Search bar / search results}
-Rechtsbovenaan alle pagina's staat een searchbar waarin je een speler/match/team kunt invullen en die de beschikbare info presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
+\subsection{Search bar / search results}
+Rechtsbovenaan alle pagina's staat een searchbar waarin je een zoekterm kunt invullen en die de beschikbare info (hetzij team/speler/match) presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
 
-\subsubsection{Player Page}
+\subsection{Player Page}
 Deze pagina bevat informatie over een bepaalde speler.
 \\
 In de PlayerController wordt volgende info opgevraagd van de Player en Team models:
 \begin{lstlisting}
-                $playerObj = Player::getPlayer($playerName)[0];
-                $playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];
-                $playerText = Player::getPlayerText($playerName);
-                $playerImageURL = Player::getPlayerImageURL($playerName);
-                $goals = Player::goals($playerObj->id);
-                $cards = Player::cards($playerObj->id);
+  $playerObj = Player::getPlayer($id)[0];
+  $playerTeam = Team::getTeambyPlayerID($id)[0];
+  $playerText = Player::getPlayerText($playerObj->name);
+  $playerImageURL = Player::getPlayerImageURL($playerObj->name);
+  $goals = Player::goals($id);
+  $cards = Player::cards($id);
+  $playerName = $playerObj->name;
 \end{lstlisting}
 
-Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
-in onze database zitten. Misschien doen we dit beter wel?
-\subsubsection{Team Page}
+Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Met andere woorden worden hun goals, kaarten etc. getoond. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
+in onze database zitten.
+\subsection{Team Page}
 Deze pagina bevat informatie over een bepaald team, zoals de spelers, matchen e.d.
 
 In de TeamController wordt de benodigde informatie uit de models gehaald. Dit gebeurt in meerdere verschillende functies. Hieronder een voorbeeld.
 \begin{lstlisting}
-	public function index($teamID){
-		$teamObj = Team::getTeamByID($teamID)[0];
-		$teamImageURL = Team::getTeamImageURL($teamObj->name);
+    $teamObj = Team::getTeamByID($teamID)[0];
+    $teamImageURL = Team::getTeamImageURL($teamObj->name);
 
-		return View::make('team.team', compact('teamObj', 'teamImageURL'))->with('title', $teamObj->name);
+    $outcomes = Team::getWinsLossesTies($teamID);
+    $yearlyGoalsCards = Team::getYearlyGoalsCards($teamID);
+    ksort($yearlyGoalsCards); //Otherwise the graph is all messed up
+
+    // Check if we can find an background picture
+    $teamBackground = '';
+    if($teamObj->twitterAccount != ''){
+      $tweets = Twitter::getUserTimeline(array('screen_name' => $teamObj->twitterAccount, 'count' => 1, 'format' => 'array'));
+      if (isset($tweets[0]['user']['profile_banner_url'])) {
+        $backgroundpicture = $tweets[0]['user']['profile_banner_url'];
+        //$teamBackground = substr($backgroundpicture, 0, -1);
+        $teamBackground = $backgroundpicture . "/1500x500";
+      }
+
+    }
+    //Check if there's news for this team
+    $teamName = $teamObj->name;
+    $articles = RSS::getFIFAtext();
+    $hasNews = false;
+    foreach ($articles as $article){
+      $title = $article->get_title();
+      $description = $article->get_description();
+
+      $inTitle = strstr($title,$teamName);
+      $inDescription = strstr($description,$teamName);
+
+      if($inTitle == true or $inDescription == true){
+        $hasNews = true;
+        break;
+      }
+    }
 	}
 \end{lstlisting}
 
 Deze informatie wordt vervolgens gebruikt om weer te geven op de webpagina. De spelers en dergelijke worden opgevraagd in andere methoden van de TeamController.
 
-\subsubsection{Team Players page}
+\subsection{Team Players page}
 Deze pagina is een onderdeel van de bijhorende Team pagina. Door middel van Ajax wordt dit op de pagina geladen zonder de pagina te hoeven herladen.
 \\
 In de PlayersController wordt volgende info opgevraagd van het Team model:
@@ -330,10 +356,10 @@ In de PlayersController wordt volgende info opgevraagd van het Team model:
 	}
 \end{lstlisting}
 
-\subsubsection{Match page}
+\subsection{Match page}
 De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er dus info getoond over de match: de eindstand, wie er gescoord heeft, wie er een kaart heeft gekregen en dergelijke. Uiteraard kan er weer op meerdere manieren doorgeklikt worden door op de speler/teams te klikken en dergelijke.
 
-\subsubsection{Betting pages}
+\subsection{Betting pages}
 Het is momenteel enkel mogelijk om individueel pronostieken in te vullen; ondersteuning om in groep te spelen volgt nog. Er is een formulier om je pronostiek in te vullen en door te sturen en een pagina met een overzicht van alle gemaakte gokken. Later komt er onder andere nog een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
 
 \subsection{Optimalisatie van reeds bestaande pages}

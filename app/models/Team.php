@@ -226,7 +226,7 @@ class Team {
      */
     public static function getTeamText( $name ){
       	$editedName = $name . " national football team";
-        if ($name = "United States") {
+        if ($name == "United States") {
           $editedName = "United States men's national soccer team";
         }
 
