@@ -468,13 +468,22 @@ class CrawlerController extends BaseController {
                     // skip coaches and empty rows
                     if (empty($row) || preg_match("/^Coach/", trim($row->textContent))) continue;
 
-                    $url = "http://int.soccerway.com/".$row->childNodes->item(2)->getElementsByTagname('a')->item(0)->getAttribute("href");
+                    $url = $row->childNodes->item(2)->getElementsByTagname('a')->item(0);
+                    if (empty($url)) $url = $row->childNodes->item(0)->getElementsByTagname('a')->item(0);
+                    if (empty($url)) continue;
+                    $url = "http://int.soccerway.com/".$url->getAttribute("href");
 
                     // grab info about goals and cards
                     $yellows = array();
                     $reds = array();
                     $goals = array();
-                    foreach ($row->childNodes->item(4)->getElementsByTagName("img") as $booking) {
+
+                    $images = $row->childNodes->item(4);
+                    if (empty($images)) $images = $row->childNodes->item(2);
+                    if (empty($images)) continue;
+                    $images = $images->getElementsByTagName("img");
+
+                    foreach ($images as $booking) {
                         $time = trim($booking->parentNode->textContent);
 
                         $src = $booking->getAttribute("src");
@@ -496,12 +505,14 @@ class CrawlerController extends BaseController {
                     // skip coaches and empty rows
                     if (empty($row) || preg_match("/^Coach/", trim($row->textContent))) continue;
 
-                    $players = $row->childNodes->item(2)->getElementsByTagName('a');
+                    $in_player = $row->childNodes->item(2)->getElementsByTagName('a')->item(0);
+                    if (empty($in_player)) $in_player = $row->childNodes->item(0)->getElementsByTagName('a')->item(0);
+                    if (empty($in_player)) continue;
+                    $in_player = "http://int.soccerway.com/".$in_player->getAttribute("href");
 
-                    $in_player = $players->item(0);
-                    $in_player = empty($in_player) ? NULL : "http://int.soccerway.com/".$in_player->getAttribute("href");
-                    $out_player = $players->item(1);
-                    if (!empty($out_player)) $out_player = "http://int.soccerway.com/".$out_player->getAttribute("href");
+                    $out_player = $row->childNodes->item(2)->getElementsByTagName('a')->item(1);
+                    if (empty($out_player)) $out_player = $row->childNodes->item(0)->getElementsByTagName('a')->item(1);
+                    $out_player = empty($out_player) ? NULL : "http://int.soccerway.com/".$out_player->getAttribute("href");
 
                     $subs_time = NULL;
                     preg_match("/\d+(\+\d+)?'/", trim($row->childNodes->item(2)->textContent), $subs_time);
@@ -511,7 +522,13 @@ class CrawlerController extends BaseController {
                     $yellows = array();
                     $reds = array();
                     $goals = array();
-                    foreach ($row->childNodes->item(4)->getElementsByTagName("img") as $booking) {
+
+                    $images = $row->childNodes->item(4);
+                    if (empty($images)) $images = $row->childNodes->item(0);
+                    if (empty($images)) continue;
+                    $images = $images->getElementsByTagName("img");
+
+                    foreach ($images as $booking) {
                         $time = trim($booking->parentNode->textContent);
 
                         $src = $booking->getAttribute("src");
@@ -696,7 +713,6 @@ class CrawlerController extends BaseController {
      *      - final (only final stages)
      */
     public static function update_competition($url, $what="all") {
-        Log::info("BEGIN");
         $keys = array("name");
         switch ($what) {
         case "all":
@@ -854,7 +870,9 @@ class CrawlerController extends BaseController {
                     Match::linkPlayer($player_id1, $match_id);
                     Match::substitute($player_id1, $match_id, $time);
                 } // end foreach
+
             } // end foreach
+
 
         } // end foreach
 
@@ -871,9 +889,6 @@ class CrawlerController extends BaseController {
         /*
          * COMPETITIONS
          * Please uncomment the part you want to update.
-         *
-         * BUG: those marked with TODO: has a slightly different structure to
-         * parse (causes crashes on line 471).
          */
 
         /* WORLD CUP */
@@ -888,14 +903,14 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1970-mexico/group-stage/r784/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1966-england/group-stage/r789/");
         //self::update_competition("http://int.soccerway.com/international/world/world-cup/1962-chile/group-stage/r794/");
-        //TODO:self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
+        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
 
         /* CONFEDERATION CUP */
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2013-brazil/group-stage/r16347/");
-        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
-        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
-        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
-        //TODO:self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
+        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1999-mexico/group-stage/r1660/");
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1997-saudi-arabia/group-stage/r1664/");
         //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1995-saudi-arabia/group-stage/r1668/");
@@ -914,8 +929,8 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1976-yugoslavia/s566/final-stages/", "final");
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1972-belgium/s567/final-stages/", "final");
         //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1968-italy/s568/final-stages/", "final");
-        //TODO:self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
-        //TODO:self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
+        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
 
         /* COPA AMERICA */
         //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2011-argentina/group-stage/r13240/");
@@ -932,7 +947,7 @@ class CrawlerController extends BaseController {
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2009/group-stage/r8491/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2007/group-stage/r4574/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2005/group-stage/r1682/");
-        //TODO:self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
+        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2002/group-stage/r1688/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2000/group-stage/r1693/");
         //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1998/group-stage/r1697/");
