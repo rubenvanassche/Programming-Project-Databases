@@ -78,8 +78,7 @@ Momenteel is het mogelijk om voorspellingen uit te voeren op reeds gespeelde mat
 Gemaakte voorspellingen worden opgeslagen in een specifieke tabel, `bet`, in de database. Concreet krijgt elke voorspelling een unieke id, en worden id van match en gebruiker en alle gemaakte voorspellingen bijgehouden.
 
 \section{Database}
-TODO: UPDATE
-Onze database bestaat 12 tabellen met voetbalgerelateerde data en 2 usergerelateerde tabellen.
+Onze database bestaat 20 tabellen met voetbalgerelateerde data en 2 usergerelateerde tabellen.
 \begin{enumerate}
 \item 'continent': Tabel voor werelddelen. Bevat een id en een naam.
 \item `country`: Tabel voor landen. Bevat een id, een naam, de id van het werelddeel waarin het land ligt, en een afkorting voor de naam van het land. Die afkorting zal gebruikt worden op de website.
@@ -95,7 +94,12 @@ Onze database bestaat 12 tabellen met voetbalgerelateerde data en 2 usergerelate
 \item `cards`: Tabel voor gele en rode kaarten. Bevat een id, een id van de speler die de kaart kreeg, een id van de match waarin de kaart gegeven werd, de kleur van de kaart en de tijd waarop de kaart gegeven werd.
 \item `user`: Meer uitleg bij sectie over gebruikers.
 \item `bet`: Meer uitleg bij sectie over voorspellingen
-\item `notifications`:
+\item `notifications`: Tabel die alle notificaties bevat. Meer uitleg bij de notificaties sectie.
+\item `userGroup`: Tabel die informatie bevat inzake usergroups. Alsook een kolom om private usergroups aan te duiden.
+\item `userGroupInvites`: In userGroupInvites staat informatie over gebruikers die andere gebruikers uitnodigen om een usergroup te joinen.
+\item `userGroupMessages`: Tabel die informatie bevat over discussies (in usergroups).
+\item `userGroupMessagesContent`: Tabel voor berichten in bepaalde discussies.
+\item `userPerUserGroup`: Tabel die gebruikers linkt aan usergroups.
 \end{enumerate}
 
 \subsection{ER-diagramma}
