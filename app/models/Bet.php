@@ -123,10 +123,11 @@ class Bet {
 		return count($bets);
 	}
 
-	public static function processAllBets() {
-		$now = new DateTime();
+	public static function processAllBets($now = NULL) {
+		if ($now == NULL)
+			$now = new DateTime();
+		$now->sub(new DateInterval('PT3H'));
 		$now = $now->format("Y-m-d H:i:s");
-
 		$matches = DB::select("SELECT id FROM `match` WHERE date < ?", array($now));
 		$totalBetCount = 0;
 		$matchCount = 0;
