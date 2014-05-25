@@ -292,31 +292,31 @@
 
 
 				<div class="form-group">
-					<label>{{ Form::label('firstGoal', 'First goal') }}</label>
+					<label>{{ Form::label('firstGoal', 'First goal (optional)') }}</label>
 					{{ Form::select('firstGoal',  array('none' => '', 'home' => $match->hometeam, 'away' => $match->awayteam)) }}
 					{{ $errors->first('firstGoal', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team') }}</label>
+					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team (optional)') }}</label>
 					{{ Form::text('hometeamYellows', Input::old('hometeamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamReds', 'Red cards for home team') }}</label>
+					<label>{{ Form::label('hometeamReds', 'Red cards for home team (optional)') }}</label>
 					{{ Form::text('hometeamReds', Input::old('hometeamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamReds', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team') }}</label>
+					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team (optional)') }}</label>
 					{{ Form::text('awayteamYellows', Input::old('awayteamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamReds', 'Red cards for away team') }}</label>
+					<label>{{ Form::label('awayteamReds', 'Red cards for away team (optional)') }}</label>
 					{{ Form::text('awayteamReds', Input::old('awayteamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}
 				</div>

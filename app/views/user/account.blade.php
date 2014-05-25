@@ -42,7 +42,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 
 <div class="form-group">
   <label>Email opt out / opt in</label>
-  <a href="{{ action('UserController@optoutin') }}" class="btn btn-success form-control">Toggle recieving emails</a>
+  <a href="{{ action('UserController@optoutin') }}" class="btn btn-success form-control">Toggle receiving emails</a>
 </div>
 
 <div class="form-group">
