@@ -46,7 +46,13 @@
 			@if($bet)
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
 			@endif
-			<p><?php $date = new DateTime($match->date); echo $date->format('d-m-Y H:i')?></p>
+			<?php if($match->date == "0000-00-00 00:00:00") 
+						echo "date unknown"; 
+					  else {
+						$date = new DateTime($match->date);
+						echo date_format($date, 'd-m-Y H:i');
+					  }
+					?>
 		</div>
 		<div class="col-md-5">
 			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
