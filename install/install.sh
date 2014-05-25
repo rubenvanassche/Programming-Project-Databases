@@ -33,11 +33,12 @@ line="0 20 * * 1 php $artisanLocation remindUsers 7"
 (crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
 
 #Add cronjob for database updates.
-#line="30 * * * * php $artisanLocation updateDB"
-#(crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
-
-#Add cronjob for processing bets.
-line="0 * * * * php $artisanLocation ProcessBets"
+line="0 /2 * * * php $artisanLocation updateDB"
 (crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
 
+#Add cronjob for processing bets.
+line="5 * * * * php $artisanLocation ProcessBets"
+(crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
+
+echo "### INSTALLATION COMPLETE ###"
 exit

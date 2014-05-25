@@ -37,8 +37,10 @@ class updateDB extends Command {
 	 */
 	public function fire()
 	{
-		// Call the update functions.
-		CrawlerController::updateDB();
+		// Call the update function.
+		echo "=== UPDATING DATABASE ===";
+		CrawlerController::update();
+		echo "=== FINISHED ===";
 	}
 
 	/**
