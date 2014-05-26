@@ -65,10 +65,10 @@
   <script type="text/javascript">
     jQuery(document).ready(function() {
         $("#myTable2")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorter({debug: false, dateFormat: "uk", widgets: ['zebra'], sortList: [[0, 0]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0, 1,]}); });
+                            filterColumns: [0]}); });
   </script>
 
     <script type="text/javascript">
