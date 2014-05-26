@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 25, 2014 at 09:50 PM
+-- Generation Time: May 26, 2014 at 09:28 AM
 -- Server version: 5.5.37-MariaDB
 -- PHP Version: 5.5.12
 
@@ -6095,7 +6095,7 @@ CREATE TABLE IF NOT EXISTS `competition` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=67 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
 
 --
 -- Dumping data for table `competition`
@@ -6167,7 +6167,8 @@ INSERT INTO `competition` (`id`, `name`) VALUES
 (63, 'Africa Cup of Nations 2004 Tunisia'),
 (64, 'Africa Cup of Nations 2002 Mali'),
 (65, 'Africa Cup of Nations 2000 Ghana/Nigeria'),
-(66, 'Africa Cup of Nations 1998 Burkina Faso');
+(66, 'Africa Cup of Nations 1998 Burkina Faso'),
+(67, 'Asian Cup 2015 Australia');
 
 -- --------------------------------------------------------
 
@@ -10412,7 +10413,7 @@ CREATE TABLE IF NOT EXISTS `match` (
   KEY `hometeam` (`hometeam_id`),
   KEY `awayteam` (`awayteam_id`),
   KEY `competition` (`competition_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1737 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1758 ;
 
 --
 -- Dumping data for table `match`
@@ -12156,7 +12157,28 @@ INSERT INTO `match` (`id`, `hometeam_id`, `awayteam_id`, `competition_id`, `date
 (1733, 16, 211, 35, '1960-07-06 20:00:00', 'semi-finals', NULL),
 (1734, 212, 213, 35, '1960-07-06 21:30:00', 'semi-finals', NULL),
 (1735, 4, 7, 48, '0000-00-00 00:00:00', 'quarter-finals', NULL),
-(1736, 19, 82, 48, '0000-00-00 00:00:00', 'quarter-finals', NULL);
+(1736, 19, 82, 48, '0000-00-00 00:00:00', 'quarter-finals', NULL),
+(1737, 60, 108, 67, '2015-01-09 10:00:00', 'group stage', 1),
+(1738, 56, 81, 67, '2015-01-10 06:00:00', 'group stage', 1),
+(1739, 108, 56, 67, '2015-01-13 08:00:00', 'group stage', 1),
+(1740, 81, 60, 67, '2015-01-13 10:00:00', 'group stage', 1),
+(1741, 60, 56, 67, '2015-01-17 09:00:00', 'group stage', 1),
+(1742, 81, 108, 67, '2015-01-17 10:00:00', 'group stage', 1),
+(1743, 53, 137, 67, '2015-01-10 08:00:00', 'group stage', 2),
+(1744, 75, 96, 67, '2015-01-10 09:00:00', 'group stage', 2),
+(1745, 137, 75, 67, '2015-01-14 08:00:00', 'group stage', 2),
+(1746, 96, 53, 67, '2015-01-14 09:00:00', 'group stage', 2),
+(1747, 53, 75, 67, '2015-01-18 10:00:00', 'group stage', 2),
+(1748, 96, 137, 67, '2015-01-18 10:00:00', 'group stage', 2),
+(1749, 67, 95, 67, '2015-01-11 08:00:00', 'group stage', 3),
+(1750, 37, 105, 67, '2015-01-11 10:00:00', 'group stage', 3),
+(1751, 105, 67, 67, '2015-01-15 08:00:00', 'group stage', 3),
+(1752, 95, 37, 67, '2015-01-15 10:00:00', 'group stage', 3),
+(1753, 37, 67, 67, '2015-01-19 09:00:00', 'group stage', 3),
+(1754, 95, 105, 67, '2015-01-19 10:00:00', 'group stage', 3),
+(1755, 64, 100, 67, '2015-01-12 09:00:00', 'group stage', 4),
+(1756, 100, 47, 67, '2015-01-16 09:00:00', 'group stage', 4),
+(1757, 47, 64, 67, '2015-01-20 10:00:00', 'group stage', 4);
 
 -- --------------------------------------------------------
 
@@ -91157,6 +91179,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (37, 55),
 (37, 56),
 (37, 57),
+(37, 67),
 (38, 1),
 (38, 2),
 (38, 3),
@@ -91227,6 +91250,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (47, 55),
 (47, 56),
 (47, 57),
+(47, 67),
 (49, 3),
 (49, 4),
 (49, 5),
@@ -91263,6 +91287,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (53, 55),
 (53, 56),
 (53, 57),
+(53, 67),
 (54, 2),
 (54, 3),
 (54, 4),
@@ -91290,6 +91315,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (56, 55),
 (56, 56),
 (56, 57),
+(56, 67),
 (57, 5),
 (57, 6),
 (57, 25),
@@ -91307,6 +91333,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (60, 19),
 (60, 55),
 (60, 56),
+(60, 67),
 (61, 58),
 (61, 59),
 (61, 60),
@@ -91325,6 +91352,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (63, 65),
 (64, 55),
 (64, 57),
+(64, 67),
 (65, 4),
 (65, 6),
 (65, 7),
@@ -91348,6 +91376,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (67, 55),
 (67, 56),
 (67, 57),
+(67, 67),
 (68, 6),
 (68, 12),
 (68, 18),
@@ -91399,6 +91428,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (75, 55),
 (75, 56),
 (75, 57),
+(75, 67),
 (76, 3),
 (76, 43),
 (76, 46),
@@ -91428,6 +91458,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (79, 50),
 (81, 56),
 (81, 57),
+(81, 67),
 (82, 5),
 (82, 44),
 (82, 45),
@@ -91473,10 +91504,12 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (95, 55),
 (95, 56),
 (95, 57),
+(95, 67),
 (96, 4),
 (96, 55),
 (96, 56),
 (96, 57),
+(96, 67),
 (97, 60),
 (97, 61),
 (97, 63),
@@ -91487,15 +91520,18 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (100, 55),
 (100, 56),
 (100, 57),
+(100, 67),
 (101, 58),
 (102, 58),
 (102, 59),
 (105, 55),
 (105, 56),
 (105, 57),
+(105, 67),
 (106, 63),
 (108, 55),
 (108, 57),
+(108, 67),
 (109, 24),
 (110, 8),
 (110, 17),
@@ -91541,6 +91577,7 @@ INSERT INTO `teamPerCompetition` (`team_id`, `competition_id`) VALUES
 (137, 2),
 (137, 10),
 (137, 55),
+(137, 67),
 (140, 56),
 (140, 57),
 (142, 56),
