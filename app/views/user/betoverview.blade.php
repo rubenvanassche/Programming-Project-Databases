@@ -42,6 +42,7 @@
 					?></p>
 				</div>
 			</div>
+		<?php $matchIndex = $matchIndex + 1; ?>
 		@endforeach 
       </div>
     </div>
