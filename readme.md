@@ -40,6 +40,7 @@ Of course, there's more!
 - News feed
 - Twitter feed
 - Facebook integration
+- Search through the data
 
 ## Installation
 First, you'll need to load some data in the database:
