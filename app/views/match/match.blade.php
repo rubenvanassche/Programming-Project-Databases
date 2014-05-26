@@ -17,8 +17,13 @@
 		  if (isset($_GET["openBet"]) && $bet)
 			$autoOpenBetModal = true;
 	?>
-	<div class="row">
-		<div class="col-md-1" style="margin-top:20px;">
+	<div class="row visible-xs visible-sm">
+		<div class="col-sm-12 col-xs-12" style="text-align:center">
+			<h1><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{ $match->hometeam }}</a> {{ $match->hometeam_score }} - {{ $match->awayteam_score }} <a href="{{route('team', array('id'=>$match->awayteam_id))}}">{{ $match->awayteam }}</a></h1>
+		</div>
+	</div>
+	<div class="row hidden-xs hidden-sm">
+		<div class="col-md-1 " style="margin-top:20px;">
 			<img style="width:100%;" src="<?php echo Team::getTeamImageURL($match->hometeam); ?>" />
 		</div>
 		<div class="col-md-4">
@@ -39,7 +44,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-5">
+		<div class="col-md-5 hidden-xs hidden-sm">
 			<a href="{{route('team', array('id'=>$match->hometeam_id))}}">Go to the team</a>
 		</div>
 		<div class="col-md-2" style="text-align:center;">
@@ -57,7 +62,7 @@
 					  }
 					?>
 		</div>
-		<div class="col-md-5">
+		<div class="col-md-5 hidden-xs hidden-sm">
 			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
 		</div>
 	</div>
@@ -95,7 +100,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Goals</h3>
+			<h3>Goals <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
 			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
@@ -114,7 +119,7 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h3>Goals</h3>
+			<h3>Goals <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
 			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
@@ -135,7 +140,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Cards</h3>
+			<h3>Cards <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
 			<table id="myTable3"class="tablesorter">
 				<thead>
 					<tr>
@@ -156,7 +161,7 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h3>Cards</h3>
+			<h3>Cards <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
 			<table id="myTable4" class="tablesorter">
 				<thead>
 					<tr>
@@ -184,7 +189,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Substitutions</h3>
+			<h3>Substitutions <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
 			<table id="myTable5" class="tablesorter">
 				<thead>
 					<tr>
@@ -228,7 +233,7 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h3>Substitutions</h3>
+			<h3>Substitutions <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
 			<table id="myTable6" class="tablesorter">
 				<thead>
 					<tr>
