@@ -191,7 +191,7 @@ class Player {
 		foreach ($matches as $match) {
 			if (!Match::isPlayed($match->id))
 				continue;
-			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeambyPlayerID($playerID)[0]) {
+			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeamIDbyPlayerID($playerID)) {
 				$thisTeam = 0;
 				$otherTeam = 1;
 			}
@@ -221,7 +221,7 @@ class Player {
 			$matchYear = new DateTime($match->date);
 			$matchYear = $matchYear->format("Y");
 			$cards = Match::getCardCounts($match->id, $playerID);
-			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeambyPlayerID($playerID)[0]) {
+			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeamIDbyPlayerID($playerID)) {
 				$yellows = $cards[0];
 				$reds = $cards[1];
 				$score = Match::getScore2($match->id, $playerID)[0];
