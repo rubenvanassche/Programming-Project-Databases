@@ -14,7 +14,7 @@
 		<div class="col-md-12">
 			<h1>{{$competition->name}}</h1>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
@@ -32,7 +32,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
