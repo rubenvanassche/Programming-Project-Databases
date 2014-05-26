@@ -27,13 +27,12 @@
 		<h2>{{$playerObj->name}}</h2>
 		<p><b>Team: </b> <a href="{{ route('team', array('id'=>$playerTeam->id)) }}">{{$playerTeam->name}}</a></p>
 		<p><b>Goals: </b> <?php echo Player::countGoals($playerObj->id); ?></p>
-		<p><b>Injured: </b> <?php if ($playerObj->injured == 0) {echo "No";} else { echo "Yes";}; ?></p>
 	</div>
 	<div class="col-md-10">
 		<h3>Information</h3>
 		<p>{{$playerText}}</p>
 		<h3>Goals</h3>
-		<table id="myTable2" class="tablesorter" style="text-align: center;">
+		<table id="myTable" class="tablesorter">
 			<thead>
 				<tr>
 					<th>Date</th>
@@ -54,7 +53,7 @@
 			</tbody>
 		</table>
 		<h3>Cards</h3>
-		<table id="myTable" class="tablesorter" style="text-align: center;">
+		<table id="myTable2" class="tablesorter">
 			<thead>
 				<tr>
 					<th>Date</th>
@@ -76,6 +75,32 @@
 				@endforeach
 			</tbody>
 		</table>
+		<h3>Matches</h3>
+		<table id="myTable3" class="tablesorter">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Match</th>
+					<th>Score</th>
+				</tr>
+			</thead>
+			<tbody>	
+				@foreach ($matches as $match)
+					<tr>
+						<td><?php if($match->date == "0000-00-00 00:00:00") 
+							echo "date unknown"; 
+						  else {
+							$date = new DateTime($match->date);
+  						    echo date_format($date, 'd-m-Y H:i');
+						  }
+						?></td>
+						<td><a href="{{route('match', array('id'=>$match->id))}}">{{ $match->hometeam}} - {{ $match->awayteam }} </a></td>
+						<td><?php if (Match::isPlayed($match->id)) echo Match::getScore($match->id); else echo "? - ?" ?></td>
+					<tr>
+				@endforeach
+			</tbody>
+		</table>
+
     </div>
 </div>
 @stop
@@ -86,20 +111,28 @@
 
   <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#myTable")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        $("#myTable3")
+        .tablesorter({debug: false, dateFormat: "uk", widgets: ['zebra'], sortList: [[0, 1]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0, 1, 3]}); });
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
   </script>
 
     <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#myTable2")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
-                            filterColumns: [0, 1, 3]}); });
+                            filterColumns: [0, 1, 2]}); });
   </script>
 @stop
 

@@ -104,7 +104,7 @@
   <script type="text/javascript">
     jQuery(document).ready(function() {
         $("#myTable")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]], headers: {2: {sorter: false}, 4: {sorter: false}}})
+        .tablesorter({debug: false, dateFormat: "uk", widgets: ['zebra'], sortList: [[0, 0]], headers: {2: {sorter: false}, 4: {sorter: false}}})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
                             filterColumns: [0, 1, 3]}); });

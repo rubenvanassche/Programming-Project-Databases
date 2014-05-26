@@ -77,5 +77,5 @@ table.tablesorter thead tr .headerSortDown {
 	background-image: url(../img/desc.gif);
 }
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #8dbdd8;
+background-color: #eee;
 }

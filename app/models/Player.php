@@ -145,4 +145,11 @@ class Player {
         } // end try-catch
     }
 
+	public static function matches($id) {
+		$results = DB::select("SELECT `match`.*, (SELECT name FROM team WHERE team.id = `match`.hometeam_id) AS hometeam, 
+												 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) AS awayteam 
+								FROM `match`, `playerPerMatch` WHERE `playerPerMatch`.player_id = ? AND `playerPerMatch`.match_id = `match`.id", array($id));
+		return $results;
+	} 
+
 }

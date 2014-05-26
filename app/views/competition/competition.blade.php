@@ -25,7 +25,7 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<table id="myTable" class="tablesorter">
+			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Date</th>
@@ -40,7 +40,13 @@
 							$matchinfo = Match::get($match->id);
 							?>
 						<tr>
-							<td><a href="{{url('match/'.$match->id)}}">{{$matchinfo->date}}</a></td>
+							<td><a href="{{url('match/'.$match->id)}}"><?php if($matchinfo->date == "0000-00-00 00:00:00") 
+										echo "date unknown"; 
+						  			  else {
+										$date = new DateTime($matchinfo->date);
+  									    echo date_format($date, 'd-m-Y H:i');
+									  }
+							?></a></td>
 							<td><a href="{{url('team/'.$match->hometeam_id)}}">{{$matchinfo->hometeam}}</a></td>
 							<td>{{$matchinfo->hometeam_score}} - {{$matchinfo->awayteam_score}}</td>
 							<td style="text-align:right;"><a href="{{url('team/'.$match->awayteam_id)}}">{{$matchinfo->awayteam}}</a></td>
@@ -50,4 +56,27 @@
 			</table>
 		</div>
 	</div>
+@stop
+
+@section('javascript')
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, dateFormat: "uk", widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[1, 0]] , headers: {0: {sorter: false}}})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
 @stop

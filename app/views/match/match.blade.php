@@ -46,7 +46,13 @@
 			@if($bet)
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
 			@endif
-			<p><?php $date = new DateTime($match->date); echo $date->format('d-m-Y H:i')?></p>
+			<?php if($match->date == "0000-00-00 00:00:00") 
+						echo "date unknown"; 
+					  else {
+						$date = new DateTime($match->date);
+						echo date_format($date, 'd-m-Y H:i');
+					  }
+					?>
 		</div>
 		<div class="col-md-5">
 			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
@@ -73,7 +79,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Goals</h3>
-			<table class="table table-condensed">
+			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -92,7 +98,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Goals</h3>
-			<table class="table table-condensed">
+			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -113,7 +119,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Cards</h3>
-			<table class="table table-condensed">
+			<table id="myTable3"class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -134,7 +140,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Cards</h3>
-			<table class="table table-condensed">
+			<table id="myTable4" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -162,7 +168,7 @@
 	<div class="row">
 		<div class="col-md-6">
 			<h3>Transfers</h3>
-			<table class="table table-condensed">
+			<table id="myTable5" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -206,7 +212,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Transfers</h3>
-			<table class="table table-condensed">
+			<table id="myTable6" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -292,31 +298,31 @@
 
 
 				<div class="form-group">
-					<label>{{ Form::label('firstGoal', 'First goal') }}</label>
+					<label>{{ Form::label('firstGoal', 'First goal (optional)') }}</label>
 					{{ Form::select('firstGoal',  array('none' => '', 'home' => $match->hometeam, 'away' => $match->awayteam)) }}
 					{{ $errors->first('firstGoal', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team') }}</label>
+					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team (optional)') }}</label>
 					{{ Form::text('hometeamYellows', Input::old('hometeamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamReds', 'Red cards for home team') }}</label>
+					<label>{{ Form::label('hometeamReds', 'Red cards for home team (optional)') }}</label>
 					{{ Form::text('hometeamReds', Input::old('hometeamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamReds', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team') }}</label>
+					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team (optional)') }}</label>
 					{{ Form::text('awayteamYellows', Input::old('awayteamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamReds', 'Red cards for away team') }}</label>
+					<label>{{ Form::label('awayteamReds', 'Red cards for away team (optional)') }}</label>
 					{{ Form::text('awayteamReds', Input::old('awayteamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}
 				</div>
@@ -364,6 +370,64 @@ $(document).ready(function () {
     }
 });
 </script>
+
+
+
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable6")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable5")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable4")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable3")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1]}); });
+  </script>
 
 
 @stop

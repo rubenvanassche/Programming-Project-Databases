@@ -14,7 +14,6 @@ class CompetitionController extends BaseController {
 		$data['teams'] = Competition::getTeams($id);
 		$data['matches'] = Competition::getMatches($id);
 		$data['goals'] = Competition::getGoals($id);
-		print_r($data['goals']);
 		
 		return View::make('competition.competition', $data)->with('title', $data['competition']->name);
 	}
