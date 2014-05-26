@@ -3,8 +3,8 @@
 friends and such.
 
 This was a project for the course Programming Project Databases at the
-University of Antwerp. As this was a groupswork, the following developers has
-build the basics of CoachCenter:
+University of Antwerp. As this was a group project, the following developers have
+built the basics of CoachCenter:
 
 - [JakobStruye](https://github.com/JakobStruye)
 - [KristofDM](https://github.com/KristofDM)
@@ -45,7 +45,8 @@ Of course, there's more!
 First, you'll need to load some data in the database:
 
 1. Create database `coachcenter`
-2. Load the data as given in `sql/coachcenter.sql` file into this database.
+2. Run the installation script `install/install.sh` (Only if you're on linux)
+3. Load the data as given in `sql/coachcenter.sql` file into this database.
 
 Then you can deploy the site locally using `artisan`:
 

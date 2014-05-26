@@ -136,8 +136,135 @@ SELECT id FROM `".self::TABLE_GOAL."` WHERE match_id = ? AND team_id = ?
 ###########
 #Match.php#
 ###########
+#Get the ids of a given match.
+SELECT * FROM `".self::TABLE_MATCH."` WHERE hometeam_id = ? AND awayteam_id = ? AND competition_id = ? AND date = ?
 
-#TODO
+#Add a match to the database.
+INSERT INTO `".self::TABLE_MATCH."` (hometeam_id, awayteam_id, competition_id, date, phase, group_nr) VALUES (?, ?, ?, ?, ?, ?)
+
+#Link a player to a match.
+INSERT INTO `'.self::TABLE_PLAYER_PER_MATCH.'` (player_id, match_id, intime, outtime) VALUES (?, ?, ?, ?)
+
+#Update a player's information about that match because of the substitution.
+UPDATE `".self::TABLE_PLAYER_PER_MATCH."` SET `outtime` = ? WHERE `player_id` = ? AND `match_id` = ?
+
+#Get all matches past today's date.
+SELECT `id` FROM `match` WHERE `competition_id` = ? AND `date` <= ?
+
+#Trivial selects
+SELECT id FROM `competition` WHERE name = ?
+
+SELECT * FROM `match` WHERE id = ?
+
+SELECT * FROM `match` WHERE hometeam_id = ? AND awayteam_id = ?
+
+SELECT * FROM `match` WHERE hometeam_id = ?
+
+SELECT * FROM `match` WHERE awayteam_id = ?
+
+#Get $amount recent matches.
+SELECT * FROM `match` WHERE date < CURDATE() ORDER BY date DESC LIMIT $amount
+
+#Get $amount future matches.
+SELECT * FROM `match` WHERE date > CURDATE() ORDER BY date LIMIT $amount
+
+#Get the score of a given match.
+SELECT
+  (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+  (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
+  FROM `match` WHERE id = ?
+
+#Get information about a match given a match_id.
+SELECT date,
+hometeam_id,
+awayteam_id,
+(SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+(SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam,
+(SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+(SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
+FROM `match` WHERE id = ?
+
+#Get goals from a given team in a given match.
+SELECT time, (SELECT name FROM player WHERE id = goal.player_id) as player,
+(SELECT id FROM player WHERE id = goal.player_id) as player_id FROM goal
+WHERE match_id = ? AND team_id = ?
+
+#Get cards from a given team in a given match.
+ELECT color, time, (SELECT name FROM player WHERE player.id = cards.player_id) AS player,
+player_id FROM cards
+WHERE match_id = ?
+AND EXISTS(
+  SELECT playerPerTeam.player_id FROM playerPerTeam
+  WHERE playerPerTeam.player_id = cards.player_id
+  AND playerPerTeam.team_id = ?)
+
+#Get all substitutions from a given team in a given match.
+SELECT intime, outtime, name, player_id FROM playerPerMatch, player
+WHERE match_id = ?
+AND player.id = playerPerMatch.player_id
+AND player_id
+IN (
+  SELECT player_id
+  FROM playerPerTeam
+  WHERE team_id = ?
+
+#Get the phase of a given match.
+SELECT phase, group_nr FROM `match` where id = ?
+
+#Get the score of a given match.
+SELECT
+(SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
+(SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
+FROM `match` WHERE id = ?
+
+#Get the team_id from the team that scored the first goal in a match.
+SELECT team_id
+FROM goal
+WHERE match_id = ?
+AND time = (
+  SELECT min(time)
+  FROM goal
+  WHERE match_id = ?)
+
+#Get all yellow cards from a team in a certain match.
+SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
+AND match_id = ?
+AND EXISTS (
+  SELECT playerPerTeam.player_id
+  FROM playerPerTeam
+  WHERE playerPerTeam.player_id = cards.player_id
+  AND playerPerTeam.team_id = ?)
+
+#Get all red cards from a team in a certain match.
+SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
+AND match_id = ?
+AND EXISTS (
+  SELECT playerPerTeam.player_id
+  FROM playerPerTeam
+  WHERE playerPerTeam.player_id = cards.player_id
+  AND playerPerTeam.team_id = ?)
+
+#Get the match given a hometeam_id, awayeam_id and date.
+SELECT * FROM `match` WHERE hometeam_id = ? AND awayteam_id = ? AND date = ?
+
+#Get all matches that are to be played in the next coming $days.
+SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+(SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
+FROM `match`
+WHERE DATEDIFF(`date`, CURDATE()) <= ?
+AND DATEDIFF(`date`, CURDATE()) >= 0
+
+#Get all matches that are to be played in the next coming $days and where $user hasn't betted on yet.
+SELECT `match`.id, date, hometeam_id, awayteam_id,
+(SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
+(SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
+FROM `match`, `bet`
+WHERE DATEDIFF(`date`, CURDATE()) <= ?
+AND DATEDIFF(`date`, CURDATE()) >= 0
+AND `match`.id NOT IN (
+  SELECT match_id
+  FROM `bet`
+  WHERE `bet`.user_id = ?)
 
 ###################
 #Notifications.php#
@@ -251,14 +378,88 @@ AND `playerPerMatch`.match_id = `match`.id
 ##########
 #Team.php#
 ##########
+#Get team by id.
+SELECT id FROM `".self::TABLE_TEAM."` WHERE name = (?)
 
-#TODO
+#Insert team with given data.
+INSERT INTO `".self::TABLE_TEAM."` (name, country_id, fifapoints) VALUES ( ?, ?, ?)
+
+#Update points and coach from given team.
+UPDATE `".self::TABLE_TEAM."` SET fifapoints = ?, coach_id = ? WHERE id = ?
+
+#Link a given player (with a certain position) to a given team.
+SELECT * FROM `".self::TABLE_PLAYER_PER_TEAM."` WHERE player_id = ? AND team_id = ?
+
+#Get the team by id.
+SELECT * FROM `".self::TABLE_TEAM."` WHERE id = ?
+
+#Get all teams.
+SELECT team.id, team.name, team.fifapoints, country.abbreviation, continent.name AS continent FROM team, country, continent WHERE team.country_id = country.id AND country.continent_id = continent.id
+
+#Get the team of a player (by id).
+SELECT team_id FROM `".self::TABLE_PLAYER_PER_TEAM."` WHERE player_id = ?
+
+#Get all players of a given team (by id).
+SELECT player.id, player.name,
+(SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position
+FROM player
+WHERE player.id IN
+  (SELECT player_id FROM playerPerTeam WHERE team_id = ?)
+
+#Get the matches of a given team.
+SELECT `match`.date,
+`match`.id as match_id,
+(SELECT name FROM team WHERE team.id = `match`.hometeam_id) as hometeam,
+(SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam
+FROM `match`
+WHERE hometeam_id = ? OR awayteam_id = ?
+
+#Get fifa points of a team by id.
+SELECT team.fifapoints FROM `team` WHERE id = ?
 
 ##########
 #User.php#
 ##########
+#Used to check whether or not a certain facebook user already exists in our database.
+SELECT COUNT(id) as count FROM user WHERE facebookid = ?
 
-#TODO
+#Insert user into the databse (through facebook).
+INSERT INTO user (firstname, lastname, facebookid, email, username, country_id) VALUES (?,?,?,?,?,'20')
+
+#Trivial selects.
+SELECT id, firstname, lastname FROM user WHERE email = ?
+
+SELECT registrationcode, email FROM user WHERE username = ?
+
+SELECT * FROM user WHERE id = ?
+
+SELECT * FROM user
+
+SELECT username FROM user WHERE email = ?
+
+SELECT picture FROM user WHERE id = ?
+
+SELECT facebookid FROM user WHERE id = ?
+
+#Insert user into the database (without facebook).
+INSERT INTO user (username, firstname, lastname, email, password, country_id, registrationcode, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+
+#Update the registration code (user has activated their account)
+UPDATE user SET registrationcode = '' WHERE username = ?
+
+#Update a user's password by id.
+UPDATE user SET password = ? WHERE id = ?
+
+#Update a user's information with the provided information.
+UPDATE user
+SET firstname = ?, lastname = ?, email = ?, country_id = ?, about = ?, age = ?
+WHERE id = ?
+
+#Change a user's profile picture by id.
+UPDATE user SET picture = ? WHERE id = ?
+
+#Get all users who want to recieve email.
+SELECT * FROM user WHERE `recieve_email` = 1
 
 ###############
 #UserGroup.php#
@@ -359,5 +560,27 @@ WHERE message_id = ? AND user_id <> ?
 #######################
 #UserGroupMessages.php#
 #######################
+#Get all discussion in a usergroup (by id).
+SELECT created, id, title,
+(SELECT username FROM user WHERE id = userGroupMessages.user_id) as username,
+(SELECT COUNT(id) as count FROM userGroupMessagesContent WHERE message_id = userGroupMessages.id) as count
+FROM userGroupMessages WHERE usergroup_id = ?
+ORDER BY created DESC
 
-#TODO
+#Get information about a discussion.
+SELECT created, title,
+(SELECT username FROM user WHERE id = userGroupMessages.user_id) as username
+FROM userGroupMessages WHERE id = ?
+
+#Get all content from a discussion.
+SELECT created, content,
+(SELECT username FROM user WHERE id = userGroupMessagesContent.user_id) as username, user_id
+FROM userGroupMessagesContent
+WHERE message_id = ?
+ORDER BY created ASC
+
+#Add new discussion to the usergroup.
+INSERT INTO userGroupMessages (usergroup_id, user_id, title, created) VALUES (?,?,?,?)
+
+#Add new reply to the discussion.
+INSERT INTO userGroupMessagesContent (user_id, message_id, content, created) VALUES (?,?,?,?)
