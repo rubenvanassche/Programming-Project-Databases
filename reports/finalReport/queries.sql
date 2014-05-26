@@ -372,8 +372,20 @@ AND `playerPerMatch`.match_id = `match`.id
 ############
 #Search.php#
 ############
+#Search for teams
+SELECT name, id, (SELECT abbreviation FROM country WHERE id = team.country_id) as abbreviation FROM teams WHERE name LIKE %?%
 
-#TODO
+#Search for players
+SELECT name, id FROM player WHERE name LIKE %?%
+
+#Search for matches
+SELECT id FROM `match` WHERE hometeam_id IN (SELECT id FROM team WHERE name LIKE %?%) OR awayteam_id IN (SELECT id FROM team WHERE name LIKE %?%)
+
+#Search for users
+SELECT username, id FROM user WHERE username LIKE %?%
+
+# search for usergroups
+SELECT name, id, private FROM usergroup WHERE name LIKE %?%
 
 ##########
 #Team.php#

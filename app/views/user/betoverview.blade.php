@@ -1,6 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+<div class="row">
+	<div class="col-md-12">
+		<h1>Bets Overview</h1>
+	</div>
+</div>
 
 <ul id="myTab" class="nav nav-tabs">
       <li class="active"><a href="#future" data-toggle="tab">Future Matches</a></li>
