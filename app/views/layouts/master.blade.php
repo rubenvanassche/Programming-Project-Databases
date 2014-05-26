@@ -269,10 +269,12 @@
 				?>
 				<a href="{{ action('UserController@resendmail', array('username'=>Input::old('username'))) }}" class="btn btn-warning pull-left">Resend Email</a>
 				<?php } ?>
+				<?php if("$_SERVER[HTTP_HOST]" == 'coachcenter.be') { ?>
 				<a href="{{ url('user/facebooklogin') }}" class="btn btn-primary pull-right">Facebook Login</a>
+				<?php } ?>
 				{{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
-
 				{{ Form::token() . Form::close() }}
+			</div>
 			<div><p/>&nbsp;</div>  <!--makes sure login button is inside modal-->
     	</div>
   	</div>
