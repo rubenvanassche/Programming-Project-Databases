@@ -53,6 +53,11 @@
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
 			</div>
 			@endif
+			@if(!$bet && $loggedIn && $inFuture)
+			<div style="text-align:center;">
+				<a href="#" class="btn btn-lg btn-success btn-sm disabled">Bet</a>
+			</div>
+			@endif
 
 			<?php if($match->date == "0000-00-00 00:00:00") 
 						echo "date unknown"; 

@@ -10,6 +10,7 @@ class MatchController extends BaseController {
 		$user = new User;
 		$data['match'] = Match::get($matchID);
 		$data['inFuture'] = Match::isInFuture($matchID, 1);
+		$data['loggedIn'] = $user->loggedIn();
 		$data['bet'] = $data['inFuture'] && $user->loggedIn() && !(Bet::hasBet($user->ID(), $matchID));
 		$data['goalshometeam'] = Match::goals($matchID, $data['match']->hometeam_id);
 		$data['cardshometeam'] = Match::cards($matchID, $data['match']->hometeam_id);
