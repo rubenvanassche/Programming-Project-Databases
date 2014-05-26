@@ -41,7 +41,7 @@ In deze sectie noemen we enkel de grote onderdelen waar we veel aan werkten. Dit
 \subsection{Stijn}
 Was verantwoordelijk voor het binnenhalen alle voetbalgerelateerde data (door middel van crawler); dit omvatte matchen (zowel de nog te spelen als de gespeelde), competities, info over de matchen zoals spelers, kaarten, doelpunten, en spelerwissels, teams en zijn spelers, FIFA rank,... Uiteraard zou de design voldoende robuust moeten zijn en bovendien effici\"ent genoeg zodat het geen eeuwigheid zou duren om de net gespeelde matchen up-to-date te brengen.
 \subsection{Kristof}
-Heeft enkele pagina's gemaakt en ook de back-end verzorgd die nodig was voor die pagina's. Heeft de basis gelegd voor user profiles en  heeft private usergroups gemaakt. Bouwde een notificatiesysteem en zorgde ook voor de email reminders. 
+Heeft enkele pagina's gemaakt en ook de back-end verzorgd die nodig was voor die pagina's. Heeft de basis gelegd voor user profiles en heeft private usergroups gemaakt. Bouwde een notificatiesysteem en zorgde ook voor de email reminders.
 \subsection{Tom}
 Maakte de algoritmen die aan de hand van de data in de database een beredeneerde calculatie moest maken over de uitslag van de wedstrijden.
 Zorgde voor het sorteersysteem en filtersysteem van de tabellen.
@@ -276,6 +276,30 @@ Uiteraard moet de gebruiker de mogelijkheid krijgen om geen emails meer te ontva
 anderzijds kan je dit regelen door de knop op de preferences page te gebruiken. Deze knop/link togglet als het ware tussen het ontvangen van email en het niet ontvangen van de mail. Als de gebruiker zich op een later moment
 bedenkt kan deze dit dus gewoon via de preferences page (of een link in een email) regelen.
 
+\subsection{User profiles}
+Elke geregistreerde gebruiker op CoachCenter heeft zijn eigen profiel. Wanneer een gebruiker zijn eigen profiel bezoekt kan hij zijn notificaties, uitnodigingen en groepen zien.
+Ook zijn avatar, betscore, land en `about me` zijn te zien. Hij kan ervoor kiezen zijn profiel te bewerken waarop hij wordt doorgestuurd naar de preferences page.
+Op deze preferences page kan een gebruiker zijn passwoord veranderen, van avatar veranderen, emails in- of uitschakelen en andere informatie zoals zijn emailadres, leeftijd en dergelijke aanpassen.
+\\
+\\
+Geregistreerde (en ongeregistreerde) gebruikers kunnen ook de profielen van andere mensen bekijken. Uiteraard zijn nu de notificaties en dergelijke van deze bepaalde gebruiker niet zichtbaar.
+Enkel de informatie (avatar, betscore, `about me`, groepen) is zichtbaar.
+
+\subsection{Usergroups}
+In de lijst van vereiste functionaliteit stond ook dat er voor ingelogde gebruikers de mogelijkheid moeset zijn om groepen van gebruikers te maken die tegen elkaar kunnen spelen.
+Ze moeten scores en ranking binnen een groep kunnen zien en ook moet de mogelijkheid bestaan om andere gebruikers uit te nodigen tot een usergroup.
+\\
+\\
+We hebben twee soorten usergroups gemaakt. Beiden ondersteunen dezelfde functionaliteit maar ze verschillen van elkaar in het opzicht dat de ene soort usergroup publiek is en de andere privaat.
+Concreet komt dit erop neer dat in een publieke groep iedereen kan joinen wie wilt (eveneens kan men gebruikers uitnodigen) en in een private groep kunnen enkel mensen joinen die worden uitgenodigd.
+\\
+\\
+De usergroup pagina bevat een tijdslijn waarin events (uiteraard chronologisch geordend) van de groep worden getoond. Zo kan iedereen zien wanneer gebruiker X op welke match heeft gewed, zien wanneer een bepaalde gebruiker is uitgenodigd geweest en is gejoind, ...
+Ook worden er discussies ondersteund: dit zijn gesprekken binnen in de usergroup waar iedereen die lid is op kan antwoorden. Wanneer er een nieuwe discussie wordt gestart of wanneer er iemand antwoord in een gesprek waaraan je deelneemt zal je uiteraard een notificatie hierover krijgen.
+\\
+\\
+Bovenaan de usergroup zien we ook de leden met hun betscore ernaast. Zo ontstaat er een soort van competitiedrang die het aantal bets in het systeem alleen maar zal opdrijven.
+
 \subsection{Grafische weergave van statistieken}
 Voor de grafische weergave van data gebruiken we Google Charts. Dat biedt heel wat verschillende grafieken. Momenteel zijn op elke teampagina twee grafieken beschikbaar. Er is een taartdiagram dat het percentage gewonnen, verloren en gelijkgespeelde matchen van een team toont. Ook is er een staafdiagram dat het gemiddelde aantal goals en/of kaarten per match per jaar toont. De gebruiker kan kiezen welke combinatie van 'gemiddeld aantal goals', 'gemiddeld aantal gele kaarten' en 'gemiddeld aantal rode kaarten' hij wil zien. De grafiek wordt meteen aangepast, zonder dat de pagina opnieuw geladen moet worden. Deze grafieken bevinden zich onder de tab 'Graphs' op elke teampagina. \\ \\
 Op de homepagina staat een grote wereldkaart. De kleur van elk land geeft zijn FIFA score weer. Hoe donkerder het land, hoe hoger de score. Wanneer op een land geklikt wordt, wordt meteen naar de teampagina van het nationale team gelinkt. Voor enkele kleine landen is geen teampagina aanwezig, er gebeurt dan ook niets wanneer erop geklikt wordt. Als op het Verenigd Koninkrijk geklikt wordt, zoomt de kaart in, zodat op de vier aparte delen (Wales, Engeland, Noord-Ierland en Schotland) kan worden geklikt. Deze hebben namelijk elk een apart nationaal team. \\ \\
@@ -333,7 +357,6 @@ De match page bevat informatie van een specifieke wedstrijd. De spelende teams m
 
 \subsection{Competition page}
 Op de pagina van een specifieke competitie is enerzijds een tabel met alle deelnemende ploegen te zien, en anderzijds met alle wedstrijden die in de competitie gespeeld zijn en nog gespeeld worden. De tabellen zijn sorteerbaar en waar nuttig kan er doorgeklikt worden.
-
 
 \section{Extra functionaliteit}
 Naast de vereiste competitie WK 2014 Brazil, zijn er ook een heel aantal andere (oudere) competities beschikbaar, deze worden dan ook gebruikt voor het voorspellingsalgoritme. Daarnaast is er nog een andere internationale competitie gevonden: de Asian Cup 2015 Australia, ook op deze competitie kan men, voor wie dat nu al wenst, erop betten. \\ \\
