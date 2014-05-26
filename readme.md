@@ -46,7 +46,7 @@ Of course, there's more!
 First, you'll need to load some data in the database:
 
 1. Create database `coachcenter`
-2. Run the installation script `install/install.sh` (Only if you're on linux)
+2. Run the installation script `install/install.sh` (Only if you're on linux, also run from inside the install folder, read `install/readme.txt` first)
 3. Load the data as given in `sql/coachcenter.sql` file into this database.
 
 Then you can deploy the site locally using `artisan`:
