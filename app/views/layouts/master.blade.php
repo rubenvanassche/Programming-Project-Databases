@@ -31,11 +31,14 @@
 						<div class="form-group">
 							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%; padding:0.35em; ', 'placeholder'=>'Type searchterm here')) }}
 						</div>
-						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i></button>
+						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i><span class="visible-xs">Search</span></button>
 					{{ Form::token() . Form::close() }}
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="User">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="glyphicon glyphicon-user"> </i> <b class="caret"></b>
+								<span class="visible-xs">User</span>
+							</a>
 							<ul class="dropdown-menu">
 							<?php
 								$user = new User;
@@ -63,7 +66,7 @@
 					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Notifications">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i><span class="visible-xs">Notifications</span></a>
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
 									<?php $id = $notification["id"]?>
@@ -77,7 +80,10 @@
 					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Notifications">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="glyphicon glyphicon-star"></i>
+								<span class="visible-xs">Notifications</span>
+							</a>
 							<ul class="dropdown-menu">
 									<li><a href="{{url('profile')}}">No new notifications</a></li>
 							</ul>
@@ -85,19 +91,54 @@
 					<?php
 						}
 					?>
-						<li data-toggle="tooltip" data-placement="bottom" title="Usergroups"><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
-						<li data-toggle="tooltip" data-placement="bottom" title="Users"><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-						<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches"><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
-						<li data-toggle="tooltip" data-placement="bottom" title="Competitions"><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Usergroups">
+							<a href="{{url('usergroups')}}">
+								<i class="glyphicon glyphicon-tower"></i>
+								<span class="visible-xs">Usergroups</span>
+							</a>
+						</li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Users">
+							<a href="{{url('users')}}">
+								<i class="fa fa-users"></i>
+								<span class="visible-xs">Users</span>
+							</a>
+						</li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches">
+							<a href="{{url('upcoming')}}">
+								<i class="glyphicon glyphicon-time"></i>
+								<span class="visible-xs">Upcoming Matches</span>
+							</a>
+						</li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Competitions">
+							<a href="{{url('competitions')}}">
+								<i class="glyphicon glyphicon-globe"></i>
+								<span class="visible-xs">Competitions</span>
+							</a>
+						</li>
 					</ul>
 					<?php
 					}
 					else {
 					?>
 						<ul class="nav navbar-nav navbar-left">
-							<li data-toggle="tooltip" data-placement="bottom" title="Users"><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-							<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches"><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
-							<li data-toggle="tooltip" data-placement="bottom" title="Competitions"><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Users">
+								<a href="{{url('users')}}">
+									<i class="fa fa-users"></i>
+									<span class="visible-xs">Users</span>
+								</a>
+							</li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches">
+								<a href="{{url('upcoming')}}">
+									<i class="glyphicon glyphicon-time"></i>
+									<span class="visible-xs">Upcoming Matches</span>
+								</a>
+							</li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Competitions">
+								<a href="{{url('competitions')}}">
+									<i class="glyphicon glyphicon-globe"></i>
+									<span class="visible-xs">Competitions</span>
+								</a>
+							</li>
 						</ul>
 					<?php } ?>
 
