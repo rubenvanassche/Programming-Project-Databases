@@ -28,6 +28,7 @@
 		<h2>{{$playerObj->name}}</h2>
 		<p><b>Team: </b> <a href="{{ route('team', array('id'=>$playerTeam->id)) }}">{{$playerTeam->name}}</a></p>
 		<p><b>Goals: </b> <?php echo Player::countGoals($playerObj->id); ?></p>
+		<p><b>Cards: </b> <?php echo Player::countYellowCards($playerObj->id); ?><img style="height:16px; margin-bottom:7px;" src="{{asset('img/yellowcard.png')}}"> - <?php echo Player::countRedCards($playerObj->id); ?><img style="height:16px;  margin-bottom:7px;" src="{{asset('img/redcard.png')}}"></p>
 	</div>
 	<div class="col-md-10">
 		<h3>Information</h3>
