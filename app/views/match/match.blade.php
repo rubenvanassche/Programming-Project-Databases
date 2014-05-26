@@ -60,6 +60,13 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
+			<div style="text-align:center;">
+				<p>{{$phase}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			@if($inFuture)
 			<div style="text-align:center;">
 				<p>Predictions:</p>

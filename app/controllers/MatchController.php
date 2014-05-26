@@ -17,6 +17,7 @@ class MatchController extends BaseController {
 		$data['goalsawayteam'] = Match::goals($matchID, $data['match']->awayteam_id);
 		$data['cardsawayteam'] = Match::cards($matchID, $data['match']->awayteam_id);
 		$data['transfersawayteam'] = Match::transfers($matchID, $data['match']->awayteam_id);
+		$data['phase'] = Match::phase($matchID);
 		if ($data['inFuture']) {
 			$data['predictedScores'] = Prediction::predictScore($matchID);
 			$data['predictedOutcome'] = Prediction::predictOutcome($matchID);
