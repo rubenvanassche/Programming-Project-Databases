@@ -771,6 +771,7 @@ class CrawlerController extends BaseController {
             if (empty($ids)) throw new Exception("No such team: ".$awayteam);
             $awayteam_id = $ids[0]->id;
             Competition::linkTeam($awayteam_id, $competition_id);
+            Log::info("UPDATE MATCH ".$hometeam.' - '.$awayteam);
 
             $kick_off = $match_data["kick-off"];
             if (empty($kick_off)) $kick_off = $match_data["scoretime"]; 
@@ -884,92 +885,99 @@ class CrawlerController extends BaseController {
      */
     public static function update() {
         set_time_limit(0);
-        //self::update_teams();
 
-        /*
-         * COMPETITIONS
-         * Please uncomment the part you want to update.
-         */
+        try {
+            //self::update_teams();
 
-        /* WORLD CUP */
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/", "group");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2010-south-africa/group-stage/r10532/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2006-germany/group-stage/r2820/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/2002-korea-rep-japan/group-stage/r741/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1998-france/group-stage/r747/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1994-usa/group-stage/r753/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1990-italy/group-stage/r759/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1986-mexico/group-stage/r765/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1970-mexico/group-stage/r784/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1966-england/group-stage/r789/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1962-chile/group-stage/r794/");
-        //self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
+            /*
+             * COMPETITIONS
+             * Please uncomment the part you want to update.
+             */
 
-        /* CONFEDERATION CUP */
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2013-brazil/group-stage/r16347/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1999-mexico/group-stage/r1660/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1997-saudi-arabia/group-stage/r1664/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1995-saudi-arabia/group-stage/r1668/");
-        //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1992-saudi-arabia/s1024/final-stages/", "final");
+            /* WORLD CUP */
+            self::update_competition("http://int.soccerway.com/international/world/world-cup/2014-brazil/group-stage/r16351/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/2010-south-africa/group-stage/r10532/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/2006-germany/group-stage/r2820/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/2002-korea-rep-japan/group-stage/r741/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1998-france/group-stage/r747/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1994-usa/group-stage/r753/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1990-italy/group-stage/r759/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1986-mexico/group-stage/r765/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1970-mexico/group-stage/r784/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1966-england/group-stage/r789/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1962-chile/group-stage/r794/");
+            //self::update_competition("http://int.soccerway.com/international/world/world-cup/1950-brazil/group-stage/r811/");
 
-        /* EUROPEAN CHAMPIONSHIP */
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2012-poland-ukraine/group-stage/r13552/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2008-austria-switzerland/group-stage/r5803/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2004-portugal/group-stage/r166/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2000-netherlands-belgium/group-stage/r639/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1996-england/group-stage/r662/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1992-sweden/group-stage/r666/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1988-germany/group-stage/r669/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1984-france/group-stage/r672/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1980-italy/group-stage/r675/");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1976-yugoslavia/s566/final-stages/", "final");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1972-belgium/s567/final-stages/", "final");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1968-italy/s568/final-stages/", "final");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
-        //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
+            /* CONFEDERATION CUP */
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2013-brazil/group-stage/r16347/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2009-south-africa/group-stage/r8151/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2005-germany/group-stage/r1674/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2003-france/group-stage/r1652/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/2001-korea-rep-japan/group-stage/r1656/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1999-mexico/group-stage/r1660/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1997-saudi-arabia/group-stage/r1664/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1995-saudi-arabia/group-stage/r1668/");
+            //self::update_competition("http://int.soccerway.com/international/world/confederations-cup/1992-saudi-arabia/s1024/final-stages/", "final");
 
-        /* COPA AMERICA */
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2011-argentina/group-stage/r13240/");
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2007-venezuela/group-stage/r4518/");
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2004-peru/group-stage/r2085/");
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2001-colombia/group-stage/r2090/");
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1999-paraguay/group-stage/r2095/");
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1997-bolivia/group-stage/r2100/");
-        //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1995-uruguay/group-stage/r2105/");
+            /* EUROPEAN CHAMPIONSHIP */
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2012-poland-ukraine/group-stage/r13552/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2008-austria-switzerland/group-stage/r5803/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2004-portugal/group-stage/r166/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/2000-netherlands-belgium/group-stage/r639/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1996-england/group-stage/r662/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1992-sweden/group-stage/r666/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1988-germany/group-stage/r669/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1984-france/group-stage/r672/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1980-italy/group-stage/r675/");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1976-yugoslavia/s566/final-stages/", "final");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1972-belgium/s567/final-stages/", "final");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1968-italy/s568/final-stages/", "final");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1964-spain/s571/final-stages/", "final");
+            //self::update_competition("http://int.soccerway.com/international/europe/european-championships/1960-france/s572/final-stages/", "final");
 
-        /* CONCACAF GOLD CUP */
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2013/group-stage/r20898/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2011/group-stage/r13986/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2009/group-stage/r8491/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2007/group-stage/r4574/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2005/group-stage/r1682/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2002/group-stage/r1688/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2000/group-stage/r1693/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1998/group-stage/r1697/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1996/group-stage/r1701/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1993/group-stage/r8473/");
-        //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1991/group-stage/r8477/");
+            /* COPA AMERICA */
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2011-argentina/group-stage/r13240/");
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2007-venezuela/group-stage/r4518/");
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2004-peru/group-stage/r2085/");
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/2001-colombia/group-stage/r2090/");
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1999-paraguay/group-stage/r2095/");
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1997-bolivia/group-stage/r2100/");
+            //self::update_competition("http://int.soccerway.com/international/south-america/copa-america/1995-uruguay/group-stage/r2105/");
 
-        /* ASIAN CUP */
-        //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2011-qatar/group-stage/r11619/");
-        //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2007-indonesia---malaysia---thailand---vietnam/group-stage/r4522/");
-        //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2004-china/group-stage/r1762/");
+            /* CONCACAF GOLD CUP */
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2013/group-stage/r20898/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2011/group-stage/r13986/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2009/group-stage/r8491/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2007/group-stage/r4574/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2005/group-stage/r1682/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2003/group-stage/r1683/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2002/group-stage/r1688/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/2000/group-stage/r1693/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1998/group-stage/r1697/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1996/group-stage/r1701/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1993/group-stage/r8473/");
+            //self::update_competition("http://int.soccerway.com/international/nc-america/concacaf-gold-cup/1991/group-stage/r8477/");
 
-        /* AFRICA CUP OF NATIONS */
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2014/group-stage/r19328/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2012-equatorial-guinea-gabon/group-stage/r16436/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2010-angola/group-stage/r10704/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2008-ghana/group-stage/r5650/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2006-egypt/group-stage/r2901/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2004-tunisia/group-stage/r2906/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2002-mali/group-stage/r2911/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2000-ghananigeria/group-stage/r17436/");
-        //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/1998-burkina-faso/group-stage/r17441/");
+            /* ASIAN CUP */
+            self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2015-australia/group-stage/r20964/");
+            //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2011-qatar/group-stage/r11619/");
+            //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2007-indonesia---malaysia---thailand---vietnam/group-stage/r4522/");
+            //self::update_competition("http://int.soccerway.com/international/asia/asian-cup/2004-china/group-stage/r1762/");
+
+            /* AFRICA CUP OF NATIONS */
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2014/group-stage/r19328/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2012-equatorial-guinea-gabon/group-stage/r16436/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2010-angola/group-stage/r10704/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2008-ghana/group-stage/r5650/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2006-egypt/group-stage/r2901/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2004-tunisia/group-stage/r2906/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2002-mali/group-stage/r2911/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/2000-ghananigeria/group-stage/r17436/");
+            //self::update_competition("http://int.soccerway.com/international/africa/africa-cup-of-nations/1998-burkina-faso/group-stage/r17441/");
+        } catch (Exception $e) {
+            // log error
+            Log::info($e);
+        } // end try-catch
 
         return;
     }
