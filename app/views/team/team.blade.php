@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+
 @if($teamBackground != '')
 		<div id="teambg">
 		</div>

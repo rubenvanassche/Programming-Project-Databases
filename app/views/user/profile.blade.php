@@ -14,7 +14,7 @@
 </div>
 <div class="row">
 	<div class="col-md-2">
-		<img class="img-responsive flag" src="{{$profilepicture}}" alt="" /> <!-- Optional -->
+		<img class="img-responsive flag" src="{{$profilepicture}}" alt="" />
 		<h2>{{$user->username}}</h2>
 		<p><b>Country:</b> {{Country::getCountry($user->country_id)[0]->name}}</p>
 		<p><b>Bet score:</b> {{$user->betscore}}</p>
