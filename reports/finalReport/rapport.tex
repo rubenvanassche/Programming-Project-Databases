@@ -31,15 +31,15 @@
 \begin{document}
 \title{}
 \author{Groep A\\ Eindrapport}
-\date{27 mmei 2014}
+\date{27 mei 2014}
 \maketitle
 
 \section{Status}
-Het project is afgewerkt. Alle verplichte functionaliteit is afgewerkt en we hebben heel wat extra functionaliteit voorzien. De database is goed gevuld met ongeveer 86.000 entries. De afgewerkte versie van de website staat online op \url{www.coachcenter.be} / \url{www.coachcenter.net} en blijft automatisch up to date met de recentste data.
+Het project is afgewerkt. Alle verplichte functionaliteit is aanwezig en we hebben heel wat extra functionaliteit voorzien. De database is goed gevuld met meer dan 90.000 entries. De afgewerkte versie van de website staat online op \url{www.coachcenter.be} / \url{www.coachcenter.net} en blijft automatisch up to date met de recentste data.
 \section{Taakverdeling}
 In deze sectie noemen we enkel de grote onderdelen waar we veel aan werkten. Dit is verre van een complete lijst. Voor een vollediger beeld is er het overzicht van de commits op onze git repository \\ \url{https://github.com/rubenvanassche/Programming-Project-Databases}
 \subsection{Stijn}
-Was verantwoordelijk voor het binnenhalen alle voetbalgerelateerde data (door middel van crawler), dit ging van matchen (zowel de nog te spelen als de gespeelde), competities, info over de matchen zoals spelers, kaarten, doelpunten, en spelerwissels, teams en zijn spelers, FIFA rank,... Uiteraard zou de design voldoende robuust moeten zijn en bovendien effici\"ent genoeg zodat het geen eeuwigheid zou duren voordat de net gespeelde matchen weer up-to-date is.
+Was verantwoordelijk voor het binnenhalen alle voetbalgerelateerde data (door middel van crawler); dit omvatte matchen (zowel de nog te spelen als de gespeelde), competities, info over de matchen zoals spelers, kaarten, doelpunten, en spelerwissels, teams en zijn spelers, FIFA rank,... Uiteraard zou de design voldoende robuust moeten zijn en bovendien effici\"ent genoeg zodat het geen eeuwigheid zou duren om de net gespeelde matchen up-to-date te brengen.
 \subsection{Kristof}
 Heeft enkele pagina's gemaakt en ook de back-end verzorgd die nodig was voor die pagina's. Heeft de basis gelegd voor user profiles en  heeft private usergroups gemaakt. Bouwde een notificatiesysteem en zorgde ook voor de email reminders. 
 \subsection{Tom}
@@ -53,28 +53,21 @@ Maakte een gebruikerssysteem (registreren en inloggen). Maakte een interactieve 
 \section{Design}
 TODO: LAMP, Laravel, Bootstrap
 \subsection{Voorspellingsalgoritme}
-Het voorspellingssysteem hebben wij opgesplitst in 2 essenti\"ele delen, namelijk het voorspellen van een winnaar van een wedstrijd, en het bepalen van de te verwachten score. Factoren die wij belangrijk vonden om rekening mee te houden in het voorspellen van dit alles zijn vooral onderlinge resultaten van eerder gespeelde wedstrijden, en gemiddeldes van andere wedstrijden tegen andere ploegen. Ook wordt altijd rekening gehouden met de locatie waar gespeeld wordt (uit of thuis).
+Het voorspellingssysteem hebben wij opgesplitst in 2 essenti\"ele delen, namelijk het voorspellen van een winnaar van een wedstrijd, en het bepalen van de te verwachten score. Factoren die wij belangrijk vonden om rekening mee te houden in het voorspellen van dit alles zijn vooral resultaten van onderling eerder gespeelde wedstrijden, en gemiddeldes van andere wedstrijden tegen andere ploegen. Ook wordt altijd rekening gehouden met de locatie waar gespeeld wordt (uit of thuis).
 \\
 \\
 Het voorspellen van de winnaar is natuurlijk de makkelijkste van de twee. We beginnen simpelweg door te kijken naar eerder gespeelde wedstrijden tussen deze ploegen. We werken met een puntensysteem waarbij een ploeg punten krijgt wanneer het een wedstrijd wint. Hierbinnen maken we ook nog eens het onderscheid of de set-up uit/thuis dezelfde is of omgekeerd. Voor elke match met dezelfde set-up krijgt de winnende ploeg 1 punt, met een omgekeerde set-up 0.9.
 Daarna gaan we kijken naar algemene resultaten, maar weer rekening houdende met het al dan niet uit/thuis spelen. We kijken naar alle wedstrijden die de thuisploeg thuis speelde, en de uitploeg uit speelde. Hun win/loss ratio wordt bij hun puntentotaal geteld. Vervolgens kijken we naar de wedstrijden waar de thuisploeg uit speelde, en de uitploeg thuis. Hierbij wordt de win/loss ratio vermenigvuldigd met factor 0.9 bij het puntentotaal geteld. Ook gaan we de FIFAscore van elk team gedeeld door 1000 bij het puntentotaal tellen. Tot slot gaan we de punten vergelijken en op basis daarvan kunnen we de kans bepalen dat een bepaalde ploeg wint.
 \\
 \\
-Het bepalen van een score is iets complexer. Dit volgt een gelijkaardig systeem als hierboven, maar met een belangrijk verschil. Hier werken we niet met het optellen van punten. We werken met gemiddeldes. We kijken terug naar de vier zelfde situaties, maar gaan nu het gemiddelde aantal doelpunten per match berekenen. Hiervan nemen we het gewogen gemiddelde (gewichten 1, 0.9, 0.7 en 0.5). Dit is dan de voorspelde uitkomst van de match. Indien deze uitkomst niet overeenkomt met de voorspelde winkansen, wordt de score aangepast. Merk op dat het werken met gemiddeldes betekent dat de voorspelde uitkomsten vaak redelijk weinig goals omvatten.
+Het bepalen van een score is iets complexer. Dit volgt een gelijkaardig systeem als hierboven, maar met een belangrijk verschil. Hier werken we niet met het optellen van punten, maar wel met gemiddeldes. We kijken terug naar de vier zelfde situaties, maar gaan nu het gemiddelde aantal doelpunten per match berekenen. Hiervan nemen we het gewogen gemiddelde (gewichten 1, 0.9, 0.7 en 0.5). Dit is dan de voorspelde uitkomst van de match. Indien deze uitkomst niet overeenkomt met de voorspelde winkansen, wordt de score aangepast. Merk op dat het werken met gemiddeldes betekent dat de voorspelde uitkomsten vaak redelijk weinig goals omvatten.
 \\
 \\
-Eerst hadden we ook de bedoeling om nog meer dingen te laten berekenen aan de hand van de data die we hebben. Maar al snel bleek dat deze dingen vaak te willekeurig zijn en daarom konden er ook niet echt beredeneerde gokken over worden gemaakt. Er zijn inderdaad wel spelers die vaker kaarten krijgen dan andere, maar uiteindelijk blijkt dit toch veelal willekeurig te zijn. Al snel bleek dat een algoritme hiervoor vaker ernaast zou zitten dan erop. Om onze gebruiker dan ook niet het valse gevoel te geven van hierop te kunnen gokken aan de hand van dit algoritme, hebben we besloten het niet in het uiteindelijke project te steken.
+Eerst waren we ook van plan om nog meer dingen te laten berekenen aan de hand van de data die we hebben. Al snel bleek dat deze dingen vaak te willekeurig zijn en daarom konden er ook niet echt beredeneerde gokken over worden gemaakt. Er zijn inderdaad wel spelers die vaker kaarten krijgen dan anderen, maar uiteindelijk blijkt dit toch veelal willekeurig te zijn. Al snel bleek dat een algoritme hiervoor vaker ernaast zou zitten dan erop. Om onze gebruiker dan ook niet het valse gevoel te geven van hierop te kunnen gokken aan de hand van dit algoritme, hebben we besloten het niet in het uiteindelijke project te steken.
 
-\subsection{Voorspellingen van gebruikers}
-Via een formulier kunnen gebruikers voorspellingen uitbrengen. Dit formulier kan zowel bereikt worden via het gebruikersmenu bovenaan elke pagina, of via een knop op de pagina's van matchen. In het tweede geval worden teams en datum uiteraard al voor de gebruiker ingevuld. De gebruiker kan verder voorspellingen uitbrengen over de eindscore, wie het eerste doelpunt scoort, hoeveel gele kaarten elk team krijgt en hoeveel rode kaarten elk team krijgt. Dit kan later makkelijk uitgebreid worden. Voorspellen van eindscore is verplicht, de rest kan de gebruiker naar eigen wil blanco laten. Indien geen goals gescoord worden, dient er uiteraard niet opgegeven te worden wie het eerste doelpunt scoort.	Om te kunnen bepalen wie de beste voorspellingen uitbracht, krijgt elke speler een puntentotaal afhankelijk van zijn voorspellingen. Dit zal afhankelijk zijn van de correctheid van voorspellingen en het aantal uitgebrachte voorspellingen. Merk op dat hoe meer dingen een gebruiker voorspelt, hoe meer punten er voor die match te verdienen zijn, maar hoe minder punten er per afzonderlijke voorspelling te verdienen zijn. Op deze manier is het invullen van extra voorspellingen een risk-rewardsituatie. We willen vermijden dat iedereen zich verplicht voelt alles in te vullen omdat ze anders geen kans maken, maar ook dat niemand extra voorspellingen invult omdat het nooit de moeite loont. Om de precieze afwegingen te bepalen zullen we nog wat moeten experimenteren. Het is momenteel mogelijk om voorspellingen uit te brengen, gemaakte voorspellingen te bekijken en de correctheid van voorspellingen van ondertussen gespeelde wedstrijden na te gaan, maar puntentellingen en vergelijkingen met andere gebruikers gebeuren nog niet. Ook worden voorspellingen van het systeem nog niet getoond.
-\\
-Momenteel is het mogelijk om voorspellingen uit te voeren op reeds gespeelde matchen. In de uiteindelijke versie van de site zal dit natuurlijk niet meer nodig zijn, maar nu kan dit nog, met oog op demo'en van functionaliteit zonder een halve dag te moeten wachten en bugfixen. Momenteel worden nog geen punten geteld op basis van voorspellingen, en we zullen de gemaakte voorspellingen nog resetten eens dat wel gebeurt. Zo geeft deze optie geen oneerlijk voordeel aan early adopters van onze site.
-\\
-Gemaakte voorspellingen worden opgeslagen in een specifieke tabel, `bet`, in de database. Concreet krijgt elke voorspelling een unieke id, en worden id van match en gebruiker en alle gemaakte voorspellingen bijgehouden.
 
 \section{Database}
-TODO: UPDATE
-Onze database bestaat 20 tabellen met voetbalgerelateerde data en 2 usergerelateerde tabellen.
+Onze database bestaat 12 tabellen met voetbalgerelateerde data en 8 usergerelateerde tabellen.
 \begin{enumerate}
 \item 'continent': Tabel voor werelddelen. Bevat een id en een naam.
 \item `country`: Tabel voor landen. Bevat een id, een naam, de id van het werelddeel waarin het land ligt, en een afkorting voor de naam van het land. Die afkorting zal gebruikt worden op de website.
@@ -195,7 +188,7 @@ Hoewel Laravel beschikt over een volledig uitgewerkt loginsysteem, besloten we o
 Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, staat bij emailadres wel een emailadres, is tweemaal hetzelfde paswoord ingetypt, ...) is de validatie van Laravel gebruikt. Dergelijke validatiecode ziet er heel wat beter uit voor de programmeur dan via een hoop simpele if-statements en reguliere expressies. We gebruiken de Laravel Query Builder voor makkelijker schrijven van SQL queries niet, dit gebeurt zoals opgegeven met ruwe SQL queries.
 \\
 \\
-Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina (in een 'modal', een feature van Bootstrap) weergegeven. Indien de gebruiker met foute gegegvens probeert in te loggen, wordt dit afgehandeld in diezelfde modal. Eens inloggen succesvol is, verschijnt er in de modal nog een bericht om het inloggen te bevestigen. Eens dat weggeklikt wordt, bevindt de gebruiker zich terug op dezelfde pagina als voorheen. In de modal "forgot password"-functionaliteit voorzien. De gebruiker geeft zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Indien men probeert in te loggen met een account waarvan het emailadres nog niet gevalideerd is, verschijnt een knop om de activatiemail opnieuw te versturen. \\ Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. \\ \\
+Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina (in een 'modal', een feature van Bootstrap) weergegeven. Indien de gebruiker met foute gegegvens probeert in te loggen, wordt dit afgehandeld in diezelfde modal. Eens inloggen succesvol is, verschijnt er in de modal nog een bericht om het inloggen te bevestigen. Eens dat weggeklikt wordt, bevindt de gebruiker zich terug op dezelfde pagina als voorheen. Er is ook een knop "forgot password", die de gebruiker naar een nieuwe pagina leidt. De gebruiker geeft zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Indien men probeert in te loggen met een account waarvan het emailadres nog niet gevalideerd is, verschijnt een knop om de activatiemail opnieuw te versturen. \\ Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. \\ \\
 
 TODO: Facebooklogin \\ \\
 
@@ -207,12 +200,12 @@ Als de gebruiker op "logout" klikt, wordt hij uitgelogd en naar de homepage gest
 Uitgelogde gebruikers zullen niet gelinkt worden naar pagina's voor enkel gebruikers. Indien iemand toch probeert een dergelijke pagina te bezoeken door de URL in te typen, zal hij gevraagd worden eerst in te loggen of te registreren en de eigenlijke pagina niet te zien krijgen. \\ \\
 
 \subsection{Betsysteem}
-Gebruikers kunnen pronostieken invullen voor matchen in de toekomst. Voor een ingelogde gebruiker verschijnt op matchpagina's een knop genaamd "bet", zolang de gebruiker nog niet eerder een gok heeft uitgebracht op die match. Wanneer de gebruiker erop klikt, verschijnt het betformulier in een modal. De gebruiker is verplicht om een eindscore in te vullen. Eerste goal en aantallen kaarten zijn optioneel. De gok wordt geregistreerd van zodra er op "bet" geklikt wordt. Elke gebruiker heeft per match slechts \'e\'en kans per match, denk dus goed na over je bet. Een overzicht van gemaakte bets kan gevonden worden via "bets" in de bovenste balk op de website. Daar worden bets opgedeeld in bets op toekomstige matchen en bets op verleden matchen. Er kan telkens doorgeklikt worden naar de matchen en teams. \\ \\
+Gebruikers kunnen pronostieken invullen voor matchen in de toekomst. Voor een ingelogde gebruiker verschijnt op matchpagina's een knop genaamd "bet", zolang de gebruiker nog niet eerder een gok heeft uitgebracht op die match. Wanneer de gebruiker erop klikt, verschijnt het betformulier in een modal. De gebruiker is verplicht om een eindscore in te vullen. Verder kan de gebruiker ook nog voorspellen welk team de eerste goal scoort en hoeveel kaarten van elke soort elk team zal krijgen. Deze opties zijn echter allemaal optioneel. De gok wordt geregistreerd van zodra er op "bet" geklikt wordt. Elke gebruiker heeft per match slechts \'e\'en kans per match, denk dus goed na over je bet. Een overzicht van gemaakte bets kan gevonden worden via "bets" in de bovenste balk op de website. Daar worden bets opgedeeld in bets op toekomstige matchen en bets op verleden matchen. Er kan telkens doorgeklikt worden naar de matchen en teams. \\ \\
 Eens een match gespeeld is, worden de bets erop binnen de drie uur ge\"evalueerd. Aan elke gebruiker wordt een aantal punten toegekend. Dat puntentotaal kan ook negatief zijn. Er kan met elke gemaakte gok een aantal punten gewonnen of verloren worden. Er kunnen altijd meer punten gewonnen worden dan verloren. Eerst hadden we het idee om correcte riskante gokken meer punten waard te maken. We waren van plan om "riskante gokken" te defini\"eren als keuzes waar weinig gebruikers voor gingen. Realistisch gezien zullen er waarschijnlijk niet erg veel gebruikers actief zijn tijdens het WK 2014 en zou een dergelijk systeem niet erg veel nut hebben. Daarom hebben we per optie een vast aantal punten toegekend (maar niet voor elke optie evenveel). \\ \\
 
 \subsection{Filter- \& sorteersysteem}
-Ook kunnen gebruikers zowat elke tabel die te vinden is op de website sorteren zoals zij dit zelf willen. Dit hebben we verwezenlijkt met een slim stukje javascript dat een uitbreiding is op tablesorter. Hierdoor moet de webpagina niet opnieuw geladen worden. Ook is er een ingebouwd filter systeem waardoor de gebruiker op een overzichtelijke en snelle manier ervoor kan zorgen dat alleen de data die hij relevant is voor hem zichtbaar is.
-Al deze functionaliteit zou moeten bijdragen aan de gebruiksvriendelijkheid van de website. Ook hebben we dit alles zo intiutief mogelijk gehouden zodat de gebruiker zonder enig probleem kan navigeren over de website en zich meer kan concentreren op de inhoud dan hoe hij daar moet geraken.
+Ook kunnen gebruikers zowat elke tabel die te vinden is op de website sorteren zoals zij dit zelf willen. Dit hebben we verwezenlijkt met een slim stukje javascript dat een uitbreiding is op tablesorter. Hierdoor moet de webpagina niet opnieuw geladen worden. Ook is er een ingebouwd filter systeem waardoor de gebruiker op een overzichtelijke en snelle manier ervoor kan zorgen dat alleen de data die hij relevant is voor hem zichtbaar is. Dit is ge\"implementeerd aan de hand van een zoekbalk. We hebben die zoekbalk enkel geplaatst op de pagina met alle teams. Andere tabellen zijn niet groot genoeg om een filter voor nodig te hebben. We hebben besloten om geen lijst van alle matchen in heel de database op de website te zetten; dit zou te onoverzichtelijk worden. In de plek kan de gebruiker uit een lijst van alle competities een competitie (telkens van slechts 1 jaar) kiezen en daarvan alle matchen zien. Daarin is ook te zien in welke fase van de competitie elke match gebeurde, indien deze data beschikbaar is.
+Al deze functionaliteit zou moeten bijdragen aan de gebruiksvriendelijkheid van de website. Ook hebben we dit alles zo intu\"itief mogelijk gehouden zodat de gebruiker zonder enig probleem kan navigeren over de website en zich meer kan concentreren op de inhoud dan hoe hij daar moet geraken.
 
 
 
@@ -306,8 +299,7 @@ De 3 tabellen bevatten data over de laatst gespeelde matchen, de opkomende match
 \\
 De foto newsfeed is een RSS feed van FIFA die we met SimplePie hebben geparsed.
 \\
-Op de wereldkaart krijgt elk land een tint groen toegekend; hoe hoger hun WK-ranking, hoe donkerder het groen. Wanneer men op een land klikt zal de gebruiker gelinkt worden naar de desbetreffende team pagina van het nationale team van dat land. Merk op dat het Verenigd-Koninkrijk wegens beperkingen van de gebruikte Google GeoCharts-API niet ingekleurd is; zij hebben vier "nationale" teams (Engeland, Wales, Noord-Ierland, Schotland). Om dit op te lossen, wordt bij klikken op het VK ingezoomd, waarna de vier delen apart in de juiste kleur verschijnen.
-
+Op de wereldkaart wordt verder ingegaan bij "Grafische weergave van statistieken".
 \subsection{Search bar / search results}
 Rechtsbovenaan alle pagina's staat een searchbar waarin je een zoekterm kunt invullen en die de beschikbare info (hetzij team/speler/match) presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
 
@@ -315,14 +307,13 @@ Rechtsbovenaan alle pagina's staat een searchbar waarin je een zoekterm kunt inv
 Deze pagina bevat informatie over een bepaalde speler.
 \\
 In de PlayerController wordt volgende info opgevraagd van de Player en Team models:
-Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Met andere woorden worden hun goals, kaarten etc. getoond. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
-in onze database zitten.
+Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Met andere woorden worden hun goals, kaarten en gespeelde matchen getoond. Wat wel opgemerkt moet worden is dat de alinea informatie over de speler en de afbeelding van Wikipedia worden gehaald en niet in onze database zitten.
 
 \subsection{Team Page}
 Deze pagina bevat informatie over een bepaald team, zoals de spelers, matchen e.d.
 In de TeamController wordt de benodigde informatie uit de models gehaald.
-Qua design zijn we voor een strak en propere stijl gegaan. De banners zijn van de team zijn twitter pagina gehaald.
-Al deze verkregen informatie wordt gebruikt in onze teampagina. Er zijn 6 tabs:
+Qua design zijn we voor een strak en propere stijl gegaan. De banners komen van de Twitterpagina's van de teams.
+Al deze verkregen informatie wordt gebruikt in onze teampagina. Er zijn (maximaal) 6 tabs:
 \subsubsection{Information}
 Deze pagina is de standaard geselecteerde tab in de teampagina. Door middel van Ajax wordt dit op de pagina geladen zonder de pagina te hoeven herladen.
 Hierin staat een korte tekst, van Wikipedia, die de ploeg beschrijft.
@@ -331,30 +322,27 @@ Hierin worden alle spelers (van vroeger en nu) van het team getoond. Deze zijn s
 \subsubsection{Matches}
 Alle matches van dit team worden hier in een tabel getoond (toekomstig en reeds gespeeld). Weerom is deze tabel sorteerbaar, dit keer op basis van datum en naam.
 \subsubsection{News}
-In deze tab zijn nieuwsberichten beschikbaar die te maken hebben met het team. Deze nieuwsberichten komen van FIFA.com en worden dus gefilterd op het team.
+In deze tab zijn nieuwsberichten beschikbaar die te maken hebben met het team. Deze nieuwsberichten komen van FIFA.com en worden dus gefilterd op het team. Indien er geen nieuwsberichten beschikbaar zijn, verdwijnt deze tab.
 \subsubsection{Twitter}
-Hierin bevinden zich tweets van de officiele of toch zo goed mogelijke twitter account van het team.
+Hierin bevinden zich tweets van de (indien beschikbaar) offici\"ele Twitter account van het team. Als er geen gepaste account beschikbaar is, verdwijnt de tab.
 \subsubsection{Graphs}
-In deze tab zijn er gevisualiseerde statistieken te vinden over het team. Er is een 3D taartdiagram te zien met de wins/losses/ties op. en een staafdiagram die informatie bevat over de gemiddelde goals/gele en rode kaarten.
-Om deze visualisatie te verwezenlijken hebben we gebruik gemaakt van Google zijn visualisatie API.
+In deze tab zijn er gevisualiseerde statistieken te vinden over het team. Er is een 3D taartdiagram te zien met de wins/losses/ties op, en een staafdiagram die informatie bevat over de gemiddelde goals/gele en rode kaarten. Meer informatie in de sectie "Grafische weergave van statistieken".
 
 \subsection{Match page}
-TODO: update
-De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er dus info getoond over de match: de eindstand, wie er gescoord heeft, wie er een kaart heeft gekregen en dergelijke. Uiteraard kan er weer op meerdere manieren doorgeklikt worden door op de speler/teams te klikken en dergelijke.
+De match page bevat informatie van een specifieke wedstrijd. De spelende teams met links naar hun pagina zijn zichtbaar, de eindstand (? - ? voor matchen in de toekomst), datum van de match, competitie en eventueel fase van de competitie staan bovenaan de pagina. Verder zijn er tabellen met de goals per team (tijd van goal en naam van speler), met kaarten (tijd, speler en kleur), met alle spelers en met alle wissels. Al deze tabellen zijn door de gebruiker te sorteren. \\ Bij toekomstige matchen verschijnt er nog het onderdeel "predictions". Hierbij kan de gebruiker zien wat de door het systeem voorspelde uitkomst is, en is er een balk die visualiseert wat de kans op winst van elk team is. Als de gebruiker ingelogd is en nog niet gokte op de match, verschijnt er ook een betknop, die een modal opent om een gok in te vullen.
 
-\subsection{Betting pages}
-TODO: update
-Het is momenteel enkel mogelijk om individueel pronostieken in te vullen; ondersteuning om in groep te spelen volgt nog. Er is een formulier om je pronostiek in te vullen en door te sturen en een pagina met een overzicht van alle gemaakte gokken. Later komt er onder andere nog een pagina waar je een 'gokwedstrijd' kunt aanmaken met andere mensen. Ongetwijfeld zullen er nog extra pagina's bijkomen.
+\subsection{Competition page}
+Op de pagina van een specifieke competitie is enerzijds een tabel met alle deelnemende ploegen te zien, en anderzijds met alle wedstrijden die in de competitie gespeeld zijn en nog gespeeld worden. De tabellen zijn sorteerbaar en waar nuttig kan er doorgeklikt worden.
+
 
 \section{Extra functionaliteit}
-Naast de vereiste competitie WK 2014 Brazil, zijn er ook een heel aantal andere (oudere) competities beschikbaar, deze worden dan ook gebruikt voor het voorspellingsalgoritme. Daarnaast is er nog een andere internationale competitie gevonden: de Asian Cup 2015 Australia, ook op deze competitie kan men, voor wie dat nu al wenst, erop betten.
-TODO:uitgebreide statistische data (bv data per speler, coaches, ...)
-TODO:nieuwsberichten
-TODO:searchfunctie
-TODO:uitgebreide user group interface
-TODO:twitterfeed
-TODO:...
-
+Naast de vereiste competitie WK 2014 Brazil, zijn er ook een heel aantal andere (oudere) competities beschikbaar, deze worden dan ook gebruikt voor het voorspellingsalgoritme. Daarnaast is er nog een andere internationale competitie gevonden: de Asian Cup 2015 Australia, ook op deze competitie kan men, voor wie dat nu al wenst, erop betten. \\ \\
+Er is verder heel veel data beschikbaar over die competities en alle teams die eraan meedoen. Je kunt per speler die in een of meer van de competities meedeed een overzicht zien van al zijn goals, al zijn kaarten en al zijn gespeelde matchen. Anderzijs kun je op een matchpagina zien wie wanneer een goal scoorde, wie wanneer een kaart kreeg, een lijst van alle spelers in de match en wanneer er wissels gebeuren. Op de teampagina kun je ook de coach van elk team zien. Daarnaast hebben we ook een kort stukje informatie over elk team en elke speler, dat automatisch van Wikipedia wordt gehaald. \\ \\
+Op de homepage is een newsfeed te zien. De recentste nieuwsberichten van op de website van FIFA verschijnen er automatisch, met een bijbehorende afbeelding. Er kan bij elk bericht doorgeklikt worden naar het volledige artikel, en er staat een link naar een volledig nieuwsoverzicht. Op de pagina's van de nationale teams verschijnt nieuws over hun team ook, indien beschikbaar. \\ \\
+In de bovenste balk van de website hebben we een zoekbalk geplaatst. Hier kan de gebruiker eender welke zoekterm invoeren. Zoekresultaten bestaan niet alleen uit teams, matchen en spelers, maar ook uit gebruikers van de website en zelfs usergroups. Dan kan er doorgeklikt worden naar de pagina van de match, speler, ... \\ Merk op dat zoekopdrachten waarbij het resultaat uit veel spelers bestaat, redelijk lang kunnen duren. Alle afbeeldingen moeten ingeladen worden. Daarom is het niet aangeraden om op heel korte zoektermen of veelvoorkomende namen te zoeken. \\ \\
+User groups zijn uitgebreider dan in de opdracht stond. Zo kunnen er ondermeer discussies in gevoerd worden. Er wordt meer op ingegaan in de sectie over user groups. \\ \\
+Er is de mogelijkheid om via Facebook in te loggen. Zie 'User interface' voor meer uitleg. \\ \\
+Op de meeste teampagina's is er een tab met de Twitterfeed van de Twitteraccount van de ploeg. Indien het team geen Twitteraccount heeft, wordt soms een onoffici\"ele gebruikt. De banner van op hun Twitterpagina verschijnt indien beschikbaar ook op onze teampagina.
 \section{Planning}
 Er hoeft uiteraard niet meer verder gepland worden, gezien het project af is.
 TODO:iets over hoe planning verliep?
