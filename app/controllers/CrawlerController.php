@@ -736,6 +736,7 @@ class CrawlerController extends BaseController {
         $ids = Competition::getIDsByName($name);
         if (empty($ids)) $ids = Competition::add($name);
         $competition_id = $ids[0]->id;
+        Log::info("BEGIN ".$name);
 
         // now do all the matches
         $matches = array();
@@ -837,6 +838,7 @@ class CrawlerController extends BaseController {
                     $player_id = $ids[0]->id;
 
                     Team::linkPlayer($player_id, $team_id, $player_data["position"]);
+                    if (empty($time)) continue; // skip if player has not played
                     Match::linkPlayer($player_id, $match_id, $time);
 
                     // add goals (if any)
@@ -876,6 +878,7 @@ class CrawlerController extends BaseController {
 
 
         } // end foreach
+        Log::info("END ");
 
         return;
     }
