@@ -48,7 +48,6 @@ Zorgde voor het sorteersysteem en filtersysteem van de tabellen.
 \subsection{Jakob}
 Maakte een gebruikerssysteem (registreren en inloggen). Maakte een interactieve wereldkaart met FIFA scores. Bouwde het betsysteem uit. Maakte een visualisatie van statistieken uit de database.
 \subsection{Ruben}
-Werkte mee aan het gebruikersysteem(avatars, voorkeuren aanpassen) en voegde Facebook integratie toe, schreef en herschreef een hoop pagina's(competition, match, player, team). Ik was ook verantwoordelijk voor het algemeen consistent houden van het design van Coachcenter, heb de search & usergroup functionaliteit geschreven.
 
 
 \section{Design}
@@ -191,7 +190,7 @@ Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, st
 \\
 Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina (in een 'modal', een feature van Bootstrap) weergegeven. Indien de gebruiker met foute gegegvens probeert in te loggen, wordt dit afgehandeld in diezelfde modal. Eens inloggen succesvol is, verschijnt er in de modal nog een bericht om het inloggen te bevestigen. Eens dat weggeklikt wordt, bevindt de gebruiker zich terug op dezelfde pagina als voorheen. Er is ook een knop "forgot password", die de gebruiker naar een nieuwe pagina leidt. De gebruiker geeft zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Indien men probeert in te loggen met een account waarvan het emailadres nog niet gevalideerd is, verschijnt een knop om de activatiemail opnieuw te versturen. \\ Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. \\ \\
 
-Facebook login is met één gedachte in het achterhoofd gebouwd namelijk ervoor zorgen dat mensen die een account op Facebook geen saaie registratie velden hoeven in te vullen voor de duizendste keer maar direct binnen kunnen. We willen dus dat Facebook gebruikers zichzelf snel kunnen inloggen en dat is dan ook mogelijk door bij het inloggen niet op de login knop te drukken maar op de blauwe Facebook Login knop. Vervolgens worden er wat administratieve zaken met Facebook afgehandeld waarna de gebruiker op de homepage terechtkomt als een geregistreerde coachcenter gebruiker.
+TODO: Facebooklogin \\ \\
 
 Eens ingelogd, worden de registratie- en inlogknoppen vervangen door "My Profile", "Bets", "Preferences" en "Logout". \\
 "My Profile" is een pagina waarop wat persoonlijke informatie als land en bet score te zien zijn. Deze pagina is voor iedereen, zelfs niet-ingelogde gebruikers zichtbaar. Enkel op je eigen profiel verschijnen nog de tabs "Notifications", "My Groups" en "Invitations". Op deze functionaliteit wordt verder ingegaan in andere secties. \\
@@ -326,7 +325,7 @@ De foto newsfeed is een RSS feed van FIFA die we met SimplePie hebben geparsed.
 \\
 Op de wereldkaart wordt verder ingegaan bij "Grafische weergave van statistieken".
 \subsection{Search bar / search results}
-Rechtsbovenaan alle pagina's staat een searchbar waarin je een zoekterm kunt invullen en die de beschikbare info (hetzij team/speler/match/gebruiker/gebruikersgroep) presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
+Rechtsbovenaan alle pagina's staat een searchbar waarin je een zoekterm kunt invullen en die de beschikbare info (hetzij team/speler/match) presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
 
 \subsection{Player Page}
 Deze pagina bevat informatie over een bepaalde speler.
@@ -374,6 +373,77 @@ Er hoeft uiteraard niet meer verder gepland worden, gezien het project af is.
 De planning is over het algemeen vlot gelopen. De werkelijke uitwerking is niet altijd volgens de planning gelopen: soms merkten we dat sommige opdrachten van het project beter lagen bij iemand anders en dan werd er onderling wat gewisseld.
 Op zich helemaal geen probleem aangezien alles tijdig is afgeraakt. Integendeel zelfs, het grote voordeel van met meerdere mensen samen te werken is dat iedereen vaak wel zijn sterktes en zwaktes heeft
 die elkaar aanvullen.
+
+
+-\section{Appendix}
+ -\subsection{Verplichte functionaliteit}
+ -Hier een lijst van de verplichte functionaliteit, met erbij vermeld waar en in welke vorm het ge\"implementeerd is (in \textit{italic}).
+ -\begin{enumerate}
+ -\item een niet-ingelogde gebruiker kan
+ -\begin{enumerate}
+ -\item statistische data bekijken\\
+ -\textit{Bijna iedere pagina bevat wel ergens statistische data}
+ -\begin{enumerate}
+ -\item uitslagen van wedstrijden \\
+ -\textit{Elke tabel van wedstrijden bevat ook de uitslag, gedetailleerde statistieken beschikbaar op matchpagina}
+ -\begin{enumerate}
+ -\item filteren op type (WK, EK, vriendschappelijk, ...) \\
+ -\textit{Het wereldbolicoon bovenaan toont een lijst met alle competities. Men kan doorklikken om alle matchen en teams te zien}
+ -\item filteren op tijdsperiode \\
+ -\textit{Er is een aparte competitie aanwezig voor elk jaar waarin de competitie gehouden werd, men moet dus tegelijk met filteren op competitie ook op jaar filteren}
+ -\end{enumerate}
+ -\item grafieken gebaseerd op statistische data bekijken \\
+ -\textit{De tab "graphs" op de teampagina toont twee grafieken gegenereerd adhv statistieken omtrent al hun gespeelde matchen}
+ -\begin{enumerate}
+ -\item zelf kiezen wat er op de grafieken voorgesteld wordt \\
+ -\textit{Op de tweede grafiek kan de gebruiker kiezen om een combinatie van goals, gele kaarten en rode kaarten te zien}
+ -\end{enumerate}
+ -\end{enumerate}
+ -\item voorspellingen van het systeem zelf zien \\
+ -\textit{Voorspellingen op matchpagina's van nog te spelen matchen zijn voor iedereen zichtbaar}
+ -\end{enumerate}
+ -
+ -\item een ingelogde gebruiker kan
+ -\begin{enumerate}
+ -\item voorspellingen per wedstrijd ingeven \\
+ -\textit{Voorspellingsknop bevindt zich op elke matchpagina als match toekomstig is en bet nog niet gemaakt is}
+ -\begin{enumerate}
+ -\item eindscore, wie maakt het eerste doelpunt, hoeveel gele kaarten, ... \\
+ -\textit{Eindscore is verplicht, eerste doelpunt en gele + rode kaarten optioneel}
+ -\item suggesties van het systeem krijgen \\
+ -\textit{Voorspelde score en winkans staan op matchpagina, score wordt in betformulier nog eens herhaald}
+ -\end{enumerate}
+ -\item groepen van gebruikers maken om tegen elkaar te spelen \\
+ -\textit{Usergroups kunnen via knop bovenaan aangemaakt worden.}
+ -\begin{enumerate}
+ -\item scores en ranking binnen een groep zien \\
+ -\textit{Bets voor groups zijn dezelfde bets als buiten groups. De betscore van elke gebruiker is zichtbaar binnen de group}
+ -\end{enumerate}
+ -\item groep van een andere gebruiker toetreden (op invitatie) \\
+ -\textit{Public groups kunnen door iedereen gejoind en gezien worden. Private groups kunnen enkel op invitatie van leden}
+ -\end{enumerate}
+ -\item het systeem moet
+ -\begin{enumerate}
+ -\item zelf voorspellingen maken aan de hand van statistische data \\
+ -\textit{Voorspellingen worden gemaakt adhv data rond alle reeds gespeelde matchen van de teams}
+ -\item suggesties aan de gebruikers geven door gebruik van statistische data \\
+ -\textit{Deze voorspellingen dienen als suggesties}
+ -\begin{enumerate}
+ -\item statistische data visualiseren \\
+ -\textit{De winkans van beide teams wordt gevisualiseerd adhv een balk op de match page}
+ -\end{enumerate}
+ -\item scores en rankings (overal en binnen groepen) updaten nadat de wedstrijden gespeeld zijn \\
+ -\textit{Bets worden ge\"evalueerd en scores ge\"updatet binnen de 3 uur na het einde van een match. Algemene betscore en die binnen groepen is dezelfde}
+ -\item gebruikers per email waarschuwen als ze voor een wedstrijd die binnenkort begint nog geen voorspelling hebben gemaakt \\
+ -\textit{Er wordt dagelijks een mail gestuurd voor de matchen binnen de 24 en wekelijks voor de matchen binnen een week}
+ -\item automatisch nieuwe data kunnen inladen \\
+ -\textit{Om de drie uur wordt de database ge\"updatet}
+ -\begin{enumerate}
+ -\item incl. de te voorspellen wedstrijden die nu nog niet bekend zijn (bv. finale) \\
+ -\textit{Alle matchen van het WK zullen worden ingeladen eens ze bekend zijn}
+ -\end{enumerate}
+ -\end{enumerate}
+ -\end{enumerate}
 
 
 %\begin{figure}[ht!]
