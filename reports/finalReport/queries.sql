@@ -1,15 +1,20 @@
-#Please not that most of our queries are in this form:
+#Please note that most of our queries are in this form:
 $results = DB::select("SELECT * FROM bet WHERE user_id = ?
                      AND EXISTS (
                         SELECT * FROM `match`
                         WHERE id = match_id
                         AND date < CURDATE())", array($user_id));
-#But in this file we'll use a more readable format.
+#These are raw queries, but prepared as to avoid sql injections.
+#in this file we'll use a more readable format.
+#We don't show the array of variables to be prepared. You don't need to know their names to be able to interpret the query.
+#In some queries, something like .self::TABLE_CARD. appears. At first we used this so that we would be able to change the table name 
+#without having to update all queries. Soon we realised we weren't going to change them and stopped using this.
+
 
 #########
 #Bet.php#
 #########
-# Add a bet to the database, the ? correspond to the variables used for this insert.
+# Add a bet to the database, the ? corresponds to the variables used for this insert.
 INSERT INTO `".self::TABLE_BET."` (match_id, user_id, hometeam_score, awayteam_score, first_goal, hometeam_yellows, hometeam_reds, awayteam_yellows, awayteam_reds, betdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 #Get past bets by user_id
@@ -162,10 +167,10 @@ SELECT * FROM `match` WHERE hometeam_id = ?
 
 SELECT * FROM `match` WHERE awayteam_id = ?
 
-#Get $amount recent matches.
+#Get $amount of recent matches.
 SELECT * FROM `match` WHERE date < CURDATE() ORDER BY date DESC LIMIT $amount
 
-#Get $amount future matches.
+#Get $amount of future matches.
 SELECT * FROM `match` WHERE date > CURDATE() ORDER BY date LIMIT $amount
 
 #Get the score of a given match.
@@ -254,7 +259,7 @@ FROM `match`
 WHERE DATEDIFF(`date`, CURDATE()) <= ?
 AND DATEDIFF(`date`, CURDATE()) >= 0
 
-#Get all matches that are to be played in the next coming $days and where $user hasn't betted on yet.
+#Get all matches that are to be played in the next coming $days and where $user hasn't bet on yet.
 SELECT `match`.id, date, hometeam_id, awayteam_id,
 (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
 (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
@@ -269,7 +274,7 @@ AND `match`.id NOT IN (
 ###################
 #Notifications.php#
 ###################
-# Add a notification to the database, the ? correspond to the variables used for this insert.
+# Add a notification to the database, the ? corresponds to the variables used for this insert.
 INSERT INTO `notifications` (actor_id, subject_id, object_id, type_id, status, created_date, updated_date) VALUES (?, ?, ?, ?, ?, ?, ?)
 
 #Select a notification inner joined with the actor (user) and subject (user)
@@ -572,7 +577,7 @@ WHERE message_id = ? AND user_id <> ?
 #######################
 #UserGroupMessages.php#
 #######################
-#Get all discussion in a usergroup (by id).
+#Get all discussions in a usergroup (by id).
 SELECT created, id, title,
 (SELECT username FROM user WHERE id = userGroupMessages.user_id) as username,
 (SELECT COUNT(id) as count FROM userGroupMessagesContent WHERE message_id = userGroupMessages.id) as count
