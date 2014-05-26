@@ -138,6 +138,19 @@ class UserController extends BaseController {
 		}
 	}
 
+	function resendmail() {
+		$username = $_GET['username'];
+		$data = User::getRegistrationCodeAndEmail($username);
+		$data['username'] = $username;
+		$message = new stdClass();
+		$user_email = $data['email'];
+		Mail::send('mails.register', $data, function($message) use ($user_email, $username){
+    	$message->to($user_email, $username)->subject("Welcome to Coach Center: email address validation");
+		});
+		return Redirect::back();
+	}
+		
+
 	function passwordforgot(){
 		if(Request::isMethod('post')){
 			// Work On the Form
@@ -192,7 +205,8 @@ class UserController extends BaseController {
 			        'lastname' => array('required'),
 			        'country' => array('required'),
 			        'email' => array('required', 'email'),
-			        'age' => array('numeric', 'between:1,99'),
+			        'age' => array('numeric', 'between:1,120'),
+			        'about' => array('digits_between:0,1024'),
 			);
 
 			$validation = Validator::make(Input::all(), $rules);
@@ -219,10 +233,7 @@ class UserController extends BaseController {
 					}
 				}
 
-
-				foreach($data as $field => $value){
-					$user->change($user->ID(), $field, $value);
-				}
+				$user->change($user->ID(), $data);
 
 				return Redirect::to('user/account')->withInput();
 			}
@@ -236,6 +247,12 @@ class UserController extends BaseController {
 	}
 
 	function changepassword(){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
+
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -252,9 +269,7 @@ class UserController extends BaseController {
 				// Start working on this data
 				$data['password'] = Input::get('password');
 
-				$user = new User;
-
-				if($user->change($user->ID(), 'password', $data['password'])){
+				if($user->changePassword($user->ID(), $data['password'])){
 					$user->logout();
 
 					$data['content'] = 'Please login again with your new password.';
@@ -274,6 +289,11 @@ class UserController extends BaseController {
 
 	function changeprofilepicture(){
 		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
+
 		if($user->facebookOnlyUser($user->ID()) == false){
 			if(Request::isMethod('post')){
 				$rules = array(
@@ -312,7 +332,7 @@ class UserController extends BaseController {
 
 						return Redirect::to('profile/'.$user->ID());
 				   }else{
-				   	   Notification::error("The image size is not the right format(jpg, png, gif).");
+				   	   Notification::error("The image is not the right format(jpg, png, gif).");
 					   return Redirect::back()->withErrors($validation);
 				   }
 				} else {
@@ -334,23 +354,21 @@ class UserController extends BaseController {
 		$user = new User;
 		$user->logout();
 
-		return Redirect::back()->withInput(array("loggedOut" => true));
+		//return Redirect::back()->withInput(array("loggedOut" => true));
+		return Redirect::to('/')->withInput(array("loggedOut" => true));
 	}
 
-	function profile($id='') {
+	public static function profile($id='') {
 		$user = new User;
-		if (!$user->loggedIn()) {
-	    	$data['title'] = 'Not logged in';
-	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
-		}
-		$usergroup = new UserGroup;		
-		if($id == ''){
+
+		$usergroup = new UserGroup;
+		if($id == '' || $id == $user->ID()){
 			$data['groups'] = $usergroup->getGroupsByUser($user->ID());
 			$data['user'] = $user->get($user->ID());
 			$data['profilepicture'] = $user->getPicture($user->ID());
 			$data['personal'] = true;
 			$data['notifications'] = $user->getNotifications($user->ID());
-			$data['invites'] = $usergroup->getMyInvites();
+			$data['invites'] = $usergroup->getUsersInvites($user->ID());
 		}else{
 			$data['groups'] = $usergroup->getGroupsByUser($id);
 			$data['user'] = $user->get($id);
@@ -360,10 +378,41 @@ class UserController extends BaseController {
 		return View::make('user.profile', $data)->with('title', $data['user']->username);
 	}
 
-
 	function userOverview() {
 		$user = new User;
 		$data['users'] = $user->getAllUsers();
 		return View::make('user.userOverview', $data)->with('title', 'users');
+	}
+
+public static function acceptInvite($notif_id, $ug_id) {
+		$user = new User;
+		$result1 = DB::select("SELECT subject_id, status FROM `notifications` WHERE id = ?", array($notif_id))[0];
+		if ($result1->subject_id == $user->ID() && $result1->status == 'unseen') {
+			UserGroup::acceptInvite($notif_id, $ug_id);
+			UserGroup::addUser($ug_id, $user->ID());
+		}
+		return UsergroupController::usergroup($ug_id);
+	}
+
+	public static function declineInvite($notif_id) {
+		UserGroup::declineInvite($notif_id);
+		return UserController::profile();
+	}
+
+	public static function optoutin() {
+		$user = new User;
+		$result = DB::select("SELECT recieve_email FROM `user` WHERE id = ?", array($user->ID()))[0];
+		if ($result->recieve_email == true) {
+			DB::update("UPDATE user SET recieve_email = false WHERE id = ?", array($user->ID()));
+			$data['content'] = 'Successfully opted out: you will no longer recieve email from us.';
+			$data['title'] = 'Success!';
+		}
+		else {
+			DB::update("UPDATE user SET recieve_email = true WHERE id = ?", array($user->ID()));
+			$data['content'] = 'Successfully opted in: you will now recieve email reminders from us.';
+			$data['title'] = 'Success!';
+		}
+
+		return View::make('layouts.simple', $data);
 	}
 }

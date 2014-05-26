@@ -87,7 +87,7 @@ class Prediction {
 	
 		// add average multiplied by factor to the score.
 		if ($matches_played != 0)
-			$hometeam_points += ($matches_won / $matches_played);
+			$hometeam_points += 0.9 * ($matches_won / $matches_played);
 	
 		// Calculate average win/loss awayteam @ away
 		$matches_played = 0;
@@ -125,7 +125,7 @@ class Prediction {
 	
 		// add average multiplied by factor to the score.
 		if ($matches_played)
-			$awayteam_points += ($matches_won / $matches_played);
+			$awayteam_points += 0.9 * ($matches_won / $matches_played);
 
 		$fifapoints_home = Team::getFifaPointsByID($hometeam_id);
 		$fifapoints_away = Team::getFifaPointsByID($awayteam_id);
@@ -272,17 +272,17 @@ class Prediction {
 		if ($matches_played)
 			$avg_away_at_home_score += $goals_scored_away / $matches_played;
 	
-		$home_team_score = round(($avg_same_setup_home_score + ($avg_reversed_setup_home_score * 0.9) + ($avg_home_at_home_score * 0.7) + ($avg_home_at_away_score * 0.5)) / 4);
-		$away_team_score = round(($avg_same_setup_away_score + ($avg_reversed_setup_away_score * 0.9) + ($avg_away_at_home_score * 0.7) + ($avg_away_at_away_score * 0.5)) / 4);
+		$home_team_score = round(($avg_same_setup_home_score + ($avg_reversed_setup_home_score * 0.9) + ($avg_home_at_home_score * 0.7) + ($avg_home_at_away_score * 0.5)) / 3.1);
+		$away_team_score = round(($avg_same_setup_away_score + ($avg_reversed_setup_away_score * 0.9) + ($avg_away_at_home_score * 0.7) + ($avg_away_at_away_score * 0.5)) / 3.1);
 
 		$match_chance = Prediction::predictOutcome($matchID);
 
-		if ($match_chance >= 0.45 And $match_chance <= 0.55) {
+		if ($match_chance >= 0.45 && $match_chance <= 0.55) {
 			while(true) {
 				if ($home_team_score < $away_team_score) {
 					$home_team_score++;
 				}
-				elseif ($away_team_score < $away_team_score) {
+				elseif ($away_team_score < $home_team_score) {
 					$away_team_score++;
 				}
 				else {

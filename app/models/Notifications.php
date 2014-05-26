@@ -4,6 +4,8 @@ class Notifications {
 
 	const INVITE_USER_GROUP = 1;
 	const REMIND_USER_BETS = 2;
+	const NEW_DISCUSSION = 3;
+	const NEW_MESSAGE = 4;
 
 	public static function saveNotification($object_id, $subject_id, $actor_id, $type_id){
 		$created_date = date("Y-m-d H:i:s");
@@ -25,7 +27,7 @@ class Notifications {
 					INNER JOIN user subject ON nf.subject_id = subject.id
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
-					LIMIT 0, 10";
+					LIMIT 0, 20";
 		}
 		else {
 			$query = "SELECT nf.*, actor.username AS actor_name, subject.username AS subject_name
@@ -35,7 +37,7 @@ class Notifications {
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
 					AND type_id = $type
-					LIMIT 0, 10";
+					LIMIT 0, 20";
 		}
 
 		$result = DB::select($query);
@@ -72,10 +74,17 @@ class Notifications {
     {
         switch($typeId){
             case self::INVITE_USER_GROUP:
-                $query = "SELECT * FROM `userGroupInvites` WHERE `competitionId` = ?";
-				$values = array($objectId);
-				$result = DB::select($query, $values)[0];
-				return $result;
+              $query = "SELECT * FROM `userGroupInvites` WHERE `id` = ?";
+							$values = array($objectId);
+							$result = DB::select($query, $values)[0];
+							return $result;
+						case self::NEW_DISCUSSION:
+						case self::NEW_MESSAGE:
+						// Both cases have the same object.
+							$query = "SELECT * FROM `userGroupMessages` WHERE `id` = ?";
+							$values = array($objectId);
+							$result = DB::select($query, $values)[0];
+							return $result;
         }
     }
 
@@ -85,7 +94,7 @@ class Notifications {
 				$group = DB::select("
 				SELECT name
 						FROM userGroup
-						WHERE id = {$row['object']->competitionId}
+						WHERE id = {$row['object']->usergroupId}
 				");
 
 				$actor = DB::select("
@@ -98,7 +107,23 @@ class Notifications {
 
 			case self::REMIND_USER_BETS:
 				return "Don't forget to bet on these matches!";
-      }
+
+			case self::NEW_DISCUSSION:
+				$result = DB::select("
+				SELECT ug.name, us.username
+				FROM userGroup as ug, user as us
+				WHERE ug.id = {$row['object']->usergroup_id}
+				AND us.id = {$row['object']->user_id}
+				")[0];
+				$message = $result->username . " started a new discussion in " . $result->name;
+				return $message;
+
+			case self::NEW_MESSAGE:
+				$user = new User;
+				$actor = $user->get($row['actor_id']);
+				$message = $actor->username . " replied in discussion: " . $row['object']->title;
+				return $message;
+    }
   }
 
 	public static function get($id) {
@@ -123,25 +148,50 @@ class Notifications {
 		});
 	}
 
-	public static function betReminder($user_id, $matches) {
-		// Sends a notification reminding one user that they still need to bet on a match.
-		$user = new User;
-		Notifications::saveNotification(NULL, $user->ID(), $user->ID(), Notifications::REMIND_USER_BETS);
+	public static function betReminder($user_id) {
+		// Sends a notification reminding one user that they still need to bet some matches.
+		// First check if there's an old, unseen notification of this sort.
+		$result = DB::select("SELECT * FROM `notifications` WHERE subject_id = ? AND status = 'unseen'", array($user_id));
+		if (count($result) == 0) {
+			// No previous, unseen notification of this sort. We can add a new one.
+			Notifications::saveNotification(NULL, $user_id, $user_id, Notifications::REMIND_USER_BETS);
+		}
+		// else: there's still an unseen notification of this sort. Let's not spam the user with the same linking notifications.
 	}
 
 	public static function sendReminders($days) {
 		// Will send an email + notification reminding the users that they still need to bet on a match.
 		// Set $days to the amount of days you want to check for upcoming matches.
-		$users = User::getEmailUsers();
+		$a_user = new User;
+		$users = $a_user->getAllUsers();
 
 		foreach($users as $user) {
 				$matches = Match::getNextunbetMatches($days, $user);
 				if (count($matches) > 0) {
-					Notifications::sendMailReminder($user->id, $matches);
-					Notifications::betReminder($user->id, $matches);
+					Notifications::betReminder($user->id);
+					if ($user->recieve_email == 1) {
+						Notifications::sendMailReminder($user->id, $matches);
+					}
 				}
 		}
-
 	}
 
+	public static function notifyNewDiscussion($ug_id, $discussion_id) {
+		$user = new User;
+		$members = UserGroup::getUsers($ug_id);
+
+		foreach($members as $member) {
+			if ($member->id != $user->ID()) {
+				Notifications::saveNotification($discussion_id, $member->id, $user->ID(), Notifications::NEW_DISCUSSION);
+			}
+		}
+	}
+
+	public static function notifyNewMessage($ug_id, $discussion_id) {
+		$user = new User;
+		$participants = UserGroup::getParticipants($discussion_id);
+		foreach($participants as $participant) {
+			Notifications::saveNotification($discussion_id, $participant->user_id, $user->ID(), Notifications::NEW_MESSAGE);
+		}
+	}
 }

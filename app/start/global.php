@@ -48,7 +48,9 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 
 App::error(function(Exception $exception, $code)
 {
-	Log::error($exception);
+        $message = 'The requested page could not be found.';
+
+		return View::make('layouts.simple')->with('title', 'Error')->with('content', $message);
 });
 
 /*

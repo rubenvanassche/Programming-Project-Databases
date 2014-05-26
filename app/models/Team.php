@@ -47,6 +47,14 @@ class Team {
         return self::getIDsByName( $name );
     }
 
+    public static function update($team_id, $points, $coach_id) {
+        $query = "UPDATE `".self::TABLE_TEAM."` SET fifapoints = ?, coach_id = ? WHERE id = ?";
+        $values = array($points, $coach_id, $team_id);
+
+        DB::update($query, $values);
+        return;
+    }
+
     /**
      * @brief link a player to a team.
      * @param player_id The player ID.
@@ -79,7 +87,7 @@ class Team {
     }
 
     /**
-     * @brief Get all the teams.    
+     * @brief Get all the teams.
      * @return Results after the query.
      */
     public static function getAll(){
@@ -109,25 +117,9 @@ class Team {
      * @return Array of the players.
      */
     public static function getPlayers( $teamID ) {
-        // query for player ID
-        $query = "SELECT player_id FROM`".self::TABLE_PLAYER_PER_TEAM."` WHERE team_id = ?";
-        $values = array( $teamID );
+        $result = DB::select("SELECT player.id, player.name, (SELECT position FROM playerPerTeam WHERE player_id = player.id AND team_id = ?) as position FROM player WHERE  player.id IN (SELECT player_id FROM playerPerTeam WHERE team_id = ?)", array($teamID,$teamID));
 
-        $playerIDs = DB::select( $query, $values );
-
-        $players = array();
-        foreach ( $playerIDs as $playerID ) {
-            // query for player
-            $query = "SELECT * FROM `".Player::TABLE_PLAYER."` WHERE id = ?";
-            $values = array( $playerID->player_id );
-
-            $player = DB::select( $query, $values );
-
-            // add player
-            array_push($players, $player);
-        } // end foreach
-        
-        return $players;
+        return $result;
     }
 
     /**
@@ -201,7 +193,9 @@ class Team {
         $query = "SELECT `match`.date,
             `match`.id as match_id,
             (SELECT name FROM team WHERE team.id = `match`.hometeam_id) as hometeam,
-            (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam
+            (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam,
+			competition_id,
+			(SELECT name FROM competition WHERE competition.id = `match`.competition_id) as competition
             FROM `match` WHERE hometeam_id = ? OR awayteam_id = ?";
         $values = array( $teamID, $teamID );
 
@@ -214,13 +208,16 @@ class Team {
      * @return The team's biography (summary).
      */
     public static function getTeamText( $name ){
-    	$editedName = $name . " national football team";
-    	
+      	$editedName = $name . " national football team";
+        if ($name == "United States") {
+          $editedName = "United States men's national soccer team";
+        }
+
         $jsonurl = "http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exsentences=5&exlimit=10&exintro=&exsectionformat=plain&titles=" . urlencode( $editedName );
 
         $json = file_get_contents($jsonurl);
         $decodedJSON = json_decode($json, true, JSON_UNESCAPED_UNICODE);
-        
+
         foreach ($decodedJSON['query']['pages'] as $key => $value) {
             $pagenr = $key;
         } // end foreach
@@ -247,7 +244,7 @@ class Team {
         foreach ($decodedJSON['query']['pages'] as $key => $value) {
             $pagenr = $key;
         } // end foreach
-        
+
         try {
             return $decodedJSON['query']['pages'][$pagenr]['thumbnail']['source'];
         }
@@ -289,7 +286,7 @@ class Team {
 		$matches = Team::getMatches( $teamID );
 		$stats = array();
 		foreach ($matches as $match) {
-			if (!Match::isPlayed($match->match_id))
+			if (!Match::isPlayed($match->match_id) or $match->date == "0000-00-00 00:00:00")
 				continue;
 			$matchYear = new DateTime($match->date);
 			$matchYear = $matchYear->format("Y");

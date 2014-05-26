@@ -1,6 +1,3 @@
-<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
-<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
-<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
 <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
 <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
 
@@ -12,29 +9,22 @@ $("#myTable")
                     filterClearContainer: "#filter-clear-button",
                     filterColumns: [0]}); });
 </script>
-<table id="myTable" class="table table-condensed">
+<table id="myTable" class="tablesorter">
 	<thead>
 		<tr>
 			<th>Name</th>
-			<th>Injured</th>
+			<th>Position</th>
 			<th>Goals</th>
 		</tr>
 	</thead>
 	<tbody>	
 		@foreach ($playerBase as $player)
 			<tr>
-				<td><a href="{{ route('player', array('name'=>urlencode($player[0]->id))) }}">{{$player[0]->name}}</a></td>
+				<td><a href="{{ route('player', array('name'=>$player->id)) }}">{{$player->name}}</a></td>
 				<td>
-					<?php 
-						if ($player[0]->injured == 0) {
-							echo "No";
-						} 
-						else{ 
-							echo "Yes";
-						}; 
-					?>
+					{{$player->position}}
 				</td>
-				<td><?php echo Player::countGoals($player[0]->id); ?></td>
+				<td><?php echo Player::countGoals($player->id); ?></td>
 			</tr>
 		@endforeach					
 	</tbody>

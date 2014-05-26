@@ -7,7 +7,7 @@
 	<div class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="{{ route('home') }}">Home</a></li>
-			<li><a href="{{ url('users') }}">People</a></li>
+			<li><a href="{{ url('users') }}">Users</a></li>
 			<li class="active">{{$user->username}}</li>
 		</ol>
 	</div>
@@ -28,7 +28,7 @@
 				<a href="{{url('user/account')}}"><i class="glyphicon glyphicon-pencil"></i></a>
 			@endif
 		</h3>
-		
+
 		@if ($user->about == '')
 			<p><i>I still have to write this!</i></p>
 		@else
@@ -49,7 +49,7 @@
 								<td>0</td>
 							</tr>
 						<?php } else { ?>
-	
+
 							<tr class="private notification">
 								<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
 								<td>0</td>
@@ -65,43 +65,43 @@
 		      <li><a href="#groups" data-toggle="tab">My Groups</a></li>
 		      <li><a href="#invitations" data-toggle="tab">Invitations</a></li>
 		    </ul>
-		    
+
 		    <div id="myTabContent" class="tab-content">
 		      <div class="tab-pane fade in active" id="notifications">
-		      @if(empty($groups))
-		      	<p>No Groups</p>
-		      @endif
-				<table class="table table-condensed">
-					<tbody>
-						@foreach ($groups as $group)
-							<?php if ($group->private == false) { ?>
-								<tr class="notification">
-									<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
-								</tr>
-							<?php } else { ?>
-		
-								<tr class="private notification">
-									<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
-								</tr>
-										<?php
-									} ?>
-						@endforeach
-					</tbody>
-				</table>
+						@if(empty($notifications))
+							<p>No notifications</p>
+						@endif
+						<table class="table table-condensed">
+							<tbody>
+								@foreach ($notifications as $notification)
+									<tr class="notification">
+										<td>{{$notification['message']}}</td>
+									<tr>
+								@endforeach
+							</tbody>
+						</table>
 		      </div>
 		      <div class="tab-pane fade" id="groups">
-		      	@if(empty($notifications))
-		      		<p>No notifications</p>
-		      	@endif
-				<table class="table table-condensed">
-					<tbody>
-						@foreach ($notifications as $notification)
-							<tr class="notification">
-								<td>{{$notification['message']}}</td>
-							<tr>
-						@endforeach
-					</tbody>
-				</table>
+		      @if(empty($groups))
+									<p>No Groups</p>
+								@endif
+							<table class="table table-condensed">
+								<tbody>
+									@foreach ($groups as $group)
+										<?php if ($group->private == false) { ?>
+											<tr class="notification">
+												<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
+											</tr>
+										<?php } else { ?>
+
+											<tr class="private notification">
+												<td><a href="{{url('usergroup/'.$group->id)}}">{{$group->name}}</a></td>
+											</tr>
+													<?php
+												} ?>
+									@endforeach
+								</tbody>
+							</table>
 		      </div>
 		      <div class="tab-pane fade" id="invitations">
 		      	@if(empty($invites))

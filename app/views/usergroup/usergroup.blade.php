@@ -2,6 +2,15 @@
 
 @section('content')
 	<div class="row">
+		<div class="col-md-12">
+			<ol class="breadcrumb">
+				<li><a href="{{ route('home') }}">Home</a></li>
+				<li><a href="{{ url('usergroups') }}">Usergroups</a></li>
+				<li class="active">{{$title}}</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-md-6">
 			<h1>{{$title}}</h1>
 		</div>
@@ -27,7 +36,7 @@
 		
 			@foreach ($users as $user)
 				<div class="col-md-3">
-					<a href="{{url('profile/'.$user->id)}}"><i class="glyphicon glyphicon-user"></i> {{$user->username}}</a>
+					<a href="{{url('profile/'.$user->id)}}"><i class="glyphicon glyphicon-user"></i> {{$user->username}} </a> (betscore: {{$user->betscore}})
 				</div>
 			@endforeach
 			

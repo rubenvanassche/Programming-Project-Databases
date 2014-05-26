@@ -9,12 +9,16 @@ class MatchController extends BaseController {
 		*/
 		$user = new User;
 		$data['match'] = Match::get($matchID);
-		$data['inFuture'] = Match::isInFuture($matchID);
+		$data['inFuture'] = Match::isInFuture($matchID, 1);
 		$data['bet'] = $data['inFuture'] && $user->loggedIn() && !(Bet::hasBet($user->ID(), $matchID));
 		$data['goalshometeam'] = Match::goals($matchID, $data['match']->hometeam_id);
 		$data['cardshometeam'] = Match::cards($matchID, $data['match']->hometeam_id);
+		$data['transfershometeam'] = Match::transfers($matchID, $data['match']->hometeam_id);
 		$data['goalsawayteam'] = Match::goals($matchID, $data['match']->awayteam_id);
 		$data['cardsawayteam'] = Match::cards($matchID, $data['match']->awayteam_id);
+		$data['transfersawayteam'] = Match::transfers($matchID, $data['match']->awayteam_id);
+		$data['phase'] = Match::phase($matchID);
+		$data['competition'] = Match::competition($matchID);
 		if ($data['inFuture']) {
 			$data['predictedScores'] = Prediction::predictScore($matchID);
 			$data['predictedOutcome'] = Prediction::predictOutcome($matchID);
@@ -36,7 +40,7 @@ class MatchController extends BaseController {
 		return View::make('match.matches', $data)->with('title', 'Upcoming Matches');
 	}
 
-	function betMatches() {
+	public static function betMatches() {
 		$user = new User;
 		$data['loggedIn'] = $user->loggedIn();
 		if ($user->loggedIn()) {

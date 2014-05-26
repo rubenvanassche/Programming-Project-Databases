@@ -37,8 +37,23 @@ class updateDB extends Command {
 	 */
 	public function fire()
 	{
-		// Call the update functions.
-		CrawlerController::updateDB();
+		// Call the update function.
+		$now = new DateTime();
+		echo "=== UPDATING DATABASE ===";
+		echo "\n";
+		CrawlerController::update();
+		echo "=== UPDATING FINISHED ===";
+		echo "\n";
+		echo "=== PROCESSING BETS ===";
+		echo "\n";
+		$result = Bet::processAllBets($now);
+		if ($result['matchCount'] == 0)
+			echo "No bets processed";
+		else
+			echo $result['betCount'] . " bet(s) from " . $result['matchCount'] . " match(es) processed";
+		echo "\n";
+		echo "=== FINISHED ===";
+		echo "\n";
 	}
 
 	/**

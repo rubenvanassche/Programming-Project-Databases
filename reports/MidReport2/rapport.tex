@@ -50,7 +50,7 @@ Werkte aan de implementatie van het voorspellingsalgoritme.
 \subsection{Jakob}
 Werkte aan de interface om gebruikers voorspellingen uit te laten voeren.
 \subsection{Ruben}
-Zorgde voor specifieke bugfixes.	
+Zorgde voor specifieke bugfixes.
 
 \section{Design}
 De meesten van ons groepje hadden totaal geen ervaring met het bouwen van websites. In het begin van het project zijn de meesten dus begonnen met het doornemen van allerlei tutorials. Dit nam redelijk wat tijd in beslag, waardoor het eigenlijke project met wat vertraging begon. In eerste geval werkten we aan de backend van de website: opstellen van databaseschema, bouwen van loginsysteem, ... We waren eerst van plan om onze data te verkrijgen via de OpenFooty API. Ongeveer een week na het versturen van onze API key request begonnen we te vrezen dat we deze niet meer gingen krijgen, wat inderdaad nog steeds niet gebeurd is. We moesten dus op zoek gaan naar andere manieren om onze data te vergaren. De enige andere optie leek het gebruik van een crawler. Niemand van ons had enige ervaring met het schrijven/gebruiken van crawlers, en de crawler bleek een struikelblok. Nu werkt de crawler goed, en kunnen we de crawler vertrouwen om goeie informatie te verzamelen. Aan de implementatie van het voorspellingsalgoritme wordt gewerkt, maar dit is nog niet in de website ge\"integreerd. De meeste, maar niet alle pagina's zijn ondertussen aangemaakt.
@@ -168,7 +168,7 @@ ALTER TABLE `team`
 --
 ALTER TABLE `teamPerCompetition`
   ADD CONSTRAINT `tpc_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
-  
+
   --
 -- Constraints for table `bet`
 --
@@ -202,9 +202,71 @@ Het design hebben we grotendeels te danken aan Twitter Bootstrap. Een website zi
 \\
 \\
 De webpagina's zijn nog volop in development alsook kan het design hier en daar ook nog wel veranderen.
- 
+\subsection{Email reminders}
+Gebruikers worden tijdig herinnerd wanneer ze nog niet op bepaalde wedstrijden hebben gebet. Dit wordt mogelijk gemaakt door een combinatie van een Laravel command die via een cronjob om de zoveel tijd loopt.
+Momenteel worden de gebruikers elke dag herinnerd om te wedden op de wedstrijden die de komende twee dagen worden gespeeld waar ze nog niet reeds hebben op gebet.
+Ook wordt er een wekelijks overzicht gegeven op zondag met een overzicht van de wedstrijden die in de komende week worden gespeeld.
+
+De functie die in het Laravel command wordt opgeroepen is de Notifications::sendReminders. Dit zal samen met een email ook een notificatie sturen naar de gebruiker.
+
+\subsection{Notifications}
+Ook is er in ons systeem een uitgebreid notificatiesysteem aanwezig. Wanneer een gebruiker ingelogd is, zal er bovenaan naast het user menu een nieuw item tevoorschijn komen (icoon: ster). Op het moment dat er een notificatie is voor de gebruiker wordt die hier getoond. Zonder op het item te klikken kan je al zien hoeveel ongelezen notificaties je hebt door het cijfer in superscript dat naast het sterretje staat. Als de gebruiker hierop klikt komt er een dropdown menu tevoorschijn met de meest recente notificaties. Deze notificaties linken naar de relevante pagina. \\
+Om dit mogelijk te maken is er een notificatiesysteem geschreven dat gemakkelijk uitbreidbaar is. Elke notificatie heeft een specifiek formaat: er is altijd een actor, een subject, een object en een type. Aan de hand van deze informatie kan er dan een gepaste boodschap worden getoond.
+\begin{enumerate}
+\item Actor: de uitvoerende partij
+\item Subject: de persoon voor wie de notificatie bestemd is
+\item Object: de specifieke informatie over de notificatie
+\item Type: om duidelijk te maken welk voor type notificatie we hebben (Bijvoorbeeld een usergroup invite)
+\end{enumerate}
+\subsubsection{Implementatie}
+Elke notificatie komt dus overeen met een rij van de notifications table. Wanneer een notificatie wordt opgeslagen (Notifications::saveNotification) komt er niet veel bij zien: gewoon letterlijk de kolommen invullen.
+Bij het opvragen van een notificatie (Notifications::getNotification) komt er wat meer bij kijken: in het resultaat wordt de informatie van het object erbij gezet.
+Wanneer er op de notificatie wordt geklikt wordt de redirect methode van de NotificationController opgeroepen die naargelang het type notificatie de gebruiker naar de juiste pagina redirect.
+
+\subsubsection{Soorten notifications}
+\subsubsubsection{Usergroup invites}
+Een gebruiker nodigt een andere gebruiker uit om een usergroup te joinen.
+\begin{enumerate}
+\item Actor: de gebruiker die de persoon uitnodigt
+\item Subject: de uitgenodigde gebruiker
+\item Object: de userGroupInvite
+\item Type: 1, Notifications::INVITE_USER_GROUP
+\end{enumerate}
+De notificatie zal linken naar de gebruiker zijn profiel waar die de invitatie zal kunnen accepteren of weigeren.
+
+\subsubsubsection{Remind user bets}
+Het systeem herinnert de gebruikers om te betten op matchen waar ze dat nog niet op hebben gedaan.
+Omdat het systeem dit verstuurt zullen we de actor en subject dezelfde personen nemen.
+\begin{enumerate}
+\item Actor: de gebruiker
+\item Subject: de gebruiker
+\item Object: NULL (Geen verdere info nodig)
+\item Type: 2, Notifications::REMIND_USER_BETS
+\end{enumerate}
+De notificatie zal linken naar de upcoming matches page, waar de gebruiker gemakkelijk kan zien op welke matches hij/zij nog niet op heeft gebet.
+
+\subsubsubsection{Nieuwe discussie in usergroup}
+Wanneer een gebruiker een nieuwe discussie start in een usergroup zullen alle members van die groep een notificatie hierover krijgen.
+\begin{enumerate}
+\item Actor: de gebruiker die de discussie heeft aangemaakt
+\item Subject: een gebruiker die lid is van de groep
+\item Object: de discussie
+\item Type: 3, Notifications::NEW_DISCUSSION
+\end{enumerate}
+De notificatie zal linken naar de discussie.
+
+\subsubsubsection{Nieuwe reply in discussie}
+Als een gebruiker een bericht post in de discussie zullen alle deelnemers van die discussie hierover genotified worden.
+\begin{enumerate}
+\item Actor: de gebruiker die een nieuwe reply heeft gemaakt
+\item Subject: deelnemer aan de discussie
+\item Object: discussie
+\item Type: 4, Notifications::NEW_MESSASGE
+\end{enumerate}
+De notificatie linkt naar de discussie.
+
 \subsection{Work in progress}
- 
+
 \subsubsection{Home page}
 Bestaat uit 3 tabellen, een news foto feed en een wereldkaart die de landen kleurt in functie van hun WK-ranking.
 De 3 tabellen zullen data bevatten over de laatst gespeelde matchen, de opkomende matchen en de WK-ranking.
@@ -212,40 +274,40 @@ De 3 tabellen zullen data bevatten over de laatst gespeelde matchen, de opkomend
 De foto newsfeed is een RSS feed van FIFA die we met SimplePie hebben geparsed.
 \\
 Op de wereldkaart krijgt elk land een tint groen toegekend; hoe hoger hun WK-ranking, hoe donkerder het groen. Later zul je op elk apart land kunnen klikken om op de pagina van het nationale team terecht te komen. Merk op dat het Verenigd Koninkrijk wegens beperkingen van de gebruikte Google GeoCharts-API niet ingekleurd is; zij hebben vier "nationale" teams (Engeland, Wales, Noord-Ierland, Schotland). Om dit op te lossen, wordt bij klikken op het VK ingezoomd, waarna de vier delen apart in de juiste kleur verschijnen.
- 
+
 \subsubsection{Search bar / search results}
 Rechtsbovenaan alle pagina's staat een searchbar waarin je een speler/match/team kunt invullen en die de beschikbare info presenteert. Als je op de links doorklikt word je doorgestuurd naar de desbetreffende pagina.
- 
+
 \subsubsection{Player Page}
 Deze pagina bevat informatie over een bepaalde speler.
 \\
 In de PlayerController wordt volgende info opgevraagd van de Player en Team models:
 \begin{lstlisting}
                 $playerObj = Player::getPlayer($playerName)[0];
-                $playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];              
+                $playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];
                 $playerText = Player::getPlayerText($playerName);
                 $playerImageURL = Player::getPlayerImageURL($playerName);
                 $goals = Player::goals($playerObj->id);
                 $cards = Player::cards($playerObj->id);
 \end{lstlisting}
- 
+
 Deze informatie wordt dan vervolgens gebruikt om weer te geven op de webpagina. Wat wel opgemerkt moet worden is dat momenteel de playerText en de playerImageURL van wikipedia worden gehaald en niet
 in onze database zitten. Misschien doen we dit beter wel?
 \subsubsection{Team Page}
 Deze pagina bevat informatie over een bepaald team, zoals de spelers, matchen e.d.
- 
+
 In de TeamController wordt de benodigde informatie uit de models gehaald. Dit gebeurt in meerdere verschillende functies. Hieronder een voorbeeld.
 \begin{lstlisting}
 	public function index($teamID){
 		$teamObj = Team::getTeamByID($teamID)[0];
 		$teamImageURL = Team::getTeamImageURL($teamObj->name);
-		
+
 		return View::make('team.team', compact('teamObj', 'teamImageURL'))->with('title', $teamObj->name);
 	}
 \end{lstlisting}
- 
+
 Deze informatie wordt vervolgens gebruikt om weer te geven op de webpagina. De spelers en dergelijke worden opgevraagd in andere methoden van de TeamController.
- 
+
 \subsubsection{Team Players page}
 Deze pagina is een onderdeel van de bijhorende Team pagina. Door middel van Ajax wordt dit op de pagina geladen zonder de pagina te hoeven herladen.
 \\
@@ -253,16 +315,16 @@ In de PlayersController wordt volgende info opgevraagd van het Team model:
 \begin{lstlisting}
 	public function index($playerName){
 		$playerObj = Player::getPlayer($playerName)[0];
-		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
+		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];
 		$playerText = Player::getPlayerText($playerName);
 		$playerImageURL = Player::getPlayerImageURL($playerName);
 		$goals = Player::goals($playerObj->id);
 		$cards = Player::cards($playerObj->id);
-			
+
 		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards'))->with('title', $playerName);
 	}
 \end{lstlisting}
- 
+
 \subsubsection{Match page}
 De match page bevat informatie van een specifieke wedstrijd. Hierbij wordt er dus info getoond over de match: de eindstand, wie er gescoord heeft, wie er een kaart heeft gekregen en dergelijke. Uiteraard kan er weer op meerdere manieren doorgeklikt worden door op de speler/teams te klikken en dergelijke.
 
@@ -281,24 +343,26 @@ Eerder dit:
 		$data['cardshometeam'] = Match::cards($matchID, $data['match']->hometeam_id);
 		$data['goalsawayteam'] = Match::goals($matchID, $data['match']->awayteam_id);
 		$data['cardsawayteam'] = Match::cards($matchID, $data['match']->awayteam_id);
-		
+
 		return View::make('match.match',$data)->with('title', 'Match');
 	}
-\end{lstlisting} 
+\end{lstlisting}
 
 in plaats van:
 \begin{lstlisting}
 	public function index($playerName){
 		$playerObj = Player::getPlayer($playerName)[0];
-		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];		
+		$playerTeam = Team::getTeambyPlayerID($playerObj->id)[0];
 		$playerText = Player::getPlayerText($playerName);
 		$playerImageURL = Player::getPlayerImageURL($playerName);
 		$goals = Player::goals($playerObj->id);
 		$cards = Player::cards($playerObj->id);
-			
+
 		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards'))->with('title', $playerName);
 	}
-\end{lstlisting} 
+\end{lstlisting}
+
+
 
 \section{Extra functionaliteit}
 De meeste extra functionaliteit die gesuggereerd wordt in de opgave is aanwezig of is ondersteuning voor ingebouwd. Er is heel wat data aanwezig over spelers, er is relevant nieuws te lezen, er is (ondersteuning voor) data uit andere competities, ... \\ Over verdere extra functionaliteiten hebben we nog niet echt nagedacht, het is nu in de eerste plaats belangrijk dat de verplichte functionaliteit er is. Daarna zou nog tijd over moeten zijn voor extra functionaliteit.

@@ -29,13 +29,16 @@
 
 					{{ Form::open(array('url' => 'search', 'class'=>'navbar-form navbar-right')) }}
 						<div class="form-group">
-							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%;', 'placeholder'=>'Type searchterm here')) }}
+							{{ Form::text('input', '', array('class'=>'form-control', 'id'=>'searchbar', 'style' => 'width:100%; padding:0.35em; ', 'placeholder'=>'Type searchterm here')) }}
 						</div>
-						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i></button>
+						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i><span class="visible-xs">Search</span></button>
 					{{ Form::token() . Form::close() }}
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="glyphicon glyphicon-user"> </i> <b class="caret"></b>
+								<span class="visible-xs">User</span>
+							</a>
 							<ul class="dropdown-menu">
 							<?php
 								$user = new User;
@@ -58,13 +61,12 @@
 						</li>
 					</ul>
 					<?php
-					$user = new User;
 					if($user->loggedIn()) {
 						if (count($notifications) > 0) {
 					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i><span class="visible-xs">Notifications</span></a>
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
 									<?php $id = $notification["id"]?>
@@ -72,29 +74,71 @@
 								@endforeach
 							</ul>
 						</li>
-						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
-						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-usd"></i></a></li>
+
 					<?php
 						}else{
 					?>
 					<ul class="nav navbar-nav navbar-left">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="glyphicon glyphicon-star"></i>
+								<span class="visible-xs">Notifications</span>
+							</a>
 							<ul class="dropdown-menu">
-									<li><a href="{{url('myProfile')}}">No new notifications</a></li>
+									<li><a href="{{url('profile')}}">No new notifications</a></li>
 							</ul>
 						</li>
-						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
-						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-euro"></i></a></li>
-					</ul>
 					<?php
 						}
+					?>
+						<li data-toggle="tooltip" data-placement="bottom" title="Usergroups">
+							<a href="{{url('usergroups')}}">
+								<i class="glyphicon glyphicon-tower"></i>
+								<span class="visible-xs">Usergroups</span>
+							</a>
+						</li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Users">
+							<a href="{{url('users')}}">
+								<i class="fa fa-users"></i>
+								<span class="visible-xs">Users</span>
+							</a>
+						</li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches">
+							<a href="{{url('upcoming')}}">
+								<i class="glyphicon glyphicon-time"></i>
+								<span class="visible-xs">Upcoming Matches</span>
+							</a>
+						</li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Competitions">
+							<a href="{{url('competitions')}}">
+								<i class="glyphicon glyphicon-globe"></i>
+								<span class="visible-xs">Competitions</span>
+							</a>
+						</li>
+					</ul>
+					<?php
 					}
-					else {?>
+					else {
+					?>
 						<ul class="nav navbar-nav navbar-left">
-							<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-euro"></i></a></li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Users">
+								<a href="{{url('users')}}">
+									<i class="fa fa-users"></i>
+									<span class="visible-xs">Users</span>
+								</a>
+							</li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches">
+								<a href="{{url('upcoming')}}">
+									<i class="glyphicon glyphicon-time"></i>
+									<span class="visible-xs">Upcoming Matches</span>
+								</a>
+							</li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Competitions">
+								<a href="{{url('competitions')}}">
+									<i class="glyphicon glyphicon-globe"></i>
+									<span class="visible-xs">Competitions</span>
+								</a>
+							</li>
 						</ul>
 					<?php } ?>
 
@@ -144,9 +188,10 @@
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
-		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
 
+		<script src="<?php echo asset('js/jquery.min.js'); ?>" ></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+		<script src="<?php echo asset('js/bootstrap.min.js'); ?>" ></script>
 
 
 		<!-- This script makes sure login and logout modals appear on any page -->
@@ -158,6 +203,8 @@
 			if ({{ Input::old('loggedOut', 'false') }}) {
 				$('#logoutModal').modal('show');
 			}
+			
+			$('.nav li').tooltip();
 		});
 		</script>
 
@@ -187,7 +234,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">Bet</h4>
+            <h4 class="modal-title" id="myModalLabel">Login</h4>
             </div>
             <div class="modal-body">
 
@@ -216,8 +263,12 @@
 					<label>{{ Form::label('password', 'Password') }}</label>
 					{{ Form::password('password', array('class'=>'form-control')) }}
 				</div>
-
 				<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
+				<?php
+				if(Notification::showAll() != '' and $errors->first('username') != "Email address hasn't been validated!") {
+				?>
+				<a href="{{ action('UserController@resendmail', array('username'=>Input::old('username'))) }}" class="btn btn-warning pull-left">Resend Email</a>
+				<?php } ?>
 				<a href="{{ url('user/facebooklogin') }}" class="btn btn-primary pull-right">Facebook Login</a>
 				{{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
 

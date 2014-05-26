@@ -39,8 +39,8 @@ class Player {
     }
 
     /**
-     * @brief Get the player by name.
-     * @param name The name of the player.
+     * @brief Get the player's information by id.
+     * @param id The player's id.
      * @return The results after the query.
      */
     public static function getPlayer( $id ) {
@@ -144,5 +144,12 @@ class Player {
             return "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQDBQGDMwwKrrjyl5frVZhTV1qDP6u3YtPhFW_XM6zjdStHkm0";
         } // end try-catch
     }
+
+	public static function matches($id) {
+		$results = DB::select("SELECT `match`.*, (SELECT name FROM team WHERE team.id = `match`.hometeam_id) AS hometeam,
+												 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) AS awayteam
+								FROM `match`, `playerPerMatch` WHERE `playerPerMatch`.player_id = ? AND `playerPerMatch`.match_id = `match`.id", array($id));
+		return $results;
+	}
 
 }

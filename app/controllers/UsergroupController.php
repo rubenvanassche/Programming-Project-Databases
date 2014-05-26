@@ -2,7 +2,7 @@
 
 class UsergroupController extends BaseController {
 
-	function index(){
+	public static function index(){
 		$user = new User;
 		if (!$user->loggedIn()) {
 	    	$data['title'] = 'Not logged in';
@@ -30,10 +30,17 @@ class UsergroupController extends BaseController {
 			}else{
 				// Start working on this data
 				$name = Input::get('name');
+				$private = Input::get('private');
+				if ($private == 'true') {
+					$private = true;
+				}
+				else {
+					$private = false;
+				}
 
 				$user = new User;
 				$usergroup = new UserGroup;
-				$success = $usergroup->addGroup($name);
+				$success = $usergroup->addGroup($name, $private);
 
 				if($success){
 					// Add founder of the group to the group instantly.
@@ -53,7 +60,13 @@ class UsergroupController extends BaseController {
     	}
 	}
 
-	function usergroup($id){
+	public static function usergroup($id){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
+
 		$usergroup = new UserGroup;
 		$usergroupmessages = new UserGroupMessages;
 		$data['users'] = $usergroup->getUsers($id);
@@ -62,14 +75,26 @@ class UsergroupController extends BaseController {
 		$data['timeline'] = $usergroup->timeline($id);
 		$data['messages'] = $usergroupmessages->getAll($id);
 
-		//print_r($usergroup->timeline($id));
 
-		return View::make('usergroup.usergroup', $data);
+		$ismember = UserGroup::isMember($user->ID(), $id);
+		$private = UserGroup::getPrivateSetting($id);
+		if ($private && count($ismember) == 0) {
+			// Not allowed to see this!
+			// Send them back to the usergroups page.
+			return Redirect::to('usergroups');
+		}
+		else {
+			return View::make('usergroup.usergroup', $data);
+		}
 	}
 
 	function addMe($id){
 		$usergroup = new UserGroup;
 		$user = new user;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 
 		if(!$usergroup->isMember($user->ID(), $id)){
 			$usergroup->addUser($id, $user->ID());
@@ -82,6 +107,11 @@ class UsergroupController extends BaseController {
 	}
 
 	function inviteUser($usergroup_id){
+		$user = new User;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 		if(Request::isMethod('post')){
 			// Work On the Form
 			$rules = array(
@@ -92,24 +122,34 @@ class UsergroupController extends BaseController {
 
 			if($validation->fails()) {
 				// Problem so show the user error messages
-				return Redirect::to('usergroups/'.$usergroup_id.'/invite')->withInput()->withErrors($validation);
+				return Redirect::to('usergroup/'.$usergroup_id.'/invite')->withInput()->withErrors($validation);
 			}else{
 				// Start working on this data
 				$invitee_name = Input::get('invitee_name');
-				$user = new User;
 				$invitee_id = $user->getID($invitee_name);
 
 				if ($invitee_id == -1){
 					$data['title'] = 'Problem';
 					$data['content'] = 'This user doesn\'t exist.';
 					return View::make('layouts.simple', $data);
-				}else if ($user->ID() == $invitee_id){
+				} else if ($user->ID() == $invitee_id){
 					$data['title'] = 'Problem';
 					$data['content'] = 'You are already part of this group.';
 					return View::make('layouts.simple', $data);
-				}else{
+				} else if (count(UserGroup::isMember($invitee_id, $usergroup_id)) > 0){
+					// Invitee is already member
+					$data['title'] = 'Problem';
+					$data['content'] = 'This user is already a member of this group.';
+					return View::make('layouts.simple', $data);
+				} else if (UserGroup::isInvited($invitee_id, $usergroup_id)){
+					// Invitee has already been invited.
+					$data['title'] = 'Problem';
+					$data['content'] = 'This user has already been invited to join this group.';
+					return View::make('layouts.simple', $data);
+				}
+				else {
 					$usergroup = new UserGroup();
-					$usergroup->invite($user->ID(),$usergroup_id, $invitee_id);
+					$usergroup->invite($invitee_id,$usergroup_id, $user->ID());
 
 					$data['title'] = 'User Invited!';
 					$data['content'] = '<a href="'.url('usergroup/'.$usergroup_id).'">Click here</a> to go back to the usergroup.';
@@ -130,6 +170,10 @@ class UsergroupController extends BaseController {
 	function leave($id){
 		$usergroup = new UserGroup;
 		$user = new user;
+		if (!$user->loggedIn()) {
+	    	$data['title'] = 'Not logged in';
+	        return View::make('layouts.simple', $data)->nest('content', 'user.nologin', $data);
+		}
 
 		if($usergroup->isMember($user->ID(), $id)){
 			$usergroup->leave($user->ID(), $id);

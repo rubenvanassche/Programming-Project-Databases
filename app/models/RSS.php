@@ -3,8 +3,10 @@
 class RSS {
 	public static function getFIFAtext() {
 		
+		$feeds = array('http://www.fifa.com/worldcup/news/rss.xml');
+		
 		$feed = new SimplePie;
-		$feed->set_feed_url('http://www.fifa.com/worldcup/news/rss.xml');
+		$feed->set_feed_url($feeds);
 		$feed->enable_order_by_date(true);
 		$feed->set_cache_location(base_path() . '/cache/simplepie');
 		$feed->init();

@@ -40,6 +40,8 @@ Route::get('matches', 'MatchController@matches');
 
 Route::get('notification/{id}', array('as' => 'notification', 'uses' => 'NotificationController@redirect'));
 
+Route::get('optoutin', 'UserController@optoutin');
+
 // ------------
 // USER
 // ------------
@@ -51,10 +53,13 @@ Route::match(array('GET', 'POST'), 'user/register', 'UserController@register');
 Route::get('user/activate/{username}/{registrationcode}', array('as' => 'user/activate', 'uses' =>'UserController@activate'));
 Route::get('user/logout', 'UserController@logout');
 Route::match(array('GET', 'POST'),'user/passwordforgot', 'UserController@passwordforgot');
+Route::match(array('GET', 'POST'),'user/resendmail', 'UserController@resendmail');
 Route::match(array('GET', 'POST'),'user/account', 'UserController@account');
 Route::match(array('GET', 'POST'),'user/changepassword', 'UserController@changepassword');
 Route::match(array('GET', 'POST'),'user/changeprofilepicture', 'UserController@changeprofilepicture');
 
+Route::get('competitions', 'CompetitionController@index');
+Route::get('competition/{id}', 'CompetitionController@competition');
 
 Route::get('user/facebooklogin', 'UserController@facebookLogin');
 

@@ -2,14 +2,20 @@
 
 @section('content')
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-8">
 			<h1>Teams</h1>
-			<h3>International</h3>
+		</div>
+		<div class="col-md-4">
+			
+  <div class="form-group has-feedback" style="margin-top:20px;">
+
+    <input name="filter" id="filter-box" class="form-control" value="" maxlength="30" size="30" type="text" placeholder="Name or Continent">
+    <span class="glyphicon glyphicon-search form-control-feedback" style="margin-top:-25px; color:grey;"></span>
+  </div>
 		</div>
 		<div class="col-md-12">
 
-			Search: <input name="filter" id="filter-box" value="" maxlength="30" size="30" type="text" placeholder="Name or Continent">
-    		<input id="filter-clear-button" type="submit" value="Clear"/>
+			
 			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
@@ -70,7 +76,7 @@
 @stop
 
 @section('javascript')
-	<script src="<?php echo asset('js/jquery-1-3-2.js'); ?>" ></script>
+
 	<script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
 	<script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
 
@@ -83,37 +89,5 @@
                             filterColumns: [1, 2]}); });
 	</script>
 
-    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-     google.load('visualization', '1', {'packages': ['geochart']});
-     google.setOnLoadCallback(drawRegionsMap);
 
-      function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-          ['Country'],
-          ['Belgium']
-
-        ]);
-
-        var options = {
-        	legend: 'none',
-			dataMode: 'regions'
-        };
-
-        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    };
-
-		// Won't run correctly if not hosted on server appareantly.
-		google.visualization.events.addListener(
-		globalGeomap, 'regionClick', function(e) {
-		   //doSomething(e['region']);
-		   alert("ayo");
-		});
-
-		google.visualization.events.addListener(geomap, 'select', function() {
-		alert('Select event called, selected row is ' +
-			geomap.getSelection()[0].row);
-		});
-    </script>
 @stop

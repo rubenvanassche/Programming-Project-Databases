@@ -2,9 +2,9 @@
 
 <?php
 	function cardColorToImg($color){
-		if($color == 1){
+		if($color == 'red'){
 			return "<img src='". asset('img/redcard.png') ."' style='height:16px;' />";
-		}else if($color == 0){
+		}else if($color == 'yellow'){
 			return "<img src='". asset('img/yellowcard.png') ."' style='height:16px;' />";
 		}
 	}
@@ -17,8 +17,13 @@
 		  if (isset($_GET["openBet"]) && $bet)
 			$autoOpenBetModal = true;
 	?>
-	<div class="row">
-		<div class="col-md-1" style="margin-top:20px;">
+	<div class="row visible-xs visible-sm">
+		<div class="col-sm-12 col-xs-12" style="text-align:center">
+			<h1><a href="{{route('team', array('id'=>$match->hometeam_id))}}">{{ $match->hometeam }}</a> {{ $match->hometeam_score }} - {{ $match->awayteam_score }} <a href="{{route('team', array('id'=>$match->awayteam_id))}}">{{ $match->awayteam }}</a></h1>
+		</div>
+	</div>
+	<div class="row hidden-xs hidden-sm">
+		<div class="col-md-1 " style="margin-top:20px;">
 			<img style="width:100%;" src="<?php echo Team::getTeamImageURL($match->hometeam); ?>" />
 		</div>
 		<div class="col-md-4">
@@ -39,29 +44,64 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-5">
+		<div class="col-md-5 hidden-xs hidden-sm">
 			<a href="{{route('team', array('id'=>$match->hometeam_id))}}">Go to the team</a>
 		</div>
 		<div class="col-md-2" style="text-align:center;">
 			@if($bet)
+			<div style="text-align:center;">
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
-			@endif
-			<p>{{$match->date}}</p>
-			@if($inFuture)
-			<p>Predictions:</p>
-			<p><h2>{{ $predictedScores[0] }} - {{ $predictedScores[1] }}</h2></p>
-		    <div id="chart_div" style="width: 500px; height: 150px;"></div>
+			</div>
 			@endif
 
+			<?php if($match->date == "0000-00-00 00:00:00") 
+						echo "date unknown"; 
+					  else {
+						$date = new DateTime($match->date);
+						echo date_format($date, 'd-m-Y H:i');
+					  }
+					?>
 		</div>
-		<div class="col-md-5">
+		<div class="col-md-5 hidden-xs hidden-sm">
 			<a class="pull-right" href="{{route('team', array('id'=>$match->awayteam_id))}}">Go to the team</a>
 		</div>
 	</div>
 	<div class="row">
+		<div class="col-md-12">
+			<div style="text-align:center;">
+				<p><a href="{{url('competition/'.$competition->id)}}">{{$competition->name}}</a></p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div style="text-align:center;">
+				<p>{{$phase}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			@if($inFuture)
+			<div style="text-align:center;">
+				<p>Predictions:</p>
+				<p><h2>{{ $predictedScores[0] }} - {{ $predictedScores[1] }}</h2></p>
+			</div>
+			<div class="progress" style="height:20px;">	
+			  <div class="progress-bar progress-bar-success" style="width: {{100 * $predictedOutcome}}%">
+				<span>{{$match->hometeam}}: {{100 * $predictedOutcome}}%</span>
+			  </div>
+			  <div class="progress-bar progress-bar-warning" style="width: {{100 * (1 - $predictedOutcome)}}%">
+				<span>{{$match->awayteam}}: {{100 * (1 - $predictedOutcome)}}%</span>
+			  </div>
+			</div>
+			@endif
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-md-6">
-			<h3>Goals</h3>
-			<table class="table table-condensed">
+			<h3>Goals <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
+			<table id="myTable" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -79,8 +119,8 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h3>Goals</h3>
-			<table class="table table-condensed">
+			<h3>Goals <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
+			<table id="myTable2" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -100,8 +140,8 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Cards</h3>
-			<table class="table table-condensed">
+			<h3>Cards <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
+			<table id="myTable3"class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -121,8 +161,8 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h3>Cards</h3>
-			<table class="table table-condensed">
+			<h3>Cards <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
+			<table id="myTable4" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -142,6 +182,96 @@
 							<td><a href="{{route('player', array('id'=>$cardawayteam->player_id))}}">{{$cardawayteam->player}}</a></td>
 							<td><?php echo cardColorToImg($cardawayteam->color); ?></td>
 						<tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<h3>Substitutions <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
+			<table id="myTable5" class="tablesorter">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Player</th>
+						<th>In/Out</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($transfershometeam as $transferhometeam)
+						<?php
+						if($transferhometeam->intime != '' and $transferhometeam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';																		
+						}else if($transferhometeam->intime == '' and $transferhometeam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';							
+						}else if($transferhometeam->intime != '' and $transferhometeam->outtime == ''){
+							echo '<tr>';
+							echo '<td>'.$transferhometeam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferhometeam->player_id).'">'.$transferhometeam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+						}else{
+							// do nothing
+						}
+						?>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6">
+			<h3>Substitutions <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
+			<table id="myTable6" class="tablesorter">
+				<thead>
+					<tr>
+						<th>Time</th>
+						<th>Player</th>
+						<th>In/Out</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($transfersawayteam as $transferawayteam)
+						<?php
+						if($transferawayteam->intime != '' and $transferawayteam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';																		
+						}else if($transferawayteam->intime == '' and $transferawayteam->outtime != ''){
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->outtime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>Out</td>';
+							echo '<tr>';							
+						}else if($transferawayteam->intime != '' and $transferawayteam->outtime == ''){
+							echo '<tr>';
+							echo '<td>'.$transferawayteam->intime.'</td>';
+							echo '<td><a href="'.url('player/'.$transferawayteam->player_id).'">'.$transferawayteam->name.'</a></td>';
+							echo '<td>In</td>';
+							echo '<tr>';
+						}else{
+							// do nothing
+						}
+						?>
 					@endforeach
 				</tbody>
 			</table>
@@ -190,31 +320,31 @@
 
 
 				<div class="form-group">
-					<label>{{ Form::label('firstGoal', 'First goal') }}</label>
+					<label>{{ Form::label('firstGoal', 'First goal (optional)') }}</label>
 					{{ Form::select('firstGoal',  array('none' => '', 'home' => $match->hometeam, 'away' => $match->awayteam)) }}
 					{{ $errors->first('firstGoal', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team') }}</label>
+					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team (optional)') }}</label>
 					{{ Form::text('hometeamYellows', Input::old('hometeamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamReds', 'Red cards for home team') }}</label>
+					<label>{{ Form::label('hometeamReds', 'Red cards for home team (optional)') }}</label>
 					{{ Form::text('hometeamReds', Input::old('hometeamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamReds', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team') }}</label>
+					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team (optional)') }}</label>
 					{{ Form::text('awayteamYellows', Input::old('awayteamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamReds', 'Red cards for away team') }}</label>
+					<label>{{ Form::label('awayteamReds', 'Red cards for away team (optional)') }}</label>
 					{{ Form::text('awayteamReds', Input::old('awayteamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}
 				</div>
@@ -263,27 +393,63 @@ $(document).ready(function () {
 });
 </script>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-  google.load("visualization", "1", {packages:["corechart"]});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-      ["Match", "{{$match->hometeam}}", {'role': 'tooltip'}, {'role': 'annotation'}, "{{$match->awayteam}}", {'role': 'tooltip'}, {'role': 'annotation'}],
-      [2, {{$predictedOutcome}}, "{{100 * $predictedOutcome}}%", "{{$match->hometeam}}",  {{1 - $predictedOutcome}}, "{{100*(1 - $predictedOutcome)}}%", "{{$match->awayteam}}"]
-    ]);
 
-    var options = {
-      title: '',
-      vAxis: {title: '', baselineColor: '#FFFFFF',gridlines: {color: 'transparent'} , ticks: []},
-	  hAxis: {baselineColor: '#FFFFFF', ticks: []},
-      legend: {position: 'none'},
-	  isStacked: true
-    };
 
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-</script>
+  <script src="<?php echo asset('js/tablesorter.js'); ?>" ></script>
+  <script src="<?php echo asset('js/tablesorter_filter.js'); ?>" ></script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable6")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable5")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable4")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable3")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1, 2]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable2")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1]}); });
+  </script>
+
+    <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0, 1]}); });
+  </script>
+
 
 @stop

@@ -1,5 +1,5 @@
 <?php
-if(Notification::showAll() != '' or $errors->first('username') != '' or $errors->first('firstname') != '' or $errors->first('lastname') != '' or $errors->first('country') != '' or $errors->first('email') != '' or $errors->first('about') != ''){
+if(Notification::showAll() != '' or $errors->first('username') != '' or $errors->first('firstname') != '' or $errors->first('lastname') != '' or $errors->first('country') != '' or $errors->first('email') != '' or $errors->first('about') != '' or $errors->first('age') != ''){
 ?>
 <div class="alert alert-danger alert-dismissable">
   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -11,6 +11,7 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
   <p>{{ $errors->first('lastname') }}</p>
   <p>{{ $errors->first('email') }}</p>
   <p>{{ $errors->first('about') }}</p>
+  <p>{{ $errors->first('age') }}</p>
 </div>
 <?php
 }
@@ -38,6 +39,11 @@ if(Notification::showAll() != '' or $errors->first('username') != '' or $errors-
 	<a href="{{ action('UserController@changeprofilepicture') }}" class="btn btn-warning form-control">Change Profile Picture</a>
 </div>
 @endif
+
+<div class="form-group">
+  <label>Email opt out / opt in</label>
+  <a href="{{ action('UserController@optoutin') }}" class="btn btn-success form-control">Toggle receiving emails</a>
+</div>
 
 <div class="form-group">
 	<label>{{ Form::label('firstname', 'First Name') }}</label>

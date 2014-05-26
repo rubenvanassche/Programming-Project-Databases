@@ -161,14 +161,15 @@ class User {
 		$data['registrationcode'] = str_random(24);
 		$data['password'] = Hash::make($data['password']);
 
-		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country_id, registrationcode) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		$result = DB::insert("INSERT INTO user (username, firstname, lastname, email, password, country_id, registrationcode, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 		array($data['username'],
 			$data['firstname'],
 			$data['lastname'],
 			$data['email'],
 			$data['password'],
 			$data['country_id'],
-			$data['registrationcode']));
+			$data['registrationcode'],
+			url('profilepictures/coachcenter.jpg')));
 
 		//Send email
 		$message = new stdClass();
@@ -214,6 +215,11 @@ class User {
 		}
 	}
 
+	public static function getRegistrationCodeAndEmail($username) {
+		$result = DB::select("SELECT registrationcode, email FROM user WHERE username = ?", array($username));
+		return array('registrationcode'=>$result[0]->registrationcode, 'email'=>$result[0]->email);
+	}
+
 	function passwordforgot($email, $newPassword){
 		$results = DB::select('SELECT id, firstname, lastname FROM user WHERE email = ?', array($email));
 
@@ -248,18 +254,19 @@ class User {
 		return $results;
 	}
 
-	function change($userID, $field, $value){
-		if($field == 'password'){
-			$value = Hash::make($value);
-		}
+	function changePassword($userID, $password) {
+		$password = Hash::make($password);
+		$results = DB::update("UPDATE user SET password = ? WHERE id = ?", array($password, $userID) );
+		return $results;
+	}
 
-		$results = DB::update("UPDATE user SET $field = ? WHERE id = ?", array($value, $userID) );
+	function change($userID, $values){
+		$results = DB::update("UPDATE user SET firstname = ?, lastname = ?, email = ?, 
+								               country_id = ?, about = ?, age = ? WHERE id = ?", 
+								array($values['firstname'], $values['lastname'], $values['email'], 
+									  $values['country_id'], $values['about'], $values['age'], $userID) );
 
-		if($results == 1){
-			return true;
-		}else{
-			return false;
-		}
+		return $results;
 	}
 
 	function onlyOneEmail($email){

@@ -3,9 +3,9 @@
  * Copyright 2011-2014 CoachCenter
  * Licensed under GNU GPL-v3
 */
- 
-body{ 
-	padding-top: 50px; 
+
+body{
+	padding-top: 50px;
 }
 
 .widepicture{
@@ -43,17 +43,14 @@ body{
 
 /* tables */
 table.tablesorter {
-	font-family:arial;
 	background-color: #CDCDCD;
-	margin:10px 0pt 15px;
-	font-size: 8pt;
+	margin:10px 0pt 15px;;
 	width: 100%;
 	text-align: left;
 }
 table.tablesorter thead tr th, table.tablesorter tfoot tr th {
-	background-color: #e6EEEE;
-	border: 1px solid #FFF;
-	font-size: 8pt;
+	background-color: #fff;
+	border-bottom: 2px solid #ddd;
 	padding: 4px;
 }
 table.tablesorter thead tr .header {
@@ -62,14 +59,16 @@ table.tablesorter thead tr .header {
 	background-position: center right;
 	cursor: pointer;
 }
+
 table.tablesorter tbody td {
-	color: #3D3D3D;
+	color: #000;
 	padding: 4px;
 	background-color: #FFF;
 	vertical-align: top;
 }
+
 table.tablesorter tbody tr.odd td {
-	background-color:#F0F0F6;
+	background-color:#f9f9f9;
 }
 table.tablesorter thead tr .headerSortUp {
 	background-image: url(../img/asc.gif);
@@ -78,6 +77,5 @@ table.tablesorter thead tr .headerSortDown {
 	background-image: url(../img/desc.gif);
 }
 table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
-background-color: #8dbdd8;
+background-color: #eee;
 }
-
