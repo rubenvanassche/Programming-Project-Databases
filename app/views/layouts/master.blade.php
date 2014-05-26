@@ -159,6 +159,13 @@
 			?>
 		</div><!-- /.container -->
 
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12" style="font-size:10px; text-align:right;">
+					<a href="{{url('about')}}">Coachcenter</a> 2013-2014
+				</div>
+			</div>
+		</div>
 		<!--
 		<div id="bottom" >
 			&copy; CoachCenter 2014

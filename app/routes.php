@@ -14,6 +14,7 @@
 
 Route::get('/', array('as' => 'home', 'uses' => 'HomeController@index'));
 Route::get('news', array('as' => 'news', 'uses' => 'HomeController@news'));
+Route::get('/about', array('as' => 'about', 'uses' => 'HomeController@about'));
 Route::match(array('GET', 'POST'), 'search', array('as' => 'search', 'uses' => 'SearchController@search'));
 Route::match(array('GET', 'POST'), 'search/{input}', array('uses' => 'SearchController@search'));
 
