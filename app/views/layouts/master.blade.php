@@ -265,7 +265,7 @@
 				</div>
 				<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
 				<?php
-				if(Notification::showAll() != '' and $errors->first('username') != "Email address hasn't been validated!") {
+				if(Notification::showAll()  == "Email address hasn't been validated!") {
 				?>
 				<a href="{{ action('UserController@resendmail', array('username'=>Input::old('username'))) }}" class="btn btn-warning pull-left">Resend Email</a>
 				<?php } ?>
