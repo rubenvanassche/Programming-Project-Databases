@@ -78,6 +78,12 @@ Now let's start the server:
 $ php artisan serve
 ```
 
-Now you have a running coachcenter server! There are also some commands which can be run through artisan:
-- php artisan remindUsers $ -> reminds users to bet for matches they haven't bet on yet(replace $ by the amount of days we coachcenter should look for future matches)
-- php artisan updateDB -> get new information about matches from our sources and update the bet scores of users
+Now you have a running coachcenter server! There are also some commands which can be run using artisan:
+```sh
+$ php artisan remindUsers %
+```
+reminds users to bet for matches they haven't bet on yet(replace % by the amount of days we coachcenter should look for future matches)
+```sh
+$ php artisan updateDB
+```
+get new information about matches from our sources and update the bet scores of users
