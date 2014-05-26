@@ -48,6 +48,7 @@ Zorgde voor het sorteersysteem en filtersysteem van de tabellen.
 \subsection{Jakob}
 Maakte een gebruikerssysteem (registreren en inloggen). Maakte een interactieve wereldkaart met FIFA scores. Bouwde het betsysteem uit. Maakte een visualisatie van statistieken uit de database.
 \subsection{Ruben}
+Werkte mee aan het gebruikersysteem(avatars, voorkeuren aanpassen) en voegde Facebook integratie toe, schreef en herschreef een hoop pagina's(competition, match, player, team). Ik was ook verantwoordelijk voor het algemeen consistent houden van het design van Coachcenter, heb de search & usergroup functionaliteit geschreven.
 
 
 \section{Design}
@@ -190,7 +191,7 @@ Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, st
 \\
 Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina (in een 'modal', een feature van Bootstrap) weergegeven. Indien de gebruiker met foute gegegvens probeert in te loggen, wordt dit afgehandeld in diezelfde modal. Eens inloggen succesvol is, verschijnt er in de modal nog een bericht om het inloggen te bevestigen. Eens dat weggeklikt wordt, bevindt de gebruiker zich terug op dezelfde pagina als voorheen. Er is ook een knop "forgot password", die de gebruiker naar een nieuwe pagina leidt. De gebruiker geeft zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Indien men probeert in te loggen met een account waarvan het emailadres nog niet gevalideerd is, verschijnt een knop om de activatiemail opnieuw te versturen. \\ Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. \\ \\
 
-TODO: Facebooklogin \\ \\
+Facebook login is met één gedachte in het achterhoofd gebouwd namelijk ervoor zorgen dat mensen die een account op Facebook geen saaie registratie velden hoeven in te vullen voor de duizendste keer maar direct binnen kunnen. We willen dus dat Facebook gebruikers zichzelf snel kunnen inloggen en dat is dan ook mogelijk door bij het inloggen niet op de login knop te drukken maar op de blauwe Facebook Login knop. Vervolgens worden er wat administratieve zaken met Facebook afgehandeld waarna de gebruiker op de homepage terechtkomt als een geregistreerde coachcenter gebruiker.
 
 Eens ingelogd, worden de registratie- en inlogknoppen vervangen door "My Profile", "Bets", "Preferences" en "Logout". \\
 "My Profile" is een pagina waarop wat persoonlijke informatie als land en bet score te zien zijn. Deze pagina is voor iedereen, zelfs niet-ingelogde gebruikers zichtbaar. Enkel op je eigen profiel verschijnen nog de tabs "Notifications", "My Groups" en "Invitations". Op deze functionaliteit wordt verder ingegaan in andere secties. \\
