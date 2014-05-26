@@ -66,22 +66,8 @@ class Player {
 
         return DB::select( $query, $values );
     }
-
-    /**
-     * @brief Count the goals made by a certain player.
-     * @param id The player ID.
-     * @return The amount of goals made by a player.
-     */
-    public static function countGoals( $id ) {
-        $query = "SELECT COUNT(id) as count FROM goal WHERE player_id = ?";
-        $values = array( $id );
-
-        $result = DB::select( $query, $values );
-
-        // 0 if player id not in the table.
-        return ( empty( $result ) ) ? 0 : $result[0]->count;
-    }
-
+    
+    
     /**
      * @brief Get the cards of the player.
      * @param id The player id.
@@ -100,6 +86,51 @@ class Player {
         return DB::select( $query, $values );
     }
 
+    /**
+     * @brief Count the goals made by a certain player.
+     * @param id The player ID.
+     * @return The amount of goals made by a player.
+     */
+    public static function countGoals( $id ) {
+        $query = "SELECT COUNT(id) as count FROM goal WHERE player_id = ?";
+        $values = array( $id );
+
+        $result = DB::select( $query, $values );
+
+        // 0 if player id not in the table.
+        return ( empty( $result ) ) ? 0 : $result[0]->count;
+    }
+
+    /**
+     * @brief Count the red cards made by a certain player.
+     * @param id The player ID.
+     * @return The amount of red cards made by a player.
+     */
+    public static function countRedCards( $id ) {
+        $query = "SELECT COUNT(id) as count FROM cards WHERE player_id = ? AND color = 'red'";
+        $values = array( $id );
+
+        $result = DB::select( $query, $values );
+
+        // 0 if player id not in the table.
+        return ( empty( $result ) ) ? 0 : $result[0]->count;
+    }
+
+    /**
+     * @brief Count the yellow cards made by a certain player.
+     * @param id The player ID.
+     * @return The amount of yellow cards made by a player.
+     */
+    public static function countYellowCards( $id ) {
+        $query = "SELECT COUNT(id) as count FROM cards WHERE player_id = ? AND color = 'yellow'";
+        $values = array( $id );
+
+        $result = DB::select( $query, $values );
+
+        // 0 if player id not in the table.
+        return ( empty( $result ) ) ? 0 : $result[0]->count;
+    }
+    
     /**
      * @brief Get the player biography.
      * @param name The name of the player.
