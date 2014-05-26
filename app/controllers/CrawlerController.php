@@ -888,7 +888,6 @@ class CrawlerController extends BaseController {
      */
     public static function update() {
         set_time_limit(0);
-
         try {
             //self::update_teams();
 
