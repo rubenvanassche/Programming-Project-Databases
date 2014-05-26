@@ -184,7 +184,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Transfers</h3>
+			<h3>Substitutions</h3>
 			<table id="myTable5" class="tablesorter">
 				<thead>
 					<tr>
@@ -228,7 +228,7 @@
 			</table>
 		</div>
 		<div class="col-md-6">
-			<h3>Transfers</h3>
+			<h3>Substitutions</h3>
 			<table id="myTable6" class="tablesorter">
 				<thead>
 					<tr>
