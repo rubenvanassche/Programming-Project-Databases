@@ -164,11 +164,17 @@ class Match {
 		return $result[0];
 	}
 
-    public static function getScore2($matchID){
-        $results = DB::select('SELECT
+    public static function getScore2($matchID, $playerID = 0){
+		if ($playerID == 0)
+        	$results = DB::select('SELECT
                                 (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,
                                 (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id) as awayteam_score
                                 FROM `match` WHERE id = ?', array($matchID));
+		else
+         	$results = DB::select('SELECT
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id AND goal.player_id = ?) as hometeam_score,
+                                (SELECT COUNT(id) FROM goal WHERE team_id = `match`.awayteam_id AND match_id = `match`.id AND goal.player_id = ?) as awayteam_score
+                                FROM `match` WHERE id = ?', array($playerID, $playerID, $matchID));
         return array($results[0]->hometeam_score, $results[0]->awayteam_score);
     }
 
@@ -180,34 +186,63 @@ class Match {
 			return $results[0]->team_id;
 	}
 
-	public static function getCardCounts($matchID) {
+	public static function getCardCounts($matchID, $playerID = 0) {
 
 		$hometeam = DB::select("SELECT hometeam_id FROM `match` WHERE id = ?", array($matchID))[0]->hometeam_id;
 		$awayteam = DB::select("SELECT awayteam_id FROM `match` WHERE id = ?", array($matchID))[0]->awayteam_id;
-		$hometeam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
-																	AND match_id = ?
-										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
-																WHERE playerPerTeam.player_id = cards.player_id
-																AND playerPerTeam.team_id = ?)",
-										array($matchID, $hometeam));
-		$hometeam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
-																	AND match_id = ?
-										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
-																WHERE playerPerTeam.player_id = cards.player_id
-																AND playerPerTeam.team_id = ?)",
-										array($matchID, $hometeam));
-		$awayteam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
-																	AND match_id = ?
-										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
-																WHERE playerPerTeam.player_id = cards.player_id
-																AND playerPerTeam.team_id = ?)",
-										array($matchID, $awayteam));
-		$awayteam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
-																	AND match_id = ?
-										  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
-																WHERE playerPerTeam.player_id = cards.player_id
-																AND playerPerTeam.team_id = ?)",
-										array($matchID, $awayteam));
+		if ($playerID == 0) {
+			$hometeam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
+																		AND match_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $hometeam));
+			$hometeam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
+																		AND match_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $hometeam));
+			$awayteam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
+																		AND match_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $awayteam));
+			$awayteam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
+																		AND match_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $awayteam));
+		}
+		else {
+			$hometeam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
+																		AND match_id = ? AND player_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $playerID, $hometeam));
+			$hometeam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
+																		AND match_id = ? AND player_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $playerID, $hometeam));
+			$awayteam_yellows = DB::select("SELECT count(player_id) AS yellows FROM cards WHERE color = 'yellow'
+																		AND match_id = ? AND player_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $playerID, $awayteam));
+			$awayteam_reds = DB::select("SELECT count(player_id) AS reds FROM cards WHERE color = 'red'
+																		AND match_id = ? AND player_id = ?
+											  AND EXISTS (SELECT playerPerTeam.player_id FROM playerPerTeam
+																	WHERE playerPerTeam.player_id = cards.player_id
+																	AND playerPerTeam.team_id = ?)",
+											array($matchID, $playerID, $awayteam));
+
+		}
 		return array($hometeam_yellows[0]->yellows, $hometeam_reds[0]->reds, $awayteam_yellows[0]->yellows, $awayteam_reds[0]->reds);
 	}
 

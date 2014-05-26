@@ -112,6 +112,20 @@ class Team {
     }
 
     /**
+     * @brief Get the team ID of the player (by ID).
+     * @param playerID The ID of the player.
+     * @return Result after the query.
+     */
+    public static function getTeamIDbyPlayerID( $playerID ) {
+        // query for teamID
+        $query = "SELECT team_id FROM `".self::TABLE_PLAYER_PER_TEAM."` WHERE player_id = ?";
+        $values = array( $playerID );
+
+        $teamID = DB::select( $query, $values );
+
+        return ( empty( $teamID ) ) ? NULL : $teamID[0]->team_id;
+    }
+    /**
      * @brief Get all the players of a given team.
      * @param teamID The ID of the team.
      * @return Array of the players.

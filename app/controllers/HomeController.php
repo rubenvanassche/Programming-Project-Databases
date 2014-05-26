@@ -45,6 +45,10 @@ class HomeController extends BaseController {
         $articles = RSS::getFIFAtext();
         return View::make('news', compact('articles'))->with('title', 'News');
     }
+    
+    public function about(){
+	    return View::make('about');
+    }
 
 
 }

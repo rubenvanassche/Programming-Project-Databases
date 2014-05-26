@@ -66,22 +66,8 @@ class Player {
 
         return DB::select( $query, $values );
     }
-
-    /**
-     * @brief Count the goals made by a certain player.
-     * @param id The player ID.
-     * @return The amount of goals made by a player.
-     */
-    public static function countGoals( $id ) {
-        $query = "SELECT COUNT(id) as count FROM goal WHERE player_id = ?";
-        $values = array( $id );
-
-        $result = DB::select( $query, $values );
-
-        // 0 if player id not in the table.
-        return ( empty( $result ) ) ? 0 : $result[0]->count;
-    }
-
+    
+    
     /**
      * @brief Get the cards of the player.
      * @param id The player id.
@@ -100,6 +86,51 @@ class Player {
         return DB::select( $query, $values );
     }
 
+    /**
+     * @brief Count the goals made by a certain player.
+     * @param id The player ID.
+     * @return The amount of goals made by a player.
+     */
+    public static function countGoals( $id ) {
+        $query = "SELECT COUNT(id) as count FROM goal WHERE player_id = ?";
+        $values = array( $id );
+
+        $result = DB::select( $query, $values );
+
+        // 0 if player id not in the table.
+        return ( empty( $result ) ) ? 0 : $result[0]->count;
+    }
+
+    /**
+     * @brief Count the red cards made by a certain player.
+     * @param id The player ID.
+     * @return The amount of red cards made by a player.
+     */
+    public static function countRedCards( $id ) {
+        $query = "SELECT COUNT(id) as count FROM cards WHERE player_id = ? AND color = 'red'";
+        $values = array( $id );
+
+        $result = DB::select( $query, $values );
+
+        // 0 if player id not in the table.
+        return ( empty( $result ) ) ? 0 : $result[0]->count;
+    }
+
+    /**
+     * @brief Count the yellow cards made by a certain player.
+     * @param id The player ID.
+     * @return The amount of yellow cards made by a player.
+     */
+    public static function countYellowCards( $id ) {
+        $query = "SELECT COUNT(id) as count FROM cards WHERE player_id = ? AND color = 'yellow'";
+        $values = array( $id );
+
+        $result = DB::select( $query, $values );
+
+        // 0 if player id not in the table.
+        return ( empty( $result ) ) ? 0 : $result[0]->count;
+    }
+    
     /**
      * @brief Get the player biography.
      * @param name The name of the player.
@@ -150,6 +181,66 @@ class Player {
 												 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) AS awayteam
 								FROM `match`, `playerPerMatch` WHERE `playerPerMatch`.player_id = ? AND `playerPerMatch`.match_id = `match`.id", array($id));
 		return $results;
+	}
+
+	public static function getWinsLossesTies( $playerID ) {
+		$matches = Player::matches( $playerID );
+		$wins = 0;
+		$losses = 0;
+		$ties = 0;
+		foreach ($matches as $match) {
+			if (!Match::isPlayed($match->id))
+				continue;
+			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeamIDbyPlayerID($playerID)) {
+				$thisTeam = 0;
+				$otherTeam = 1;
+			}
+			else {
+				$thisTeam = 1;
+				$otherTeam = 0;
+			}
+			$score = Match::getScore2($match->id);
+			if ($score[$thisTeam] > $score[$otherTeam])
+				$wins += 1;
+			if ($score[$thisTeam] == $score[$otherTeam])
+				$ties += 1;
+			if ($score[$thisTeam] < $score[$otherTeam])
+				$losses += 1;
+		}
+		return array("wins" => $wins, "losses" => $losses, "ties" => $ties);
+	}
+
+
+
+	public static function getYearlyGoalsCards( $playerID ) {
+		$matches = Player::matches( $playerID );
+		$stats = array();
+		foreach ($matches as $match) {
+			if (!Match::isPlayed($match->id) or $match->date == "0000-00-00 00:00:00")
+				continue;
+			$matchYear = new DateTime($match->date);
+			$matchYear = $matchYear->format("Y");
+			$cards = Match::getCardCounts($match->id, $playerID);
+			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeamIDbyPlayerID($playerID)) {
+				$yellows = $cards[0];
+				$reds = $cards[1];
+				$score = Match::getScore2($match->id, $playerID)[0];
+			}
+			else {
+				$yellows = $cards[2];
+				$reds = $cards[3];
+				$score = Match::getScore2($match->id, $playerID)[1];
+			}
+			if (array_key_exists($matchYear, $stats)) {
+				$stats[$matchYear]["totalScore"] = $stats[$matchYear]["totalScore"] + $score;
+				$stats[$matchYear]["totalYellows"] = $stats[$matchYear]["totalYellows"] + $yellows;
+				$stats[$matchYear]["totalReds"] = $stats[$matchYear]["totalReds"] + $reds;
+				$stats[$matchYear]["matchCount"] = $stats[$matchYear]["matchCount"] + 1;
+			}
+			else
+				$stats[$matchYear] = array("totalScore" => $score, "totalYellows" => $yellows, "totalReds" => $reds, "matchCount" => 1);
+		}
+		return ($stats);
 	}
 
 }

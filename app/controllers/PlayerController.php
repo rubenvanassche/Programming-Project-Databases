@@ -11,8 +11,10 @@ class PlayerController extends BaseController {
 		$cards = Player::cards($id);
 		$matches = Player::matches($id);
 		$playerName = $playerObj->name;
+		$outcomes = Player::getWinsLossesTies($id);
+		$yearlyGoalsCards = Player::getYearlyGoalsCards($id);
 			
-		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards', 'matches'))->with('title', $playerName);
+		return View::make('player.player', compact('playerObj', 'playerTeam', 'playerText', 'playerImageURL', 'goals', 'cards', 'matches', 'outcomes', 'yearlyGoalsCards'))->with('title', $playerName);
 	}
 }
 
