@@ -66223,38 +66223,112 @@ CREATE TABLE IF NOT EXISTS `userPerUserGroup` (
   PRIMARY KEY (`user_id`,`userGroup_id`),
   KEY `userGroup_id` (`userGroup_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Constraints for table `bet`
+--
+ALTER TABLE `bet`
+  ADD CONSTRAINT `matchID` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userID` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `cards`
+--
+ALTER TABLE `cards`
+  ADD CONSTRAINT `match` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `country`
+--
+ALTER TABLE `country`
+  ADD CONSTRAINT `continent` FOREIGN KEY (`continent_id`) REFERENCES `continent` (`id`);
+
+--
+-- Constraints for table `goal`
+--
+ALTER TABLE `goal`
+  ADD CONSTRAINT `goal_match` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `goal_player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `goal_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `match`
+--
+ALTER TABLE `match`
+  ADD CONSTRAINT `awayteam` FOREIGN KEY (`awayteam_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `hometeam` FOREIGN KEY (`hometeam_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `match_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_3` FOREIGN KEY (`object_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`actor_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `notifications_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `playerPerMatch`
+--
+ALTER TABLE `playerPerMatch`
+  ADD CONSTRAINT `playerPerMatch_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `player_per_match` FOREIGN KEY (`match_id`) REFERENCES `match` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `playerPerTeam`
+--
+ALTER TABLE `playerPerTeam`
+  ADD CONSTRAINT `playerPerTeam_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `player_per_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `team`
+--
+ALTER TABLE `team`
+  ADD CONSTRAINT `team_coach` FOREIGN KEY (`coach_id`) REFERENCES `coach` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `team_country` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`);
+
+--
+-- Constraints for table `teamPerCompetition`
+--
+ALTER TABLE `teamPerCompetition`
+  ADD CONSTRAINT `tpc_competition` FOREIGN KEY (`competition_id`) REFERENCES `competition` (`id`);
+
+--
+-- Constraints for table `user`
+--
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
----
---- Constraints for table `userGroupInvites`
----
--ALTER TABLE `userGroupInvites`
+--
+-- Constraints for table `userGroupInvites`
+--
+ALTER TABLE `userGroupInvites`
   ADD CONSTRAINT `userGroupInvites_ibfk_3` FOREIGN KEY (`invitedById`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userGroupInvites_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userGroupInvites_ibfk_2` FOREIGN KEY (`usergroupId`) REFERENCES `userGroup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
----
---- Constraints for table `userGroupMessages`
----
--ALTER TABLE `userGroupMessages`
+--
+-- Constraints for table `userGroupMessages`
+--
+ALTER TABLE `userGroupMessages`
   ADD CONSTRAINT `userGroupMessages_ibfk_2` FOREIGN KEY (`usergroup_id`) REFERENCES `userGroup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userGroupMessages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
----
---- Constraints for table `userGroupMessagesContent`
----
+--
+-- Constraints for table `userGroupMessagesContent`
+--
 ALTER TABLE `userGroupMessagesContent`
-  ADD CONSTRAINT `userGroupMessagesContent_ibfk_2` FOREIGN KEY (`message_id`) REFERENCES `userGroupMessagesContent` (`id`) ON DELETE CASCADE ON UPDAT
+  ADD CONSTRAINT `userGroupMessagesContent_ibfk_2` FOREIGN KEY (`message_id`) REFERENCES `userGroupMessagesContent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userGroupMessagesContent_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
----
---- Constraints for table `userPerUserGroup`
----
+--
+-- Constraints for table `userPerUserGroup`
+--
 ALTER TABLE `userPerUserGroup`
   ADD CONSTRAINT `userPerUserGroup_ibfk_2` FOREIGN KEY (`userGroup_id`) REFERENCES `userGroup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `userPerUserGroup_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
