@@ -1,10 +1,18 @@
 @extends('layouts.master')
 
 @section('content')
+<div class="row">
+	<div class="col-md-12">
+		<ol class="breadcrumb">
+			<li><a href="{{ route('home') }}">Home</a></li>
+			<li><a href="{{ url('competitions') }}">Competitions</a></li>
+			<li class="active">{{$competition->name}}</li>
+		</ol>
+	</div>
+</div>
 	<div class="row">
 		<div class="col-md-12">
 			<h1>{{$competition->name}}</h1>
-			<i><a href="{{url('competitions')}}">Back to competitions</a></i>
 		</div>
 		<div class="col-md-6">
 			<table id="myTable" class="tablesorter">

@@ -3,6 +3,14 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-12">
+			<ol class="breadcrumb">
+				<li><a href="{{ route('home') }}">Home</a></li>
+				<li class="active">Users</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			<h1>Users</h1>
 		</div>
 		<div class="col-md-12">

@@ -7,7 +7,7 @@
 	<div class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="{{ route('home') }}">Home</a></li>
-			<li><a href="{{ url('users') }}">People</a></li>
+			<li><a href="{{ url('users') }}">Users</a></li>
 			<li class="active">{{$user->username}}</li>
 		</ol>
 	</div>

@@ -3,6 +3,15 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-12">
+			<ol class="breadcrumb">
+				<li><a href="{{ route('home') }}">Home</a></li>
+				<li class="active">Usergroups</li>
+			</ol>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
 			<h1>{{$title}}</h1>
 			<a class="btn btn-success pull-right" style="margin-top:-45px;" href="{{url('usergroups/new')}}">New Group</a>
 		</div>
