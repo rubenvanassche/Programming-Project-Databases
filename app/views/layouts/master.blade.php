@@ -159,6 +159,13 @@
 			?>
 		</div><!-- /.container -->
 
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12" style="font-size:10px; text-align:right;">
+					<a href="{{url('about')}}">Coachcenter</a> 2013-2014
+				</div>
+			</div>
+		</div>
 		<!--
 		<div id="bottom" >
 			&copy; CoachCenter 2014
@@ -265,14 +272,16 @@
 				</div>
 				<a href="{{ action('UserController@passwordforgot') }}" class="btn btn-warning pull-left">Recover Password</a>
 				<?php
-				if(Notification::showAll() != '' and $errors->first('username') != "Email address hasn't been validated!") {
+				if(Notification::showAll()  == "Email address hasn't been validated!") {
 				?>
 				<a href="{{ action('UserController@resendmail', array('username'=>Input::old('username'))) }}" class="btn btn-warning pull-left">Resend Email</a>
 				<?php } ?>
+				<?php if("$_SERVER[HTTP_HOST]" == 'coachcenter.be') { ?>
 				<a href="{{ url('user/facebooklogin') }}" class="btn btn-primary pull-right">Facebook Login</a>
+				<?php } ?>
 				{{ Form::submit('Login', array('class'=>'btn btn-success pull-right')) }}
-
 				{{ Form::token() . Form::close() }}
+			</div>
 			<div><p/>&nbsp;</div>  <!--makes sure login button is inside modal-->
     	</div>
   	</div>

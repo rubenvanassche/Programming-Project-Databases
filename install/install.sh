@@ -21,19 +21,20 @@ sed -i.bak 's/\x27password\x27  => \x27root\x27,/\x27password\x27  => \x27'$pass
 ##### ADD CRONJOBS ######
 #########################
 echo "### ADDING CRONJOBS ###"
+PHPPATH=$(which php)
 cd ../
 artisanLocation=`pwd`/artisan
 #Remind users daily (at 20:00) to bet on upcoming matches in the next 2 days.
-line="0 20 * * * php $artisanLocation remindUsers 2"
+line="0 20 * * * $PHPPATH $artisanLocation remindUsers 2"
 (crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
 
 #Remind users weekly to bet on upcoming matches in the upcoming week.
 #This is more like a weekly overview.
-line="0 20 * * 1 php $artisanLocation remindUsers 7"
+line="0 20 * * 1 $PHPPATH $artisanLocation remindUsers 7"
 (crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
 
 #Add cronjob for database updates (which also processes bets).
-line="0 */2 * * * php $artisanLocation updateDB"
+line="0 */2 * * * $PHPPATH $artisanLocation updateDB"
 (crontab -u $USER -l; echo "$line" ) | crontab -u $USER -
 
 echo "### INSTALLATION COMPLETE ###"

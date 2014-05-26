@@ -96,7 +96,7 @@ class User {
 
 	function facebookOnlyUser($id){
 		$result = DB::select("SELECT facebookid, password FROM user WHERE id = ?", array($id));
-		if($result[0]->password == '' and !$result[0]->facebookid == ''){
+		if(!$result[0]->facebookid == ''){
 			return true;
 		}else{
 			return false;
@@ -113,7 +113,7 @@ class User {
 
 			FacebookConnect::getFacebook($application);
 			$permissions = 'publish_stream,email';
-			$url_app = 'http://localhost:8000/user/facebooklogin';
+			$url_app = url('');
 			$getUser = FacebookConnect::getUser($permissions, $url_app);
 
 			if($link == ''){

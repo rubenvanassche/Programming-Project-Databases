@@ -183,4 +183,64 @@ class Player {
 		return $results;
 	}
 
+	public static function getWinsLossesTies( $playerID ) {
+		$matches = Player::matches( $playerID );
+		$wins = 0;
+		$losses = 0;
+		$ties = 0;
+		foreach ($matches as $match) {
+			if (!Match::isPlayed($match->id))
+				continue;
+			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeamIDbyPlayerID($playerID)) {
+				$thisTeam = 0;
+				$otherTeam = 1;
+			}
+			else {
+				$thisTeam = 1;
+				$otherTeam = 0;
+			}
+			$score = Match::getScore2($match->id);
+			if ($score[$thisTeam] > $score[$otherTeam])
+				$wins += 1;
+			if ($score[$thisTeam] == $score[$otherTeam])
+				$ties += 1;
+			if ($score[$thisTeam] < $score[$otherTeam])
+				$losses += 1;
+		}
+		return array("wins" => $wins, "losses" => $losses, "ties" => $ties);
+	}
+
+
+
+	public static function getYearlyGoalsCards( $playerID ) {
+		$matches = Player::matches( $playerID );
+		$stats = array();
+		foreach ($matches as $match) {
+			if (!Match::isPlayed($match->id) or $match->date == "0000-00-00 00:00:00")
+				continue;
+			$matchYear = new DateTime($match->date);
+			$matchYear = $matchYear->format("Y");
+			$cards = Match::getCardCounts($match->id, $playerID);
+			if (Team::getIDsByName($match->hometeam)[0]->id == Team::getTeamIDbyPlayerID($playerID)) {
+				$yellows = $cards[0];
+				$reds = $cards[1];
+				$score = Match::getScore2($match->id, $playerID)[0];
+			}
+			else {
+				$yellows = $cards[2];
+				$reds = $cards[3];
+				$score = Match::getScore2($match->id, $playerID)[1];
+			}
+			if (array_key_exists($matchYear, $stats)) {
+				$stats[$matchYear]["totalScore"] = $stats[$matchYear]["totalScore"] + $score;
+				$stats[$matchYear]["totalYellows"] = $stats[$matchYear]["totalYellows"] + $yellows;
+				$stats[$matchYear]["totalReds"] = $stats[$matchYear]["totalReds"] + $reds;
+				$stats[$matchYear]["matchCount"] = $stats[$matchYear]["matchCount"] + 1;
+			}
+			else
+				$stats[$matchYear] = array("totalScore" => $score, "totalYellows" => $yellows, "totalReds" => $reds, "matchCount" => 1);
+		}
+		return ($stats);
+	}
+
 }
