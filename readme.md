@@ -1,5 +1,5 @@
 # CoachCenter
-*Awesome* web-service for (~soccer~) football stats, (safe) betting with your
+*Awesome* web-service for (~~soccer~~) football stats, (safe) betting with your
 friends and such.
 
 This was a project for the course Programming Project Databases at the
