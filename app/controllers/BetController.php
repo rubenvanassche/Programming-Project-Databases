@@ -90,15 +90,15 @@ class BetController extends BaseController {
 				$firstGoal_id = $hometeamID;
 			if ($firstGoal == "away")
 				$firstGoal_id = $awayteamID;
-			//save blank guesses as -1 internally
+			//save blank guesses as NULL
 			if ($hometeam_yellows == "")
-				$hometeam_yellows = -1;
+				$hometeam_yellows = NULL;
 			if ($hometeam_reds == "")
-				$hometeam_reds = -1;
+				$hometeam_reds = NULL;
 			if ($awayteam_yellows == "")
-				$awayteam_yellows = -1;
+				$awayteam_yellows = NULL;
 			if ($awayteam_reds == "")
-				$awayteam_reds = -1;
+				$awayteam_reds = NULL;
 
 			$match = Match::getMatchByTeamsAndDate($hometeamID, $awayteamID, $date);
 			$user = new User;
