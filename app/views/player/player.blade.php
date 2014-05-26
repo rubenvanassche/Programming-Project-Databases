@@ -112,7 +112,7 @@
   <script type="text/javascript">
     jQuery(document).ready(function() {
         $("#myTable3")
-        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 1]]})
+        .tablesorter({debug: false, dateFormat: "uk", widgets: ['zebra'], sortList: [[0, 1]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
                             filterColumns: [0, 1, 2]}); });
