@@ -88,3 +88,4 @@ $ php artisan updateDB
 get new information about matches from our sources and update the bet scores of users
 
 These commands will run automatically through cron jobs if you use the automatic installation.
+If the cron jobs don't work for some reason, you will have to update manually by running php artisan updateDB while in the project root.
