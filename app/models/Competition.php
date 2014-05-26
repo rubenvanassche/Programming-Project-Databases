@@ -105,7 +105,7 @@ class Competition {
      * @return Array containing match objects
      */
     public static function getMatches($competition_id) {
-        $query = "SELECT id, hometeam_id, awayteam_id FROM `match` WHERE competition_id = ? ORDER BY date DESC";
+        $query = "SELECT id, hometeam_id, awayteam_id, phase, group_nr FROM `match` WHERE competition_id = ? ORDER BY date DESC";
 
         $result = DB::select($query, array($competition_id));
 

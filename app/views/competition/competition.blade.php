@@ -32,6 +32,7 @@
 						<th>Hometeam</th>
 						<th></th>
 						<th style="text-align:right;">Awayteam</th>
+						<th style="text-align:right;">Phase</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -50,6 +51,7 @@
 							<td><a href="{{url('team/'.$match->hometeam_id)}}">{{$matchinfo->hometeam}}</a></td>
 							<td>{{$matchinfo->hometeam_score}} - {{$matchinfo->awayteam_score}}</td>
 							<td style="text-align:right;"><a href="{{url('team/'.$match->awayteam_id)}}">{{$matchinfo->awayteam}}</a></td>
+							<td style="text-align:right;">{{$match->phase . ' ' . $match->group_nr}}</td>
 						</tr>
 					@endforeach
 				</tbody>
