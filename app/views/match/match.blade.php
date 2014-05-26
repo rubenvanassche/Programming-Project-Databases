@@ -340,13 +340,13 @@
 
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamScore', 'Home team score (we predict: ' . $predictedScores[0] . ')') }}</label>
+					<label>{{ Form::label('hometeamScore', $match->hometeam.' score (we predict: ' . $predictedScores[0] . ')') }}</label>
 					{{ Form::text('hometeamScore', Input::old('hometeamScore'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamScore', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamScore', 'Away team score (we predict: ' . $predictedScores[1] . ')') }}</label>
+					<label>{{ Form::label('awayteamScore', $match->awayteam.' score (we predict: ' . $predictedScores[1] . ')') }}</label>
 					{{ Form::text('awayteamScore', Input::old('awayteamScore'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamScore', '<label class="error">:message</label>') }}
 				</div>
@@ -359,25 +359,25 @@
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamYellows', 'Yellow cards for home team (optional)') }}</label>
+					<label>{{ Form::label('hometeamYellows', 'Yellow cards for '.$match->hometeam.' (optional)') }}</label>
 					{{ Form::text('hometeamYellows', Input::old('hometeamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('hometeamReds', 'Red cards for home team (optional)') }}</label>
+					<label>{{ Form::label('hometeamReds', 'Red cards for '.$match->hometeam.' (optional)') }}</label>
 					{{ Form::text('hometeamReds', Input::old('hometeamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('hometeamReds', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamYellows', 'Yellow cards for away team (optional)') }}</label>
+					<label>{{ Form::label('awayteamYellows', 'Yellow cards for '.$match->awayteam.' (optional)') }}</label>
 					{{ Form::text('awayteamYellows', Input::old('awayteamYellows'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamYellows', '<label class="error">:message</label>') }}
 				</div>
 
 				<div class="form-group">
-					<label>{{ Form::label('awayteamReds', 'Red cards for away team (optional)') }}</label>
+					<label>{{ Form::label('awayteamReds', 'Red cards for '.$match->awayteam.' (optional)') }}</label>
 					{{ Form::text('awayteamReds', Input::old('awayteamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}
 				</div>
