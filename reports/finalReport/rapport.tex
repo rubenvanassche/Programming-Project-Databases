@@ -30,16 +30,16 @@
 
 \begin{document}
 \title{}
-\author{Groep A\\ Rapport 1}
-\date{19 maart 2014}
+\author{Groep A\\ Eindrapport}
+\date{27 mmei 2014}
 \maketitle
 
 \section{Status}
-Het project is afgewerkt. Alle verplichte functionaliteit is afgewerkt en we hebben heel wat extra functionaliteit voorzien. De database is goed gevuld met ongeveer 86.000 entries. De afgewerkte versie van de website staat online op \url{www.coachcenter.be / www.coachcenter.net} en blijft automatisch up to date met de recentste data.
+Het project is afgewerkt. Alle verplichte functionaliteit is afgewerkt en we hebben heel wat extra functionaliteit voorzien. De database is goed gevuld met ongeveer 86.000 entries. De afgewerkte versie van de website staat online op \url{www.coachcenter.be} / \url{www.coachcenter.net} en blijft automatisch up to date met de recentste data.
 \section{Taakverdeling}
 In deze sectie noemen we enkel de grote onderdelen waar we veel aan werkten. Dit is verre van een complete lijst. Voor een vollediger beeld is er het overzicht van de commits op onze git repository \\ \url{https://github.com/rubenvanassche/Programming-Project-Databases}
 \subsection{Stijn}
-Was verantwoordelijk voor het binnenhalen alle voetbalgerelateerde data (door middel van crawler), dit ging van matchen (zowel de nog te spelen als de gespeelde), competities, info over de matchen zoals spelers, kaarten, doelpunten, en spelerwissels, teams en zijn spelers, FIFA rank,... Uiteraard zou de design voldoende robuust moeten zijn en bovendien efficiënt genoeg zodat het geen eeuwigheid zou duren voordat de net gespeelde matchen weer up-to-date is.
+Was verantwoordelijk voor het binnenhalen alle voetbalgerelateerde data (door middel van crawler), dit ging van matchen (zowel de nog te spelen als de gespeelde), competities, info over de matchen zoals spelers, kaarten, doelpunten, en spelerwissels, teams en zijn spelers, FIFA rank,... Uiteraard zou de design voldoende robuust moeten zijn en bovendien effici\"ent genoeg zodat het geen eeuwigheid zou duren voordat de net gespeelde matchen weer up-to-date is.
 \subsection{Kristof}
 Heeft enkele pagina's gemaakt en ook de back-end verzorgd die nodig was voor die pagina's. Heeft de basis gelegd voor user profiles en  heeft private usergroups gemaakt. Bouwde een notificatiesysteem en zorgde ook voor de email reminders. 
 \subsection{Tom}
@@ -211,7 +211,7 @@ Uitgelogde gebruikers zullen niet gelinkt worden naar pagina's voor enkel gebrui
 Gebruikers kunnen pronostieken invullen voor matchen in de toekomst. Voor een ingelogde gebruiker verschijnt op matchpagina's een knop genaamd "bet", zolang de gebruiker nog niet eerder een gok heeft uitgebracht op die match. Wanneer de gebruiker erop klikt, verschijnt het betformulier in een modal. De gebruiker is verplicht om een eindscore in te vullen. Eerste goal en aantallen kaarten zijn optioneel. De gok wordt geregistreerd van zodra er op "bet" geklikt wordt. Elke gebruiker heeft per match slechts \'e\'en kans per match, denk dus goed na over je bet. Een overzicht van gemaakte bets kan gevonden worden via "bets" in de bovenste balk op de website. Daar worden bets opgedeeld in bets op toekomstige matchen en bets op verleden matchen. Er kan telkens doorgeklikt worden naar de matchen en teams. \\ \\
 Eens een match gespeeld is, worden de bets erop binnen de drie uur ge\"evalueerd. Aan elke gebruiker wordt een aantal punten toegekend. Dat puntentotaal kan ook negatief zijn. Er kan met elke gemaakte gok een aantal punten gewonnen of verloren worden. Er kunnen altijd meer punten gewonnen worden dan verloren. Eerst hadden we het idee om correcte riskante gokken meer punten waard te maken. We waren van plan om "riskante gokken" te defini\"eren als keuzes waar weinig gebruikers voor gingen. Realistisch gezien zullen er waarschijnlijk niet erg veel gebruikers actief zijn tijdens het WK 2014 en zou een dergelijk systeem niet erg veel nut hebben. Daarom hebben we per optie een vast aantal punten toegekend (maar niet voor elke optie evenveel). \\ \\
 
-\subsection{Filter- & sorteersysteem}
+\subsection{Filter- \& sorteersysteem}
 Ook kunnen gebruikers zowat elke tabel die te vinden is op de website sorteren zoals zij dit zelf willen. Dit hebben we verwezenlijkt met een slim stukje javascript dat een uitbreiding is op tablesorter. Hierdoor moet de webpagina niet opnieuw geladen worden. Ook is er een ingebouwd filter systeem waardoor de gebruiker op een overzichtelijke en snelle manier ervoor kan zorgen dat alleen de data die hij relevant is voor hem zichtbaar is.
 Al deze functionaliteit zou moeten bijdragen aan de gebruiksvriendelijkheid van de website. Ook hebben we dit alles zo intiutief mogelijk gehouden zodat de gebruiker zonder enig probleem kan navigeren over de website en zich meer kan concentreren op de inhoud dan hoe hij daar moet geraken.
 
