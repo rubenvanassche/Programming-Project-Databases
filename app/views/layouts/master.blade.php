@@ -34,7 +34,7 @@
 						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i><span class="visible-xs">Search</span></button>
 					{{ Form::token() . Form::close() }}
 					<ul class="nav navbar-nav navbar-left">
-						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="User">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<i class="glyphicon glyphicon-user"> </i> <b class="caret"></b>
 								<span class="visible-xs">User</span>
@@ -65,7 +65,7 @@
 						if (count($notifications) > 0) {
 					?>
 					<ul class="nav navbar-nav navbar-left">
-						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Notifications">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i><span class="visible-xs">Notifications</span></a>
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
@@ -79,7 +79,7 @@
 						}else{
 					?>
 					<ul class="nav navbar-nav navbar-left">
-						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Notifications">
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<i class="glyphicon glyphicon-star"></i>
 								<span class="visible-xs">Notifications</span>
