@@ -158,6 +158,12 @@ class Match {
 		return $result[0]->phase . ' ' . $result[0]->group_nr;
 	}
 
+	public static function competition($match_id) {
+		$result = DB::select("SELECT competition.* FROM `competition`, `match` WHERE `match`.id = ? 
+																			   AND `match`.competition_id = `competition`.id", array($match_id));
+		return $result[0];
+	}
+
     public static function getScore2($matchID){
         $results = DB::select('SELECT
                                 (SELECT COUNT(id) FROM goal WHERE team_id = `match`.hometeam_id AND match_id = `match`.id) as hometeam_score,

@@ -13,7 +13,6 @@
 		<ol class="breadcrumb">
 			<li><a href="{{ route('home') }}">Home</a></li>
 			<li><a href="{{ route('teams') }}">Teams</a></li>
-			<li><a href="#">International</a></li>
 			<li class="active">{{$teamObj->name}}</li>
 		</ol>
 	</div>
