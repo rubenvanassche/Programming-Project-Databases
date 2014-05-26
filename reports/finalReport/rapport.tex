@@ -375,75 +375,75 @@ Op zich helemaal geen probleem aangezien alles tijdig is afgeraakt. Integendeel 
 die elkaar aanvullen.
 
 
--\section{Appendix}
- -\subsection{Verplichte functionaliteit}
- -Hier een lijst van de verplichte functionaliteit, met erbij vermeld waar en in welke vorm het ge\"implementeerd is (in \textit{italic}).
- -\begin{enumerate}
- -\item een niet-ingelogde gebruiker kan
- -\begin{enumerate}
- -\item statistische data bekijken\\
- -\textit{Bijna iedere pagina bevat wel ergens statistische data}
- -\begin{enumerate}
- -\item uitslagen van wedstrijden \\
- -\textit{Elke tabel van wedstrijden bevat ook de uitslag, gedetailleerde statistieken beschikbaar op matchpagina}
- -\begin{enumerate}
- -\item filteren op type (WK, EK, vriendschappelijk, ...) \\
- -\textit{Het wereldbolicoon bovenaan toont een lijst met alle competities. Men kan doorklikken om alle matchen en teams te zien}
- -\item filteren op tijdsperiode \\
- -\textit{Er is een aparte competitie aanwezig voor elk jaar waarin de competitie gehouden werd, men moet dus tegelijk met filteren op competitie ook op jaar filteren}
- -\end{enumerate}
- -\item grafieken gebaseerd op statistische data bekijken \\
- -\textit{De tab "graphs" op de teampagina toont twee grafieken gegenereerd adhv statistieken omtrent al hun gespeelde matchen}
- -\begin{enumerate}
- -\item zelf kiezen wat er op de grafieken voorgesteld wordt \\
- -\textit{Op de tweede grafiek kan de gebruiker kiezen om een combinatie van goals, gele kaarten en rode kaarten te zien}
- -\end{enumerate}
- -\end{enumerate}
- -\item voorspellingen van het systeem zelf zien \\
- -\textit{Voorspellingen op matchpagina's van nog te spelen matchen zijn voor iedereen zichtbaar}
- -\end{enumerate}
- -
- -\item een ingelogde gebruiker kan
- -\begin{enumerate}
- -\item voorspellingen per wedstrijd ingeven \\
- -\textit{Voorspellingsknop bevindt zich op elke matchpagina als match toekomstig is en bet nog niet gemaakt is}
- -\begin{enumerate}
- -\item eindscore, wie maakt het eerste doelpunt, hoeveel gele kaarten, ... \\
- -\textit{Eindscore is verplicht, eerste doelpunt en gele + rode kaarten optioneel}
- -\item suggesties van het systeem krijgen \\
- -\textit{Voorspelde score en winkans staan op matchpagina, score wordt in betformulier nog eens herhaald}
- -\end{enumerate}
- -\item groepen van gebruikers maken om tegen elkaar te spelen \\
- -\textit{Usergroups kunnen via knop bovenaan aangemaakt worden.}
- -\begin{enumerate}
- -\item scores en ranking binnen een groep zien \\
- -\textit{Bets voor groups zijn dezelfde bets als buiten groups. De betscore van elke gebruiker is zichtbaar binnen de group}
- -\end{enumerate}
- -\item groep van een andere gebruiker toetreden (op invitatie) \\
- -\textit{Public groups kunnen door iedereen gejoind en gezien worden. Private groups kunnen enkel op invitatie van leden}
- -\end{enumerate}
- -\item het systeem moet
- -\begin{enumerate}
- -\item zelf voorspellingen maken aan de hand van statistische data \\
- -\textit{Voorspellingen worden gemaakt adhv data rond alle reeds gespeelde matchen van de teams}
- -\item suggesties aan de gebruikers geven door gebruik van statistische data \\
- -\textit{Deze voorspellingen dienen als suggesties}
- -\begin{enumerate}
- -\item statistische data visualiseren \\
- -\textit{De winkans van beide teams wordt gevisualiseerd adhv een balk op de match page}
- -\end{enumerate}
- -\item scores en rankings (overal en binnen groepen) updaten nadat de wedstrijden gespeeld zijn \\
- -\textit{Bets worden ge\"evalueerd en scores ge\"updatet binnen de 3 uur na het einde van een match. Algemene betscore en die binnen groepen is dezelfde}
- -\item gebruikers per email waarschuwen als ze voor een wedstrijd die binnenkort begint nog geen voorspelling hebben gemaakt \\
- -\textit{Er wordt dagelijks een mail gestuurd voor de matchen binnen de 24 en wekelijks voor de matchen binnen een week}
- -\item automatisch nieuwe data kunnen inladen \\
- -\textit{Om de drie uur wordt de database ge\"updatet}
- -\begin{enumerate}
- -\item incl. de te voorspellen wedstrijden die nu nog niet bekend zijn (bv. finale) \\
- -\textit{Alle matchen van het WK zullen worden ingeladen eens ze bekend zijn}
- -\end{enumerate}
- -\end{enumerate}
- -\end{enumerate}
+\section{Appendix}
+ \subsection{Verplichte functionaliteit}
+ Hier een lijst van de verplichte functionaliteit, met erbij vermeld waar en in welke vorm het ge\"implementeerd is (in \textit{italic}).
+ \begin{enumerate}
+ \item een nietingelogde gebruiker kan
+ \begin{enumerate}
+ \item statistische data bekijken\\
+ \textit{Bijna iedere pagina bevat wel ergens statistische data}
+ \begin{enumerate}
+ \item uitslagen van wedstrijden \\
+ \textit{Elke tabel van wedstrijden bevat ook de uitslag, gedetailleerde statistieken beschikbaar op matchpagina}
+ \begin{enumerate}
+ \item filteren op type (WK, EK, vriendschappelijk, ...) \\
+ \textit{Het wereldbolicoon bovenaan toont een lijst met alle competities. Men kan doorklikken om alle matchen en teams te zien}
+ \item filteren op tijdsperiode \\
+ \textit{Er is een aparte competitie aanwezig voor elk jaar waarin de competitie gehouden werd, men moet dus tegelijk met filteren op competitie ook op jaar filteren}
+ \end{enumerate}
+ \item grafieken gebaseerd op statistische data bekijken \\
+ \textit{De tab "graphs" op de teampagina toont twee grafieken gegenereerd adhv statistieken omtrent al hun gespeelde matchen}
+ \begin{enumerate}
+ \item zelf kiezen wat er op de grafieken voorgesteld wordt \\
+ \textit{Op de tweede grafiek kan de gebruiker kiezen om een combinatie van goals, gele kaarten en rode kaarten te zien}
+ \end{enumerate}
+ \end{enumerate}
+ \item voorspellingen van het systeem zelf zien \\
+ \textit{Voorspellingen op matchpagina's van nog te spelen matchen zijn voor iedereen zichtbaar}
+ \end{enumerate}
+
+ \item een ingelogde gebruiker kan
+ \begin{enumerate}
+ \item voorspellingen per wedstrijd ingeven \\
+ \textit{Voorspellingsknop bevindt zich op elke matchpagina als match toekomstig is en bet nog niet gemaakt is}
+ \begin{enumerate}
+ \item eindscore, wie maakt het eerste doelpunt, hoeveel gele kaarten, ... \\
+ \textit{Eindscore is verplicht, eerste doelpunt en gele + rode kaarten optioneel}
+ \item suggesties van het systeem krijgen \\
+ \textit{Voorspelde score en winkans staan op matchpagina, score wordt in betformulier nog eens herhaald}
+ \end{enumerate}
+ \item groepen van gebruikers maken om tegen elkaar te spelen \\
+ \textit{Usergroups kunnen via knop bovenaan aangemaakt worden.}
+ \begin{enumerate}
+ \item scores en ranking binnen een groep zien \\
+ \textit{Bets voor groups zijn dezelfde bets als buiten groups. De betscore van elke gebruiker is zichtbaar binnen de group}
+ \end{enumerate}
+ \item groep van een andere gebruiker toetreden (op invitatie) \\
+ \textit{Public groups kunnen door iedereen gejoind en gezien worden. Private groups kunnen enkel op invitatie van leden}
+ \end{enumerate}
+ \item het systeem moet
+ \begin{enumerate}
+ \item zelf voorspellingen maken aan de hand van statistische data \\
+ \textit{Voorspellingen worden gemaakt adhv data rond alle reeds gespeelde matchen van de teams}
+ \item suggesties aan de gebruikers geven door gebruik van statistische data \\
+ \textit{Deze voorspellingen dienen als suggesties}
+ \begin{enumerate}
+ \item statistische data visualiseren \\
+ \textit{De winkans van beide teams wordt gevisualiseerd adhv een balk op de match page}
+ \end{enumerate}
+ \item scores en rankings (overal en binnen groepen) updaten nadat de wedstrijden gespeeld zijn \\
+ \textit{Bets worden ge\"evalueerd en scores ge\"updatet binnen de 3 uur na het einde van een match. Algemene betscore en die binnen groepen is dezelfde}
+ \item gebruikers per email waarschuwen als ze voor een wedstrijd die binnenkort begint nog geen voorspelling hebben gemaakt \\
+ \textit{Er wordt dagelijks een mail gestuurd voor de matchen binnen de 24 en wekelijks voor de matchen binnen een week}
+ \item automatisch nieuwe data kunnen inladen \\
+ \textit{Om de drie uur wordt de database ge\"updatet}
+ \begin{enumerate}
+ \item incl. de te voorspellen wedstrijden die nu nog niet bekend zijn (bv. finale) \\
+ \textit{Alle matchen van het WK zullen worden ingeladen eens ze bekend zijn}
+ \end{enumerate}
+ \end{enumerate}
+ \end{enumerate}
 
 
 %\begin{figure}[ht!]
