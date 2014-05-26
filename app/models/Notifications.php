@@ -27,7 +27,7 @@ class Notifications {
 					INNER JOIN user subject ON nf.subject_id = subject.id
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
-					LIMIT 0, 10";
+					LIMIT 0, 20";
 		}
 		else {
 			$query = "SELECT nf.*, actor.username AS actor_name, subject.username AS subject_name
@@ -37,7 +37,7 @@ class Notifications {
 					WHERE subject_id = $subjectID
 					AND status = 'unseen'
 					AND type_id = $type
-					LIMIT 0, 10";
+					LIMIT 0, 20";
 		}
 
 		$result = DB::select($query);

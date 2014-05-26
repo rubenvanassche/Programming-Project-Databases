@@ -39,8 +39,8 @@ class Player {
     }
 
     /**
-     * @brief Get the player by name.
-     * @param name The name of the player.
+     * @brief Get the player's information by id.
+     * @param id The player's id.
      * @return The results after the query.
      */
     public static function getPlayer( $id ) {
@@ -146,10 +146,10 @@ class Player {
     }
 
 	public static function matches($id) {
-		$results = DB::select("SELECT `match`.*, (SELECT name FROM team WHERE team.id = `match`.hometeam_id) AS hometeam, 
-												 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) AS awayteam 
+		$results = DB::select("SELECT `match`.*, (SELECT name FROM team WHERE team.id = `match`.hometeam_id) AS hometeam,
+												 (SELECT name FROM team WHERE team.id = `match`.awayteam_id) AS awayteam
 								FROM `match`, `playerPerMatch` WHERE `playerPerMatch`.player_id = ? AND `playerPerMatch`.match_id = `match`.id", array($id));
 		return $results;
-	} 
+	}
 
 }
