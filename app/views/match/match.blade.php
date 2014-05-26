@@ -381,6 +381,21 @@
 					{{ Form::text('awayteamReds', Input::old('awayteamReds'), array('class'=>'form-control')) }}
 					{{ $errors->first('awayteamReds', '<label class="error">:message</label>') }}
 				</div>
+				
+				<?php
+				$user = new User;
+				if($user->facebookOnlyUser($user->ID())){
+				?>
+				<div class="form-group">
+				  <div class="checkbox">
+				    <label>
+				      <input type="checkbox" name="facebookpost" value="yes"> Post on Facebook
+				    </label>
+				  </div>
+				</div>
+				 <?
+				 }
+				 ?>
 
 				{{ Form::submit('Bet', array('class'=>'btn btn-success pull-right')) }}
 

@@ -113,6 +113,25 @@ class BetController extends BaseController {
 				$data['content'] = 'Thank you for filling in your bet.';
 				$data['title'] = 'Bet registered!';
 				$acceptedInput = array("accepted" => true); //Add the bet accepted indicator flag as an input.
+				
+				// Do we have to post to Facebook
+				if(Input::get("facebookpost") == 'yes'){
+					$user = new User;
+					
+					if(!$user->facebookOnlyUser($user->ID())){
+						return Redirect::back()->withInput($acceptedInput);//Go back to match page
+					}
+					
+					$hometeam_name = Team::getTeamByID($hometeamID)[0]->name;
+					$awayteam_name = Team::getTeamByID($awayteamID)[0]->name;
+					
+					$title = "I have placed a bet on ".$hometeam_name." - ".$awayteam_name;
+					$message = "Do you think you can do beter then me? Place your own bet at Coachcenter!";
+					$url = url('match/'.$match->id);
+					
+					$user->postToFacebook($title, $message, $url);
+				}
+				
 				return Redirect::back()->withInput($acceptedInput);//Go back to match page
 			}else{
 				// Something went wrong (shouldn't happen)
