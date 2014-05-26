@@ -34,7 +34,7 @@
 						<button type="submit" id="searchbutton" class="btn btn-primary"><i class="glyphicon glyphicon-search"> </i></button>
 					{{ Form::token() . Form::close() }}
 					<ul class="nav navbar-nav navbar-left">
-						<li class="dropdown">
+						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="User">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"> </i> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 							<?php
@@ -62,7 +62,7 @@
 						if (count($notifications) > 0) {
 					?>
 					<ul class="nav navbar-nav navbar-left">
-						<li class="dropdown">
+						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Notifications">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"><sup>{{count($notifications)}}</sup></i></a>
 							<ul class="dropdown-menu">
 								@foreach ($notifications as $notification)
@@ -76,7 +76,7 @@
 						}else{
 					?>
 					<ul class="nav navbar-nav navbar-left">
-						<li class="dropdown">
+						<li class="dropdown" data-toggle="tooltip" data-placement="bottom" title="Notifications">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-star"></i></a>
 							<ul class="dropdown-menu">
 									<li><a href="{{url('profile')}}">No new notifications</a></li>
@@ -85,18 +85,19 @@
 					<?php
 						}
 					?>
-						<li><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
-						<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
-						<li><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Usergroups"><a href="{{url('usergroups')}}"><i class="glyphicon glyphicon-tower"></i></a></li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Users"><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches"><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
+						<li data-toggle="tooltip" data-placement="bottom" title="Competitions"><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
 					</ul>
 					<?php
 					}
-					else {?>
+					else {
+					?>
 						<ul class="nav navbar-nav navbar-left">
-							<li><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
-						<li><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
-						<li><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Users"><a href="{{url('users')}}"><i class="fa fa-users"></i></a></li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Upcoming Matches"><a href="{{url('upcoming')}}"><i class="glyphicon glyphicon-time"></i></a></li>
+							<li data-toggle="tooltip" data-placement="bottom" title="Competitions"><a href="{{url('competitions')}}"><i class="glyphicon glyphicon-globe"></i></a></li>
 						</ul>
 					<?php } ?>
 
@@ -161,6 +162,8 @@
 			if ({{ Input::old('loggedOut', 'false') }}) {
 				$('#logoutModal').modal('show');
 			}
+			
+			$('.nav li').tooltip();
 		});
 		</script>
 
