@@ -81,8 +81,10 @@ Now you have a running coachcenter server! There are also some commands which ca
 ```sh
 $ php artisan remindUsers %
 ```
-reminds users to bet for matches they haven't bet on yet(replace % by the amount of days we coachcenter should look for future matches)
+reminds users to bet for matches they haven't bet on yet(replace % by the amount of days coachcenter should look for future matches)
 ```sh
 $ php artisan updateDB
 ```
 get new information about matches from our sources and update the bet scores of users
+
+These commands will run automatically through cron jobs if you use the automatic installation.
