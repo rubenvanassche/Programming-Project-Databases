@@ -63,8 +63,7 @@ Now, a local version of the CoachCenter is running in your localhost (usually
 First, you'll need to load some data in the database:
 
 1. Create database `coachcenter`
-2. Run the installation script `install/install.sh` (Only if you're on linux)
-3. Load the data as given in `sql/coachcenter.sql` file into this database.
+2. Load the data as given in `sql/coachcenter.sql` file into this database.
 
 Second, you should update the system to connect to the database:
 
