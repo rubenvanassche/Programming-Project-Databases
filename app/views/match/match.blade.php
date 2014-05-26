@@ -384,16 +384,18 @@
 				
 				<?php
 				$user = new User;
-				if($user->facebookOnlyUser($user->ID())){
+				if($user->loggedIn()){
+					if($user->facebookOnlyUser($user->ID())){
 				?>
-				<div class="form-group">
-				  <div class="checkbox">
-				    <label>
-				      <input type="checkbox" name="facebookpost" value="yes"> Post on Facebook
-				    </label>
-				  </div>
-				</div>
+					<div class="form-group">
+					  <div class="checkbox">
+					    <label>
+					      <input type="checkbox" name="facebookpost" value="yes"> Post on Facebook
+					    </label>
+					  </div>
+					</div>
 				 <?php
+				 }
 				 }
 				 ?>
 
