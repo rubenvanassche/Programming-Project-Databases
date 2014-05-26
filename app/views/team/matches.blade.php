@@ -10,12 +10,13 @@ $("#myTable")
                     filterColumns: [0]}); });
 </script>
 
-<table id="myTable" class="tablesorter" style="text-align: center;">
+<table id="myTable" class="tablesorter">
 	<thead>
 		<tr>
 			<th>Date</th>
 			<th>Match</th>
 			<th>Score</th>
+			<th>Competition</th>
 		</tr>
 	</thead>
 	<tbody>	
@@ -30,6 +31,7 @@ $("#myTable")
 						?></td>
 				<td><a href="{{route('match', array('id'=>$match->match_id))}}">{{ $match->hometeam}} - {{ $match->awayteam }} </a></td>
 				<td><?php if (Match::isPlayed($match->match_id)) echo Match::getScore($match->match_id); else echo "? - ?" ?></td>
+				<td style="text-align: right;"><a href="{{url('competition/'.$match->competition_id)}}">{{$match->competition}}</a></td>
 			</tr>
 		@endforeach					
 	</tbody>

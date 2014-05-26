@@ -193,7 +193,9 @@ class Team {
         $query = "SELECT `match`.date,
             `match`.id as match_id,
             (SELECT name FROM team WHERE team.id = `match`.hometeam_id) as hometeam,
-            (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam
+            (SELECT name FROM team WHERE team.id = `match`.awayteam_id) as awayteam,
+			competition_id,
+			(SELECT name FROM competition WHERE competition.id = `match`.competition_id) as competition
             FROM `match` WHERE hometeam_id = ? OR awayteam_id = ?";
         $values = array( $teamID, $teamID );
 
