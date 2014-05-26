@@ -189,8 +189,40 @@
 	</div>
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Substitutions <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->hometeam}}</span></h3>
+			<h3>Players</h3>
 			<table id="myTable5" class="tablesorter">
+				<thead>
+					<tr>
+						<th>Player</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($transfershometeam as $transferhometeam)
+						<tr><td><a href="{{action('player', array($transferhometeam->player_id))}}">{{$transferhometeam->name}}</a></td></tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-6">
+			<h3>Players</h3>
+			<table id="myTable6" class="tablesorter">
+				<thead>
+					<tr>
+						<th>Player</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach ($transfersawayteam as $transferawayteam)
+						<tr><td><a href="{{action('player', array($transferawayteam->player_id))}}">{{$transferawayteam->name}}</a></td></tr>
+					@endforeach
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<h3>Substitutions</h3>
+			<table id="myTable7" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -234,7 +266,7 @@
 		</div>
 		<div class="col-md-6">
 			<h3>Substitutions <span style="font-size:20px;" class="visible-sm visible-xs">{{$match->awayteam}}</span></h3>
-			<table id="myTable6" class="tablesorter">
+			<table id="myTable8" class="tablesorter">
 				<thead>
 					<tr>
 						<th>Time</th>
@@ -277,6 +309,7 @@
 			</table>
 		</div>
 	</div>
+
 @stop
 
 @section('css')
@@ -400,7 +433,7 @@ $(document).ready(function () {
 
   <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#myTable6")
+        $("#myTable8")
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
@@ -408,12 +441,30 @@ $(document).ready(function () {
   </script>
   <script type="text/javascript">
     jQuery(document).ready(function() {
-        $("#myTable5")
+        $("#myTable7")
         .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
         .tablesorterFilter({filterContainer: "#filter-box",
                             filterClearContainer: "#filter-clear-button",
                             filterColumns: [0, 1, 2]}); });
   </script>
+
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable6")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0]}); });
+  </script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("#myTable5")
+        .tablesorter({debug: false, widgets: ['zebra'], sortList: [[0, 0]]})
+        .tablesorterFilter({filterContainer: "#filter-box",
+                            filterClearContainer: "#filter-clear-button",
+                            filterColumns: [0]}); });
+  </script>
+
 
     <script type="text/javascript">
     jQuery(document).ready(function() {
