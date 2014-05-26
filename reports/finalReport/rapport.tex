@@ -41,7 +41,7 @@ In deze sectie noemen we enkel de grote onderdelen waar we veel aan werkten. Dit
 \subsection{Stijn}
 Was verantwoordelijk voor het binnenhalen alle voetbalgerelateerde data (door middel van crawler); dit omvatte matchen (zowel de nog te spelen als de gespeelde), competities, info over de matchen zoals spelers, kaarten, doelpunten, en spelerwissels, teams en zijn spelers, FIFA rank,... Uiteraard zou de design voldoende robuust moeten zijn en bovendien effici\"ent genoeg zodat het geen eeuwigheid zou duren om de net gespeelde matchen up-to-date te brengen.
 \subsection{Kristof}
-Heeft enkele pagina's gemaakt en ook de back-end verzorgd die nodig was voor die pagina's. Heeft de basis gelegd voor user profiles en heeft private usergroups gemaakt. Bouwde een notificatiesysteem en zorgde ook voor de email reminders. Zorgde voor de setup en onderhoud van www.coachcenter.be/wwww.coachcenter.net.
+Heeft enkele pagina's gemaakt en ook de back-end verzorgd die nodig was voor die pagina's. Heeft de basis gelegd voor user profiles en heeft private usergroups gemaakt. Bouwde een notificatiesysteem en zorgde ook voor de email reminders. Zorgde voor de setup en onderhoud van onlineversie.
 \subsection{Tom}
 Maakte de algoritmen die aan de hand van de data in de database een beredeneerde calculatie moest maken over de uitslag van de wedstrijden.
 Zorgde voor het sorteersysteem en filtersysteem van de tabellen.
@@ -237,7 +237,7 @@ Voor de validatie van input bij registreren (zijn verplichte velden ingevuld, st
 \\
 Op elke webpagina verschijnt voor een niet-ingelogde gebruiker een loginknop. Het loginmenu wordt dan over de huidige pagina (in een 'modal', een feature van Bootstrap) weergegeven. Indien de gebruiker met foute gegegvens probeert in te loggen, wordt dit afgehandeld in diezelfde modal. Eens inloggen succesvol is, verschijnt er in de modal nog een bericht om het inloggen te bevestigen. Eens dat weggeklikt wordt, bevindt de gebruiker zich terug op dezelfde pagina als voorheen. Er is ook een knop "forgot password", die de gebruiker naar een nieuwe pagina leidt. De gebruiker geeft zijn emailadres in, en er wordt een email gestuurd waarmee het paswoord gereset kan worden. Indien men probeert in te loggen met een account waarvan het emailadres nog niet gevalideerd is, verschijnt een knop om de activatiemail opnieuw te versturen. \\ Bij een ingelogde gebruiker wordt bij elke bezochte pagina de login cookie gerefresht, zodat een gebruiker bij langdurige sessies op de site niet om de zoveel tijd opnieuw hoeft in te loggen. \\ \\
 
-Facebook login is met één gedachte in het achterhoofd gebouwd namelijk ervoor zorgen dat mensen die een account op Facebook geen saaie registratie velden hoeven in te vullen voor de duizendste keer maar direct binnen kunnen. We willen dus dat Facebook gebruikers zichzelf snel kunnen inloggen en dat is dan ook mogelijk door bij het inloggen niet op de login knop te drukken maar op de blauwe Facebook Login knop. Vervolgens worden er wat administratieve zaken met Facebook afgehandeld waarna de gebruiker op de homepage terechtkomt als een geregistreerde coachcenter gebruiker.
+Facebook login is met \'e\'en gedachte in het achterhoofd gebouwd, namelijk ervoor zorgen dat mensen die een account op Facebook geen saaie registratie velden hoeven in te vullen voor de duizendste keer maar direct binnen kunnen. We willen dus dat Facebook gebruikers zichzelf snel kunnen inloggen en dat is dan ook mogelijk door bij het inloggen niet op de login knop te drukken maar op de blauwe Facebook Login knop. Vervolgens worden er wat administratieve zaken met Facebook afgehandeld waarna de gebruiker op de homepage terechtkomt als een geregistreerde coachcenter gebruiker. Merk op dat, wegens beperkingen van de Facebook plugin, Facebooklogin enkel beschikbaar is vanaf coachcenter.be (z\'onder www.!)'. \\ \\
 
 Eens ingelogd, worden de registratie- en inlogknoppen vervangen door "My Profile", "Bets", "Preferences" en "Logout". \\
 "My Profile" is een pagina waarop wat persoonlijke informatie als land en bet score te zien zijn. Deze pagina is voor iedereen, zelfs niet-ingelogde gebruikers zichtbaar. Enkel op je eigen profiel verschijnen nog de tabs "Notifications", "My Groups" en "Invitations". Op deze functionaliteit wordt verder ingegaan in andere secties. \\
@@ -333,7 +333,7 @@ Geregistreerde (en ongeregistreerde) gebruikers kunnen ook de profielen van ande
 Enkel de informatie (avatar, betscore, `about me`, groepen) is zichtbaar.
 
 \subsection{Usergroups}
-In de lijst van vereiste functionaliteit stond ook dat er voor ingelogde gebruikers de mogelijkheid moeset zijn om groepen van gebruikers te maken die tegen elkaar kunnen spelen.
+In de lijst van vereiste functionaliteit stond ook dat er voor ingelogde gebruikers de mogelijkheid moest zijn om groepen van gebruikers te maken die tegen elkaar kunnen spelen.
 Ze moeten scores en ranking binnen een groep kunnen zien en ook moet de mogelijkheid bestaan om andere gebruikers uit te nodigen tot een usergroup.
 \\
 \\
@@ -345,7 +345,7 @@ De usergroup pagina bevat een tijdslijn waarin events (uiteraard chronologisch g
 Ook worden er discussies ondersteund: dit zijn gesprekken binnen in de usergroup waar iedereen die lid is op kan antwoorden. Wanneer er een nieuwe discussie wordt gestart of wanneer er iemand antwoord in een gesprek waaraan je deelneemt zal je uiteraard een notificatie hierover krijgen.
 \\
 \\
-Bovenaan de usergroup zien we ook de leden met hun betscore ernaast. Zo ontstaat er een soort van competitiedrang die het aantal bets in het systeem alleen maar zal opdrijven.
+Bovenaan de usergroup zien we ook de leden met hun betscore ernaast. Zo ontstaat er een soort van competitiedrang die het aantal bets in het systeem alleen maar zal opdrijven. Merk op dat er geen andere bets kunnen worden uitgebracht binnen een usergroup. Als een gebruiker bet op een match, dan geldt deze bet binnen alle usergroups. Zo dwingen we onze gebruikers om goed na te denken over elke bet.
 
 \subsection{Grafische weergave van statistieken}
 Voor de grafische weergave van data gebruiken we Google Charts. Dat biedt heel wat verschillende grafieken. Momenteel zijn op elke teampagina twee grafieken beschikbaar. Er is een taartdiagram dat het percentage gewonnen, verloren en gelijkgespeelde matchen van een team toont. Ook is er een staafdiagram dat het gemiddelde aantal goals en/of kaarten per match per jaar toont. De gebruiker kan kiezen welke combinatie van 'gemiddeld aantal goals', 'gemiddeld aantal gele kaarten' en 'gemiddeld aantal rode kaarten' hij wil zien. De grafiek wordt meteen aangepast, zonder dat de pagina opnieuw geladen moet worden. Deze grafieken bevinden zich onder de tab 'Graphs' op elke teampagina. \\ \\
@@ -482,7 +482,7 @@ die elkaar aanvullen.
  \item scores en rankings (overal en binnen groepen) updaten nadat de wedstrijden gespeeld zijn \\
  \textit{Bets worden ge\"evalueerd en scores ge\"updatet binnen de 3 uur na het einde van een match. Algemene betscore en die binnen groepen is dezelfde}
  \item gebruikers per email waarschuwen als ze voor een wedstrijd die binnenkort begint nog geen voorspelling hebben gemaakt \\
- \textit{Er wordt dagelijks een mail gestuurd voor de matchen binnen de 24 en wekelijks voor de matchen binnen een week}
+ \textit{Er wordt dagelijks een mail gestuurd voor de matchen binnen de 24 uur en wekelijks voor de matchen binnen een week}
  \item automatisch nieuwe data kunnen inladen \\
  \textit{Om de drie uur wordt de database ge\"updatet}
  \begin{enumerate}
@@ -491,6 +491,9 @@ die elkaar aanvullen.
  \end{enumerate}
  \end{enumerate}
  \end{enumerate}
+
+\subsection{SQL Queries}
+Volledige lijst van onze queries  te vinden in ./queries.sql \\
 
 
 %\begin{figure}[ht!]
