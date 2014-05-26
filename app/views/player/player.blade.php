@@ -16,7 +16,7 @@
 	<div class="col-md-12">
 		<ol class="breadcrumb">
 			<li><a href="{{ route('home') }}">Home</a></li>
-			<li><a href="{{ route('teams') }}">Players</a></li>
+		    <li><a href="{{ route('team', array('id'=>$playerTeam->id)) }}">{{$playerTeam->name}}</a></p>
 			<li class="active">{{$playerObj->name}}</li>
 		</ol>
 	</div>

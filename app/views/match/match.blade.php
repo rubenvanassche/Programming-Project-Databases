@@ -44,8 +44,11 @@
 		</div>
 		<div class="col-md-2" style="text-align:center;">
 			@if($bet)
+			<div style="text-align:center;">
 				<a href="#" class="btn btn-lg btn-success btn-sm"data-toggle="modal" data-target="#betModal">Bet</a>
+			</div>
 			@endif
+
 			<?php if($match->date == "0000-00-00 00:00:00") 
 						echo "date unknown"; 
 					  else {
