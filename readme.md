@@ -70,6 +70,9 @@ Second, you should update the system to connect to the database:
 1. Open App/Config/database.php
 2. Change the mysql configuration
 3. Save the file
+4. Open App/Config/app.php
+5. Change some preferences
+6. Save the file
 
 Now let's start the server:
 
