@@ -159,7 +159,7 @@ class Match {
 	}
 
 	public static function competition($match_id) {
-		$result = DB::select("SELECT competition.* FROM `competition`, `match` WHERE `match`.id = ? 
+		$result = DB::select("SELECT competition.* FROM `competition`, `match` WHERE `match`.id = ?
 																			   AND `match`.competition_id = `competition`.id", array($match_id));
 		return $result[0];
 	}
@@ -273,7 +273,7 @@ class Match {
 		else
 	        return $results[0];
     }
-    
+
 
     public static function getInfo($rm) {
     		$recentTeamMatches = array();
@@ -346,7 +346,7 @@ class Match {
       $results = DB::select('
         SELECT `match`.id, date, hometeam_id, awayteam_id, (SELECT name FROM team WHERE id = `match`.hometeam_id) AS hometeam,
           (SELECT name FROM team WHERE id = `match`.awayteam_id) AS awayteam
-          FROM `match`, `bet`
+          FROM `match`
           WHERE DATEDIFF(`date`, CURDATE()) <= ?
           AND DATEDIFF(`date`, CURDATE()) >= 0
           AND `match`.id NOT IN (

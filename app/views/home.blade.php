@@ -1,6 +1,19 @@
 @extends('layouts.master')
 @section('content')
 	<div class="row">
+		@if ($loggedin)
+		<div class="alert alert-warning alert-dismissable help">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Welcome to coachcenter!</strong> Now that you're registered you can bet on matches. If your bet was quite good, you'll recieve points for it. You can check out the users page to
+			compare your score to the world. If you'd like to compete with your friends, you can start by creating a usergroup and inviting your friends. Let the games begin!
+		</div>
+		@else
+		<div class="alert alert-warning alert-dismissable help">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong>Welcome to coachcenter!</strong> You're currently not logged in. This means that you can check out matches, teams and players and find out cool statistics about them!
+			However, if you want to prove yourself a true champion and compete against your friends and the world in a betting competition, please <a href="#">register</a>.
+		</div>
+		@endif
 		<div class="col-md-4">
 			<div class="matchListDiv">
 				<h5 class="matchListTitle">Played Matches</h5>
@@ -14,8 +27,8 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody>	
-						<?php 
+					<tbody>
+						<?php
 							$i = 0;
 						?>
 						@foreach ($playedMatchInfo as $pmi)
@@ -31,7 +44,7 @@
 									<td>{{$pmi[2][1][0]->name}}</td>
 									<td><i class={{$aFlag}}></i></td>
 								</tr>
-						@endforeach					
+						@endforeach
 					</tbody>
 				</table>
 			</div>
@@ -57,7 +70,7 @@
                                                                                 $aFlag = "flag-" . $fmi[1][1][0]->abbreviation;
                                                                                 $start_date = $fmi[3]->date;
                                                                                 $date = substr($start_date, 0, 10);
-                                                                                $today = date("Y-m-d H:i:s"); 
+                                                                                $today = date("Y-m-d H:i:s");
                                                                                 $today = substr($today, 0, 10);
                                                                                 if ($today == $date) {
                                                                                 	$date = substr($start_date, 11, 5);
@@ -111,7 +124,7 @@
 		<div class="col-md-12">
 			<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 				<div class="carousel-inner">
-					<?php 
+					<?php
 					$counter = 0;
 					foreach ($articles as $article):
 						if($counter == 5){
@@ -130,10 +143,10 @@
 								<p><a href="<?php echo $article->get_permalink(); ?>">Read More</a></p>
 							</div>
 						</div>
-				 
-						<?php 
+
+						<?php
 						$counter++;
-						endforeach; 
+						endforeach;
 						?>
 				</div>
 				<a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -159,6 +172,12 @@
 @section('css')
 <style>
 
+.help {
+	margin-top:2%;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
 
 .matchListDiv thead tr  {
 	text-align:center;
@@ -238,9 +257,9 @@ hr {
 <script type='text/javascript'>
      google.load('visualization', '1', {'packages': ['geochart']});
 
-     var chart; 
+     var chart;
      var data;
-     var options;   
+     var options;
 
      google.setOnLoadCallback(drawRegionsMap);
 
@@ -252,7 +271,7 @@ hr {
 		data.addColumn({type:'string', role:'tooltip'});  // Will make sure only FIFA points and not id is shown in tooltip
         data.addRows(
 				//Create the Country/FIFA points table in PHP, as Javascript has no access to these codes
-				<?php 
+				<?php
 				echo "[";
 				foreach($fifaPoints as $points) {
 					echo "[\"";
@@ -290,17 +309,17 @@ hr {
 		      document.getElementById('goback').style.display='block';
 			}
 
-		
+
     };
 
 	function toPage() {  //Allows user click on country to go to its national team
-	
+
 	  var rowIndex = chart.getSelection()[0].row;
 	  var teamID = data.getValue(rowIndex, 2);
 	  if (teamID != 0)  //id 0 means no page for this national team
   	    window.open('{{route('teamNoIndex')}}/' + teamID, '_self'); //Add teamID in js
 
-		
+
     };
 
     </script>

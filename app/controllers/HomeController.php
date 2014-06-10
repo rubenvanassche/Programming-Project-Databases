@@ -25,6 +25,7 @@ class HomeController extends BaseController {
 	      $futureMatchInfo = array();
         $topteams = Team::getTopTeams(5);
         $fifaPoints = Team::getFIFAPoints(true);
+        $loggedin = $user->loggedIn();
 
 
         foreach ($recentMatches as $rm) {
@@ -38,14 +39,14 @@ class HomeController extends BaseController {
 		array_push($futureMatchInfo, $info);
 	}
 
-        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints', 'futureMatchInfo'))->with('title', 'Home');
+        return View::make('home', compact('recentMatches', 'playedMatchInfo', 'topteams', 'articles', 'fifaPoints', 'futureMatchInfo', 'loggedin'))->with('title', 'Home');
     }
 
     public function news(){
         $articles = RSS::getFIFAtext();
         return View::make('news', compact('articles'))->with('title', 'News');
     }
-    
+
     public function about(){
 	    return View::make('about');
     }

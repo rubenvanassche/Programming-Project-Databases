@@ -161,7 +161,7 @@ class Notifications {
 
 	public static function sendReminders($days) {
 		// Will send an email + notification reminding the users that they still need to bet on a match.
-		// Set $days to the amount of days you want to check for upcoming matches.
+		// Set $days to the amount of days you want to check ahead for upcoming matches.
 		$a_user = new User;
 		$users = $a_user->getAllUsers();
 
