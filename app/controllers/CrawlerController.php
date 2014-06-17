@@ -776,7 +776,7 @@ class CrawlerController extends BaseController {
 
             $kick_off = $match_data["kick-off"];
             if (empty($kick_off)) $kick_off = $match_data["scoretime"]; 
-            $date = $match_data["date"].' '.$kick_off;
+            $date = (strpos($kick_off, ':') !== false) ? $match_data["date"].' '.$kick_off : $match_data['date'];
 
             $ids = Match::getIDs($hometeam_id, $awayteam_id, $competition_id, $date);
             if (empty($ids)) $ids = Match::add($hometeam_id, $awayteam_id, $competition_id, $date, $phase, $group_nr);
